@@ -13,10 +13,11 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { DataTable } from '@/components/data-table'
 import { PageHeader } from '@/components/page-header'
 import { ColumnDef } from '@tanstack/react-table'
-import { GraduationCap, MoreHorizontal, Pencil, Trash2, Loader2, Upload } from 'lucide-react'
+import { GraduationCap, MoreHorizontal, Pencil, Trash2, Loader2, Upload, Download } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { useToast } from '@/hooks/use-toast'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { BulkUpload } from '@/components/bulk-upload'
 
 interface Student {
   id: string
@@ -254,14 +255,21 @@ export default function StudentsPage() {
 
   return (
     <div className="space-y-6">
-      <PageHeader
-        title="Students"
-        description="Manage student records and registrations"
-        actionLabel="Add Student"
-        onAction={() => handleOpenDialog()}
-        onRefresh={fetchData}
-        loading={loading}
-      />
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-white">Students</h1>
+          <p className="text-slate-400">Manage student records and registrations</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <BulkUpload institutionId="demo-institution" onUploadComplete={fetchData} />
+          <Button onClick={() => handleOpenDialog()} className="bg-gradient-to-r from-cyan-500 to-blue-600">
+            Add Student
+          </Button>
+          <Button variant="outline" onClick={fetchData} disabled={loading} className="border-white/10 text-slate-300">
+            {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
+          </Button>
+        </div>
+      </div>
 
       <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
         <CardContent className="pt-6">
