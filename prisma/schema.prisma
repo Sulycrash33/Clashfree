@@ -1,8 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// ClashFree - Automatic Timetable Generator
+// Revolutionary Academic Scheduling System
 
 generator client {
   provider = "prisma-client-js"
@@ -13,20 +10,577 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+// ============================================
+// AUTHENTICATION & USER MANAGEMENT
+// ============================================
+
+enum UserRole {
+  SA // Super Admin - Platform level
+  IA // Institution Admin
+  TO // Timetable Officer
+  LC // Lecturer
+  ST // Student
 }
 
-model Post {
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  passwordHash String
+  name         String
+  role         UserRole  @default(ST)
+  avatar       String?
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  // Relations
+  institutionId String?
+  institution   Institution?  @relation(fields: [institutionId], references: [id])
+  facultyId     String?
+  faculty       Faculty?      @relation(fields: [facultyId], references: [id])
+  lecturer      Lecturer?
+  student       Student?
+  activityLogs  ActivityLog[]
+
+  @@index([email])
+  @@index([role])
+}
+
+model ActivityLog {
+  id         String   @id @default(cuid())
+  action     String
+  entityType String
+  entityId   String
+  details    String? // JSON string for flexible data
+  ipAddress  String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([entityType, entityId])
+}
+
+// ============================================
+// INSTITUTION STRUCTURE
+// ============================================
+
+enum InstitutionType {
+  FEDERAL_UNI
+  STATE_UNI
+  PRIVATE_UNI
+  POLYTECHNIC
+  MONOTECHNIC
+  COLLEGE_OF_EDUCATION
+  SCHOOL_OF_NURSING
+  HEALTH_TECH
+}
+
+model Institution {
+  id              String          @id @default(cuid())
+  name            String
+  shortName       String          @unique // e.g., "NSUK", "ABU", "UNILAG"
+  type            InstitutionType
+  city            String
+  state           String
+  country         String          @default("Nigeria")
+  logo            String?
+  website         String?
+  emailDomain     String? // for auto-validating staff/student emails
+  currentSession  String // e.g., "2025/2026"
+  currentSemester Int             @default(1)
+  isActive        Boolean         @default(true)
+  settings        String? // JSON for institution-specific settings
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  // Relations
+  users       User[]
+  faculties   Faculty[]
+  rooms       Room[]
+  examPeriods ExamPeriod[]
+  courses     Course[]
+
+  @@index([shortName])
+  @@index([type])
+}
+
+model Faculty {
+  id            String   @id @default(cuid())
+  institutionId String
+  name          String
+  code          String // e.g., "FAS", "FES", "FMS"
+  description   String?
+  deanName      String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  institution Institution  @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  departments Department[]
+  rooms       Room[]
+  users       User[] // Timetable officers assigned to this faculty
+
+  @@unique([institutionId, code])
+  @@index([institutionId])
+}
+
+model Department {
   id        String   @id @default(cuid())
-  title     String
-  content   String?
-  published Boolean  @default(false)
-  authorId  String
+  facultyId String
+  name      String
+  code      String // e.g., "CSC", "MTH", "PHY"
+  hodName   String?
+  isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Relations
+  faculty   Faculty    @relation(fields: [facultyId], references: [id], onDelete: Cascade)
+  courses   Course[]
+  students  Student[]
+  lecturers Lecturer[]
+
+  @@unique([facultyId, code])
+  @@index([facultyId])
+}
+
+// ============================================
+// ACADEMIC DATA
+// ============================================
+
+model Course {
+  id            String   @id @default(cuid())
+  institutionId String
+  departmentId  String
+  code          String // e.g., "CSC 201", "MTH 101", "GST 112"
+  name          String
+  creditUnits   Int      @default(2)
+  level         Int // 100, 200, 300, 400, 500, 600
+  semester      Int      @default(1)
+  isShared      Boolean  @default(false) // Service/GST course
+  requiresLab   Boolean  @default(false)
+  maxStudents   Int?
+  description   String?
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  institution    Institution          @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  department     Department           @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  lecturerId     String?
+  lecturer       Lecturer?            @relation(fields: [lecturerId], references: [id])
+  studentCourses StudentCourse[]
+  examSlots      ExamSlot[]
+  prerequisites  CoursePrerequisite[] @relation("PrerequisiteTo")
+  requiredFor    CoursePrerequisite[] @relation("PrerequisiteFor")
+
+  @@unique([institutionId, code])
+  @@index([departmentId])
+  @@index([level])
+  @@index([isShared])
+}
+
+model CoursePrerequisite {
+  id             String   @id @default(cuid())
+  courseId       String
+  prerequisiteId String
+  createdAt      DateTime @default(now())
+
+  course       Course @relation("PrerequisiteTo", fields: [courseId], references: [id], onDelete: Cascade)
+  prerequisite Course @relation("PrerequisiteFor", fields: [prerequisiteId], references: [id], onDelete: Cascade)
+
+  @@unique([courseId, prerequisiteId])
+}
+
+model Student {
+  id            String   @id @default(cuid())
+  departmentId  String
+  userId        String?  @unique // Link to User account
+  regNumber     String // Matric number
+  name          String
+  email         String?
+  phone         String?
+  level         Int      @default(100)
+  admissionYear Int
+  isSpillover   Boolean  @default(false)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  department     Department      @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  user           User?           @relation(fields: [userId], references: [id])
+  studentCourses StudentCourse[]
+
+  @@unique([departmentId, regNumber])
+  @@index([departmentId])
+  @@index([level])
+}
+
+model StudentCourse {
+  id        String       @id @default(cuid())
+  studentId String
+  courseId  String
+  status    CourseStatus @default(REGISTERED)
+  semester  Int
+  session   String
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  // Relations
+  student Student @relation(fields: [studentId], references: [id], onDelete: Cascade)
+  course  Course  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([studentId, courseId, session])
+  @@index([studentId])
+  @@index([courseId])
+  @@index([status])
+}
+
+enum CourseStatus {
+  REGISTERED // Currently registered
+  CARRY_OVER // Failed, retaking
+  SPILLOVER // Extra year course
+  COMPLETED // Passed
+}
+
+model Lecturer {
+  id             String   @id @default(cuid())
+  departmentId   String
+  userId         String?  @unique // Link to User account
+  staffId        String
+  name           String
+  email          String
+  phone          String?
+  rank           String? // Professor, Reader, Senior Lecturer, etc.
+  specialization String?
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Availability - stored as JSON array of blocked dates/times
+  unavailableDays  String? // JSON: ["monday", "friday"]
+  unavailableTimes String? // JSON: [{"date": "2025-06-15", "reason": "Conference"}]
+
+  // Relations
+  department    Department              @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  user          User?                   @relation(fields: [userId], references: [id])
+  courses       Course[]
+  invigilations InvigilatorAssignment[]
+
+  @@unique([departmentId, staffId])
+  @@index([departmentId])
+}
+
+// ============================================
+// VENUE / ROOM MANAGEMENT
+// ============================================
+
+enum RoomType {
+  LECTURE_HALL
+  AUDITORIUM
+  CLASSROOM
+  LABORATORY
+  COMPUTER_LAB
+  EXAM_HALL
+  OUTDOOR
+}
+
+model Room {
+  id            String   @id @default(cuid())
+  institutionId String
+  facultyId     String? // NULL = central/university-wide
+  code          String // e.g., "MPH", "BLOCK-A-LT1", "CSC-LAB-01"
+  name          String
+  building      String?
+  floor         String?
+  capacity      Int
+  type          RoomType
+  hasProjector  Boolean  @default(false)
+  hasAC         Boolean  @default(false)
+  hasComputers  Boolean  @default(false)
+  labEquipment  String? // JSON array of equipment
+  isAccessible  Boolean  @default(true)
+  isActive      Boolean  @default(true)
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  institution Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  faculty     Faculty?    @relation(fields: [facultyId], references: [id], onDelete: SetNull)
+  examSlots   ExamSlot[]
+
+  @@unique([institutionId, code])
+  @@index([institutionId])
+  @@index([facultyId])
+  @@index([type])
+}
+
+// ============================================
+// EXAM PERIOD & SCHEDULE
+// ============================================
+
+model ExamPeriod {
+  id              String           @id @default(cuid())
+  institutionId   String
+  name            String // e.g., "First Semester 2025/2026"
+  session         String // e.g., "2025/2026"
+  semester        Int
+  startDate       DateTime
+  endDate         DateTime
+  slotsPerDay     Int              @default(3)
+  slotDuration    Int              @default(180) // minutes
+  morningStart    String           @default("08:00")
+  morningEnd      String           @default("11:00")
+  afternoonStart  String           @default("12:00")
+  afternoonEnd    String           @default("15:00")
+  eveningStart    String           @default("16:00")
+  eveningEnd      String           @default("19:00")
+  includeSaturday Boolean          @default(true)
+  excludeFridays  Boolean          @default(false) // For Jumu'ah consideration
+  status          ExamPeriodStatus @default(DRAFT)
+  publishedAt     DateTime?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  // Relations
+  institution     Institution        @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  examSlots       ExamSlot[]
+  blackoutDates   BlackoutDate[]
+  conflictReports ConflictReport[]
+  versions        TimetableVersion[]
+  conflicts       Conflict[]
+
+  @@index([institutionId])
+  @@index([status])
+}
+
+enum ExamPeriodStatus {
+  DRAFT
+  GENERATING
+  GENERATED
+  UNDER_REVIEW
+  APPROVED
+  PUBLISHED
+  ARCHIVED
+}
+
+model BlackoutDate {
+  id           String   @id @default(cuid())
+  examPeriodId String
+  date         DateTime
+  reason       String // e.g., "Public Holiday", "ASUU Strike"
+  isFullDay    Boolean  @default(true)
+  startTime    String? // If partial day
+  endTime      String?
+  createdAt    DateTime @default(now())
+
+  // Relations
+  examPeriod ExamPeriod @relation(fields: [examPeriodId], references: [id], onDelete: Cascade)
+
+  @@unique([examPeriodId, date])
+  @@index([examPeriodId])
+}
+
+model ExamSlot {
+  id           String         @id @default(cuid())
+  examPeriodId String
+  courseId     String
+  roomId       String
+  date         DateTime
+  dayOfWeek    Int // 0=Sunday, 1=Monday, etc.
+  slotNumber   Int // 1=morning, 2=afternoon, 3=evening
+  startTime    String
+  endTime      String
+  status       ExamSlotStatus @default(SCHEDULED)
+  notes        String?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  // Relations
+  examPeriod   ExamPeriod              @relation(fields: [examPeriodId], references: [id], onDelete: Cascade)
+  course       Course                  @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  room         Room                    @relation(fields: [roomId], references: [id])
+  invigilators InvigilatorAssignment[]
+  conflicts    Conflict[]              @relation("SlotAConflict")
+  conflictsB   Conflict[]              @relation("SlotBConflict")
+
+  @@unique([examPeriodId, courseId]) // One course, one slot per exam period
+  @@index([examPeriodId])
+  @@index([date])
+  @@index([roomId])
+}
+
+enum ExamSlotStatus {
+  SCHEDULED
+  RESCHEDULED
+  CANCELLED
+  COMPLETED
+}
+
+model InvigilatorAssignment {
+  id         String          @id @default(cuid())
+  examSlotId String
+  lecturerId String
+  role       InvigilatorRole @default(ASSISTANT)
+  notes      String?
+  createdAt  DateTime        @default(now())
+
+  // Relations
+  examSlot ExamSlot @relation(fields: [examSlotId], references: [id], onDelete: Cascade)
+  lecturer Lecturer @relation(fields: [lecturerId], references: [id], onDelete: Cascade)
+
+  @@unique([examSlotId, lecturerId])
+  @@index([examSlotId])
+  @@index([lecturerId])
+}
+
+enum InvigilatorRole {
+  CHIEF
+  ASSISTANT
+  SUPERVISOR
+}
+
+// ============================================
+// CONFLICT DETECTION & REPORTING
+// ============================================
+
+enum ConflictType {
+  STUDENT_CLASH // Student has two exams at same time
+  LECTURER_CLASH // Lecturer teaching/invigilating two exams
+  ROOM_CLASH // Room double-booked
+  ROOM_CAPACITY // Room too small for enrollment
+  ROOM_TYPE_MISMATCH // Lab course in lecture hall
+  LECTURER_UNAVAILABLE
+  CO_CLASH // Carry-over course clashes with current level
+}
+
+enum ConflictSeverity {
+  CRITICAL // Must be resolved before publishing
+  WARNING // Should be resolved but not blocking
+  INFO // FYI only
+}
+
+enum ConflictStatus {
+  DETECTED
+  ACKNOWLEDGED
+  RESOLVED
+  IGNORED
+}
+
+model Conflict {
+  id             String           @id @default(cuid())
+  examPeriodId   String
+  type           ConflictType
+  severity       ConflictSeverity
+  status         ConflictStatus   @default(DETECTED)
+  description    String
+  affectedEntity String // Student ID, Lecturer ID, or Room ID
+  affectedName   String // Human-readable name
+  slotAId        String?
+  slotBId        String?
+  resolution     String?
+  resolvedBy     String?
+  resolvedAt     DateTime?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  // Relations
+  examPeriod ExamPeriod      @relation(fields: [examPeriodId], references: [id], onDelete: Cascade)
+  slotA      ExamSlot?       @relation("SlotAConflict", fields: [slotAId], references: [id])
+  slotB      ExamSlot?       @relation("SlotBConflict", fields: [slotBId], references: [id])
+  report     ConflictReport? @relation(fields: [reportId], references: [id])
+
+  reportId String?
+
+  @@index([examPeriodId])
+  @@index([type])
+  @@index([status])
+  @@index([affectedEntity])
+}
+
+model ConflictReport {
+  id             String       @id @default(cuid())
+  examPeriodId   String
+  generatedAt    DateTime     @default(now())
+  totalConflicts Int          @default(0)
+  criticalCount  Int          @default(0)
+  warningCount   Int          @default(0)
+  infoCount      Int          @default(0)
+  status         ReportStatus @default(PENDING)
+  reviewedBy     String?
+  reviewedAt     DateTime?
+  approvedBy     String?
+  approvedAt     DateTime?
+  notes          String?
+
+  // Relations
+  examPeriod ExamPeriod @relation(fields: [examPeriodId], references: [id], onDelete: Cascade)
+  conflicts  Conflict[]
+
+  @@index([examPeriodId])
+  @@index([status])
+}
+
+enum ReportStatus {
+  PENDING
+  REVIEWED
+  APPROVED
+  REJECTED
+}
+
+// ============================================
+// TIMETABLE VERSIONS & PUBLISHING
+// ============================================
+
+model TimetableVersion {
+  id           String    @id @default(cuid())
+  examPeriodId String
+  version      Int
+  changes      String? // JSON: what changed from previous version
+  publishedBy  String?
+  publishedAt  DateTime?
+  isCurrent    Boolean   @default(false)
+  createdAt    DateTime  @default(now())
+
+  // Relations
+  examPeriod ExamPeriod @relation(fields: [examPeriodId], references: [id], onDelete: Cascade)
+
+  @@unique([examPeriodId, version])
+  @@index([examPeriodId])
+}
+
+// ============================================
+// NOTIFICATIONS
+// ============================================
+
+model Notification {
+  id        String           @id @default(cuid())
+  userId    String
+  title     String
+  message   String
+  type      NotificationType
+  isRead    Boolean          @default(false)
+  actionUrl String? // Link to relevant page
+  createdAt DateTime         @default(now())
+
+  @@index([userId])
+  @@index([isRead])
+}
+
+enum NotificationType {
+  INFO
+  WARNING
+  ERROR
+  SUCCESS
+  SCHEDULE_CHANGE
+  CONFLICT_DETECTED
+  APPROVAL_REQUIRED
 }
