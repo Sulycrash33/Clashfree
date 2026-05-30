@@ -1,16 +1,20 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { useSession } from 'next-auth/react'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { PageHeader } from '@/components/page-header'
-import { Calendar, Clock, MapPin, Users, AlertTriangle, CheckCircle2, Loader2, Sparkles, Download, RefreshCw, XCircle } from 'lucide-react'
+import { Calendar, Clock, MapPin, Users, AlertTriangle, CheckCircle2, Loader2, Sparkles, RefreshCw, XCircle, Eye, Filter } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 import { Progress } from '@/components/ui/progress'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { ExportButtons } from '@/components/export-buttons'
+import { VersionHistory } from '@/components/version-history'
+import { ConflictBadge } from '@/components/notification-badge'
+import type { TimetableExportData, ExamSlotExport } from '@/lib/export-utils'
 
 interface ExamSlot {
   id: string
@@ -48,6 +52,15 @@ interface ExamPeriod {
   eveningEnd?: string
 }
 
+interface Conflict {
+  id: string
+  type: string
+  severity: string
+  status: string
+  description: string
+  affectedName: string
+}
+
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 const slotLabels = ['Morning', 'Afternoon', 'Evening']
 const slotColors = [
@@ -56,6 +69,14 @@ const slotColors = [
   'from-amber-500/20 to-yellow-500/20 border-amber-500/30',
 ]
 
+const levelColors: Record<number, string> = {
+  100: 'bg-green-500/20 text-green-400 border-green-500/30',
+  200: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
+  300: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
+  400: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
+  500: 'bg-pink-500/20 text-pink-400 border-pink-500/30',
+}
+
 export default function ExamTimetablePage() {
   const { data: session } = useSession()
   const { toast } = useToast()
@@ -63,11 +84,16 @@ export default function ExamTimetablePage() {
   const [selectedPeriod, setSelectedPeriod] = useState<string>('')
   const [selectedPeriodData, setSelectedPeriodData] = useState<ExamPeriod | null>(null)
   const [examSlots, setExamSlots] = useState<ExamSlot[]>([])
+  const [conflicts, setConflicts] = useState<Conflict[]>([])
   const [stats, setStats] = useState({ totalExams: 0, uniqueCourses: 0, roomsUsed: 0, totalStudents: 0 })
   const [loading, setLoading] = useState(true)
   const [generating, setGenerating] = useState(false)
   const [progress, setProgress] = useState(0)
   const [progressMessage, setProgressMessage] = useState('')
+  const [viewMode, setViewMode] = useState<'calendar' | 'list'>('calendar')
+  const [filterLevel, setFilterLevel] = useState<string>('all')
+  const [filterDept, setFilterDept] = useState<string>('all')
+  const [currentVersion, setCurrentVersion] = useState(0)
 
   const fetchExamPeriods = useCallback(async () => {
     setLoading(true)
@@ -103,13 +129,28 @@ export default function ExamTimetablePage() {
     }
   }, [selectedPeriod])
 
+  const fetchConflicts = useCallback(async () => {
+    if (!selectedPeriod) return
+
+    try {
+      const res = await fetch(`/api/conflicts?examPeriodId=${selectedPeriod}`)
+      if (res.ok) {
+        const data = await res.json()
+        setConflicts(data.conflicts || [])
+      }
+    } catch (error) {
+      console.error('Failed to fetch conflicts:', error)
+    }
+  }, [selectedPeriod])
+
   useEffect(() => {
     fetchExamPeriods()
   }, [fetchExamPeriods])
 
   useEffect(() => {
     fetchExamSlots()
-  }, [fetchExamSlots])
+    fetchConflicts()
+  }, [fetchExamSlots, fetchConflicts])
 
   useEffect(() => {
     if (selectedPeriod) {
@@ -163,6 +204,8 @@ export default function ExamTimetablePage() {
             description: `Generated timetable with ${result.generation?.assignments?.length || 0} exam slots`,
           })
           fetchExamSlots()
+          fetchConflicts()
+          setCurrentVersion(prev => prev + 1)
         } else {
           toast({
             title: 'Generation Completed with Issues',
@@ -203,21 +246,45 @@ export default function ExamTimetablePage() {
     }
   }
 
+  // Filter slots
+  const filteredSlots = useMemo(() => {
+    return examSlots.filter(slot => {
+      if (filterLevel !== 'all' && slot.course.level !== parseInt(filterLevel)) return false
+      if (filterDept !== 'all' && slot.course.department?.code !== filterDept) return false
+      return true
+    })
+  }, [examSlots, filterLevel, filterDept])
+
+  // Get unique departments for filter
+  const departments = useMemo(() => {
+    const depts = new Map()
+    examSlots.forEach(slot => {
+      if (slot.course.department) {
+        depts.set(slot.course.department.code, slot.course.department.name)
+      }
+    })
+    return Array.from(depts.entries())
+  }, [examSlots])
+
   // Group slots by date and slot number for the calendar view
-  const groupedSlots = examSlots.reduce((acc, slot) => {
-    const dateKey = new Date(slot.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
-    if (!acc[dateKey]) acc[dateKey] = {}
-    if (!acc[dateKey][slot.slotNumber]) acc[dateKey][slot.slotNumber] = []
-    acc[dateKey][slot.slotNumber].push(slot)
-    return acc
-  }, {} as Record<string, Record<number, ExamSlot[]>>)
+  const groupedSlots = useMemo(() => {
+    return filteredSlots.reduce((acc, slot) => {
+      const dateKey = new Date(slot.date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+      if (!acc[dateKey]) acc[dateKey] = {}
+      if (!acc[dateKey][slot.slotNumber]) acc[dateKey][slot.slotNumber] = []
+      acc[dateKey][slot.slotNumber].push(slot)
+      return acc
+    }, {} as Record<string, Record<number, ExamSlot[]>>)
+  }, [filteredSlots])
 
   // Sort dates
-  const sortedDates = Object.keys(groupedSlots).sort((a, b) => {
-    const dateA = new Date(a)
-    const dateB = new Date(b)
-    return dateA.getTime() - dateB.getTime()
-  })
+  const sortedDates = useMemo(() => {
+    return Object.keys(groupedSlots).sort((a, b) => {
+      const dateA = new Date(a)
+      const dateB = new Date(b)
+      return dateA.getTime() - dateB.getTime()
+    })
+  }, [groupedSlots])
 
   // Get slot times from exam period
   const getSlotTime = (slotNum: number) => {
@@ -230,11 +297,40 @@ export default function ExamTimetablePage() {
     }
   }
 
+  // Prepare export data
+  const exportData: TimetableExportData = useMemo(() => {
+    return {
+      institution: 'Nasarawa State University, Keffi',
+      examPeriod: selectedPeriodData?.name || 'Exam Timetable',
+      session: selectedPeriodData?.session || '2025/2026',
+      semester: selectedPeriodData?.semester || 1,
+      generatedAt: new Date().toLocaleString(),
+      slots: examSlots.map(slot => ({
+        date: new Date(slot.date).toLocaleDateString(),
+        dayOfWeek: slot.dayOfWeek,
+        slotNumber: slot.slotNumber,
+        startTime: slot.startTime,
+        endTime: slot.endTime,
+        courseCode: slot.course.code,
+        courseName: slot.course.name,
+        level: slot.course.level,
+        department: slot.course.department?.name || 'General',
+        room: slot.room.name,
+        roomCapacity: slot.room.capacity,
+        studentCount: slot.course._count?.studentCourses || 0,
+        isShared: slot.course.isShared,
+      })),
+    }
+  }, [examSlots, selectedPeriodData])
+
+  const criticalConflicts = conflicts.filter(c => c.severity === 'CRITICAL').length
+  const warningConflicts = conflicts.filter(c => c.severity === 'WARNING').length
+
   return (
     <div className="space-y-6">
       <PageHeader
         title="Exam Timetable"
-        description="Visual canvas for exam scheduling"
+        description="Visual canvas for exam scheduling with CO clash detection"
         onRefresh={fetchExamSlots}
         loading={loading}
       />
@@ -242,8 +338,8 @@ export default function ExamTimetablePage() {
       {/* Control Panel */}
       <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
         <CardContent className="pt-6">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
+          <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
+            <div className="flex flex-wrap items-center gap-4">
               <div className="space-y-1">
                 <label className="text-sm text-slate-400">Exam Period</label>
                 <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
@@ -271,17 +367,14 @@ export default function ExamTimetablePage() {
                   {selectedPeriodData.status}
                 </Badge>
               )}
+              
+              {/* Version Badge */}
+              <VersionHistory examPeriodId={selectedPeriod} currentVersion={currentVersion} />
             </div>
 
-            <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                className="border-white/10 text-slate-300 hover:text-white"
-                disabled={examSlots.length === 0}
-              >
-                <Download className="w-4 h-4 mr-2" />
-                Export PDF
-              </Button>
+            <div className="flex flex-wrap items-center gap-2">
+              <ExportButtons data={exportData} disabled={examSlots.length === 0} />
+              
               {examSlots.length > 0 && (
                 <Button
                   variant="outline"
@@ -325,8 +418,8 @@ export default function ExamTimetablePage() {
       </Card>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-white/5 border-white/10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <Card className="bg-white/5 border-white/10 hover:bg-white/[0.07] transition-colors">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center">
@@ -339,7 +432,7 @@ export default function ExamTimetablePage() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white/5 border-white/10">
+        <Card className="bg-white/5 border-white/10 hover:bg-white/[0.07] transition-colors">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center">
@@ -352,7 +445,7 @@ export default function ExamTimetablePage() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white/5 border-white/10">
+        <Card className="bg-white/5 border-white/10 hover:bg-white/[0.07] transition-colors">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500/20 to-yellow-500/20 flex items-center justify-center">
@@ -365,7 +458,7 @@ export default function ExamTimetablePage() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white/5 border-white/10">
+        <Card className="bg-white/5 border-white/10 hover:bg-white/[0.07] transition-colors">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center">
@@ -380,6 +473,87 @@ export default function ExamTimetablePage() {
         </Card>
       </div>
 
+      {/* Conflicts Alert */}
+      {conflicts.length > 0 && (
+        <Card className="bg-red-500/5 border-red-500/20">
+          <CardContent className="pt-4">
+            <div className="flex items-center justify-between">
+              <ConflictBadge 
+                count={conflicts.length} 
+                critical={criticalConflicts}
+                warnings={warningConflicts}
+              />
+              <Button 
+                variant="link" 
+                className="text-red-400 hover:text-red-300"
+                onClick={() => window.location.href = '/dashboard/conflicts'}
+              >
+                View All Conflicts →
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Filters */}
+      {examSlots.length > 0 && (
+        <Card className="bg-white/5 border-white/10">
+          <CardContent className="pt-4">
+            <div className="flex flex-wrap items-center gap-4">
+              <div className="flex items-center gap-2">
+                <Filter className="w-4 h-4 text-slate-400" />
+                <span className="text-sm text-slate-400">Filter:</span>
+              </div>
+              <Select value={filterLevel} onValueChange={setFilterLevel}>
+                <SelectTrigger className="w-32 bg-white/5 border-white/10 text-white text-sm">
+                  <SelectValue placeholder="Level" />
+                </SelectTrigger>
+                <SelectContent className="bg-slate-900 border-white/10">
+                  <SelectItem value="all" className="text-white">All Levels</SelectItem>
+                  {[100, 200, 300, 400, 500].map(lvl => (
+                    <SelectItem key={lvl} value={lvl.toString()} className="text-white">{lvl}L</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              
+              <Select value={filterDept} onValueChange={setFilterDept}>
+                <SelectTrigger className="w-48 bg-white/5 border-white/10 text-white text-sm">
+                  <SelectValue placeholder="Department" />
+                </SelectTrigger>
+                <SelectContent className="bg-slate-900 border-white/10">
+                  <SelectItem value="all" className="text-white">All Departments</SelectItem>
+                  {departments.map(([code, name]) => (
+                    <SelectItem key={code} value={code} className="text-white">{code} - {name}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              
+              <div className="flex items-center gap-2 ml-auto">
+                <span className="text-sm text-slate-400">View:</span>
+                <div className="flex bg-white/5 rounded-lg p-1">
+                  <Button
+                    variant={viewMode === 'calendar' ? 'default' : 'ghost'}
+                    size="sm"
+                    onClick={() => setViewMode('calendar')}
+                    className={viewMode === 'calendar' ? 'bg-cyan-500 text-white' : 'text-slate-400'}
+                  >
+                    Calendar
+                  </Button>
+                  <Button
+                    variant={viewMode === 'list' ? 'default' : 'ghost'}
+                    size="sm"
+                    onClick={() => setViewMode('list')}
+                    className={viewMode === 'list' ? 'bg-cyan-500 text-white' : 'text-slate-400'}
+                  >
+                    List
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Visual Calendar Canvas */}
       <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
         <CardHeader>
@@ -388,13 +562,13 @@ export default function ExamTimetablePage() {
             Exam Schedule Canvas
           </CardTitle>
           <CardDescription>
-            {examSlots.length > 0
-              ? `${stats.totalExams} exams across ${sortedDates.length} days`
+            {filteredSlots.length > 0
+              ? `${filteredSlots.length} exams across ${sortedDates.length} days`
               : 'Generate a timetable to see the visual schedule'}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          {examSlots.length === 0 ? (
+          {filteredSlots.length === 0 ? (
             <div className="py-16 text-center">
               <Calendar className="w-16 h-16 mx-auto text-slate-600 mb-4" />
               <p className="text-white font-medium mb-2">No exams scheduled yet</p>
@@ -408,7 +582,7 @@ export default function ExamTimetablePage() {
                 Generate Timetable
               </Button>
             </div>
-          ) : (
+          ) : viewMode === 'calendar' ? (
             <div className="overflow-x-auto">
               <div className="min-w-[900px]">
                 {/* Header */}
@@ -445,7 +619,7 @@ export default function ExamTimetablePage() {
                                       {slot.course.code}
                                       {slot.course.isShared && ' (GST)'}
                                     </Badge>
-                                    <Badge variant="secondary" className="bg-white/10 text-slate-300 text-xs">
+                                    <Badge variant="secondary" className={`${levelColors[slot.course.level] || 'bg-white/10 text-slate-300'} text-xs`}>
                                       {slot.course.level}L
                                     </Badge>
                                   </div>
@@ -477,12 +651,62 @@ export default function ExamTimetablePage() {
                 ))}
               </div>
             </div>
+          ) : (
+            /* List View */
+            <div className="space-y-2">
+              {sortedDates.map((date) => (
+                <div key={date} className="space-y-2">
+                  <h3 className="text-white font-medium sticky top-0 bg-slate-900/80 py-2">{date}</h3>
+                  {[1, 2, 3].map((slotNum) => {
+                    const slotsForTime = groupedSlots[date]?.[slotNum] || []
+                    if (slotsForTime.length === 0) return null
+                    
+                    return (
+                      <div key={slotNum} className="pl-4 border-l-2 border-white/10">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Clock className="w-4 h-4 text-slate-400" />
+                          <span className="text-sm text-slate-300">{getSlotTime(slotNum)}</span>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                          {slotsForTime.map((slot) => (
+                            <div
+                              key={slot.id}
+                              className="p-3 bg-white/5 rounded-lg border border-white/10 hover:border-cyan-500/30 transition-colors"
+                            >
+                              <div className="flex items-center justify-between mb-2">
+                                <Badge variant="outline" className="text-cyan-400 text-xs font-mono">
+                                  {slot.course.code}
+                                </Badge>
+                                <Badge variant="secondary" className={`${levelColors[slot.course.level] || 'bg-white/10 text-slate-300'} text-xs`}>
+                                  {slot.course.level}L
+                                </Badge>
+                              </div>
+                              <p className="text-sm text-white mb-2">{slot.course.name}</p>
+                              <div className="flex items-center justify-between text-xs text-slate-400">
+                                <div className="flex items-center gap-1">
+                                  <MapPin className="w-3 h-3" />
+                                  {slot.room.name}
+                                </div>
+                                <div className="flex items-center gap-1">
+                                  <Users className="w-3 h-3" />
+                                  {slot.course._count?.studentCourses || 0} students
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              ))}
+            </div>
           )}
         </CardContent>
       </Card>
 
       {/* Legend */}
-      {examSlots.length > 0 && (
+      {filteredSlots.length > 0 && (
         <Card className="bg-white/5 border-white/10">
           <CardContent className="pt-4">
             <div className="flex flex-wrap items-center gap-6">
