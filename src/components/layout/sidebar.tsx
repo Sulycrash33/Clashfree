@@ -66,15 +66,17 @@ const navigation = {
     { name: 'Conflicts', href: '/dashboard/conflicts', icon: AlertTriangle },
   ],
   LC: [
-    { name: 'My Schedule', href: '/dashboard', icon: LayoutDashboard },
-    { name: 'My Courses', href: '/dashboard/courses', icon: BookOpen },
-    { name: 'Invigilation Duties', href: '/dashboard/invigilation', icon: Calendar },
-    { name: 'Availability', href: '/dashboard/availability', icon: Clock },
+    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+    { name: 'My Schedule', href: '/dashboard/lecturer-schedule', icon: Calendar },
+    { name: 'Courses', href: '/dashboard/courses', icon: BookOpen },
+    { name: 'Students', href: '/dashboard/students', icon: GraduationCap },
+    { name: 'Rooms', href: '/dashboard/rooms', icon: MapPin },
   ],
   ST: [
-    { name: 'My Timetable', href: '/dashboard', icon: LayoutDashboard },
-    { name: 'My Courses', href: '/dashboard/courses', icon: BookOpen },
-    { name: 'Carry-over Status', href: '/dashboard/carry-over', icon: AlertTriangle },
+    { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+    { name: 'My Timetable', href: '/dashboard/my-timetable', icon: Calendar },
+    { name: 'Courses', href: '/dashboard/courses', icon: BookOpen },
+    { name: 'Conflicts', href: '/dashboard/conflicts', icon: AlertTriangle },
   ],
 }
 
