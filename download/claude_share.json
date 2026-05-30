@@ -1,0 +1,83 @@
+{
+  "code": 200,
+  "data": {
+    "description": "Shared via Claude, an AI assistant from Anthropic",
+    "external": {
+      "apple-touch-icon": {
+        "https://assets-proxy.anthropic.com/claude-ai/v2/assets/v1/c129d018a-jJjJELY8.png": {}
+      },
+      "apple-touch-startup-image": {
+        "https://claude.ai/images/claude_app_icon.png": {}
+      },
+      "dns-prefetch": {
+        "https://assets-proxy.anthropic.com/": {}
+      },
+      "icon": {
+        "https://assets-proxy.anthropic.com/claude-ai/v2/assets/v1/c03e51811-DebilQLI.png": {
+          "sizes": "16x16",
+          "type": "image/png"
+        },
+        "https://assets-proxy.anthropic.com/claude-ai/v2/assets/v1/cd02a42d9-Vq_H3mgS.svg": {
+          "type": "image/svg+xml"
+        },
+        "https://assets-proxy.anthropic.com/claude-ai/v2/assets/v1/ce67964e7-CAX1bqSh.png": {
+          "sizes": "32x32",
+          "type": "image/png"
+        },
+        "https://claude.ai/favicon.ico": {}
+      },
+      "manifest": {
+        "https://claude.ai/manifest.json": {}
+      },
+      "preconnect": {
+        "https://assets-proxy.anthropic.com/": {
+          "crossorigin": ""
+        },
+        "https://js.stripe.com/": {},
+        "https://m.stripe.network/": {}
+      },
+      "preload": {
+        "https://assets-proxy.anthropic.com/claude-ai/v2/assets/v1/c66fc489e-C-BHYa_K.woff2": {
+          "as": "font",
+          "crossorigin": "",
+          "type": "font/woff2"
+        },
+        "https://assets-proxy.anthropic.com/claude-ai/v2/assets/v1/cc27851ad-CFxw3nG7.woff2": {
+          "as": "font",
+          "crossorigin": "",
+          "type": "font/woff2"
+        }
+      }
+    },
+    "html": "<html data-build-id=\"0aa664188a\" data-git-hash=\"0aa664188a644e9902a69c98d8cb3855ff935c14\" data-build-timestamp=\"1780107539\" data-version=\"1.0.0\" data-env=\"\" data-color-version=\"v2\" lang=\"en-US\" data-theme=\"claude\" data-mode=\"light\" class=\"h-screen antialiased scroll-smooth\"><head data-ion-ip-country=\"US\"><meta property=\"og:title\" content=\"Claude\"><meta name=\"twitter:title\" content=\"Claude\"><meta property=\"og:description\" content=\"Shared via Claude, an AI assistant from Anthropic\"><meta name=\"twitter:description\" content=\"Shared via Claude, an AI assistant from Anthropic\"><link rel=\"preconnect\" href=\"https://assets-proxy.anthropic.com\" crossorigin=\"\"><link rel=\"dns-prefetch\" href=\"https://assets-proxy.anthropic.com\"><meta charset=\"UTF-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1,viewport-fit=cover\"><title>Claude</title><meta name=\"apple-itunes-app\" content=\"app-id=6473753684\"><meta property=\"og:type\" content=\"website\"><meta property=\"og:site_name\" content=\"Claude\"><meta property=\"og:image\" content=\"https://claude.ai/images/claude_ogimage.png\"><meta property=\"og:image:width\" content=\"1200\"><meta property=\"og:image:height\" content=\"630\"><meta name=\"twitter:card\" content=\"summary_large_image\"><link rel=\"icon\" type=\"image/svg+xml\" href=\"https://assets-proxy.anthropic.com/claude-ai/v2/assets/v1/cd02a42d9-Vq_H3mgS.svg\"><link rel=\"icon\" type=\"image/png\" sizes=\"32x32\" href=\"https://assets-proxy.anthropic.com/claude-ai/v2/assets/v1/ce67964e7-CAX1bqSh.png\"><link rel=\"icon\" type=\"image/png\" sizes=\"16x16\" href=\"https://assets-proxy.anthropic.com/claude-ai/v2/assets/v1/c03e51811-DebilQLI.png\"><link rel=\"shortcut icon\" href=\"/favicon.ico\"><link rel=\"apple-touch-icon\" href=\"https://assets-proxy.anthropic.com/claude-ai/v2/assets/v1/c129d018a-jJjJELY8.png\"><link rel=\"apple-touch-startup-image\" href=\"/images/claude_app_icon.png\"><link rel=\"manifest\" href=\"/manifest.json\"><meta name=\"mobile-web-app-capable\" content=\"yes\"><link rel=\"preload\" href=\"https://assets-proxy.anthropic.com/claude-ai/v2/assets/v1/cc27851ad-CFxw3nG7.woff2\" as=\"font\" type=\"font/woff2\" crossorigin=\"\"><link rel=\"preload\" href=\"https://assets-proxy.anthropic.com/claude-ai/v2/assets/v1/c66fc489e-C-BHYa_K.woff2\" as=\"font\" type=\"font/woff2\" crossorigin=\"\"><script nonce=\"elNEeE9gwXc+oigKng/RJQ==\">void 0===globalThis.process&&(globalThis.process={env:{},cwd:function(){return\"/\"}}),void 0===globalThis.global&&(globalThis.global=globalThis)</script><script type=\"application/ld+json\" nonce=\"elNEeE9gwXc+oigKng/RJQ==\">{\n        \"@context\": \"https://schema.org\",\n        \"@graph\": [\n          {\n            \"@type\": \"WebSite\",\n            \"name\": \"Claude\",\n            \"alternateName\": [\"Claude.ai\", \"Claude by Anthropic\"],\n            \"url\": \"https://claude.com\"\n          },\n          {\n            \"@type\": \"Organization\",\n            \"name\": \"Anthropic\",\n            \"url\": \"https://www.anthropic.com\",\n            \"logo\": \"https://claude.ai/images/claude_ogimage.png\",\n            \"sameAs\": [\n              \"https://x.com/AnthropicAI\",\n              \"https://www.linkedin.com/company/anthropic\",\n              \"https://www.youtube.com/@anthropic-ai\"\n            ]\n          }\n        ]\n      }</script><script nonce=\"elNEeE9gwXc+oigKng/RJQ==\">!function(){try{performance.mark?.(\"rq_cache:preload_start\");const e=\"keyval-store\",o=\"keyval\",r=\"react-query-cache\",t=new Promise(t=>{if(!window.indexedDB)return void t(void 0);const c=indexedDB.open(e);c.onupgradeneeded=()=>{c.transaction?.abort()},c.onerror=()=>t(void 0),c.onsuccess=()=>{const a=c.result;if(!a.objectStoreNames.contains(o))return a.close(),indexedDB.deleteDatabase(e),void t(void 0);try{const e=a.transaction(o,\"readonly\").objectStore(o).get(r);e.onerror=()=>{a.close(),t(void 0)},e.onsuccess=()=>{a.close(),window.__PRELOADED_IDB_CACHE_RESULT__=e.result,t(e.result)}}catch{a.close(),t(void 0)}}});window.__PRELOADED_IDB_CACHE__=t,performance.measure?.(\"rq_cache:preload_exec\",{start:\"rq_cache:preload_start\"})}catch{}}()</script><link rel=\"preconnect\" href=\"https://js.stripe.com\"><link rel=\"preconnect\" href=\"https://m.stripe.network\"><script type=\"module\" crossorigin=\"\" src=\"https://assets-proxy.anthropic.com/claude-ai/v2/assets/v1/index-C8tuKOhP.js\" nonce=\"elNEeE9gwXc+oigKng/RJQ==\"></script><link rel=\"stylesheet\" crossorigin=\"\" href=\"https://assets-proxy.anthropic.com/claude-ai/v2/assets/v1/c2591c98b-yIeMwlTz.css\"><link rel=\"stylesheet\" crossorigin=\"\" href=\"https://assets-proxy.anthropic.com/claude-ai/v2/assets/v1/c6a992d55-CAgg__up.css\"><meta name=\"x-route-title\" data-router-head=\"\" data-intended-title=\"Claude\"><meta name=\"description\" content=\"Shared via Claude, an AI assistant from Anthropic\" data-router-head=\"\"><meta name=\"theme-color\" content=\"hsl(60,11%,95%)\"></head><body class=\"bg-bg-100 text-text-100 font-ui min-h-screen\"><div id=\"root\"><div class=\"cds-root text-primary contents\" data-density=\"comfortable\" data-mode=\"light\" data-platform=\"web\" data-font=\"anthropic\" style=\"font-size: var(--cds-text-body);\"><div class=\"root\"><div class=\"grid place-content-center min-h-min text-center gap-2 pt-24 pb-32 px-4 mx-auto h-screen max-w-min\"><div class=\"m-auto\"><div class=\"h-20 w-20 border-8 border-border-200 text-secondary inline-block animate-spin rounded-full border-solid border-r-transparent align-[-0.125em] motion-reduce:animate-none\" role=\"status\"><span class=\"sr-only\">Loading...</span></div></div></div></div></div><div role=\"region\" aria-label=\"Notifications (F8)\" tabindex=\"-1\" style=\"pointer-events: none;\"><ol tabindex=\"-1\" class=\"fixed top-0 z-toast flex flex-col gap-3 p-4 draggable-none pointer-events-none\" style=\"right: var(--launch-drawer-width, 0px);\"></ol></div><iframe src=\"https://a.claude.ai/isolated-segment.html?v=0aa664188a\" referrerpolicy=\"no-referrer\" sandbox=\"allow-scripts allow-same-origin\" title=\"Marketing analytics\" style=\"display: none;\"></iframe></div><script nonce=\"elNEeE9gwXc+oigKng/RJQ==\">(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.nonce='elNEeE9gwXc+oigKng/RJQ==';d.innerHTML=\"window.__CF$cv$params={r:'a03ac568fc918b73',t:'MTc4MDExMjk4OQ=='};var a=document.createElement('script');a.nonce='elNEeE9gwXc+oigKng/RJQ==';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);\";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script><iframe height=\"1\" width=\"1\" style=\"position: absolute; top: 0px; left: 0px; border-width: medium; border-style: none; border-color: currentcolor; border-image: initial; visibility: hidden;\"></iframe><script src=\"https://s-cdn.anthropic.com/s.js\" async=\"\"></script></body></html>",
+    "metadata": {
+      "apple-itunes-app": "app-id=6473753684",
+      "description": "Shared via Claude, an AI assistant from Anthropic",
+      "lang": "en-US",
+      "mobile-web-app-capable": "yes",
+      "og:description": "Shared via Claude, an AI assistant from Anthropic",
+      "og:image": "https://claude.ai/images/claude_ogimage.png",
+      "og:image:height": "630",
+      "og:image:width": "1200",
+      "og:site_name": "Claude",
+      "og:title": "Claude",
+      "og:type": "website",
+      "theme-color": "hsl(60,11%,95%)",
+      "twitter:card": "summary_large_image",
+      "twitter:description": "Shared via Claude, an AI assistant from Anthropic",
+      "twitter:title": "Claude",
+      "viewport": "width=device-width,initial-scale=1,viewport-fit=cover"
+    },
+    "title": "Claude",
+    "url": "https://claude.ai/share/5e6534dd-73e2-473e-ada9-210da77812e3",
+    "usage": {
+      "tokens": 2081
+    }
+  },
+  "meta": {
+    "usage": {
+      "tokens": 2081
+    }
+  },
+  "status": 20000
+}
