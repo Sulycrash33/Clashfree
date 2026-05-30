@@ -98,11 +98,12 @@ model Institution {
   updatedAt       DateTime        @updatedAt
 
   // Relations
-  users       User[]
-  faculties   Faculty[]
-  rooms       Room[]
-  examPeriods ExamPeriod[]
-  courses     Course[]
+  users             User[]
+  faculties         Faculty[]
+  rooms             Room[]
+  examPeriods       ExamPeriod[]
+  courses           Course[]
+  lectureTimetables LectureTimetable[]
 
   @@index([shortName])
   @@index([type])
@@ -177,6 +178,7 @@ model Course {
   lecturer       Lecturer?            @relation(fields: [lecturerId], references: [id])
   studentCourses StudentCourse[]
   examSlots      ExamSlot[]
+  lectureSlots   LectureSlot[]
   prerequisites  CoursePrerequisite[] @relation("PrerequisiteTo")
   requiredFor    CoursePrerequisite[] @relation("PrerequisiteFor")
 
@@ -313,9 +315,10 @@ model Room {
   updatedAt     DateTime @updatedAt
 
   // Relations
-  institution Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
-  faculty     Faculty?    @relation(fields: [facultyId], references: [id], onDelete: SetNull)
+  institution Institution  @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  faculty     Faculty?     @relation(fields: [facultyId], references: [id], onDelete: SetNull)
   examSlots   ExamSlot[]
+  lectureSlots LectureSlot[]
 
   @@unique([institutionId, code])
   @@index([institutionId])
@@ -555,6 +558,76 @@ model TimetableVersion {
 
   @@unique([examPeriodId, version])
   @@index([examPeriodId])
+}
+
+// ============================================
+// LECTURE TIMETABLE
+// ============================================
+
+model LectureTimetable {
+  id            String              @id @default(cuid())
+  institutionId String
+  name          String              // e.g., "First Semester 2025/2026"
+  session       String              // e.g., "2025/2026"
+  semester      Int
+  startDate     DateTime            // Semester start date
+  endDate       DateTime            // Semester end date
+  status        TimetableStatus     @default(DRAFT)
+  publishedAt   DateTime?
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
+
+  // Relations
+  institution Institution    @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  slots       LectureSlot[]
+
+  @@unique([institutionId, session, semester])
+  @@index([institutionId])
+  @@index([status])
+}
+
+enum TimetableStatus {
+  DRAFT
+  GENERATING
+  GENERATED
+  UNDER_REVIEW
+  APPROVED
+  PUBLISHED
+  ARCHIVED
+}
+
+model LectureSlot {
+  id                  String            @id @default(cuid())
+  lectureTimetableId  String
+  courseId            String
+  roomId              String
+  dayOfWeek           Int               // 0=Sunday, 1=Monday, 2=Tuesday, etc.
+  startTime           String            // e.g., "08:00"
+  endTime             String            // e.g., "10:00"
+  isRecurring         Boolean           @default(true) // Weekly recurring
+  weekPattern         String?           // JSON: [1,1,1,1,1,0,0] for which weeks this runs
+  status              SlotStatus        @default(ACTIVE)
+  notes               String?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+
+  // Relations
+  lectureTimetable LectureTimetable @relation(fields: [lectureTimetableId], references: [id], onDelete: Cascade)
+  course           Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  room             Room             @relation(fields: [roomId], references: [id])
+
+  @@unique([lectureTimetableId, courseId, dayOfWeek, startTime])
+  @@index([lectureTimetableId])
+  @@index([courseId])
+  @@index([roomId])
+  @@index([dayOfWeek])
+}
+
+enum SlotStatus {
+  ACTIVE
+  CANCELLED
+  RESCHEDULED
+  ONE_OFF // Single occurrence, not recurring
 }
 
 // ============================================
