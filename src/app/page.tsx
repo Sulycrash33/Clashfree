@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -28,6 +29,8 @@ const roles = [
     icon: Shield,
     color: 'from-red-500 to-orange-500',
     features: ['47+ institutions', 'User management', 'System health', 'Activity logs'],
+    demoEmail: 'admin@clashfree.com',
+    demoPassword: 'admin123',
   },
   {
     id: 'IA',
@@ -37,6 +40,8 @@ const roles = [
     icon: Building2,
     color: 'from-blue-500 to-cyan-500',
     features: ['Faculties & depts', 'Timetable generation', 'Approval workflow', 'Reports'],
+    demoEmail: 'ia@nsuk.edu.ng',
+    demoPassword: 'admin123',
   },
   {
     id: 'TO',
@@ -46,6 +51,8 @@ const roles = [
     icon: Calendar,
     color: 'from-purple-500 to-pink-500',
     features: ['Course management', 'Student data', 'Room inventory', 'Conflict resolution'],
+    demoEmail: 'to@nsuk.edu.ng',
+    demoPassword: 'admin123',
   },
   {
     id: 'LC',
@@ -55,6 +62,8 @@ const roles = [
     icon: BookOpen,
     color: 'from-green-500 to-emerald-500',
     features: ['My schedule', 'Availability setter', 'Invigilation duties', 'Course assignments'],
+    demoEmail: 'lecturer@nsuk.edu.ng',
+    demoPassword: 'admin123',
   },
   {
     id: 'ST',
@@ -64,6 +73,8 @@ const roles = [
     icon: GraduationCap,
     color: 'from-amber-500 to-yellow-500',
     features: ['My exams', 'Venue locations', 'Carry-over status', 'Calendar sync'],
+    demoEmail: 'student@nsuk.edu.ng',
+    demoPassword: 'admin123',
   },
 ]
 
@@ -102,6 +113,12 @@ const institutions = [
 ]
 
 export default function LandingPage() {
+  const router = useRouter()
+
+  const handleRoleClick = (role: typeof roles[0]) => {
+    router.push(`/login?email=${encodeURIComponent(role.demoEmail)}&password=${encodeURIComponent(role.demoPassword)}`)
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
       {/* Animated background */}
@@ -220,6 +237,7 @@ export default function LandingPage() {
           {roles.map((role) => (
             <Card
               key={role.id}
+              onClick={() => handleRoleClick(role)}
               className="group bg-white/5 border-white/10 backdrop-blur-sm hover:border-white/20 transition-all hover:scale-[1.02] cursor-pointer"
             >
               <CardHeader className="pb-3">

@@ -62,6 +62,34 @@ async function main() {
   })
   console.log('✅ Created timetable officer:', timetableOfficer.email)
 
+  // Lecturer Demo User
+  const lcPassword = await hash('admin123', 12)
+  const lecturerUser = await prisma.user.upsert({
+    where: { email: 'lecturer@nsuk.edu.ng' },
+    update: {},
+    create: {
+      email: 'lecturer@nsuk.edu.ng',
+      passwordHash: lcPassword,
+      name: 'Dr. Adamu Ibrahim',
+      role: 'LC',
+    },
+  })
+  console.log('✅ Created lecturer user:', lecturerUser.email)
+
+  // Student Demo User
+  const stPassword = await hash('admin123', 12)
+  const studentUser = await prisma.user.upsert({
+    where: { email: 'student@nsuk.edu.ng' },
+    update: {},
+    create: {
+      email: 'student@nsuk.edu.ng',
+      passwordHash: stPassword,
+      name: 'Chinedu Okafor',
+      role: 'ST',
+    },
+  })
+  console.log('✅ Created student user:', studentUser.email)
+
   // ========================================
   // 2. CREATE INSTITUTION
   // ========================================
