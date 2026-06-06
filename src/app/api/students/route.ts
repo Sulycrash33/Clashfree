@@ -56,6 +56,7 @@ export async function GET(request: NextRequest) {
           admissionYear: true,
           isSpillover: true,
           isActive: true,
+          userId: true,
           department: {
             select: {
               id: true,

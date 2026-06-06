@@ -1,410 +1,632 @@
-import { PrismaClient, RoomType, ConflictType, ConflictSeverity, ConflictStatus, NotificationType } from '@prisma/client'
-import { hash } from 'bcryptjs'
+import { PrismaClient, UserRole, InstitutionType, RoomType } from "@prisma/client";
+import bcrypt from "bcryptjs";
 
-const prisma = new PrismaClient()
+const prisma = new PrismaClient();
+
+// Password for all demo accounts: demo1234
+const DEMO_PASSWORD = "$2a$12$LJ3m4ys3Lk0pQGJ5eF5NHOtZQ7Xh8Y0rAaBbCcDdEeFfGgHhIiJjKk";
+
+const INSTITUTION = {
+  name: "Federal University of Konoha",
+  shortName: "FEDKO",
+  type: "FEDERAL_UNI" as InstitutionType,
+  city: "Konoha Village",
+  state: "Land of Fire",
+  country: "Nigeria",
+  currentSession: "2025/2026",
+  currentSemester: 2,
+};
+
+const FACULTIES = [
+  { code: "FAD", name: "Faculty of Administration", deanName: "Tsunade" },
+  { code: "FAG", name: "Faculty of Agriculture", deanName: "Yamato" },
+  { code: "FAL", name: "Faculty of Arts", deanName: "Kurenai Yuhi" },
+  { code: "FEN", name: "Faculty of Engineering", deanName: "Minato Namikaze" },
+  { code: "FED", name: "Faculty of Environmental Design", deanName: "Orochimaru" },
+  { code: "FLA", name: "Faculty of Law", deanName: "Danzo Shimura" },
+  { code: "FPS", name: "Faculty of Physical and Applied Sciences", deanName: "Hiruzen Sarutobi" },
+  { code: "FPH", name: "Faculty of Pharmacy", deanName: "Sakura Haruno" },
+  { code: "FSS", name: "Faculty of Social Sciences", deanName: "Itachi Uchiha" },
+  { code: "FVM", name: "Faculty of Veterinary Medicine", deanName: "Kiba Inuzuka" },
+];
+
+// facultyCode -> departments[]
+const DEPARTMENTS: Record<string, { code: string; name: string; hod: string }[]> = {
+  FAD: [
+    { code: "ACC", name: "Accounting", hod: "Shikamaru Nara" },
+    { code: "BUS", name: "Business Administration", hod: "Ino Yamanaka" },
+    { code: "PAD", name: "Public Administration", hod: "Temari" },
+    { code: "LGS", name: "Local Government and Development Studies", hod: "Choji Akimichi" },
+    { code: "MAC", name: "Mass Communication", hod: "Jiraiya" },
+  ],
+  FAG: [
+    { code: "AGN", name: "Agronomy", hod: "Konohamaru Sarutobi" },
+    { code: "ANS", name: "Animal Science", hod: "Kiba Inuzuka" },
+    { code: "AEC", name: "Agricultural Economics and Rural Sociology", hod: "Sai" },
+    { code: "AER", name: "Agricultural Extension and Rural Development", hod: "Asuma Sarutobi" },
+    { code: "SLS", name: "Soil Science", hod: "Iruka Umino" },
+    { code: "CRP", name: "Crop Protection", hod: "Shino Aburame" },
+  ],
+  FAL: [
+    { code: "ELS", name: "English and Literary Studies", hod: "Kakashi Hatake" },
+    { code: "HIS", name: "History", hod: "Jiraiya" },
+    { code: "ARA", name: "Arabic", hod: "Gaara" },
+    { code: "FRE", name: "French", hod: "Yugao Uzuki" },
+    { code: "ALC", name: "African Languages and Cultures", hod: "Killer B" },
+    { code: "THA", name: "Theatre and Performing Arts", hod: "Might Guy" },
+  ],
+  FEN: [
+    { code: "CVE", name: "Civil Engineering", hod: "Hashirama Senju" },
+    { code: "ECE", name: "Electrical and Computer Engineering", hod: "Tobirama Senju" },
+    { code: "MCE", name: "Mechanical Engineering", hod: "Rock Lee" },
+    { code: "CHN", name: "Chemical Engineering", hod: "Kabuto Yakushi" },
+    { code: "PET", name: "Petroleum Engineering", hod: "Rasa" },
+    { code: "AUT", name: "Automotive Engineering", hod: "Darui" },
+    { code: "MTE", name: "Mechatronics Engineering", hod: "Neji Hyuga" },
+  ],
+  FED: [
+    { code: "ARC", name: "Architecture", hod: "Sasori" },
+    { code: "BLD", name: "Building", hod: "Deidara" },
+    { code: "GEM", name: "Geomatics", hod: "Konan" },
+    { code: "URP", name: "Urban and Regional Planning", hod: "Yahiko" },
+    { code: "QSV", name: "Quantity Surveying", hod: "Kakuzu" },
+    { code: "IND", name: "Industrial Design", hod: "Hidan" },
+  ],
+  FLA: [
+    { code: "PBL", name: "Public Law", hod: "Tsunade" },
+    { code: "PRL", name: "Private Law", hod: "Hinata Hyuga" },
+    { code: "CML", name: "Commercial Law", hod: "Shikamaru Nara" },
+    { code: "ILW", name: "Islamic Law", hod: "Gaara" },
+  ],
+  FPS: [
+    { code: "CSC", name: "Computer Science", hod: "Shikamaru Nara" },
+    { code: "MTH", name: "Mathematics", hod: "Itachi Uchiha" },
+    { code: "PHY", name: "Physics", hod: "Minato Namikaze" },
+    { code: "CHM", name: "Chemistry", hod: "Sasori" },
+    { code: "BSC", name: "Biological Sciences", hod: "Shino Aburame" },
+    { code: "BCH", name: "Biochemistry", hod: "Kabuto Yakushi" },
+    { code: "BOT", name: "Botany", hod: "Ino Yamanaka" },
+    { code: "ZOO", name: "Zoology", hod: "Kiba Inuzuka" },
+    { code: "MCB", name: "Microbiology", hod: "Kabuto Yakushi" },
+    { code: "STA", name: "Statistics", hod: "Temari" },
+    { code: "GEO", name: "Geology", hod: "Onoki" },
+    { code: "GEG", name: "Geography", hod: "Konan" },
+  ],
+  FPH: [
+    { code: "PHA", name: "Pharmacy", hod: "Sakura Haruno" },
+    { code: "PHM", name: "Pharmacology", hod: "Tsunade" },
+    { code: "PHC", name: "Pharmaceutical Chemistry", hod: "Kabuto Yakushi" },
+    { code: "PHT", name: "Pharmacognosy", hod: "Shizune" },
+  ],
+  FSS: [
+    { code: "POL", name: "Political Science and International Studies", hod: "Madara Uchiha" },
+    { code: "SOC", name: "Sociology", hod: "Nagato" },
+    { code: "PHL", name: "Philosophy", hod: "Nagato" },
+    { code: "PSY", name: "Psychology", hod: "Ino Yamanaka" },
+    { code: "ECO", name: "Economics", hod: "Shikamaru Nara" },
+    { code: "SWK", name: "Social Work", hod: "Kurenai Yuhi" },
+  ],
+  FVM: [
+    { code: "VTM", name: "Veterinary Medicine", hod: "Kiba Inuzuka" },
+    { code: "VPH", name: "Veterinary Public Health", hod: "Shizune" },
+    { code: "VAP", name: "Veterinary Anatomy and Physiology", hod: "Sakura Haruno" },
+    { code: "VSG", name: "Veterinary Surgery", hod: "Tsunade" },
+    { code: "VMT", name: "Veterinary Microbiology", hod: "Kabuto Yakushi" },
+  ],
+};
+
+// Course templates: deptCode -> {code, name, level, cu, lab?}
+const COURSES: Record<string, { code: string; name: string; level: number; cu: number; lab?: boolean }[]> = {
+  ACC: [{code:"101",name:"Introduction to Financial Accounting",level:100,cu:3},{code:"102",name:"Principles of Cost Accounting",level:100,cu:3},{code:"201",name:"Financial Accounting I",level:200,cu:3},{code:"202",name:"Cost and Management Accounting",level:200,cu:3},{code:"301",name:"Advanced Financial Accounting",level:300,cu:3},{code:"302",name:"Public Sector Accounting and Finance",level:300,cu:3}],
+  BUS: [{code:"101",name:"Introduction to Business Administration",level:100,cu:3},{code:"102",name:"Principles of Management",level:100,cu:2},{code:"201",name:"Business Organisation and Environment",level:200,cu:3},{code:"202",name:"Business Statistics",level:200,cu:3},{code:"301",name:"Operations Management",level:300,cu:3}],
+  PAD: [{code:"101",name:"Introduction to Public Administration",level:100,cu:3},{code:"102",name:"Nigerian Government and Politics",level:100,cu:2},{code:"201",name:"Public Policy Analysis",level:200,cu:3},{code:"202",name:"Local Government Administration",level:200,cu:3},{code:"301",name:"Development Administration",level:300,cu:3}],
+  LGS: [{code:"101",name:"Introduction to Local Government Studies",level:100,cu:2},{code:"201",name:"Community Development",level:200,cu:3},{code:"202",name:"Rural Development Administration",level:200,cu:3},{code:"301",name:"Local Government Finance",level:300,cu:3},{code:"302",name:"Inter-Governmental Relations",level:300,cu:2}],
+  MAC: [{code:"101",name:"Introduction to Mass Communication",level:100,cu:3},{code:"102",name:"History of Nigerian Media",level:100,cu:2},{code:"201",name:"News Writing and Reporting",level:200,cu:3},{code:"202",name:"Broadcast Journalism",level:200,cu:3},{code:"301",name:"Public Relations and Advertising",level:300,cu:3}],
+  AGN: [{code:"101",name:"Introduction to Agronomy",level:100,cu:3},{code:"102",name:"Principles of Crop Production",level:100,cu:3},{code:"201",name:"Crop Physiology and Ecology",level:200,cu:3},{code:"202",name:"Seed Technology",level:200,cu:3},{code:"301",name:"Cereal and Legume Production",level:300,cu:3,lab:true}],
+  ANS: [{code:"101",name:"Introduction to Animal Science",level:100,cu:3},{code:"102",name:"Animal Anatomy and Physiology",level:100,cu:3},{code:"201",name:"Animal Nutrition and Feeding",level:200,cu:3},{code:"202",name:"Animal Breeding and Genetics",level:200,cu:3},{code:"301",name:"Livestock Production Management",level:300,cu:3,lab:true}],
+  AEC: [{code:"101",name:"Introduction to Agricultural Economics",level:100,cu:3},{code:"102",name:"Principles of Agricultural Production",level:100,cu:2},{code:"201",name:"Farm Management and Production Economics",level:200,cu:3},{code:"202",name:"Agricultural Marketing and Prices",level:200,cu:3},{code:"301",name:"Project Appraisal in Agriculture",level:300,cu:3}],
+  AER: [{code:"101",name:"Introduction to Agricultural Extension",level:100,cu:3},{code:"102",name:"Rural Sociology",level:100,cu:2},{code:"201",name:"Extension Methods and Communication",level:200,cu:3},{code:"202",name:"Agricultural Development Programmes",level:200,cu:3},{code:"301",name:"Extension Administration and Supervision",level:300,cu:3}],
+  SLS: [{code:"101",name:"Introduction to Soil Science",level:100,cu:3},{code:"201",name:"Soil Physics",level:200,cu:3,lab:true},{code:"202",name:"Soil Chemistry and Fertility",level:200,cu:3,lab:true},{code:"301",name:"Soil Conservation and Management",level:300,cu:3},{code:"302",name:"Land Use Planning",level:300,cu:2}],
+  CRP: [{code:"101",name:"Introduction to Crop Protection",level:100,cu:3},{code:"201",name:"Principles of Plant Pathology",level:200,cu:3,lab:true},{code:"202",name:"Agricultural Entomology",level:200,cu:3,lab:true},{code:"301",name:"Weed Science and Control",level:300,cu:3},{code:"302",name:"Pesticide Chemistry and Toxicology",level:300,cu:3,lab:true}],
+  ELS: [{code:"101",name:"Introduction to English Language",level:100,cu:3},{code:"102",name:"Introduction to Literary Studies",level:100,cu:3},{code:"201",name:"English Syntax and Morphology",level:200,cu:3},{code:"202",name:"African Literature in English",level:200,cu:3},{code:"301",name:"Introduction to Sociolinguistics",level:300,cu:3}],
+  HIS: [{code:"101",name:"Introduction to History",level:100,cu:3},{code:"102",name:"History of Nigeria to 1900",level:100,cu:3},{code:"201",name:"Nigeria in the 20th Century",level:200,cu:3},{code:"202",name:"European History since 1789",level:200,cu:3},{code:"301",name:"History of International Relations",level:300,cu:3}],
+  ARA: [{code:"101",name:"Introduction to Arabic Language",level:100,cu:3},{code:"102",name:"Arabic Grammar I",level:100,cu:3},{code:"201",name:"Arabic Composition",level:200,cu:3},{code:"202",name:"Arabic Literature",level:200,cu:3},{code:"301",name:"Advanced Arabic Syntax",level:300,cu:3}],
+  FRE: [{code:"101",name:"Introduction to French Language",level:100,cu:3},{code:"102",name:"French Grammar I",level:100,cu:3},{code:"201",name:"French Composition",level:200,cu:3},{code:"202",name:"Introduction to French Literature",level:200,cu:3},{code:"301",name:"French Phonetics",level:300,cu:2}],
+  ALC: [{code:"101",name:"Introduction to African Languages",level:100,cu:3},{code:"102",name:"Hausa Language I",level:100,cu:3},{code:"201",name:"Igbo Language I",level:200,cu:3},{code:"202",name:"Yoruba Language I",level:200,cu:3},{code:"301",name:"Language and National Development",level:300,cu:3}],
+  THA: [{code:"101",name:"Introduction to Theatre Arts",level:100,cu:3},{code:"102",name:"Basic Acting Techniques",level:100,cu:2},{code:"201",name:"Stagecraft and Design",level:200,cu:3},{code:"202",name:"Play Production",level:200,cu:3},{code:"301",name:"African Drama and Theatre",level:300,cu:3}],
+  CVE: [{code:"101",name:"Introduction to Civil Engineering",level:100,cu:3},{code:"102",name:"Engineering Drawing I",level:100,cu:2},{code:"201",name:"Strength of Materials",level:200,cu:3},{code:"202",name:"Fluid Mechanics I",level:200,cu:3,lab:true},{code:"301",name:"Structural Analysis I",level:300,cu:3},{code:"302",name:"Geotechnical Engineering",level:300,cu:3,lab:true}],
+  ECE: [{code:"101",name:"Introduction to Electrical Engineering",level:100,cu:3},{code:"102",name:"Circuit Theory I",level:100,cu:3,lab:true},{code:"201",name:"Electronics I",level:200,cu:3,lab:true},{code:"202",name:"Electromagnetic Fields",level:200,cu:3},{code:"301",name:"Signals and Systems",level:300,cu:3},{code:"302",name:"Communication Principles",level:300,cu:3}],
+  MCE: [{code:"101",name:"Introduction to Mechanical Engineering",level:100,cu:3},{code:"102",name:"Engineering Thermodynamics I",level:100,cu:3},{code:"201",name:"Mechanics of Machines I",level:200,cu:3},{code:"202",name:"Manufacturing Processes I",level:200,cu:3,lab:true},{code:"301",name:"Machine Design I",level:300,cu:3}],
+  CHN: [{code:"101",name:"Introduction to Chemical Engineering",level:100,cu:3},{code:"102",name:"Material and Energy Balances",level:100,cu:3},{code:"201",name:"Chemical Engineering Thermodynamics",level:200,cu:3},{code:"202",name:"Fluid Flow Operations",level:200,cu:3,lab:true},{code:"301",name:"Chemical Reaction Engineering I",level:300,cu:3}],
+  PET: [{code:"101",name:"Introduction to Petroleum Engineering",level:100,cu:3},{code:"102",name:"Petroleum Geology",level:100,cu:3},{code:"201",name:"Reservoir Engineering I",level:200,cu:3},{code:"202",name:"Drilling Engineering I",level:200,cu:3},{code:"301",name:"Petroleum Production Engineering",level:300,cu:3}],
+  AUT: [{code:"101",name:"Introduction to Automotive Engineering",level:100,cu:3},{code:"102",name:"Automotive Electrical Systems",level:100,cu:3,lab:true},{code:"201",name:"Internal Combustion Engines",level:200,cu:3},{code:"202",name:"Vehicle Dynamics",level:200,cu:3},{code:"301",name:"Automotive Design and Manufacturing",level:300,cu:3,lab:true}],
+  MTE: [{code:"101",name:"Introduction to Mechatronics",level:100,cu:3},{code:"102",name:"Digital Electronics",level:100,cu:3,lab:true},{code:"201",name:"Control Systems I",level:200,cu:3},{code:"202",name:"Microprocessors and Microcontrollers",level:200,cu:3,lab:true},{code:"301",name:"Robotics and Automation",level:300,cu:3,lab:true}],
+  ARC: [{code:"101",name:"Introduction to Architecture",level:100,cu:3},{code:"102",name:"Architectural Drawing I",level:100,cu:3},{code:"201",name:"Architectural Design I",level:200,cu:4},{code:"202",name:"Building Construction I",level:200,cu:3},{code:"301",name:"Architectural Design II",level:300,cu:4}],
+  BLD: [{code:"101",name:"Introduction to Building Technology",level:100,cu:3},{code:"102",name:"Building Materials I",level:100,cu:3},{code:"201",name:"Building Construction I",level:200,cu:3},{code:"202",name:"Building Services I",level:200,cu:3},{code:"301",name:"Structural Elements in Building",level:300,cu:3}],
+  GEM: [{code:"101",name:"Introduction to Geomatics",level:100,cu:3},{code:"102",name:"Surveying I",level:100,cu:3,lab:true},{code:"201",name:"Surveying II",level:200,cu:3,lab:true},{code:"202",name:"Geodetic Surveying",level:200,cu:3},{code:"301",name:"Photogrammetry and Remote Sensing",level:300,cu:3}],
+  URP: [{code:"101",name:"Introduction to Urban and Regional Planning",level:100,cu:3},{code:"102",name:"Planning Theory",level:100,cu:2},{code:"201",name:"Site Analysis and Planning",level:200,cu:3},{code:"202",name:"Transportation Planning",level:200,cu:3},{code:"301",name:"Regional Planning Techniques",level:300,cu:3}],
+  QSV: [{code:"101",name:"Introduction to Quantity Surveying",level:100,cu:3},{code:"102",name:"Construction Economics",level:100,cu:2},{code:"201",name:"Measurement of Building Works I",level:200,cu:3},{code:"202",name:"Building Estimating and Pricing",level:200,cu:3},{code:"301",name:"Measurement of Engineering Works",level:300,cu:3}],
+  IND: [{code:"101",name:"Introduction to Industrial Design",level:100,cu:3},{code:"102",name:"Basic Design and Colour Theory",level:100,cu:3},{code:"201",name:"Product Design I",level:200,cu:3},{code:"202",name:"Ceramics Design",level:200,cu:3,lab:true},{code:"301",name:"Industrial Design Methods",level:300,cu:3}],
+  PBL: [{code:"101",name:"Introduction to Nigerian Legal System",level:100,cu:3},{code:"102",name:"Constitutional Law I",level:100,cu:3},{code:"201",name:"Constitutional Law II",level:200,cu:3},{code:"202",name:"Administrative Law",level:200,cu:3},{code:"301",name:"International Law I",level:300,cu:3}],
+  PRL: [{code:"101",name:"Law of Contract I",level:100,cu:3},{code:"102",name:"Law of Torts I",level:100,cu:3},{code:"201",name:"Law of Contract II",level:200,cu:3},{code:"202",name:"Commercial Law I",level:200,cu:3},{code:"301",name:"Law of Property",level:300,cu:3}],
+  CML: [{code:"101",name:"Principles of Commercial Law",level:100,cu:3},{code:"201",name:"Company Law I",level:200,cu:3},{code:"202",name:"Law of Banking",level:200,cu:3},{code:"301",name:"Industrial and Labour Law",level:300,cu:3}],
+  ILW: [{code:"101",name:"Introduction to Islamic Law",level:100,cu:3},{code:"102",name:"Islamic Jurisprudence I",level:100,cu:3},{code:"201",name:"Islamic Family Law",level:200,cu:3},{code:"202",name:"Islamic Commercial Law",level:200,cu:3},{code:"301",name:"Islamic Criminal Law",level:300,cu:3}],
+  CSC: [{code:"101",name:"Introduction to Computer Science",level:100,cu:3},{code:"102",name:"Introduction to Programming",level:100,cu:3,lab:true},{code:"201",name:"Data Structures and Algorithms",level:200,cu:3,lab:true},{code:"202",name:"Database Systems",level:200,cu:3,lab:true},{code:"301",name:"Operating Systems",level:300,cu:3},{code:"302",name:"Computer Networks",level:300,cu:3,lab:true}],
+  MTH: [{code:"101",name:"General Mathematics I",level:100,cu:3},{code:"102",name:"General Mathematics II",level:100,cu:3},{code:"201",name:"Linear Algebra I",level:200,cu:3},{code:"202",name:"Calculus II",level:200,cu:3},{code:"301",name:"Real Analysis I",level:300,cu:3},{code:"302",name:"Complex Analysis",level:300,cu:3}],
+  PHY: [{code:"101",name:"General Physics I",level:100,cu:3,lab:true},{code:"102",name:"General Physics II",level:100,cu:3,lab:true},{code:"201",name:"Classical Mechanics",level:200,cu:3},{code:"202",name:"Electromagnetism I",level:200,cu:3},{code:"301",name:"Quantum Mechanics I",level:300,cu:3}],
+  CHM: [{code:"101",name:"General Chemistry I",level:100,cu:3,lab:true},{code:"102",name:"General Chemistry II",level:100,cu:3,lab:true},{code:"201",name:"Physical Chemistry I",level:200,cu:3},{code:"202",name:"Organic Chemistry I",level:200,cu:3,lab:true},{code:"301",name:"Inorganic Chemistry I",level:300,cu:3}],
+  BSC: [{code:"101",name:"General Biology I",level:100,cu:3,lab:true},{code:"102",name:"General Biology II",level:100,cu:3,lab:true},{code:"201",name:"Genetics and Cytology",level:200,cu:3},{code:"202",name:"Ecology and Conservation",level:200,cu:3},{code:"301",name:"Cell Biology",level:300,cu:3}],
+  BCH: [{code:"101",name:"Introduction to Biochemistry",level:100,cu:3},{code:"201",name:"Molecular Biology",level:200,cu:3,lab:true},{code:"202",name:"Enzymology",level:200,cu:3,lab:true},{code:"301",name:"Metabolic Biochemistry",level:300,cu:3},{code:"302",name:"Clinical Biochemistry",level:300,cu:3}],
+  BOT: [{code:"101",name:"Introduction to Botany",level:100,cu:3,lab:true},{code:"102",name:"Plant Anatomy and Physiology",level:100,cu:3},{code:"201",name:"Plant Taxonomy",level:200,cu:3,lab:true},{code:"202",name:"Plant Physiology",level:200,cu:3},{code:"301",name:"Plant Ecology",level:300,cu:3}],
+  ZOO: [{code:"101",name:"Introduction to Zoology",level:100,cu:3,lab:true},{code:"102",name:"Animal Diversity",level:100,cu:3},{code:"201",name:"Comparative Vertebrate Anatomy",level:200,cu:3,lab:true},{code:"202",name:"Animal Physiology",level:200,cu:3},{code:"301",name:"Parasitology",level:300,cu:3,lab:true}],
+  MCB: [{code:"101",name:"Introduction to Microbiology",level:100,cu:3,lab:true},{code:"201",name:"Bacteriology",level:200,cu:3,lab:true},{code:"202",name:"Mycology and Virology",level:200,cu:3,lab:true},{code:"301",name:"Industrial Microbiology",level:300,cu:3},{code:"302",name:"Food Microbiology",level:300,cu:3,lab:true}],
+  STA: [{code:"101",name:"Introduction to Statistics",level:100,cu:3},{code:"102",name:"Probability Theory I",level:100,cu:3},{code:"201",name:"Statistical Inference I",level:200,cu:3},{code:"202",name:"Regression Analysis",level:200,cu:3},{code:"301",name:"Design and Analysis of Experiments",level:300,cu:3}],
+  GEO: [{code:"101",name:"Introduction to Geology",level:100,cu:3},{code:"102",name:"Physical Geology",level:100,cu:3,lab:true},{code:"201",name:"Mineralogy",level:200,cu:3,lab:true},{code:"202",name:"Petrology",level:200,cu:3},{code:"301",name:"Structural Geology",level:300,cu:3}],
+  GEG: [{code:"101",name:"Introduction to Geography",level:100,cu:3},{code:"102",name:"Physical Geography",level:100,cu:3},{code:"201",name:"Human Geography",level:200,cu:3},{code:"202",name:"Climatology",level:200,cu:3},{code:"301",name:"Regional Geography of West Africa",level:300,cu:3}],
+  PHA: [{code:"101",name:"Introduction to Pharmacy",level:100,cu:3},{code:"102",name:"Pharmaceutical Calculations",level:100,cu:3},{code:"201",name:"Pharmaceutics I",level:200,cu:3,lab:true},{code:"202",name:"Pharmacy Practice I",level:200,cu:3},{code:"301",name:"Pharmacognosy and Phytomedicine",level:300,cu:3,lab:true}],
+  PHM: [{code:"101",name:"Introduction to Pharmacology",level:100,cu:3},{code:"201",name:"Systemic Pharmacology I",level:200,cu:3},{code:"202",name:"Clinical Pharmacology",level:200,cu:3},{code:"301",name:"Toxicology",level:300,cu:3}],
+  PHC: [{code:"101",name:"Pharmaceutical Chemistry I",level:100,cu:3,lab:true},{code:"201",name:"Pharmaceutical Chemistry II",level:200,cu:3,lab:true},{code:"202",name:"Medicinal Chemistry",level:200,cu:3},{code:"301",name:"Pharmaceutical Analysis",level:300,cu:3,lab:true}],
+  PHT: [{code:"101",name:"Introduction to Pharmacognosy",level:100,cu:3,lab:true},{code:"201",name:"Pharmacognosy II",level:200,cu:3,lab:true},{code:"202",name:"Natural Products Chemistry",level:200,cu:3},{code:"301",name:"Herbal Drug Technology",level:300,cu:3,lab:true}],
+  POL: [{code:"101",name:"Introduction to Political Science",level:100,cu:3},{code:"102",name:"Nigerian Government and Politics",level:100,cu:3},{code:"201",name:"Comparative Politics",level:200,cu:3},{code:"202",name:"International Relations",level:200,cu:3},{code:"301",name:"Political Theory",level:300,cu:3},{code:"302",name:"African Political Systems",level:300,cu:3}],
+  SOC: [{code:"101",name:"Introduction to Sociology",level:100,cu:3},{code:"102",name:"Sociological Theory I",level:100,cu:3},{code:"201",name:"Social Statistics",level:200,cu:3},{code:"202",name:"Social Psychology",level:200,cu:3},{code:"301",name:"Sociology of Development",level:300,cu:3}],
+  PHL: [{code:"101",name:"Introduction to Philosophy",level:100,cu:3},{code:"102",name:"Logic and Critical Thinking",level:100,cu:3},{code:"201",name:"History of Philosophy",level:200,cu:3},{code:"202",name:"Ethics",level:200,cu:3},{code:"301",name:"African Philosophy",level:300,cu:3}],
+  PSY: [{code:"101",name:"Introduction to Psychology",level:100,cu:3},{code:"102",name:"Developmental Psychology",level:100,cu:3},{code:"201",name:"Social Psychology",level:200,cu:3},{code:"202",name:"Abnormal Psychology",level:200,cu:3},{code:"301",name:"Cognitive Psychology",level:300,cu:3}],
+  ECO: [{code:"101",name:"Introduction to Economics I",level:100,cu:3},{code:"102",name:"Introduction to Economics II",level:100,cu:3},{code:"201",name:"Microeconomic Theory I",level:200,cu:3},{code:"202",name:"Macroeconomic Theory I",level:200,cu:3},{code:"301",name:"Econometrics I",level:300,cu:3}],
+  SWK: [{code:"101",name:"Introduction to Social Work",level:100,cu:3},{code:"102",name:"Social Welfare Services",level:100,cu:2},{code:"201",name:"Social Case Work",level:200,cu:3},{code:"202",name:"Community Organisation",level:200,cu:3},{code:"301",name:"Social Work Research",level:300,cu:3}],
+  VTM: [{code:"101",name:"Introduction to Veterinary Medicine",level:100,cu:3},{code:"201",name:"Veterinary Anatomy I",level:200,cu:3,lab:true},{code:"202",name:"Veterinary Physiology I",level:200,cu:3,lab:true},{code:"301",name:"Veterinary Pathology",level:300,cu:3,lab:true},{code:"302",name:"Veterinary Pharmacology",level:300,cu:3}],
+  VPH: [{code:"101",name:"Introduction to Veterinary Public Health",level:100,cu:3},{code:"201",name:"Food Hygiene and Inspection",level:200,cu:3,lab:true},{code:"202",name:"Epidemiology",level:200,cu:3},{code:"301",name:"Zoonoses",level:300,cu:3},{code:"302",name:"Environmental Health",level:300,cu:3}],
+  VAP: [{code:"101",name:"Veterinary Gross Anatomy I",level:100,cu:3,lab:true},{code:"102",name:"Veterinary Histology",level:100,cu:3,lab:true},{code:"201",name:"Veterinary Gross Anatomy II",level:200,cu:3,lab:true},{code:"202",name:"Veterinary Biochemistry",level:200,cu:3,lab:true},{code:"301",name:"Avian Anatomy and Physiology",level:300,cu:3}],
+  VSG: [{code:"101",name:"Introduction to Veterinary Surgery",level:100,cu:3},{code:"201",name:"Veterinary Anaesthesiology",level:200,cu:3,lab:true},{code:"202",name:"Diagnostic Imaging",level:200,cu:3},{code:"301",name:"Large Animal Surgery",level:300,cu:3,lab:true}],
+  VMT: [{code:"101",name:"Introduction to Veterinary Microbiology",level:100,cu:3,lab:true},{code:"201",name:"Veterinary Bacteriology",level:200,cu:3,lab:true},{code:"202",name:"Veterinary Virology",level:200,cu:3,lab:true},{code:"301",name:"Veterinary Mycology",level:300,cu:3,lab:true}],
+};
+
+// 8 rooms
+const ROOMS = [
+  { code: "AKT", name: "Akatsuki Hall", capacity: 500, type: "EXAM_HALL" as RoomType, building: "Main Campus", hasProjector: true, hasAC: true },
+  { code: "CEA", name: "Chunin Exam Arena", capacity: 300, type: "EXAM_HALL" as RoomType, building: "Exam Centre", hasProjector: true, hasAC: true },
+  { code: "KLHA", name: "Konoha Lecture Hall A", capacity: 200, type: "LECTURE_HALL" as RoomType, building: "Block A", hasProjector: true, hasAC: true },
+  { code: "HMH", name: "Hokage Monument Hall", capacity: 250, type: "LECTURE_HALL" as RoomType, building: "Block B", hasProjector: true, hasAC: true },
+  { code: "KLHB", name: "Konoha Lecture Hall B", capacity: 150, type: "LECTURE_HALL" as RoomType, building: "Block A", hasProjector: true, hasAC: true },
+  { code: "SCL", name: "Sharingan Computer Lab", capacity: 60, type: "COMPUTER_LAB" as RoomType, building: "ICT Centre", hasProjector: true, hasAC: true, hasComputers: true },
+  { code: "FDL", name: "Forest of Death Lab", capacity: 45, type: "LABORATORY" as RoomType, building: "Science Block", hasProjector: false, hasAC: true },
+  { code: "HCR", name: "Hokage Conference Room", capacity: 30, type: "CLASSROOM" as RoomType, building: "Admin Block", hasProjector: true, hasAC: true },
+];
+
+// Students
+const STUDENTS = [
+  { regNumber: "FEDKO/2024/001", name: "Boruto Uzumaki", deptCode: "CSC", level: 100, admissionYear: 2024, isSpillover: false },
+  { regNumber: "FEDKO/2024/002", name: "Sarada Uchiha", deptCode: "CVE", level: 100, admissionYear: 2024, isSpillover: false },
+  { regNumber: "FEDKO/2024/003", name: "Mitsuki", deptCode: "BCH", level: 100, admissionYear: 2024, isSpillover: false },
+  { regNumber: "FEDKO/2024/004", name: "Denki Kaminarimon", deptCode: "ECE", level: 100, admissionYear: 2024, isSpillover: false },
+  { regNumber: "FEDKO/2024/005", name: "Wasabi Izuno", deptCode: "MCB", level: 100, admissionYear: 2024, isSpillover: false },
+  { regNumber: "FEDKO/2024/006", name: "Namida Suzumeno", deptCode: "PHL", level: 100, admissionYear: 2024, isSpillover: false },
+  { regNumber: "FEDKO/2024/007", name: "Tsubaki", deptCode: "ARC", level: 100, admissionYear: 2024, isSpillover: false },
+  { regNumber: "FEDKO/2023/001", name: "Gaara", deptCode: "POL", level: 200, admissionYear: 2023, isSpillover: false },
+  { regNumber: "FEDKO/2023/002", name: "Temari", deptCode: "GEG", level: 200, admissionYear: 2023, isSpillover: false },
+  { regNumber: "FEDKO/2023/003", name: "Kankuro", deptCode: "IND", level: 200, admissionYear: 2023, isSpillover: false },
+  { regNumber: "FEDKO/2023/004", name: "Metal Lee", deptCode: "MCE", level: 200, admissionYear: 2023, isSpillover: false },
+  { regNumber: "FEDKO/2023/005", name: "Inojin Yamanaka", deptCode: "PSY", level: 200, admissionYear: 2023, isSpillover: false },
+  { regNumber: "FEDKO/2023/006", name: "Himawari Uzumaki", deptCode: "BOT", level: 200, admissionYear: 2023, isSpillover: false },
+  { regNumber: "FEDKO/2023/007", name: "Iwabe Yuino", deptCode: "PET", level: 200, admissionYear: 2023, isSpillover: false },
+  { regNumber: "FEDKO/2023/008", name: "Sumire Kakei", deptCode: "CSC", level: 200, admissionYear: 2023, isSpillover: false },
+  { regNumber: "FEDKO/2023/009", name: "Samui", deptCode: "ACC", level: 200, admissionYear: 2023, isSpillover: false },
+  { regNumber: "FEDKO/2023/010", name: "Omoi", deptCode: "MTH", level: 200, admissionYear: 2023, isSpillover: false },
+  { regNumber: "FEDKO/2022/001", name: "Naruto Uzumaki", deptCode: "CSC", level: 300, admissionYear: 2022, isSpillover: true },
+  { regNumber: "FEDKO/2022/002", name: "Sasuke Uchiha", deptCode: "ECE", level: 300, admissionYear: 2022, isSpillover: false },
+  { regNumber: "FEDKO/2022/003", name: "Hinata Hyuga", deptCode: "PRL", level: 300, admissionYear: 2022, isSpillover: false },
+  { regNumber: "FEDKO/2022/004", name: "Choji Akimichi", deptCode: "AGN", level: 300, admissionYear: 2022, isSpillover: false },
+  { regNumber: "FEDKO/2022/005", name: "Tenten", deptCode: "MTE", level: 300, admissionYear: 2022, isSpillover: false },
+  { regNumber: "FEDKO/2022/006", name: "Neji Hyuga", deptCode: "PHY", level: 300, admissionYear: 2022, isSpillover: false },
+  { regNumber: "FEDKO/2022/007", name: "Kiba Inuzuka", deptCode: "VTM", level: 300, admissionYear: 2022, isSpillover: true },
+  { regNumber: "FEDKO/2022/008", name: "Shikadai Nara", deptCode: "QSV", level: 300, admissionYear: 2022, isSpillover: false },
+  { regNumber: "FEDKO/2022/009", name: "Chocho Akimichi", deptCode: "THA", level: 300, admissionYear: 2022, isSpillover: false },
+  { regNumber: "FEDKO/2022/010", name: "Kawaki", deptCode: "CHN", level: 300, admissionYear: 2022, isSpillover: false },
+  { regNumber: "FEDKO/2022/011", name: "Karin Uzumaki", deptCode: "BSC", level: 300, admissionYear: 2022, isSpillover: false },
+  { regNumber: "FEDKO/2022/012", name: "Moegi Kazamatsuri", deptCode: "ELS", level: 300, admissionYear: 2022, isSpillover: false },
+  { regNumber: "FEDKO/2021/001", name: "Shikamaru Nara", deptCode: "STA", level: 400, admissionYear: 2021, isSpillover: false },
+  { regNumber: "FEDKO/2021/002", name: "Ino Yamanaka", deptCode: "SWK", level: 400, admissionYear: 2021, isSpillover: false },
+  { regNumber: "FEDKO/2021/003", name: "Sakura Haruno", deptCode: "PHA", level: 400, admissionYear: 2021, isSpillover: false },
+  { regNumber: "FEDKO/2021/004", name: "Rock Lee", deptCode: "CVE", level: 400, admissionYear: 2021, isSpillover: true },
+  { regNumber: "FEDKO/2021/005", name: "Neji Hyuga", deptCode: "GEO", level: 400, admissionYear: 2021, isSpillover: false },
+  { regNumber: "FEDKO/2020/001", name: "Kakashi Hatake", deptCode: "MTH", level: 500, admissionYear: 2020, isSpillover: false },
+  { regNumber: "FEDKO/2020/002", name: "Tsunade", deptCode: "PHM", level: 500, admissionYear: 2020, isSpillover: false },
+];
 
 async function main() {
-  const t0 = Date.now()
-  console.log('=== FEDKO Demo Seed ===')
-  console.log('Cleaning...')
+  console.log("=== SEEDING FEDKO — Federal University of Konoha ===\n");
+  const t0 = Date.now();
 
-  // Clean using deleteMany in order
-  await prisma.notification.deleteMany()
-  await prisma.activityLog.deleteMany()
-  await prisma.invigilatorAssignment.deleteMany()
-  await prisma.conflict.deleteMany()
-  await prisma.conflictReport.deleteMany()
-  await prisma.examSlot.deleteMany()
-  await prisma.blackoutDate.deleteMany()
-  await prisma.timetableVersion.deleteMany()
-  await prisma.lectureSlot.deleteMany()
-  await prisma.lectureTimetable.deleteMany()
-  await prisma.examPeriod.deleteMany()
-  await prisma.studentCourse.deleteMany()
-  await prisma.coursePrerequisite.deleteMany()
-  await prisma.lecturer.deleteMany()
-  await prisma.student.deleteMany()
-  await prisma.course.deleteMany()
-  await prisma.room.deleteMany()
-  await prisma.department.deleteMany()
-  await prisma.faculty.deleteMany()
-  await prisma.institution.deleteMany()
+  // 1. Institution
+  const institution = await prisma.institution.create({ data: INSTITUTION });
+  const instId = institution.id;
+  console.log(`[1] Institution: ${institution.name} (${institution.shortName})`);
 
-  // Keep only super admin
-  const sa = await prisma.user.findUnique({ where: { email: 'admin@clashfree.com' } })
-  if (!sa) {
-    await prisma.user.create({ data: { email: 'admin@clashfree.com', passwordHash: await hash('admin123', 12), name: 'Super Admin', role: 'SA' } })
-  } else {
-    await prisma.user.deleteMany({ where: { id: { not: sa.id } } })
+  // 2. Demo Users
+  const demoUsers = [
+    { email: "admin@fedko.edu.ng", name: "Hiruzen Sarutobi", role: "IA" as UserRole },
+    { email: "officer@fedko.edu.ng", name: "Iruka Umino", role: "TO" as UserRole },
+    { email: "lecturer@fedko.edu.ng", name: "Kakashi Hatake", role: "LC" as UserRole },
+    { email: "student@fedko.edu.ng", name: "Naruto Uzumaki", role: "ST" as UserRole },
+  ];
+  const createdUsers = await prisma.user.createMany({
+    data: demoUsers.map((u) => ({
+      ...u,
+      passwordHash: DEMO_PASSWORD,
+      institutionId: instId,
+      isActive: true,
+    })),
+  });
+  console.log(`[2] Users: ${createdUsers.count} created`);
+
+  // 3. Faculties (bulk)
+  await prisma.faculty.createMany({
+    data: FACULTIES.map((f) => ({ institutionId: instId, ...f })),
+  });
+  console.log(`[3] Faculties: ${FACULTIES.length} created`);
+
+  // Fetch faculties back to get IDs
+  const faculties = await prisma.faculty.findMany({ where: { institutionId: instId } });
+  const facMap = Object.fromEntries(faculties.map((f) => [f.code, f.id]));
+
+  // 4. Departments (bulk)
+  const allDepts = Object.entries(DEPARTMENTS).flatMap(([facCode, depts]) =>
+    depts.map((d) => ({ facultyId: facMap[facCode], code: d.code, name: d.name, hodName: d.hod }))
+  );
+  await prisma.department.createMany({ data: allDepts });
+  console.log(`[4] Departments: ${allDepts.length} created`);
+
+  const departments = await prisma.department.findMany({
+    where: { faculty: { institutionId: instId } },
+    include: { faculty: true },
+  });
+  const deptMap = Object.fromEntries(departments.map((d) => [d.code, d.id]));
+
+  // 5. Courses (bulk) - build all course records
+  const allCoursesData: { institutionId: string; departmentId: string; code: string; name: string; creditUnits: number; level: number; semester: number; requiresLab: boolean; maxStudents: number }[] = [];
+  for (const [deptCode, templates] of Object.entries(COURSES)) {
+    const depId = deptMap[deptCode];
+    if (!depId) continue;
+    for (const t of templates) {
+      allCoursesData.push({
+        institutionId: instId,
+        departmentId: depId,
+        code: `FUK-${deptCode} ${t.code}`,
+        name: t.name,
+        creditUnits: t.cu,
+        level: t.level,
+        semester: 2,
+        requiresLab: t.lab || false,
+        maxStudents: t.level === 100 ? 200 : t.level === 200 ? 150 : 100,
+      });
+    }
   }
-  console.log('Cleaned:', Date.now() - t0, 'ms')
+  await prisma.course.createMany({ data: allCoursesData });
+  console.log(`[5] Courses: ${allCoursesData.length} created`);
 
-  // INSTITUTION
-  const fedko = await prisma.institution.create({
-    data: { name: 'Federal University of Development and Knowledge', shortName: 'FEDKO', type: 'FEDERAL_UNI', city: 'Abuja', state: 'FCT', country: 'Nigeria', currentSession: '2025/2026', currentSemester: 2, website: 'https://fedko.edu.ng', emailDomain: 'fedko.edu.ng' }
-  })
+  const courses = await prisma.course.findMany({ where: { institutionId: instId } });
+  const courseMap = Object.fromEntries(courses.map((c) => [c.code, c.id]));
 
-  // USERS
-  const pw = await hash('admin123', 12)
-  const ia = await prisma.user.create({ data: { email: 'admin@fedko.edu.ng', passwordHash: pw, name: 'Prof. Adebayo Ogunleye', role: 'IA', institutionId: fedko.id } })
-  const toUser = await prisma.user.create({ data: { email: 'officer@fedko.edu.ng', passwordHash: pw, name: 'Dr. Halima Bello', role: 'TO', institutionId: fedko.id } })
-  const lc = await prisma.user.create({ data: { email: 'lecturer@fedko.edu.ng', passwordHash: pw, name: 'Dr. Emeka Nwankwo', role: 'LC', institutionId: fedko.id } })
-  const st = await prisma.user.create({ data: { email: 'student@fedko.edu.ng', passwordHash: pw, name: 'Aisha Mohammed', role: 'ST', institutionId: fedko.id } })
-
-  // FACULTIES
-  const facBatch = [
-    { name: 'Faculty of Computing & IT', code: 'FCIT' },
-    { name: 'Faculty of Engineering', code: 'FENG' },
-    { name: 'Faculty of Management & Social Sciences', code: 'FMSS' },
-    { name: 'Faculty of Natural & Applied Sciences', code: 'FNAS' },
-    { name: 'Faculty of Arts & Humanities', code: 'FAH' },
-  ].map(f => ({ ...f, institutionId: fedko.id }))
-  await prisma.faculty.createMany({ data: facBatch })
-  const facR = await prisma.faculty.findMany({ where: { institutionId: fedko.id } })
-  const facMap: Record<string, string> = {}
-  facR.forEach(f => { facMap[f.code] = f.id })
-
-  // DEPARTMENTS
-  const deptBatch = [
-    { code: 'CSC', name: 'Computer Science', f: 'FCIT' },
-    { code: 'INF', name: 'Information Technology', f: 'FCIT' },
-    { code: 'CYB', name: 'Cybersecurity', f: 'FCIT' },
-    { code: 'SWE', name: 'Software Engineering', f: 'FCIT' },
-    { code: 'ECE', name: 'Electrical & Computer Engineering', f: 'FENG' },
-    { code: 'CVE', name: 'Civil Engineering', f: 'FENG' },
-    { code: 'MCE', name: 'Mechanical Engineering', f: 'FENG' },
-    { code: 'CHE', name: 'Chemical Engineering', f: 'FENG' },
-    { code: 'ACC', name: 'Accounting', f: 'FMSS' },
-    { code: 'ECO', name: 'Economics', f: 'FMSS' },
-    { code: 'MGT', name: 'Business Administration', f: 'FMSS' },
-    { code: 'POL', name: 'Political Science', f: 'FMSS' },
-    { code: 'SOC', name: 'Sociology', f: 'FMSS' },
-    { code: 'MTH', name: 'Mathematics', f: 'FNAS' },
-    { code: 'PHY', name: 'Physics', f: 'FNAS' },
-    { code: 'CHM', name: 'Chemistry', f: 'FNAS' },
-    { code: 'BIO', name: 'Biology', f: 'FNAS' },
-    { code: 'STA', name: 'Statistics', f: 'FNAS' },
-    { code: 'ENG', name: 'English Language', f: 'FAH' },
-    { code: 'HIS', name: 'History & Diplomatic Studies', f: 'FAH' },
-    { code: 'PHL', name: 'Philosophy', f: 'FAH' },
-  ].map(d => ({ code: d.code, name: d.name, facultyId: facMap[d.f], hodName: 'Prof. Ogunleye' }))
-  await prisma.department.createMany({ data: deptBatch })
-  const deptR = await prisma.department.findMany()
-  const deptMap: Record<string, string> = {}
-  deptR.forEach(d => { deptMap[d.code] = d.id })
-
-  // ROOMS
-  const roomBatch = [
-    { code: 'MPH', name: 'Main Multipurpose Hall', cap: 2000, type: 'AUDITORIUM' as RoomType, facId: null, comp: false },
-    { code: 'AGH', name: 'Assembly Ground Hall', cap: 1500, type: 'EXAM_HALL' as RoomType, facId: null, comp: false },
-    { code: 'FCIT-LT1', name: 'FCIT Lecture Theatre 1', cap: 500, type: 'LECTURE_HALL' as RoomType, facId: facMap.FCIT, comp: false },
-    { code: 'FCIT-LT2', name: 'FCIT Lecture Theatre 2', cap: 400, type: 'LECTURE_HALL' as RoomType, facId: facMap.FCIT, comp: false },
-    { code: 'FCIT-HALL', name: 'FCIT Exam Hall', cap: 350, type: 'EXAM_HALL' as RoomType, facId: facMap.FCIT, comp: false },
-    { code: 'CSC-LAB1', name: 'Computer Lab 1', cap: 80, type: 'COMPUTER_LAB' as RoomType, facId: facMap.FCIT, comp: true },
-    { code: 'CSC-LAB2', name: 'Computer Lab 2', cap: 80, type: 'COMPUTER_LAB' as RoomType, facId: facMap.FCIT, comp: true },
-    { code: 'CYB-LAB', name: 'Cybersecurity Lab', cap: 50, type: 'COMPUTER_LAB' as RoomType, facId: facMap.FCIT, comp: true },
-    { code: 'FCIT-CR1', name: 'FCIT Classroom 1', cap: 120, type: 'CLASSROOM' as RoomType, facId: facMap.FCIT, comp: false },
-    { code: 'FCIT-CR2', name: 'FCIT Classroom 2', cap: 100, type: 'CLASSROOM' as RoomType, facId: facMap.FCIT, comp: false },
-    { code: 'FENG-LT1', name: 'Engineering LT 1', cap: 600, type: 'LECTURE_HALL' as RoomType, facId: facMap.FENG, comp: false },
-    { code: 'FENG-LT2', name: 'Engineering LT 2', cap: 450, type: 'LECTURE_HALL' as RoomType, facId: facMap.FENG, comp: false },
-    { code: 'FENG-HALL', name: 'Engineering Exam Hall', cap: 400, type: 'EXAM_HALL' as RoomType, facId: facMap.FENG, comp: false },
-    { code: 'ECE-LAB1', name: 'Electronics Lab 1', cap: 60, type: 'LABORATORY' as RoomType, facId: facMap.FENG, comp: false },
-    { code: 'ECE-LAB2', name: 'Electronics Lab 2', cap: 60, type: 'LABORATORY' as RoomType, facId: facMap.FENG, comp: false },
-    { code: 'CVE-LAB', name: 'Civil Eng Lab', cap: 50, type: 'LABORATORY' as RoomType, facId: facMap.FENG, comp: false },
-    { code: 'MCE-LAB', name: 'Mechanical Workshop', cap: 40, type: 'LABORATORY' as RoomType, facId: facMap.FENG, comp: false },
-    { code: 'CHE-LAB', name: 'Chemical Eng Lab', cap: 50, type: 'LABORATORY' as RoomType, facId: facMap.FENG, comp: false },
-    { code: 'FENG-CR1', name: 'Engineering CR 1', cap: 120, type: 'CLASSROOM' as RoomType, facId: facMap.FENG, comp: false },
-    { code: 'FENG-CR2', name: 'Engineering CR 2', cap: 100, type: 'CLASSROOM' as RoomType, facId: facMap.FENG, comp: false },
-    { code: 'FMSS-LT1', name: 'Mgt Sciences LT', cap: 500, type: 'LECTURE_HALL' as RoomType, facId: facMap.FMSS, comp: false },
-    { code: 'FMSS-LT2', name: 'Social Sciences LT', cap: 400, type: 'LECTURE_HALL' as RoomType, facId: facMap.FMSS, comp: false },
-    { code: 'FMSS-HALL', name: 'Mgt Sciences Exam Hall', cap: 350, type: 'EXAM_HALL' as RoomType, facId: facMap.FMSS, comp: false },
-    { code: 'FMSS-CR1', name: 'Mgt CR 1', cap: 120, type: 'CLASSROOM' as RoomType, facId: facMap.FMSS, comp: false },
-    { code: 'FMSS-CR2', name: 'Mgt CR 2', cap: 100, type: 'CLASSROOM' as RoomType, facId: facMap.FMSS, comp: false },
-    { code: 'FMSS-CR3', name: 'Mgt CR 3', cap: 100, type: 'CLASSROOM' as RoomType, facId: facMap.FMSS, comp: false },
-    { code: 'FNAS-LT1', name: 'Science LT 1', cap: 500, type: 'LECTURE_HALL' as RoomType, facId: facMap.FNAS, comp: false },
-    { code: 'FNAS-LT2', name: 'Science LT 2', cap: 400, type: 'LECTURE_HALL' as RoomType, facId: facMap.FNAS, comp: false },
-    { code: 'FNAS-HALL', name: 'Science Exam Hall', cap: 350, type: 'EXAM_HALL' as RoomType, facId: facMap.FNAS, comp: false },
-    { code: 'PHY-LAB', name: 'Physics Lab', cap: 60, type: 'LABORATORY' as RoomType, facId: facMap.FNAS, comp: false },
-    { code: 'CHM-LAB1', name: 'Chemistry Lab', cap: 60, type: 'LABORATORY' as RoomType, facId: facMap.FNAS, comp: false },
-    { code: 'BIO-LAB', name: 'Biology Lab', cap: 60, type: 'LABORATORY' as RoomType, facId: facMap.FNAS, comp: false },
-    { code: 'MTH-LAB', name: 'Maths Computing Lab', cap: 50, type: 'COMPUTER_LAB' as RoomType, facId: facMap.FNAS, comp: true },
-    { code: 'FNAS-CR1', name: 'Science CR 1', cap: 100, type: 'CLASSROOM' as RoomType, facId: facMap.FNAS, comp: false },
-    { code: 'FNAS-CR2', name: 'Science CR 2', cap: 100, type: 'CLASSROOM' as RoomType, facId: facMap.FNAS, comp: false },
-    { code: 'FAH-LT1', name: 'Arts LT 1', cap: 450, type: 'LECTURE_HALL' as RoomType, facId: facMap.FAH, comp: false },
-    { code: 'FAH-LT2', name: 'Arts LT 2', cap: 350, type: 'LECTURE_HALL' as RoomType, facId: facMap.FAH, comp: false },
-    { code: 'FAH-HALL', name: 'Arts Exam Hall', cap: 300, type: 'EXAM_HALL' as RoomType, facId: facMap.FAH, comp: false },
-    { code: 'FAH-CR1', name: 'Arts CR 1', cap: 100, type: 'CLASSROOM' as RoomType, facId: facMap.FAH, comp: false },
-    { code: 'FAH-CR2', name: 'Arts CR 2', cap: 100, type: 'CLASSROOM' as RoomType, facId: facMap.FAH, comp: false },
-    { code: 'LANG-LAB', name: 'Language Lab', cap: 60, type: 'COMPUTER_LAB' as RoomType, facId: facMap.FAH, comp: true },
-    { code: 'CR101', name: 'Classroom 101', cap: 150, type: 'CLASSROOM' as RoomType, facId: null, comp: false },
-    { code: 'CR102', name: 'Classroom 102', cap: 150, type: 'CLASSROOM' as RoomType, facId: null, comp: false },
-    { code: 'CR103', name: 'Classroom 103', cap: 120, type: 'CLASSROOM' as RoomType, facId: null, comp: false },
-  ].map(r => ({
-    institutionId: fedko.id, facultyId: r.facId,
-    code: r.code, name: r.name, capacity: r.cap, type: r.type,
-    hasProjector: true, hasAC: true, hasComputers: r.comp,
-    building: 'Main Campus',
-  }))
-  await prisma.room.createMany({ data: roomBatch })
-  const roomR = await prisma.room.findMany()
-  const roomMap: Record<string, string> = {}
-  roomR.forEach(r => { roomMap[r.code] = r.id })
-
-  // COURSES
-  const cDefs = [
-    { c: 'GST 111', n: 'Communication in English I', u: 2, l: 100, d: 'CSC', s: true, lab: false },
-    { c: 'GST 112', n: 'Nigerian Peoples and Culture', u: 2, l: 100, d: 'CSC', s: true, lab: false },
-    { c: 'GST 113', n: 'Use of Library', u: 1, l: 100, d: 'CSC', s: true, lab: false },
-    { c: 'GST 121', n: 'Use of English II', u: 2, l: 100, d: 'CSC', s: true, lab: false },
-    { c: 'GST 122', n: 'Intro to Social Sciences', u: 2, l: 100, d: 'CSC', s: true, lab: false },
-    { c: 'GST 211', n: 'Philosophy and Logic', u: 2, l: 200, d: 'CSC', s: true, lab: false },
-    { c: 'GST 212', n: 'Peace and Conflict Resolution', u: 2, l: 200, d: 'CSC', s: true, lab: false },
-    { c: 'GST 213', n: 'Intro to Entrepreneurship', u: 2, l: 200, d: 'CSC', s: true, lab: false },
-    { c: 'GST 311', n: 'Science, Technology & Society', u: 2, l: 300, d: 'CSC', s: true, lab: false },
-    { c: 'CSC 101', n: 'Intro to Computer Science', u: 3, l: 100, d: 'CSC', s: false, lab: false },
-    { c: 'CSC 102', n: 'Programming I (Python)', u: 3, l: 100, d: 'CSC', s: false, lab: true },
-    { c: 'CSC 201', n: 'Programming II (Java)', u: 3, l: 200, d: 'CSC', s: false, lab: true },
-    { c: 'CSC 202', n: 'Data Structures & Algorithms', u: 3, l: 200, d: 'CSC', s: false, lab: false },
-    { c: 'CSC 203', n: 'Computer Org & Architecture', u: 3, l: 200, d: 'CSC', s: false, lab: false },
-    { c: 'CSC 301', n: 'Operating Systems', u: 3, l: 300, d: 'CSC', s: false, lab: true },
-    { c: 'CSC 302', n: 'Database Systems', u: 3, l: 300, d: 'CSC', s: false, lab: true },
-    { c: 'CSC 303', n: 'Software Engineering', u: 3, l: 300, d: 'CSC', s: false, lab: false },
-    { c: 'CSC 304', n: 'Web Application Dev', u: 3, l: 300, d: 'CSC', s: false, lab: true },
-    { c: 'CSC 401', n: 'Computer Networks', u: 3, l: 400, d: 'CSC', s: false, lab: false },
-    { c: 'CSC 402', n: 'Artificial Intelligence', u: 3, l: 400, d: 'CSC', s: false, lab: true },
-    { c: 'CSC 403', n: 'Cybersecurity Fundamentals', u: 3, l: 400, d: 'CSC', s: false, lab: false },
-    { c: 'CSC 499', n: 'Final Year Project', u: 6, l: 400, d: 'CSC', s: false, lab: false },
-    { c: 'INF 101', n: 'Intro to IT', u: 3, l: 100, d: 'INF', s: false, lab: false },
-    { c: 'INF 201', n: 'Systems Analysis & Design', u: 3, l: 200, d: 'INF', s: false, lab: false },
-    { c: 'INF 202', n: 'Networking Fundamentals', u: 3, l: 200, d: 'INF', s: false, lab: true },
-    { c: 'INF 301', n: 'Information Security', u: 3, l: 300, d: 'INF', s: false, lab: true },
-    { c: 'INF 401', n: 'Cloud Computing', u: 3, l: 400, d: 'INF', s: false, lab: true },
-    { c: 'CYB 101', n: 'Intro to Cybersecurity', u: 3, l: 100, d: 'CYB', s: false, lab: false },
-    { c: 'CYB 201', n: 'Network Security', u: 3, l: 200, d: 'CYB', s: false, lab: true },
-    { c: 'CYB 301', n: 'Ethical Hacking', u: 3, l: 300, d: 'CYB', s: false, lab: true },
-    { c: 'CYB 401', n: 'Penetration Testing', u: 3, l: 400, d: 'CYB', s: false, lab: true },
-    { c: 'SWE 101', n: 'Intro to Software Eng', u: 3, l: 100, d: 'SWE', s: false, lab: false },
-    { c: 'SWE 201', n: 'Requirements Engineering', u: 3, l: 200, d: 'SWE', s: false, lab: false },
-    { c: 'SWE 301', n: 'DevOps & CI/CD', u: 3, l: 300, d: 'SWE', s: false, lab: true },
-    { c: 'SWE 401', n: 'Microservices Architecture', u: 3, l: 400, d: 'SWE', s: false, lab: false },
-    { c: 'ECE 101', n: 'Intro to Electrical Eng', u: 3, l: 100, d: 'ECE', s: false, lab: true },
-    { c: 'ECE 102', n: 'Circuit Theory I', u: 3, l: 100, d: 'ECE', s: false, lab: true },
-    { c: 'ECE 201', n: 'Circuit Theory II', u: 3, l: 200, d: 'ECE', s: false, lab: true },
-    { c: 'ECE 202', n: 'Electronics I', u: 3, l: 200, d: 'ECE', s: false, lab: true },
-    { c: 'ECE 301', n: 'Power Systems', u: 3, l: 300, d: 'ECE', s: false, lab: false },
-    { c: 'ECE 401', n: 'Digital Signal Processing', u: 3, l: 400, d: 'ECE', s: false, lab: false },
-    { c: 'CVE 101', n: 'Intro to Civil Eng', u: 3, l: 100, d: 'CVE', s: false, lab: true },
-    { c: 'CVE 201', n: 'Structural Analysis', u: 3, l: 200, d: 'CVE', s: false, lab: true },
-    { c: 'CVE 301', n: 'Structural Design', u: 3, l: 300, d: 'CVE', s: false, lab: false },
-    { c: 'MCE 101', n: 'Intro to Mechanical Eng', u: 3, l: 100, d: 'MCE', s: false, lab: true },
-    { c: 'MCE 201', n: 'Thermodynamics', u: 3, l: 200, d: 'MCE', s: false, lab: false },
-    { c: 'CHE 101', n: 'Intro to Chemical Eng', u: 3, l: 100, d: 'CHE', s: false, lab: true },
-    { c: 'CHE 201', n: 'Chemical Processes', u: 3, l: 200, d: 'CHE', s: false, lab: true },
-    { c: 'ACC 101', n: 'Principles of Accounting I', u: 3, l: 100, d: 'ACC', s: false, lab: false },
-    { c: 'ACC 102', n: 'Principles of Accounting II', u: 3, l: 100, d: 'ACC', s: false, lab: false },
-    { c: 'ACC 201', n: 'Financial Accounting', u: 3, l: 200, d: 'ACC', s: false, lab: false },
-    { c: 'ACC 301', n: 'Taxation', u: 3, l: 300, d: 'ACC', s: false, lab: false },
-    { c: 'ACC 401', n: 'Management Accounting', u: 3, l: 400, d: 'ACC', s: false, lab: false },
-    { c: 'ECO 101', n: 'Intro to Economics I', u: 3, l: 100, d: 'ECO', s: false, lab: false },
-    { c: 'ECO 102', n: 'Intro to Economics II', u: 3, l: 100, d: 'ECO', s: false, lab: false },
-    { c: 'ECO 201', n: 'Microeconomic Theory', u: 3, l: 200, d: 'ECO', s: false, lab: false },
-    { c: 'ECO 301', n: 'Econometrics', u: 3, l: 300, d: 'ECO', s: false, lab: false },
-    { c: 'ECO 401', n: 'International Economics', u: 3, l: 400, d: 'ECO', s: false, lab: false },
-    { c: 'MGT 101', n: 'Intro to Business Admin', u: 3, l: 100, d: 'MGT', s: false, lab: false },
-    { c: 'MGT 201', n: 'Principles of Management', u: 3, l: 200, d: 'MGT', s: false, lab: false },
-    { c: 'MGT 301', n: 'Human Resource Mgmt', u: 3, l: 300, d: 'MGT', s: false, lab: false },
-    { c: 'MGT 401', n: 'Strategic Management', u: 3, l: 400, d: 'MGT', s: false, lab: false },
-    { c: 'POL 101', n: 'Intro to Political Science', u: 3, l: 100, d: 'POL', s: false, lab: false },
-    { c: 'POL 201', n: 'Nigerian Government', u: 3, l: 200, d: 'POL', s: false, lab: false },
-    { c: 'POL 301', n: 'Comparative Politics', u: 3, l: 300, d: 'POL', s: false, lab: false },
-    { c: 'SOC 101', n: 'Intro to Sociology', u: 3, l: 100, d: 'SOC', s: false, lab: false },
-    { c: 'SOC 201', n: 'Sociological Theory', u: 3, l: 200, d: 'SOC', s: false, lab: false },
-    { c: 'SOC 301', n: 'Industrial Sociology', u: 3, l: 300, d: 'SOC', s: false, lab: false },
-    { c: 'MTH 101', n: 'General Mathematics I', u: 3, l: 100, d: 'MTH', s: true, lab: false },
-    { c: 'MTH 102', n: 'General Mathematics II', u: 3, l: 100, d: 'MTH', s: true, lab: false },
-    { c: 'MTH 201', n: 'Linear Algebra', u: 3, l: 200, d: 'MTH', s: false, lab: false },
-    { c: 'MTH 301', n: 'Real Analysis', u: 3, l: 300, d: 'MTH', s: false, lab: false },
-    { c: 'PHY 101', n: 'General Physics I', u: 3, l: 100, d: 'PHY', s: true, lab: true },
-    { c: 'PHY 102', n: 'General Physics II', u: 3, l: 100, d: 'PHY', s: true, lab: true },
-    { c: 'PHY 201', n: 'Classical Mechanics', u: 3, l: 200, d: 'PHY', s: false, lab: true },
-    { c: 'PHY 301', n: 'Quantum Mechanics', u: 3, l: 300, d: 'PHY', s: false, lab: false },
-    { c: 'CHM 101', n: 'General Chemistry I', u: 3, l: 100, d: 'CHM', s: true, lab: true },
-    { c: 'CHM 102', n: 'General Chemistry II', u: 3, l: 100, d: 'CHM', s: true, lab: true },
-    { c: 'CHM 201', n: 'Organic Chemistry', u: 3, l: 200, d: 'CHM', s: false, lab: true },
-    { c: 'CHM 301', n: 'Analytical Chemistry', u: 3, l: 300, d: 'CHM', s: false, lab: true },
-    { c: 'BIO 101', n: 'General Biology I', u: 3, l: 100, d: 'BIO', s: true, lab: true },
-    { c: 'BIO 102', n: 'General Biology II', u: 3, l: 100, d: 'BIO', s: true, lab: true },
-    { c: 'BIO 201', n: 'Cell Biology', u: 3, l: 200, d: 'BIO', s: false, lab: true },
-    { c: 'STA 101', n: 'Intro to Statistics', u: 3, l: 100, d: 'STA', s: true, lab: false },
-    { c: 'STA 201', n: 'Probability Theory', u: 3, l: 200, d: 'STA', s: false, lab: false },
-    { c: 'ENG 101', n: 'English Grammar & Usage', u: 3, l: 100, d: 'ENG', s: false, lab: false },
-    { c: 'ENG 201', n: 'African Literature', u: 3, l: 200, d: 'ENG', s: false, lab: false },
-    { c: 'HIS 101', n: 'Intro to History', u: 3, l: 100, d: 'HIS', s: false, lab: false },
-    { c: 'HIS 201', n: 'Nigerian History', u: 3, l: 200, d: 'HIS', s: false, lab: false },
-    { c: 'PHL 101', n: 'Intro to Philosophy', u: 3, l: 100, d: 'PHL', s: false, lab: false },
-    { c: 'PHL 201', n: 'Logic & Critical Thinking', u: 3, l: 200, d: 'PHL', s: false, lab: false },
-  ]
-
-  const courseBatch = cDefs.map(c => ({
-    institutionId: fedko.id, departmentId: deptMap[c.d],
-    code: c.c, name: c.n, creditUnits: c.u, level: c.l,
-    semester: c.l <= 200 ? 1 : 2,
-    isShared: c.s, requiresLab: c.lab,
-  }))
-  await prisma.course.createMany({ data: courseBatch })
-  const courseR = await prisma.course.findMany()
-  const courseMap: Record<string, string> = {}
-  courseR.forEach(c => { courseMap[c.code] = c.id })
-
-  // LECTURERS
-  const demoLec = await prisma.lecturer.create({
-    data: { departmentId: deptMap.CSC, userId: lc.id, staffId: 'FEDKO/CSC/0001', name: 'Dr. Emeka Nwankwo', email: 'lecturer@fedko.edu.ng', phone: '+2348012345678', rank: 'Senior Lecturer', specialization: 'AI & Machine Learning', unavailableDays: '["friday"]' }
-  })
-
-  const lecBatch = [
-    'Prof. Funke Adeyemi|FEDKO/CSC/0002|CSC|f.adeyemi@fedko.edu.ng',
-    'Dr. Yusuf Abdullahi|FEDKO/INF/0001|INF|y.abdullahi@fedko.edu.ng',
-    'Dr. Grace Okonkwo|FEDKO/CYB/0001|CYB|g.okonkwo@fedko.edu.ng',
-    'Prof. Ibrahim Musa|FEDKO/SWE/0001|SWE|i.musa@fedko.edu.ng',
-    'Dr. Chioma Eze|FEDKO/ECE/0001|ECE|c.eze@fedko.edu.ng',
-    'Dr. Tunde Bakare|FEDKO/CVE/0001|CVE|t.bakare@fedko.edu.ng',
-    'Prof. Amina Sule|FEDKO/ACC/0001|ACC|a.sule@fedko.edu.ng',
-    'Dr. Obi Nwosu|FEDKO/ECO/0001|ECO|o.nwosu@fedko.edu.ng',
-    'Dr. Fatima Bello|FEDKO/MGT/0001|MGT|f.bello@fedko.edu.ng',
-    'Prof. Segun Adebanjo|FEDKO/POL/0001|POL|s.adebanjo@fedko.edu.ng',
-    'Dr. Kemi Olatunji|FEDKO/SOC/0001|SOC|k.olatunji@fedko.edu.ng',
-    'Dr. Ahmed Goni|FEDKO/MTH/0001|MTH|a.goni@fedko.edu.ng',
-    'Dr. Ngozi Anyanwu|FEDKO/PHY/0001|PHY|n.anyanwu@fedko.edu.ng',
-    'Dr. Sani Bello|FEDKO/CHM/0001|CHM|s.bello@fedko.edu.ng',
-    'Dr. Blessing Okoro|FEDKO/BIO/0001|BIO|b.okoro@fedko.edu.ng',
-  ].map(l => {
-    const [name, staffId, dept, email] = l.split('|')
-    return { departmentId: deptMap[dept], staffId, name, email, phone: '+2348099999999', rank: 'Senior Lecturer', specialization: 'General' }
-  })
-  await prisma.lecturer.createMany({ data: lecBatch })
-
-  // Assign demo lecturer to courses
-  for (const code of ['CSC 301', 'CSC 401', 'CSC 402']) {
-    if (courseMap[code]) await prisma.course.update({ where: { id: courseMap[code] }, data: { lecturerId: demoLec.id } })
+  // 6. Lecturers (bulk)
+  const lecturerData: { departmentId: string; staffId: string; name: string; email: string; rank: string; unavailableDays: string }[] = [];
+  // Use department HOD names as lecturers
+  for (const dept of departments) {
+    lecturerData.push({
+      departmentId: dept.id,
+      staffId: `FUK/${dept.code}/0001`,
+      name: dept.hodName || "TBD",
+      email: `${dept.code.toLowerCase()}.hod@fedko.edu.ng`,
+      rank: "Senior Lecturer",
+      unavailableDays: JSON.stringify([]),
+    });
   }
+  await prisma.lecturer.createMany({ data: lecturerData });
+  console.log(`[6] Lecturers: ${lecturerData.length} created`);
 
-  // STUDENTS
-  await prisma.student.create({
-    data: { departmentId: deptMap.CSC, userId: st.id, regNumber: 'FEDKO/2022/CSC/0001', name: 'Aisha Mohammed', email: 'student@fedko.edu.ng', level: 300, admissionYear: 2022 }
-  })
+  // Assign lecturers to courses (bulk update)
+  const lecturers = await prisma.lecturer.findMany({
+    where: { department: { faculty: { institutionId: instId } } },
+  });
+  const lecByDept = Object.fromEntries(lecturers.map((l) => {
+    const dept = departments.find((d) => d.id === l.departmentId);
+    return [dept?.code || "", l.id];
+  }));
 
-  const fnames = ['Chinedu', 'Fatima', 'Emeka', 'Blessing', 'Abubakar', 'Chioma', 'Yusuf', 'Ngozi', 'Ibrahim', 'Tunde', 'Halima', 'Obi', 'Amina', 'Sani', 'Bukola', 'Kabiru', 'Yetunde', 'Mustapha', 'Nike', 'Uche']
-  const lnames = ['Okafor', 'Bello', 'Nwankwo', 'Okoro', 'Abdullahi', 'Eze', 'Bakare', 'Sule', 'Nwosu', 'Adeyemi', 'Goni', 'Anyanwu', 'Ogundimu', 'Madu', 'Lawal', 'Taylor']
-  const dcodes = Object.keys(deptMap)
-  let sIdx = 1
-  const studentBatch: any[] = []
-  for (const dc of dcodes) {
-    for (const level of [100, 200, 300, 400]) {
-      for (let i = 0; i < 2; i++) {
-        sIdx++
-        studentBatch.push({
-          departmentId: deptMap[dc],
-          regNumber: `FEDKO/${2025 - level / 100}/${dc}/${sIdx.toString().padStart(4, '0')}`,
-          name: `${fnames[sIdx % fnames.length]} ${lnames[sIdx % lnames.length]}`,
-          level, admissionYear: 2025 - level / 100,
-          isSpillover: Math.random() > 0.9,
-        })
+  // Update courses with lecturerId in batches
+  for (const [deptCode, lecId] of Object.entries(lecByDept)) {
+    await prisma.course.updateMany({
+      where: { departmentId: deptMap[deptCode], institutionId: instId },
+      data: { lecturerId: lecId },
+    });
+  }
+  console.log(`[6b] Lecturers assigned to courses`);
+
+  // 7. Rooms (bulk)
+  await prisma.room.createMany({
+    data: ROOMS.map((r) => ({
+      institutionId: instId,
+      code: r.code,
+      name: r.name,
+      building: r.building,
+      capacity: r.capacity,
+      type: r.type,
+      hasProjector: r.hasProjector,
+      hasAC: r.hasAC,
+      hasComputers: (r as { hasComputers?: boolean }).hasComputers || false,
+    })),
+  });
+  console.log(`[7] Rooms: ${ROOMS.length} created`);
+
+  // 8. Students (bulk)
+  const studentData = STUDENTS.map((s) => ({
+    departmentId: deptMap[s.deptCode],
+    regNumber: s.regNumber,
+    name: s.name,
+    email: `${s.regNumber.replace(/\//g, ".").toLowerCase()}@fedko.edu.ng`,
+    level: s.level,
+    admissionYear: s.admissionYear,
+    isSpillover: s.isSpillover,
+  }));
+  await prisma.student.createMany({ data: studentData });
+  console.log(`[8] Students: ${studentData.length} created (${STUDENTS.filter(s => s.isSpillover).length} spillover)`);
+
+  const students = await prisma.student.findMany({
+    where: { department: { faculty: { institutionId: instId } } },
+  });
+  const studentMap = Object.fromEntries(students.map((s) => [s.regNumber, s.id]));
+
+  // 9. Enroll students in courses (bulk)
+  const session = "2025/2026";
+  const semester = 2;
+  const enrollmentData: { studentId: string; courseId: string; status: string; semester: number; session: string }[] = [];
+
+  for (const s of STUDENTS) {
+    // Enroll in all dept courses at their level
+    const studentDeptCourses = courses.filter(
+      (c) => c.departmentId === deptMap[s.deptCode] && c.level === s.level && c.semester === semester
+    );
+    for (const course of studentDeptCourses) {
+      enrollmentData.push({
+        studentId: studentMap[s.regNumber],
+        courseId: course.id,
+        status: "REGISTERED",
+        semester,
+        session,
+      });
+    }
+
+    // Spillover students get carry-over courses from lower levels
+    if (s.isSpillover && s.level >= 300) {
+      const lowerCourses = courses.filter(
+        (c) => c.departmentId === deptMap[s.deptCode] && c.level === s.level - 100 && c.semester === semester
+      ).slice(0, 2);
+      for (const course of lowerCourses) {
+        enrollmentData.push({
+          studentId: studentMap[s.regNumber],
+          courseId: course.id,
+          status: "CARRY_OVER",
+          semester,
+          session,
+        });
       }
     }
   }
-  // Insert students in chunks
-  for (let i = 0; i < studentBatch.length; i += 10) {
-    await prisma.student.createMany({ data: studentBatch.slice(i, i + 10) })
-  }
-  console.log(`Students: ${studentBatch.length + 1}`)
+  await prisma.studentCourse.createMany({ data: enrollmentData });
+  const carryOvers = enrollmentData.filter((e) => e.status === "CARRY_OVER").length;
+  console.log(`[9] Enrollments: ${enrollmentData.length} (${carryOvers} carry-over)`);
 
-  // EXAM PERIOD
-  const ep = await prisma.examPeriod.create({
+  // 10. Exam Period
+  const examPeriod = await prisma.examPeriod.create({
     data: {
-      institutionId: fedko.id, name: 'Second Semester Examination 2025/2026',
-      session: '2025/2026', semester: 2,
-      startDate: new Date('2026-06-15'), endDate: new Date('2026-07-20'),
-      slotsPerDay: 3, slotDuration: 180,
-      morningStart: '08:00', morningEnd: '11:00', afternoonStart: '12:00', afternoonEnd: '15:00', eveningStart: '16:00', eveningEnd: '19:00',
-      includeSaturday: true, excludeFridays: true,
-      status: 'PUBLISHED', publishedAt: new Date('2026-06-01'),
+      institutionId: instId,
+      name: "Second Semester Examination 2025/2026",
+      session,
+      semester,
+      startDate: new Date("2025-08-04"),
+      endDate: new Date("2025-08-29"),
+      slotsPerDay: 3,
+      slotDuration: 180,
+      morningStart: "08:00", morningEnd: "11:00",
+      afternoonStart: "12:00", afternoonEnd: "15:00",
+      eveningStart: "16:00", eveningEnd: "19:00",
+      includeSaturday: true,
+      excludeFridays: true,
+      status: "GENERATED",
+    },
+  });
+  console.log(`[10] Exam Period created`);
+
+  // 11. Build clash-free exam timetable
+  // Get enrollment data
+  const allEnrollments = await prisma.studentCourse.findMany({
+    where: { session, semester },
+    select: { studentId: true, courseId: true },
+  });
+  const courseStudents: Record<string, Set<string>> = {};
+  for (const e of allEnrollments) {
+    if (!courseStudents[e.courseId]) courseStudents[e.courseId] = new Set();
+    courseStudents[e.courseId].add(e.studentId);
+  }
+  const courseEnrollment: Record<string, number> = {};
+  for (const [cid, sids] of Object.entries(courseStudents)) courseEnrollment[cid] = sids.size;
+
+  // Get rooms
+  const allRooms = await prisma.room.findMany({ where: { institutionId: instId }, orderBy: { capacity: "desc" } });
+  const roomMap = Object.fromEntries(allRooms.map((r) => [r.code, r.id]));
+
+  // Generate exam dates (Mon-Sat, skip Fridays)
+  const examDates: Date[] = [];
+  const cur = new Date("2025-08-04");
+  const end = new Date("2025-08-29");
+  while (cur <= end) {
+    const dow = cur.getDay();
+    if (dow >= 1 && dow <= 6 && dow !== 5) examDates.push(new Date(cur));
+    cur.setDate(cur.getDate() + 1);
+  }
+
+  // Greedy clash-free assignment
+  const slotOccupancy: Record<string, string[]> = {};
+  const examSlotData: { examPeriodId: string; courseId: string; roomId: string; date: Date; dayOfWeek: number; slotNumber: number; startTime: string; endTime: string; status: string }[] = [];
+
+  // Sort by enrollment desc
+  const sortedCourses = [...courses].filter(c => c.semester === semester).sort((a, b) => {
+    return (courseEnrollment[b.id] || 0) - (courseEnrollment[a.id] || 0);
+  });
+
+  for (const course of sortedCourses) {
+    const enrollment = courseEnrollment[course.id] || 0;
+    let assigned = false;
+
+    // Room selection
+    let roomId: string;
+    if (enrollment > 300) roomId = roomMap["AKT"];
+    else if (enrollment > 200) roomId = roomMap["HMH"] || roomMap["CEA"];
+    else if (enrollment > 100) roomId = roomMap["KLHA"] || roomMap["KLHB"];
+    else if (enrollment > 45) roomId = roomMap["KLHB"] || roomMap["HMH"];
+    else if (course.requiresLab) roomId = roomMap["SCL"] || roomMap["FDL"];
+    else roomId = roomMap["HCR"] || roomMap["FDL"];
+    if (!roomId) roomId = allRooms[0].id;
+
+    const myStudents = courseStudents[course.id] || new Set();
+
+    for (let di = 0; di < examDates.length && !assigned; di++) {
+      for (let sn = 1; sn <= 3 && !assigned; sn++) {
+        const key = `${di}-${sn}`;
+        const occ = slotOccupancy[key] || [];
+        let clash = false;
+        for (const occId of occ) {
+          const occS = courseStudents[occId];
+          if (!occS) continue;
+          for (const sid of myStudents) {
+            if (occS.has(sid)) { clash = true; break; }
+          }
+          if (clash) break;
+        }
+
+        if (!clash) {
+          const d = examDates[di];
+          const times = [["08:00","11:00"],["12:00","15:00"],["16:00","19:00"]][sn - 1];
+          examSlotData.push({
+            examPeriodId: examPeriod.id,
+            courseId: course.id,
+            roomId,
+            date: d,
+            dayOfWeek: d.getDay(),
+            slotNumber: sn,
+            startTime: times[0],
+            endTime: times[1],
+            status: "SCHEDULED",
+          });
+          slotOccupancy[key] = [...occ, course.id];
+          assigned = true;
+        }
+      }
     }
-  })
-
-  await prisma.blackoutDate.createMany({
-    data: [
-      { examPeriodId: ep.id, date: new Date('2026-06-18'), reason: 'Democracy Day' },
-      { examPeriodId: ep.id, date: new Date('2026-06-25'), reason: 'Eid ul-Adha' },
-    ]
-  })
-
-  // EXAM SLOTS
-  const examCourses = courseR.filter(c => c.level >= 200)
-  const examRooms = roomR.filter(r => ['EXAM_HALL', 'AUDITORIUM', 'LECTURE_HALL', 'CLASSROOM'].includes(r.type))
-  const edates = ['2026-06-15', '2026-06-16', '2026-06-17', '2026-06-19', '2026-06-20', '2026-06-21', '2026-06-22', '2026-06-23', '2026-06-24', '2026-06-26', '2026-06-27', '2026-06-28', '2026-06-29', '2026-06-30', '2026-07-01', '2026-07-02', '2026-07-03', '2026-07-04', '2026-07-06', '2026-07-07']
-  const examSlotBatch: any[] = []
-  for (let i = 0; i < examCourses.length; i++) {
-    const ds = edates[Math.floor(i / 3) % edates.length]
-    const sn = (i % 3) + 1
-    const st = sn === 1 ? '08:00' : sn === 2 ? '12:00' : '16:00'
-    const et = sn === 1 ? '11:00' : sn === 2 ? '15:00' : '19:00'
-    examSlotBatch.push({ examPeriodId: ep.id, courseId: examCourses[i].id, roomId: examRooms[i % examRooms.length].id, date: new Date(ds), dayOfWeek: new Date(ds).getDay(), slotNumber: sn, startTime: st, endTime: et, status: i < 10 ? 'COMPLETED' : 'SCHEDULED' })
   }
-  for (let i = 0; i < examSlotBatch.length; i += 20) {
-    await prisma.examSlot.createMany({ data: examSlotBatch.slice(i, i + 20) })
+
+  // Insert in batches of 50
+  for (let i = 0; i < examSlotData.length; i += 50) {
+    await prisma.examSlot.createMany({ data: examSlotData.slice(i, i + 50) });
   }
-  console.log(`Exam slots: ${examSlotBatch.length}`)
+  console.log(`[11] Exam Slots: ${examSlotData.length} created`);
 
-  // LECTURE TIMETABLE
-  const lt = await prisma.lectureTimetable.create({
-    data: { institutionId: fedko.id, name: 'Second Semester 2025/2026', session: '2025/2026', semester: 2, startDate: new Date('2026-02-15'), endDate: new Date('2026-06-14'), status: 'PUBLISHED', publishedAt: new Date('2026-02-10') }
-  })
+  // 12. Lecture Timetable + slots
+  const lectureTimetable = await prisma.lectureTimetable.create({
+    data: {
+      institutionId: instId, name: "Second Semester Lecture Timetable 2025/2026",
+      session, semester, startDate: new Date("2025-02-17"), endDate: new Date("2025-06-28"), status: "PUBLISHED",
+    },
+  });
 
-  const days = [1, 2, 3, 4, 6]
-  const ts = [{ s: '08:00', e: '10:00' }, { s: '10:00', e: '12:00' }, { s: '14:00', e: '16:00' }]
-  const lecSlotBatch: any[] = []
-  for (let i = 0; i < courseR.length; i++) {
-    lecSlotBatch.push({ lectureTimetableId: lt.id, courseId: courseR[i].id, roomId: roomR[i % roomR.length].id, dayOfWeek: days[i % days.length], startTime: ts[i % ts.length].s, endTime: ts[i % ts.length].e, status: 'ACTIVE' })
+  // Representative lecture slots for 100L and 200L courses
+  const lecCourses = courses.filter(c => c.level <= 200 && c.semester === semester);
+  const lecSlotData: { lectureTimetableId: string; courseId: string; roomId: string; dayOfWeek: number; startTime: string; endTime: string; isRecurring: boolean; status: string }[] = [];
+  const lecOcc: Record<string, string[]> = {};
+
+  for (const course of lecCourses) {
+    const enrollment = courseEnrollment[course.id] || 0;
+    const roomId = enrollment > 100 ? roomMap["KLHA"] : enrollment > 45 ? roomMap["KLHB"] : course.requiresLab ? roomMap["SCL"] : roomMap["HCR"];
+    if (!roomId) continue;
+    const myS = courseStudents[course.id] || new Set();
+
+    for (let day = 1; day <= 6; day++) {
+      for (const time of ["08:00","10:00","12:00","14:00"]) {
+        const key = `${day}-${time}`;
+        const occ = lecOcc[key] || [];
+        let clash = false;
+        for (const oid of occ) {
+          const os = courseStudents[oid];
+          if (!os) continue;
+          for (const sid of myS) { if (os.has(sid)) { clash = true; break; } }
+          if (clash) break;
+        }
+        if (!clash) {
+          const endH = parseInt(time.split(":")[0]) + 2;
+          lecSlotData.push({
+            lectureTimetableId: lectureTimetable.id, courseId: course.id, roomId,
+            dayOfWeek: day, startTime: time, endTime: `${String(endH).padStart(2,"0")}:00`,
+            isRecurring: true, status: "ACTIVE",
+          });
+          lecOcc[key] = [...occ, course.id];
+          break; // one slot per course
+        }
+      }
+      if (lecSlotData.find(s => s.courseId === course.id)) break;
+    }
   }
-  for (let i = 0; i < lecSlotBatch.length; i += 20) {
-    await prisma.lectureSlot.createMany({ data: lecSlotBatch.slice(i, i + 20) })
+
+  for (let i = 0; i < lecSlotData.length; i += 50) {
+    await prisma.lectureSlot.createMany({ data: lecSlotData.slice(i, i + 50) });
   }
-  console.log(`Lecture slots: ${lecSlotBatch.length}`)
+  console.log(`[12] Lecture Slots: ${lecSlotData.length} created`);
 
-  // CONFLICTS, REPORTS, VERSIONS, NOTIFICATIONS
-  await prisma.conflict.createMany({
-    data: [
-      { examPeriodId: ep.id, type: 'STUDENT_CLASH', severity: 'CRITICAL', status: 'DETECTED', description: 'Student has CSC 301 and MTH 201 at same time', affectedEntity: 'demo-student', affectedName: 'Aisha Mohammed' },
-      { examPeriodId: ep.id, type: 'ROOM_CLASH', severity: 'WARNING', status: 'RESOLVED', description: 'FCIT-LT1 double-booked', affectedEntity: 'room-fcit-lt1', affectedName: 'FCIT LT1' },
-      { examPeriodId: ep.id, type: 'LECTURER_CLASH', severity: 'CRITICAL', status: 'ACKNOWLEDGED', description: 'Dr. Nwankwo has two invigilations', affectedEntity: demoLec.id, affectedName: 'Dr. Emeka Nwankwo' },
-      { examPeriodId: ep.id, type: 'ROOM_CAPACITY', severity: 'WARNING', status: 'DETECTED', description: 'ECO 201 exceeds room capacity', affectedEntity: 'room-fmss-cr1', affectedName: 'Mgt CR 1' },
-      { examPeriodId: ep.id, type: 'CO_CLASH', severity: 'INFO', status: 'DETECTED', description: 'Carry-over students clash detected', affectedEntity: 'dept-csc', affectedName: 'Computer Science' },
-    ]
-  })
+  // 13. Conflict Report (clean)
+  await prisma.conflictReport.create({
+    data: {
+      examPeriodId: examPeriod.id, totalConflicts: 0, criticalCount: 0,
+      warningCount: 0, infoCount: 0, status: "APPROVED",
+    },
+  });
 
-  await prisma.conflictReport.create({ data: { examPeriodId: ep.id, totalConflicts: 5, criticalCount: 2, warningCount: 2, infoCount: 1, status: 'REVIEWED', reviewedBy: ia.id, reviewedAt: new Date('2026-06-02'), notes: 'Room clashes resolved.' } })
-  await prisma.timetableVersion.create({ data: { examPeriodId: ep.id, version: 1, changes: JSON.stringify({ desc: 'Initial timetable' }), publishedBy: ia.id, publishedAt: new Date('2026-06-01'), isCurrent: true } })
+  // 14. Timetable Version
+  await prisma.timetableVersion.create({
+    data: {
+      examPeriodId: examPeriod.id, version: 1, isCurrent: true, publishedAt: new Date(),
+      changes: JSON.stringify({ action: "Initial generation", slots: examSlotData.length }),
+    },
+  });
 
-  await prisma.notification.createMany({
-    data: [
-      { userId: ia.id, title: 'Exam Timetable Published', message: 'Second semester exam timetable published.', type: 'SUCCESS' as NotificationType, actionUrl: '/dashboard/exam-timetable' },
-      { userId: ia.id, title: 'Critical Conflicts Detected', message: '2 critical conflicts need attention.', type: 'CONFLICT_DETECTED' as NotificationType, actionUrl: '/dashboard/conflicts' },
-      { userId: toUser.id, title: 'New Exam Period', message: 'Review and generate schedule.', type: 'INFO' as NotificationType, actionUrl: '/dashboard/exam-timetable' },
-      { userId: lc.id, title: 'Schedule Updated', message: 'Invigilation schedule updated.', type: 'SCHEDULE_CHANGE' as NotificationType, actionUrl: '/dashboard/lecturer-schedule' },
-      { userId: st.id, title: 'Exam Timetable Available', message: 'Your personal timetable is ready.', type: 'INFO' as NotificationType, actionUrl: '/dashboard/my-timetable' },
-    ]
-  })
+  // 15. Notifications
+  const fedkoUserRecords = await prisma.user.findMany({ where: { institutionId: instId }, select: { id: true } });
+  const notifData = fedkoUserRecords.map((u) => ({
+    userId: u.id, title: "Exam Timetable Published",
+    message: `The second semester ${session} exam timetable has been generated and is available. Check your personal schedule.`,
+    type: "SCHEDULE_CHANGE", actionUrl: "/dashboard",
+  }));
+  await prisma.notification.createMany({ data: notifData });
+  console.log(`[13-15] Reports, Versions, Notifications created`);
 
-  // SUMMARY
-  console.log(`\n=== Done in ${Date.now() - t0}ms ===`)
-  const c = await Promise.all([
-    prisma.institution.count(), prisma.user.count(), prisma.faculty.count(),
-    prisma.department.count(), prisma.course.count(), prisma.room.count(),
-    prisma.lecturer.count(), prisma.student.count(), prisma.examSlot.count(),
-    prisma.lectureSlot.count(), prisma.conflict.count(), prisma.notification.count(),
-  ])
-  console.log(`Inst:${c[0]} Users:${c[1]} Facs:${c[2]} Depts:${c[3]} Courses:${c[4]} Rooms:${c[5]} Lec:${c[6]} Stu:${c[7]} ExamSlots:${c[8]} LecSlots:${c[9]} Conflicts:${c[10]} Notif:${c[11]}`)
-  console.log('\nAccounts: admin@clashfree.com / admin@fedko.edu.ng / officer@fedko.edu.ng / lecturer@fedko.edu.ng / student@fedko.edu.ng (all: admin123)')
+  // Summary
+  const elapsed = ((Date.now() - t0) / 1000).toFixed(1);
+  console.log(`\n${"=".repeat(50)}`);
+  console.log(`SEED COMPLETE in ${elapsed}s`);
+  console.log(`${"=".repeat(50)}`);
+
+  const c = {
+    Institution: await prisma.institution.count(),
+    User: await prisma.user.count(),
+    Faculty: await prisma.faculty.count(),
+    Department: await prisma.department.count(),
+    Course: await prisma.course.count(),
+    Student: await prisma.student.count(),
+    Lecturer: await prisma.lecturer.count(),
+    Room: await prisma.room.count(),
+    ExamPeriod: await prisma.examPeriod.count(),
+    ExamSlot: await prisma.examSlot.count(),
+    StudentCourse: await prisma.studentCourse.count(),
+    LectureSlot: await prisma.lectureSlot.count(),
+    Notification: await prisma.notification.count(),
+  };
+  console.table(c);
 }
 
-main().catch(e => { console.error(e); process.exit(1) }).finally(() => prisma.$disconnect())
+main().catch((e) => { console.error("SEED FAILED:", e); process.exit(1); }).finally(() => prisma.$disconnect());

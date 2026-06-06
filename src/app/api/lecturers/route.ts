@@ -47,6 +47,7 @@ export async function GET(request: NextRequest) {
         rank: true,
         specialization: true,
         isActive: true,
+        userId: true,
         unavailableDays: true,
         department: {
           select: {
