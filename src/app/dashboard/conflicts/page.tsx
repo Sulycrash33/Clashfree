@@ -212,10 +212,10 @@ export default function ConflictsPage() {
     resolved: conflicts.filter(c => c.status === 'RESOLVED').length,
   }
 
-  if (!['SA', 'IA', 'TO'].includes(session?.user?.role || '')) {
+  if (!['SA', 'IA', 'TO', 'ST'].includes(session?.user?.role || '')) {
     return (
       <Alert className="bg-red-500/10 border-red-500/20">
-        <AlertDescription className="text-red-400">Access denied. Only administrators can view conflicts.</AlertDescription>
+        <AlertDescription className="text-red-400">Access denied. You do not have permission to view conflicts.</AlertDescription>
       </Alert>
     )
   }
