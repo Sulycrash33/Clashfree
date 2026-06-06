@@ -39,9 +39,9 @@ const roles = [
     description: 'Full control within your institution. Setup, generation, approval, publication.',
     icon: Building2,
     color: 'from-blue-500 to-cyan-500',
-    features: ['Faculties & depts', 'Timetable generation', 'Approval workflow', 'Reports'],
-    demoEmail: 'ia@nsuk.edu.ng',
-    demoPassword: 'admin123',
+    features: ['10 faculties', 'Multi-institution', 'Approval workflow', 'Reports'],
+    demoEmail: 'admin@fedko.edu.ng',
+    demoPassword: 'demo1234',
   },
   {
     id: 'TO',
@@ -51,8 +51,8 @@ const roles = [
     icon: Calendar,
     color: 'from-purple-500 to-pink-500',
     features: ['Course management', 'Student data', 'Room inventory', 'Conflict resolution'],
-    demoEmail: 'to@nsuk.edu.ng',
-    demoPassword: 'admin123',
+    demoEmail: 'officer@fedko.edu.ng',
+    demoPassword: 'demo1234',
   },
   {
     id: 'LC',
@@ -62,8 +62,8 @@ const roles = [
     icon: BookOpen,
     color: 'from-green-500 to-emerald-500',
     features: ['My schedule', 'Availability setter', 'Invigilation duties', 'Course assignments'],
-    demoEmail: 'lecturer@nsuk.edu.ng',
-    demoPassword: 'admin123',
+    demoEmail: 'lecturer@fedko.edu.ng',
+    demoPassword: 'demo1234',
   },
   {
     id: 'ST',
@@ -73,8 +73,8 @@ const roles = [
     icon: GraduationCap,
     color: 'from-amber-500 to-yellow-500',
     features: ['My exams', 'Venue locations', 'Carry-over status', 'Calendar sync'],
-    demoEmail: 'student@nsuk.edu.ng',
-    demoPassword: 'admin123',
+    demoEmail: 'student@fedko.edu.ng',
+    demoPassword: 'demo1234',
   },
 ]
 
@@ -186,18 +186,20 @@ export default function LandingPage() {
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Link>
-          <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 h-12 px-8">
-            Request Demo
-          </Button>
+          <Link href="/login?email=admin%40clashfree.com&password=admin123">
+            <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 h-12 px-8">
+              Try Live Demo
+            </Button>
+          </Link>
         </div>
 
-        {/* Stats */}
+        {/* Platform Highlights */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
           {[
-            { value: '47+', label: 'Institutions' },
-            { value: '1.2M+', label: 'Students' },
-            { value: '0', label: 'Clash Reports' },
-            { value: '312+', label: 'Timetables Generated' },
+            { value: '5', label: 'User Roles' },
+            { value: '8', label: 'Institution Types' },
+            { value: '0', label: 'Clash Guarantee' },
+            { value: '100%', label: 'Automation' },
           ].map((stat, i) => (
             <div key={i} className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
               <div className="text-2xl md:text-3xl font-bold text-white">{stat.value}</div>
@@ -300,9 +302,11 @@ export default function LandingPage() {
                 Get Started Free
               </Button>
             </Link>
-            <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 h-12 px-8">
-              Request a Demo
-            </Button>
+            <Link href="/login?email=admin%40clashfree.com&password=admin123">
+              <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 h-12 px-8">
+                Request a Demo
+              </Button>
+            </Link>
           </div>
         </div>
       </section>

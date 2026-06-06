@@ -192,6 +192,33 @@ export async function getTimetableStatistics(examPeriodId: string) {
   // CO statistics
   const coStats = await getCOStatistics(examPeriod.institutionId)
 
+  // F8: Room capacity ratio per slot
+  const roomRatios = await Promise.all(slots.map(async (slot) => {
+    const enrollment = await db.studentCourse.count({
+      where: { courseId: slot.courseId, status: { in: ['REGISTERED', 'CARRY_OVER', 'SPILLOVER'] } },
+    })
+    const ratio = slot.room.capacity > 0 ? enrollment / slot.room.capacity : 0
+    const percentage = Math.round(ratio * 100)
+    // Traffic light: <70% green, 70-90% amber, >90% red
+    const status = ratio < 0.7 ? 'green' : ratio < 0.9 ? 'amber' : 'red'
+    return {
+      slotId: slot.id,
+      courseCode: slot.course.code,
+      courseName: slot.course.name,
+      roomCode: slot.room.code,
+      roomName: slot.room.name,
+      roomCapacity: slot.room.capacity,
+      enrollment,
+      ratio: percentage,
+      status,
+    }
+  }))
+
+  // Room summary stats
+  const greenCount = roomRatios.filter(r => r.status === 'green').length
+  const amberCount = roomRatios.filter(r => r.status === 'amber').length
+  const redCount = roomRatios.filter(r => r.status === 'red').length
+
   return {
     examPeriod: {
       name: examPeriod.name,
@@ -215,6 +242,10 @@ export async function getTimetableStatistics(examPeriodId: string) {
       studentsWithCOs: coStats.studentsWithCOs,
       studentsWithSpillover: coStats.studentsWithSpillover,
       topCOCourses: coStats.coCoursesBreakdown.slice(0, 5),
+    },
+    roomCapacity: {
+      summary: { green: greenCount, amber: amberCount, red: redCount, total: roomRatios.length },
+      details: roomRatios.filter(r => r.status !== 'green').slice(0, 20),
     },
   }
 }

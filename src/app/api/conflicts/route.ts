@@ -78,9 +78,15 @@ export async function GET(request: NextRequest) {
     }
 
     // Default: list stored conflicts from database
+    // F9: Enforce multi-institution isolation
     const whereClause: any = {}
     if (examPeriodId) {
       whereClause.examPeriodId = examPeriodId
+    }
+    const examPeriodData = examPeriodId ? await db.examPeriod.findUnique({ where: { id: examPeriodId }, select: { institutionId: true } }) : null
+    const institutionFilter = examPeriodData?.institutionId || authResult.user.institutionId
+    if (institutionFilter && !examPeriodId) {
+      whereClause.examPeriod = { institutionId: institutionFilter }
     }
 
     const conflicts = await db.conflict.findMany({
