@@ -4,6 +4,7 @@ import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import { clearDemoCookie } from '@/lib/demo'
 import {
   LayoutDashboard,
   Building2,
@@ -21,6 +22,7 @@ import {
   ChevronDown,
   Menu,
   X,
+  Eye,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
@@ -80,7 +82,11 @@ const navigation = {
   ],
 }
 
-export function Sidebar() {
+interface SidebarProps {
+  demoMode?: boolean
+}
+
+export function Sidebar({ demoMode = false }: SidebarProps) {
   const { data: session } = useSession()
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -89,6 +95,11 @@ export function Sidebar() {
 
   const userRole = session.user.role as keyof typeof navigation
   const navItems = navigation[userRole] || navigation.ST
+
+  const handleSignOut = () => {
+    clearDemoCookie()
+    signOut({ callbackUrl: '/login' })
+  }
 
   return (
     <>
@@ -128,6 +139,16 @@ export function Sidebar() {
                 <p className="text-xs text-slate-400">{roleLabels[userRole]}</p>
               </div>
             </div>
+            {/* Demo mode indicator */}
+            {demoMode && (
+              <div className="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
+                <Eye className="w-4 h-4 text-amber-400 flex-shrink-0" />
+                <div>
+                  <p className="text-xs font-medium text-amber-400">Demo Showcase</p>
+                  <p className="text-[10px] text-amber-400/60">Read-only investor view</p>
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Navigation */}
@@ -138,6 +159,7 @@ export function Sidebar() {
                 <Link
                   key={item.name}
                   href={item.href}
+                  data-allow-nav="true"
                   className={cn(
                     'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
                     isActive
@@ -167,7 +189,7 @@ export function Sidebar() {
             <Button
               variant="ghost"
               className="w-full justify-start text-slate-400 hover:text-white hover:bg-white/5"
-              onClick={() => signOut({ callbackUrl: '/login' })}
+              onClick={handleSignOut}
             >
               <LogOut className="w-4 h-4 mr-2" />
               Sign Out

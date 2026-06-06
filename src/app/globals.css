@@ -228,3 +228,83 @@
   outline: 2px solid #06b6d4;
   outline-offset: 2px;
 }
+
+/* ============================================
+   DEMO MODE LOCKDOWN
+   Disables all interactive elements inside main
+   when [data-demo-mode="true"] is set on main
+   ============================================ */
+
+/* Disable buttons, links, inputs, selects, textareas inside main content area */
+main[data-demo-mode="true"] button,
+main[data-demo-mode="true"] a:not([data-allow-nav]),
+main[data-demo-mode="true"] [role="button"],
+main[data-demo-mode="true"] input,
+main[data-demo-mode="true"] select,
+main[data-demo-mode="true"] textarea,
+main[data-demo-mode="true"] label[for],
+main[data-demo-mode="true"] [role="switch"],
+main[data-demo-mode="true"] [role="checkbox"],
+main[data-demo-mode="true"] [role="tab"],
+main[data-demo-mode="true"] [role="combobox"],
+main[data-demo-mode="true"] [role="option"] {
+  pointer-events: none !important;
+  cursor: default !important;
+  opacity: 0.4 !important;
+  user-select: none !important;
+  transition: opacity 0.2s ease !important;
+}
+
+/* Disable dropdown menu triggers */
+main[data-demo-mode="true"] button[data-radix-dropdown-menu-trigger],
+main[data-demo-mode="true"] button[data-radix-popover-trigger],
+main[data-demo-mode="true"] button[data-radix-dialog-trigger] {
+  pointer-events: none !important;
+}
+
+/* Hide open dropdown/popover menus */
+main[data-demo-mode="true"] [data-radix-popper-content-wrapper],
+main[data-demo-mode="true"] [data-state="open"] {
+  display: none !important;
+}
+
+/* Hide open dialogs */
+main[data-demo-mode="true"] [data-radix-dialog-overlay],
+main[data-demo-mode="true"] [data-radix-dialog-content][data-state="open"] {
+  display: none !important;
+}
+
+/* Disable form submissions */
+main[data-demo-mode="true"] form {
+  pointer-events: none !important;
+  opacity: 0.4 !important;
+}
+
+/* Disable table row interactions */
+main[data-demo-mode="true"] tr {
+  cursor: default !important;
+}
+
+/* Disable card hover transforms in demo mode */
+main[data-demo-mode="true"] [class*="card-hover"]:hover {
+  transform: none !important;
+}
+
+/* Add subtle bottom-right badge in demo mode */
+main[data-demo-mode="true"]::after {
+  content: 'DEMO';
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #f59e0b;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 6px 14px;
+  border-radius: 8px;
+  z-index: 50;
+  pointer-events: none;
+  backdrop-filter: blur(8px);
+  letter-spacing: 0.05em;
+}

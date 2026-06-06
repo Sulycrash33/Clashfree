@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { Suspense, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
 import Link from 'next/link'
@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
+import { setDemoCookie } from '@/lib/demo'
 import { Loader2, Mail, Lock, ArrowLeft, Shield, Building2, Calendar, BookOpen, GraduationCap } from 'lucide-react'
 
 const demoAccounts = [
@@ -65,7 +66,7 @@ const demoAccounts = [
   },
 ]
 
-export default function LoginPage() {
+function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const initialEmail = searchParams.get('email') || ''
@@ -107,6 +108,8 @@ export default function LoginPage() {
     setEmail(account.email)
     setPassword(account.password)
     setDemoDialogOpen(false)
+    // Set demo mode cookie so dashboard knows to lock down
+    setDemoCookie()
   }
 
   return (
@@ -267,5 +270,13 @@ export default function LoginPage() {
         </p>
       </div>
     </div>
+  )
+}
+
+export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
   )
 }
