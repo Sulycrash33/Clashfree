@@ -227,7 +227,7 @@ export default function LandingPage() {
       {/* Roles Section */}
       <section id="roles" className="relative z-10 container mx-auto px-4 py-16">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Role-Based Access</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Role-Based Access</h2>
           <p className="text-slate-400 max-w-2xl mx-auto">
             Every user sees only what they need. Zero privilege escalation. All actions logged.
           </p>
@@ -244,8 +244,8 @@ export default function LandingPage() {
                 <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${role.color} flex items-center justify-center mb-3`}>
                   <role.icon className="w-5 h-5 text-white" />
                 </div>
-                <CardTitle className="text-lg">{role.title}</CardTitle>
-                <CardDescription className="text-slate-500">{role.subtitle}</CardDescription>
+                <CardTitle className="text-lg text-white">{role.title}</CardTitle>
+                <CardDescription className="text-slate-400">{role.subtitle}</CardDescription>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-slate-400 mb-4">{role.description}</p>
@@ -265,7 +265,7 @@ export default function LandingPage() {
       {/* Institutions Section */}
       <section id="institutions" className="relative z-10 container mx-auto px-4 py-16">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Built for Every Nigerian Tertiary Structure</h2>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Built for Every Nigerian Tertiary Structure</h2>
           <p className="text-slate-400">
             From federal universities to health technology schools.
           </p>
@@ -287,7 +287,7 @@ export default function LandingPage() {
       {/* CTA Section */}
       <section className="relative z-10 container mx-auto px-4 py-20">
         <div className="bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 rounded-3xl p-8 md:p-16 text-center border border-white/10 backdrop-blur-sm">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
             All Parameters Met → Guaranteed Conflict-Free Output
           </h2>
           <p className="text-slate-400 max-w-2xl mx-auto mb-8">

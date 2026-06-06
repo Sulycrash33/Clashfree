@@ -36,7 +36,7 @@ interface Faculty {
   code: string
 }
 
-export default function DepartmentsPage() {
+function DepartmentsPageInner() {
   const { data: session } = useSession()
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -341,5 +341,16 @@ export default function DepartmentsPage() {
         </DialogContent>
       </Dialog>
     </div>
+  )
+}
+
+import { Suspense } from 'react'
+import { Loader2 as SuspenseLoader } from 'lucide-react'
+
+export default function DepartmentsPage() {
+  return (
+    <Suspense fallback={<div className="flex items-center justify-center py-12"><SuspenseLoader className="w-8 h-8 animate-spin text-cyan-500" /></div>}>
+      <DepartmentsPageInner />
+    </Suspense>
   )
 }

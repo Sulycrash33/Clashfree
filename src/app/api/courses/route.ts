@@ -16,6 +16,7 @@ export async function GET(request: NextRequest) {
     const institutionId = searchParams.get('institutionId')
     const level = searchParams.get('level')
     const isShared = searchParams.get('isShared')
+    const lecturerId = searchParams.get('lecturerId')
 
     let whereClause: any = {}
 
