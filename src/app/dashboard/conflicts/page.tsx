@@ -8,7 +8,9 @@ import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { PageHeader } from '@/components/page-header'
-import { AlertTriangle, CheckCircle2, XCircle, Clock, Users, MapPin, BookOpen, Loader2, RefreshCw, TrendingUp, AlertCircle } from 'lucide-react'
+import { AlertTriangle, CheckCircle2, XCircle, Clock, Users, MapPin, BookOpen, Loader2, RefreshCw, TrendingUp, AlertCircle, Eye, RotateCcw, ShieldCheck } from 'lucide-react'
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet'
+import { Textarea } from '@/components/ui/textarea'
 import { useToast } from '@/hooks/use-toast'
 
 interface Conflict {
@@ -65,6 +67,10 @@ export default function ConflictsPage() {
   const [detecting, setDetecting] = useState(false)
   const [filter, setFilter] = useState<'all' | 'CRITICAL' | 'WARNING' | 'INFO'>('all')
   const [coStats, setCOStats] = useState<COStats | null>(null)
+  const [detailOpen, setDetailOpen] = useState(false)
+  const [detailConflict, setDetailConflict] = useState<Conflict | null>(null)
+  const [overrideNote, setOverrideNote] = useState('')
+  const [overriding, setOverriding] = useState(false)
 
   const fetchData = useCallback(async () => {
     setLoading(true)
@@ -160,6 +166,39 @@ export default function ConflictsPage() {
     } catch (error) {
       toast({ title: 'Error', description: 'Failed to update conflict', variant: 'destructive' })
     }
+  }
+
+  const handleOverride = async (id: string, note: string) => {
+    setOverriding(true)
+    try {
+      const res = await fetch('/api/conflicts', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status: 'RESOLVED', resolution: note || 'Override approved by IA' }),
+      })
+      if (res.ok) {
+        setConflicts(prev => prev.map(c => c.id === id ? { ...c, status: 'RESOLVED', resolution: note || 'Override approved by IA' } : c))
+        setDetailOpen(false)
+        setOverrideNote('')
+        toast({ title: 'Override applied', description: 'Conflict overridden and marked resolved' })
+      }
+    } catch { toast({ title: 'Error', description: 'Failed to override', variant: 'destructive' }) }
+    finally { setOverriding(false) }
+  }
+
+  const handleReopen = async (id: string) => {
+    try {
+      const res = await fetch('/api/conflicts', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, status: 'DETECTED', resolution: null }),
+      })
+      if (res.ok) {
+        setConflicts(prev => prev.map(c => c.id === id ? { ...c, status: 'DETECTED', resolution: undefined } : c))
+        setDetailOpen(false)
+        toast({ title: 'Conflict re-opened' })
+      }
+    } catch { toast({ title: 'Error', description: 'Failed to re-open', variant: 'destructive' }) }
   }
 
   const filteredConflicts = filter === 'all'
@@ -421,25 +460,54 @@ export default function ConflictsPage() {
                         </div>
                       )}
                     </div>
-                    {conflict.status === 'DETECTED' && (
-                      <div className="flex items-center gap-2">
-                        <Button
-                          size="sm"
-                          onClick={() => handleResolve(conflict.id)}
-                          className="bg-green-500/20 text-green-400 hover:bg-green-500/30 border-0"
-                        >
-                          Resolve
-                        </Button>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => { setDetailConflict(conflict); setOverrideNote(''); setDetailOpen(true) }}
+                        className="border-white/10 text-slate-300 hover:text-white"
+                      >
+                        <Eye className="w-3 h-3 mr-1" /> Detail
+                      </Button>
+                      {conflict.status === 'DETECTED' && (
+                        <>
+                          <Button
+                            size="sm"
+                            onClick={() => handleResolve(conflict.id)}
+                            className="bg-green-500/20 text-green-400 hover:bg-green-500/30 border-0"
+                          >
+                            Resolve
+                          </Button>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleIgnore(conflict.id)}
+                            className="border-white/10 text-slate-400 hover:text-white"
+                          >
+                            Ignore
+                          </Button>
+                          {['IA', 'SA'].includes(session?.user?.role || '') && (
+                            <Button
+                              size="sm"
+                              onClick={() => { setDetailConflict(conflict); setOverrideNote(''); setDetailOpen(true) }}
+                              className="bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 border-0"
+                            >
+                              <ShieldCheck className="w-3 h-3 mr-1" /> Override
+                            </Button>
+                          )}
+                        </>
+                      )}
+                      {['RESOLVED', 'IGNORED'].includes(conflict.status) && ['IA', 'SA'].includes(session?.user?.role || '') && (
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={() => handleIgnore(conflict.id)}
-                          className="border-white/10 text-slate-400 hover:text-white"
+                          onClick={() => handleReopen(conflict.id)}
+                          className="border-amber-500/20 text-amber-400 hover:text-amber-300"
                         >
-                          Ignore
+                          <RotateCcw className="w-3 h-3 mr-1" /> Re-open
                         </Button>
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -447,6 +515,128 @@ export default function ConflictsPage() {
           })
         )}
       </div>
+      {/* Override Detail Sheet */}
+      <Sheet open={detailOpen} onOpenChange={setDetailOpen}>
+        <SheetContent className="bg-slate-900 border-white/10 text-white w-full sm:max-w-xl overflow-y-auto">
+          {detailConflict && (
+            <>
+              <SheetHeader className="mb-5">
+                <SheetTitle className="text-white flex items-center gap-2">
+                  <AlertTriangle className="w-5 h-5 text-amber-400" />
+                  Conflict Detail
+                </SheetTitle>
+                <SheetDescription className="text-slate-400">
+                  {conflictTypes[detailConflict.type]?.label || detailConflict.type} · {detailConflict.severity}
+                </SheetDescription>
+              </SheetHeader>
+
+              {/* Status + severity */}
+              <div className="flex items-center gap-2 mb-4">
+                <Badge className={severityColors[detailConflict.severity]}>{detailConflict.severity}</Badge>
+                <Badge variant="outline" className={
+                  detailConflict.status === 'RESOLVED' ? 'text-green-400 border-green-500/30'
+                  : detailConflict.status === 'IGNORED' ? 'text-slate-400 border-white/10'
+                  : 'text-red-400 border-red-500/30'
+                }>{detailConflict.status}</Badge>
+              </div>
+
+              {/* Description */}
+              <div className="p-3 bg-white/5 rounded-lg border border-white/10 mb-4">
+                <p className="text-sm text-white">{detailConflict.description}</p>
+                <p className="text-xs text-slate-400 mt-2">Affected: {detailConflict.affectedName}</p>
+                <p className="text-xs text-slate-400">Detected: {new Date(detailConflict.createdAt).toLocaleString()}</p>
+              </div>
+
+              {/* Slot details */}
+              {detailConflict.details && (
+                <div className="grid grid-cols-2 gap-3 mb-4">
+                  {detailConflict.details.courseA && (
+                    <div className="p-3 bg-cyan-500/5 rounded-lg border border-cyan-500/20">
+                      <div className="text-xs text-slate-400 mb-1">Slot A</div>
+                      <Badge variant="outline" className="text-cyan-400 border-cyan-400/20 font-mono text-xs mb-1">{detailConflict.details.courseA.code}</Badge>
+                      <p className="text-xs text-white">{detailConflict.details.courseA.name || ''}</p>
+                      {detailConflict.details.courseA.status && (
+                        <Badge className="bg-amber-500/20 text-amber-400 text-xs mt-1">{detailConflict.details.courseA.status}</Badge>
+                      )}
+                    </div>
+                  )}
+                  {detailConflict.details.courseB && (
+                    <div className="p-3 bg-pink-500/5 rounded-lg border border-pink-500/20">
+                      <div className="text-xs text-slate-400 mb-1">Slot B</div>
+                      <Badge variant="outline" className="text-pink-400 border-pink-400/20 font-mono text-xs mb-1">{detailConflict.details.courseB.code}</Badge>
+                      <p className="text-xs text-white">{detailConflict.details.courseB.name || ''}</p>
+                      {detailConflict.details.courseB.status && (
+                        <Badge className="bg-amber-500/20 text-amber-400 text-xs mt-1">{detailConflict.details.courseB.status}</Badge>
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Existing resolution */}
+              {detailConflict.resolution && (
+                <div className="p-3 bg-green-500/10 rounded-lg border border-green-500/20 mb-4">
+                  <p className="text-xs text-slate-400 mb-1">Resolution note:</p>
+                  <p className="text-sm text-green-400">{detailConflict.resolution}</p>
+                </div>
+              )}
+
+              {/* Override panel — IA/SA only */}
+              {['IA', 'SA'].includes(session?.user?.role || '') && detailConflict.status === 'DETECTED' && (
+                <div className="space-y-3 border-t border-white/10 pt-4">
+                  <p className="text-sm text-white font-medium flex items-center gap-2">
+                    <ShieldCheck className="w-4 h-4 text-amber-400" /> Override Conflict
+                  </p>
+                  <p className="text-xs text-slate-400">As Institution Admin, you can override this conflict and provide a justification.</p>
+                  <Textarea
+                    value={overrideNote}
+                    onChange={e => setOverrideNote(e.target.value)}
+                    placeholder="Enter override justification (e.g. Special arrangement approved by Dean)..."
+                    className="bg-white/5 border-white/10 text-white text-sm min-h-[80px]"
+                  />
+                  <div className="flex gap-2">
+                    <Button
+                      onClick={() => handleOverride(detailConflict.id, overrideNote)}
+                      disabled={overriding}
+                      className="bg-amber-500/20 text-amber-400 hover:bg-amber-500/30 border-0"
+                    >
+                      {overriding ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <ShieldCheck className="w-4 h-4 mr-2" />}
+                      Apply Override
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => handleResolve(detailConflict.id)}
+                      className="border-green-500/20 text-green-400"
+                    >
+                      <CheckCircle2 className="w-4 h-4 mr-2" /> Resolve
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => handleIgnore(detailConflict.id)}
+                      className="border-white/10 text-slate-400"
+                    >
+                      Ignore
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* Reopen panel */}
+              {['IA', 'SA'].includes(session?.user?.role || '') && ['RESOLVED', 'IGNORED'].includes(detailConflict.status) && (
+                <div className="border-t border-white/10 pt-4">
+                  <Button
+                    variant="outline"
+                    onClick={() => handleReopen(detailConflict.id)}
+                    className="border-amber-500/20 text-amber-400"
+                  >
+                    <RotateCcw className="w-4 h-4 mr-2" /> Re-open Conflict
+                  </Button>
+                </div>
+              )}
+            </>
+          )}
+        </SheetContent>
+      </Sheet>
     </div>
   )
 }
