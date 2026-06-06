@@ -44,6 +44,8 @@ interface DashboardStats {
   examPeriods: number
   conflicts: number
   coStudents: number
+  studentLecturerRatio: string
+  facultyDrilldown: Array<{ id: string; name: string; code: string; departments: number; courses: number; rooms?: number }>
 }
 
 export default function DashboardPage() {
@@ -71,6 +73,21 @@ export default function DashboardPage() {
       // Get CO stats
       const coStats = await fetch('/api/co-stats').then(r => r.ok ? r.json() : { studentsWithCOs: 0 })
 
+      // Get faculty drill-down
+      const facultyData = await fetch('/api/faculties').then(r => r.ok ? r.json() : [])
+      const facultyDrilldown = (facultyData || []).map((f: any) => ({
+        id: f.id,
+        name: f.name,
+        code: f.code,
+        departments: f._count?.departments || 0,
+        courses: f._count?.courses || 0,
+      }))
+
+      // Student:Lecturer ratio
+      const ratio = (lecturers as number) > 0
+        ? `${Math.round((students as number) / (lecturers as number))}:1`
+        : 'N/A'
+
       setStats({
         institutions,
         users,
@@ -83,6 +100,8 @@ export default function DashboardPage() {
         examPeriods,
         conflicts,
         coStudents: coStats.studentsWithCOs || 0,
+        studentLecturerRatio: ratio,
+        facultyDrilldown,
       })
     } catch (error) {
       console.error('Failed to fetch stats:', error)
@@ -263,6 +282,65 @@ function SuperAdminStats({ stats, loading }: { stats: DashboardStats | null; loa
           </CardContent>
         </Card>
       </div>
+
+      {/* Faculty Drill-down */}
+      <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
+        <CardHeader>
+          <CardTitle className="text-white flex items-center gap-2">
+            <Building2 className="w-5 h-5 text-cyan-400" />
+            Faculty Breakdown
+          </CardTitle>
+          <CardDescription>
+            Departments and courses per faculty
+            {stats?.studentLecturerRatio && (
+              <span className={`ml-3 font-medium ${
+                parseInt(stats.studentLecturerRatio) <= 20
+                  ? 'text-green-400'
+                  : parseInt(stats.studentLecturerRatio) <= 40
+                  ? 'text-amber-400'
+                  : 'text-red-400'
+              }`}>
+                Student:Lecturer ratio — {stats.studentLecturerRatio}
+              </span>
+            )}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {loading ? (
+            <Loader2 className="w-6 h-6 animate-spin text-slate-500" />
+          ) : (stats?.facultyDrilldown?.length || 0) === 0 ? (
+            <p className="text-slate-400 text-sm">No faculties found</p>
+          ) : (
+            <div className="space-y-2">
+              {stats?.facultyDrilldown?.map(f => (
+                <div key={f.id} className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10 hover:border-white/20 transition-colors">
+                  <div className="flex items-center gap-3">
+                    <Badge variant="outline" className="text-cyan-400 border-cyan-500/30 font-mono text-xs min-w-[50px] text-center">
+                      {f.code}
+                    </Badge>
+                    <span className="text-white text-sm">{f.name}</span>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="text-center">
+                      <div className="text-white font-medium">{f.departments}</div>
+                      <div className="text-xs text-slate-400">Depts</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-white font-medium">{f.courses}</div>
+                      <div className="text-xs text-slate-400">Courses</div>
+                    </div>
+                    <Link href={`/dashboard/departments?facultyId=${f.id}`}>
+                      <Button variant="outline" size="sm" className="border-white/10 text-slate-300 hover:text-white text-xs">
+                        View Depts →
+                      </Button>
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </CardContent>
+      </Card>
     </>
   )
 }

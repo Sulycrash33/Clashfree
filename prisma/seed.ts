@@ -223,11 +223,77 @@ async function main() {
     { code: 'LAW-HALL2', name: 'Law Hall 2', capacity: 250, type: 'CLASSROOM', facultyId: lawFaculty!.id },
     { code: 'MOOT', name: 'Moot Court', capacity: 100, type: 'CLASSROOM', facultyId: lawFaculty!.id },
     
-    // General Classrooms
+    // Applied Science — expand to 20+ rooms
+    { code: 'FAS-LT3', name: 'Applied Science Lecture Theatre 3', capacity: 300, type: 'LECTURE_HALL', facultyId: null },
+    { code: 'FAS-CR1', name: 'Applied Science Classroom 1', capacity: 120, type: 'CLASSROOM', facultyId: null },
+    { code: 'FAS-CR2', name: 'Applied Science Classroom 2', capacity: 100, type: 'CLASSROOM', facultyId: null },
+    { code: 'FAS-CR3', name: 'Applied Science Classroom 3', capacity: 100, type: 'CLASSROOM', facultyId: null },
+    { code: 'FAS-SEMINAR1', name: 'Applied Science Seminar Room 1', capacity: 50, type: 'CLASSROOM', facultyId: null },
+    { code: 'FAS-SEMINAR2', name: 'Applied Science Seminar Room 2', capacity: 50, type: 'CLASSROOM', facultyId: null },
+    { code: 'FAS-HALL2', name: 'Applied Science Exam Hall 2', capacity: 250, type: 'EXAM_HALL', facultyId: null },
+    { code: 'FAS-LAB3', name: 'Science Multi-Lab 3', capacity: 60, type: 'LABORATORY', facultyId: null },
+
+    // Social Science — expand to 20+ rooms
+    { code: 'FSS-CR1', name: 'Social Science Classroom 1', capacity: 120, type: 'CLASSROOM', facultyId: null },
+    { code: 'FSS-CR2', name: 'Social Science Classroom 2', capacity: 100, type: 'CLASSROOM', facultyId: null },
+    { code: 'FSS-CR3', name: 'Social Science Classroom 3', capacity: 100, type: 'CLASSROOM', facultyId: null },
+    { code: 'FSS-CR4', name: 'Social Science Classroom 4', capacity: 80, type: 'CLASSROOM', facultyId: null },
+    { code: 'FSS-SEMINAR1', name: 'Social Science Seminar 1', capacity: 50, type: 'CLASSROOM', facultyId: null },
+    { code: 'FSS-SEMINAR2', name: 'Social Science Seminar 2', capacity: 50, type: 'CLASSROOM', facultyId: null },
+    { code: 'FSS-HALL2', name: 'Social Science Exam Hall 2', capacity: 300, type: 'EXAM_HALL', facultyId: null },
+
+    // Faculty of Arts & Education
+    ...(faeFaculty ? [
+      { code: 'FAE-LT1', name: 'Arts & Education Lecture Theatre 1', capacity: 500, type: 'LECTURE_HALL', facultyId: faeFaculty.id },
+      { code: 'FAE-LT2', name: 'Arts & Education Lecture Theatre 2', capacity: 350, type: 'LECTURE_HALL', facultyId: faeFaculty.id },
+      { code: 'FAE-HALL1', name: 'Arts & Education Exam Hall 1', capacity: 400, type: 'EXAM_HALL', facultyId: faeFaculty.id },
+      { code: 'FAE-HALL2', name: 'Arts & Education Exam Hall 2', capacity: 300, type: 'EXAM_HALL', facultyId: faeFaculty.id },
+      { code: 'FAE-CR1', name: 'Arts Classroom 1', capacity: 120, type: 'CLASSROOM', facultyId: faeFaculty.id },
+      { code: 'FAE-CR2', name: 'Arts Classroom 2', capacity: 120, type: 'CLASSROOM', facultyId: faeFaculty.id },
+      { code: 'FAE-CR3', name: 'Arts Classroom 3', capacity: 100, type: 'CLASSROOM', facultyId: faeFaculty.id },
+      { code: 'FAE-CR4', name: 'Arts Classroom 4', capacity: 100, type: 'CLASSROOM', facultyId: faeFaculty.id },
+      { code: 'FAE-CR5', name: 'Arts Classroom 5', capacity: 80, type: 'CLASSROOM', facultyId: faeFaculty.id },
+      { code: 'FAE-SEMINAR1', name: 'Arts Seminar Room 1', capacity: 50, type: 'CLASSROOM', facultyId: faeFaculty.id },
+      { code: 'FAE-SEMINAR2', name: 'Arts Seminar Room 2', capacity: 50, type: 'CLASSROOM', facultyId: faeFaculty.id },
+      { code: 'FAE-LANG-LAB', name: 'Language Laboratory', capacity: 60, type: 'COMPUTER_LAB', facultyId: faeFaculty.id, hasComputers: true },
+      { code: 'FAE-MEDIA', name: 'Media Room', capacity: 40, type: 'CLASSROOM', facultyId: faeFaculty.id },
+    ] : []),
+
+    // Faculty of Natural Sciences
+    ...(fscFaculty ? [
+      { code: 'FSC-LT1', name: 'Natural Sciences Lecture Theatre 1', capacity: 500, type: 'LECTURE_HALL', facultyId: fscFaculty.id },
+      { code: 'FSC-LT2', name: 'Natural Sciences Lecture Theatre 2', capacity: 400, type: 'LECTURE_HALL', facultyId: fscFaculty.id },
+      { code: 'FSC-HALL1', name: 'Natural Sciences Exam Hall 1', capacity: 400, type: 'EXAM_HALL', facultyId: fscFaculty.id },
+      { code: 'FSC-HALL2', name: 'Natural Sciences Exam Hall 2', capacity: 300, type: 'EXAM_HALL', facultyId: fscFaculty.id },
+      { code: 'FSC-CR1', name: 'Sciences Classroom 1', capacity: 120, type: 'CLASSROOM', facultyId: fscFaculty.id },
+      { code: 'FSC-CR2', name: 'Sciences Classroom 2', capacity: 120, type: 'CLASSROOM', facultyId: fscFaculty.id },
+      { code: 'FSC-CR3', name: 'Sciences Classroom 3', capacity: 100, type: 'CLASSROOM', facultyId: fscFaculty.id },
+      { code: 'FSC-CR4', name: 'Sciences Classroom 4', capacity: 100, type: 'CLASSROOM', facultyId: fscFaculty.id },
+      { code: 'CHM-LAB1', name: 'Chemistry Lab 1', capacity: 60, type: 'LABORATORY', facultyId: fscFaculty.id },
+      { code: 'CHM-LAB2', name: 'Chemistry Lab 2', capacity: 60, type: 'LABORATORY', facultyId: fscFaculty.id },
+      { code: 'BIO-LAB1', name: 'Biology Lab 1', capacity: 60, type: 'LABORATORY', facultyId: fscFaculty.id },
+      { code: 'MTH-LAB', name: 'Mathematics Computing Lab', capacity: 50, type: 'COMPUTER_LAB', facultyId: fscFaculty.id, hasComputers: true },
+      { code: 'FSC-SEMINAR1', name: 'Sciences Seminar Room 1', capacity: 50, type: 'CLASSROOM', facultyId: fscFaculty.id },
+      { code: 'FSC-SEMINAR2', name: 'Sciences Seminar Room 2', capacity: 50, type: 'CLASSROOM', facultyId: fscFaculty.id },
+    ] : []),
+
+    // Law — expand to 20+
+    { code: 'LAW-HALL3', name: 'Law Hall 3', capacity: 200, type: 'EXAM_HALL', facultyId: null },
+    { code: 'LAW-CR1', name: 'Law Classroom 1', capacity: 100, type: 'CLASSROOM', facultyId: null },
+    { code: 'LAW-CR2', name: 'Law Classroom 2', capacity: 80, type: 'CLASSROOM', facultyId: null },
+    { code: 'LAW-SEMINAR1', name: 'Law Seminar 1', capacity: 40, type: 'CLASSROOM', facultyId: null },
+    { code: 'LAW-SEMINAR2', name: 'Law Seminar 2', capacity: 40, type: 'CLASSROOM', facultyId: null },
+    { code: 'LAW-LIBRARY', name: 'Law Library Hall', capacity: 80, type: 'CLASSROOM', facultyId: null },
+
+    // General Classrooms — more variety
     { code: 'CR101', name: 'Classroom 101', capacity: 150, type: 'CLASSROOM', facultyId: null },
     { code: 'CR102', name: 'Classroom 102', capacity: 150, type: 'CLASSROOM', facultyId: null },
     { code: 'CR103', name: 'Classroom 103', capacity: 120, type: 'CLASSROOM', facultyId: null },
     { code: 'CR104', name: 'Classroom 104', capacity: 100, type: 'CLASSROOM', facultyId: null },
+    { code: 'CR105', name: 'Classroom 105', capacity: 100, type: 'CLASSROOM', facultyId: null },
+    { code: 'CR106', name: 'Classroom 106', capacity: 80, type: 'CLASSROOM', facultyId: null },
+    { code: 'CR107', name: 'Classroom 107', capacity: 80, type: 'CLASSROOM', facultyId: null },
+    { code: 'CR108', name: 'Classroom 108', capacity: 60, type: 'CLASSROOM', facultyId: null },
   ]
 
   for (const room of rooms) {

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -39,9 +39,12 @@ interface Faculty {
 export default function DepartmentsPage() {
   const { data: session } = useSession()
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const urlFacultyId = searchParams.get('facultyId')
   const { toast } = useToast()
   const [departments, setDepartments] = useState<Department[]>([])
   const [faculties, setFaculties] = useState<Faculty[]>([])
+  const [filterFacultyId, setFilterFacultyId] = useState<string>(urlFacultyId || 'all')
   const [loading, setLoading] = useState(true)
   const [dialogOpen, setDialogOpen] = useState(false)
   const [editingDepartment, setEditingDepartment] = useState<Department | null>(null)
@@ -241,7 +244,32 @@ export default function DepartmentsPage() {
               <Loader2 className="w-8 h-8 animate-spin text-green-500" />
             </div>
           ) : (
-            <DataTable columns={columns} data={departments} searchKey="name" searchPlaceholder="Search departments..." />
+            {/* Faculty filter bar */}
+          <div className="flex items-center gap-3 mb-4">
+            <span className="text-xs text-slate-400">Filter by Faculty:</span>
+            <Select value={filterFacultyId} onValueChange={setFilterFacultyId}>
+              <SelectTrigger className="w-56 bg-white/5 border-white/10 text-white text-sm">
+                <SelectValue placeholder="All Faculties" />
+              </SelectTrigger>
+              <SelectContent className="bg-slate-900 border-white/10">
+                <SelectItem value="all" className="text-white">All Faculties</SelectItem>
+                {faculties.map(f => (
+                  <SelectItem key={f.id} value={f.id} className="text-white">{f.code} – {f.name}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {filterFacultyId !== 'all' && (
+              <Badge variant="outline" className="text-cyan-400 border-cyan-500/30">
+                {faculties.find(f => f.id === filterFacultyId)?.code} — {departments.filter(d => d.facultyId === filterFacultyId).length} dept(s)
+              </Badge>
+            )}
+          </div>
+          <DataTable
+            columns={columns}
+            data={filterFacultyId === 'all' ? departments : departments.filter(d => d.facultyId === filterFacultyId)}
+            searchKey="name"
+            searchPlaceholder="Search departments..."
+          />
           )}
         </CardContent>
       </Card>
