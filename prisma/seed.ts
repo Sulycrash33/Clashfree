@@ -116,6 +116,8 @@ async function main() {
     { id: 'faculty-applied-science', name: 'Applied Science', code: 'FAS' },
     { id: 'faculty-social-science', name: 'Social Science', code: 'FSS' },
     { id: 'faculty-law', name: 'Law', code: 'FL' },
+    { id: 'faculty-arts-education', name: 'Arts & Education', code: 'FAE' },
+    { id: 'faculty-science', name: 'Natural Sciences', code: 'FSC' },
   ]
 
   for (const fac of faculties) {
@@ -138,6 +140,8 @@ async function main() {
   const fasFaculty = await prisma.faculty.findUnique({ where: { id: 'faculty-applied-science' } })
   const fssFaculty = await prisma.faculty.findUnique({ where: { id: 'faculty-social-science' } })
   const lawFaculty = await prisma.faculty.findUnique({ where: { id: 'faculty-law' } })
+  const faeFaculty = await prisma.faculty.findUnique({ where: { id: 'faculty-arts-education' } })
+  const fscFaculty = await prisma.faculty.findUnique({ where: { id: 'faculty-science' } })
 
   const departments = [
     // Faculty of Applied Science
@@ -157,6 +161,18 @@ async function main() {
     { code: 'LAW', name: 'Public Law', facultyId: lawFaculty!.id, avgStudents: 200 },
     { code: 'JIL', name: 'Jurisprudence & International Law', facultyId: lawFaculty!.id, avgStudents: 180 },
     { code: 'PUL', name: 'Private & Commercial Law', facultyId: lawFaculty!.id, avgStudents: 190 },
+
+    // Faculty of Arts & Education
+    { code: 'ENG', name: 'English Language & Literature', facultyId: faeFaculty!.id, avgStudents: 200 },
+    { code: 'GEO', name: 'Geography', facultyId: faeFaculty!.id, avgStudents: 160 },
+    { code: 'HIS', name: 'History', facultyId: faeFaculty!.id, avgStudents: 150 },
+    { code: 'EDU', name: 'Education', facultyId: faeFaculty!.id, avgStudents: 180 },
+    { code: 'LIB', name: 'Library & Information Science', facultyId: faeFaculty!.id, avgStudents: 120 },
+
+    // Faculty of Natural Sciences
+    { code: 'CHM', name: 'Chemistry', facultyId: fscFaculty!.id, avgStudents: 170 },
+    { code: 'BIO', name: 'Biology', facultyId: fscFaculty!.id, avgStudents: 180 },
+    { code: 'MTH', name: 'Mathematics', facultyId: fscFaculty!.id, avgStudents: 150 },
   ]
 
   for (const dept of departments) {
@@ -251,6 +267,13 @@ async function main() {
   const lawDept = await prisma.department.findFirst({ where: { code: 'LAW' } })
   const jilDept = await prisma.department.findFirst({ where: { code: 'JIL' } })
   const pulDept = await prisma.department.findFirst({ where: { code: 'PUL' } })
+  const engDept = await prisma.department.findFirst({ where: { code: 'ENG' } })
+  const geoDept = await prisma.department.findFirst({ where: { code: 'GEO' } })
+  const hisDept = await prisma.department.findFirst({ where: { code: 'HIS' } })
+  const eduDept = await prisma.department.findFirst({ where: { code: 'EDU' } })
+  const chmDept = await prisma.department.findFirst({ where: { code: 'CHM' } })
+  const bioiDept = await prisma.department.findFirst({ where: { code: 'BIO' } })
+  const mthDept = await prisma.department.findFirst({ where: { code: 'MTH' } })
 
   // All courses with realistic Nigerian university data
   const allCourses = [
@@ -538,6 +561,58 @@ async function main() {
     { name: 'Dr. Precious Adeleke', dept: 'SOC', title: 'Senior Lecturer' },
     { name: 'Dr. Yusuf Bello', dept: 'SOC', title: 'Lecturer I' },
     
+    // English Language
+    ...(engDept ? [
+      { code: 'ENG 101', name: 'Introduction to English Language Studies', creditUnits: 3, level: 100, departmentId: engDept.id, isShared: false },
+      { code: 'ENG 102', name: 'Communication Skills', creditUnits: 2, level: 100, departmentId: engDept.id, isShared: false },
+      { code: 'ENG 201', name: 'Nigerian Literature in English', creditUnits: 3, level: 200, departmentId: engDept.id, isShared: false },
+      { code: 'ENG 202', name: 'Linguistics I', creditUnits: 3, level: 200, departmentId: engDept.id, isShared: false },
+      { code: 'ENG 203', name: 'Oral English & Phonetics', creditUnits: 3, level: 200, departmentId: engDept.id, isShared: false },
+      { code: 'ENG 301', name: 'Advanced Grammar', creditUnits: 3, level: 300, departmentId: engDept.id, isShared: false },
+      { code: 'ENG 302', name: 'African Literature', creditUnits: 3, level: 300, departmentId: engDept.id, isShared: false },
+      { code: 'ENG 303', name: 'Syntax & Semantics', creditUnits: 3, level: 300, departmentId: engDept.id, isShared: false },
+      { code: 'ENG 401', name: 'Discourse Analysis', creditUnits: 3, level: 400, departmentId: engDept.id, isShared: false },
+      { code: 'ENG 499', name: 'Final Year Research Project', creditUnits: 6, level: 400, departmentId: engDept.id, isShared: false },
+    ] : []),
+
+    // Geography
+    ...(geoDept ? [
+      { code: 'GEO 101', name: 'Introduction to Physical Geography', creditUnits: 3, level: 100, departmentId: geoDept.id, isShared: false },
+      { code: 'GEO 102', name: 'Introduction to Human Geography', creditUnits: 3, level: 100, departmentId: geoDept.id, isShared: false },
+      { code: 'GEO 201', name: 'Cartography & Map Reading', creditUnits: 3, level: 200, departmentId: geoDept.id, isShared: false },
+      { code: 'GEO 202', name: 'Climatology & Meteorology', creditUnits: 3, level: 200, departmentId: geoDept.id, isShared: false },
+      { code: 'GEO 203', name: 'Population Geography', creditUnits: 3, level: 200, departmentId: geoDept.id, isShared: false },
+      { code: 'GEO 301', name: 'Remote Sensing & GIS', creditUnits: 3, level: 300, departmentId: geoDept.id, isShared: false },
+      { code: 'GEO 302', name: 'Urban & Regional Planning', creditUnits: 3, level: 300, departmentId: geoDept.id, isShared: false },
+      { code: 'GEO 303', name: 'Environmental Geography', creditUnits: 3, level: 300, departmentId: geoDept.id, isShared: false },
+      { code: 'GEO 401', name: 'Research Methods in Geography', creditUnits: 3, level: 400, departmentId: geoDept.id, isShared: false },
+      { code: 'GEO 499', name: 'Final Year Research Project', creditUnits: 6, level: 400, departmentId: geoDept.id, isShared: false },
+    ] : []),
+
+    // Chemistry
+    ...(chmDept ? [
+      { code: 'CHM 101', name: 'General Chemistry I', creditUnits: 3, level: 100, departmentId: chmDept.id, isShared: false },
+      { code: 'CHM 102', name: 'General Chemistry II', creditUnits: 3, level: 100, departmentId: chmDept.id, isShared: false },
+      { code: 'CHM 201', name: 'Organic Chemistry I', creditUnits: 3, level: 200, departmentId: chmDept.id, isShared: false },
+      { code: 'CHM 202', name: 'Physical Chemistry I', creditUnits: 3, level: 200, departmentId: chmDept.id, isShared: false },
+      { code: 'CHM 301', name: 'Analytical Chemistry', creditUnits: 3, level: 300, departmentId: chmDept.id, isShared: false },
+      { code: 'CHM 302', name: 'Inorganic Chemistry', creditUnits: 3, level: 300, departmentId: chmDept.id, isShared: false },
+      { code: 'CHM 401', name: 'Industrial Chemistry', creditUnits: 3, level: 400, departmentId: chmDept.id, isShared: false },
+      { code: 'CHM 499', name: 'Final Year Research Project', creditUnits: 6, level: 400, departmentId: chmDept.id, isShared: false },
+    ] : []),
+
+    // Mathematics
+    ...(mthDept ? [
+      { code: 'MTH 101', name: 'Elementary Mathematics I', creditUnits: 3, level: 100, departmentId: mthDept.id, isShared: false },
+      { code: 'MTH 102', name: 'Elementary Mathematics II', creditUnits: 3, level: 100, departmentId: mthDept.id, isShared: false },
+      { code: 'MTH 201', name: 'Calculus I', creditUnits: 3, level: 200, departmentId: mthDept.id, isShared: false },
+      { code: 'MTH 202', name: 'Linear Algebra', creditUnits: 3, level: 200, departmentId: mthDept.id, isShared: false },
+      { code: 'MTH 301', name: 'Real Analysis', creditUnits: 3, level: 300, departmentId: mthDept.id, isShared: false },
+      { code: 'MTH 302', name: 'Abstract Algebra', creditUnits: 3, level: 300, departmentId: mthDept.id, isShared: false },
+      { code: 'MTH 401', name: 'Numerical Analysis', creditUnits: 3, level: 400, departmentId: mthDept.id, isShared: false },
+      { code: 'MTH 499', name: 'Final Year Research Project', creditUnits: 6, level: 400, departmentId: mthDept.id, isShared: false },
+    ] : []),
+
     // Psychology
     { name: 'Prof. Felicia Nwankwo', dept: 'PSY', title: 'Professor' },
     { name: 'Dr. Chibuzor Eze', dept: 'PSY', title: 'Senior Lecturer' },
@@ -609,6 +684,13 @@ async function main() {
     'LAW': { perLevel: 60, levels: [100, 200, 300, 400, 500] },
     'JIL': { perLevel: 45, levels: [100, 200, 300, 400, 500] },
     'PUL': { perLevel: 48, levels: [100, 200, 300, 400, 500] },
+    'ENG': { perLevel: 55, levels: [100, 200, 300, 400] },
+    'GEO': { perLevel: 40, levels: [100, 200, 300, 400] },
+    'HIS': { perLevel: 38, levels: [100, 200, 300, 400] },
+    'EDU': { perLevel: 45, levels: [100, 200, 300, 400] },
+    'CHM': { perLevel: 42, levels: [100, 200, 300, 400] },
+    'BIO': { perLevel: 45, levels: [100, 200, 300, 400] },
+    'MTH': { perLevel: 38, levels: [100, 200, 300, 400] },
   }
 
   const allDepts = await prisma.department.findMany()
@@ -654,13 +736,30 @@ async function main() {
 
   for (const student of students) {
     // Get courses for student's level and department, plus GST courses
-    const studentCourses = courses.filter(c => 
-      (c.level === student.level && c.departmentId === student.departmentId) ||
-      (c.isShared && c.level <= student.level)
-    )
+    // FYP (499/Research Project): only 1 per student, own dept, 400L+ only
+    const isFYPCourse = (c: any) =>
+      c.code.endsWith('499') ||
+      c.name.toLowerCase().includes('final year project') ||
+      c.name.toLowerCase().includes('research project')
 
-    // Register for 6-9 courses (realistic load)
-    const coursesToRegister = randomPick(studentCourses, 8 + Math.floor(Math.random() * 2))
+    const eligibleCourses = courses.filter(c => {
+      if (isFYPCourse(c)) {
+        return student.level >= 400 && c.departmentId === student.departmentId
+      }
+      return (
+        (c.level === student.level && c.departmentId === student.departmentId) ||
+        (c.isShared && c.level <= student.level)
+      )
+    })
+
+    const fypCourses = eligibleCourses.filter(isFYPCourse)
+    const regularCourses = eligibleCourses.filter(c => !isFYPCourse(c))
+
+    // 8-9 regular + at most 1 FYP for final year students
+    const picked = randomPick(regularCourses, Math.min(8 + Math.floor(Math.random() * 2), regularCourses.length))
+    if (student.level >= 400 && fypCourses.length > 0) picked.push(fypCourses[0])
+    const coursesToRegister = picked
+    
     
     for (const course of coursesToRegister) {
       // Determine if this is a carry-over (realistic rates)
