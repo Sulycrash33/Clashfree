@@ -244,32 +244,33 @@ function DepartmentsPageInner() {
               <Loader2 className="w-8 h-8 animate-spin text-green-500" />
             </div>
           ) : (
-            {/* Faculty filter bar */}
-          <div className="flex items-center gap-3 mb-4">
-            <span className="text-xs text-slate-400">Filter by Faculty:</span>
-            <Select value={filterFacultyId} onValueChange={setFilterFacultyId}>
-              <SelectTrigger className="w-56 bg-white/5 border-white/10 text-white text-sm">
-                <SelectValue placeholder="All Faculties" />
-              </SelectTrigger>
-              <SelectContent className="bg-slate-900 border-white/10">
-                <SelectItem value="all" className="text-white">All Faculties</SelectItem>
-                {faculties.map(f => (
-                  <SelectItem key={f.id} value={f.id} className="text-white">{f.code} – {f.name}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {filterFacultyId !== 'all' && (
-              <Badge variant="outline" className="text-cyan-400 border-cyan-500/30">
-                {faculties.find(f => f.id === filterFacultyId)?.code} — {departments.filter(d => d.facultyId === filterFacultyId).length} dept(s)
-              </Badge>
-            )}
-          </div>
-          <DataTable
-            columns={columns}
-            data={filterFacultyId === 'all' ? departments : departments.filter(d => d.facultyId === filterFacultyId)}
-            searchKey="name"
-            searchPlaceholder="Search departments..."
-          />
+            <>
+              <div className="flex items-center gap-3 mb-4">
+                <span className="text-xs text-slate-400">Filter by Faculty:</span>
+                <Select value={filterFacultyId} onValueChange={setFilterFacultyId}>
+                  <SelectTrigger className="w-56 bg-white/5 border-white/10 text-white text-sm">
+                    <SelectValue placeholder="All Faculties" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-slate-900 border-white/10">
+                    <SelectItem value="all" className="text-white">All Faculties</SelectItem>
+                    {faculties.map(f => (
+                      <SelectItem key={f.id} value={f.id} className="text-white">{f.code} – {f.name}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                {filterFacultyId !== 'all' && (
+                  <Badge variant="outline" className="text-cyan-400 border-cyan-500/30">
+                    {faculties.find(f => f.id === filterFacultyId)?.code} — {departments.filter(d => d.facultyId === filterFacultyId).length} dept(s)
+                  </Badge>
+                )}
+              </div>
+              <DataTable
+                columns={columns}
+                data={filterFacultyId === 'all' ? departments : departments.filter(d => d.facultyId === filterFacultyId)}
+                searchKey="name"
+                searchPlaceholder="Search departments..."
+              />
+            </>
           )}
         </CardContent>
       </Card>
