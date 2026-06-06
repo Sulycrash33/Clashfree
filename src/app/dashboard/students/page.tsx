@@ -18,6 +18,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { useToast } from '@/hooks/use-toast'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { BulkUpload } from '@/components/bulk-upload'
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet'
+import { BookOpen, Eye } from 'lucide-react'
 
 interface Student {
   id: string
@@ -61,6 +63,14 @@ export default function StudentsPage() {
     isSpillover: false,
   })
   const [saving, setSaving] = useState(false)
+  const [detailOpen, setDetailOpen] = useState(false)
+  const [detailStudent, setDetailStudent] = useState<Student | null>(null)
+  const [studentCourses, setStudentCourses] = useState<any[]>([])
+  const [courseSummary, setCourseSummary] = useState<any>(null)
+  const [coursesLoading, setCoursesLoading] = useState(false)
+  const [allCourses, setAllCourses] = useState<any[]>([])
+  const [addCourseId, setAddCourseId] = useState('')
+  const [addingCourse, setAddingCourse] = useState(false)
 
   const fetchData = useCallback(async () => {
     setLoading(true)
@@ -77,6 +87,64 @@ export default function StudentsPage() {
       setLoading(false)
     }
   }, [toast])
+
+  const fetchStudentCourses = async (student: Student) => {
+    setCoursesLoading(true)
+    try {
+      const res = await fetch(`/api/students/courses?studentId=${student.id}`)
+      if (res.ok) {
+        const data = await res.json()
+        setStudentCourses(data.courses || [])
+        setCourseSummary(data.summary || null)
+      }
+    } catch {}
+    finally { setCoursesLoading(false) }
+  }
+
+  const handleOpenDetail = async (student: Student) => {
+    setDetailStudent(student)
+    setDetailOpen(true)
+    await fetchStudentCourses(student)
+    // fetch all courses for picker
+    try {
+      const res = await fetch(`/api/courses?level=${student.level}`)
+      if (res.ok) setAllCourses(await res.json())
+    } catch {}
+  }
+
+  const handleAddCourse = async () => {
+    if (!detailStudent || !addCourseId) return
+    setAddingCourse(true)
+    try {
+      const res = await fetch('/api/students/courses', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ studentId: detailStudent.id, courseId: addCourseId }),
+      })
+      if (res.ok) {
+        toast({ title: 'Course added' })
+        setAddCourseId('')
+        await fetchStudentCourses(detailStudent)
+        fetchData()
+      } else {
+        const err = await res.json()
+        toast({ title: 'Error', description: err.error, variant: 'destructive' })
+      }
+    } catch {}
+    finally { setAddingCourse(false) }
+  }
+
+  const handleRemoveCourse = async (regId: string) => {
+    if (!confirm('Remove this course from student?')) return
+    try {
+      const res = await fetch(`/api/students/courses?regId=${regId}`, { method: 'DELETE' })
+      if (res.ok && detailStudent) {
+        toast({ title: 'Course removed' })
+        await fetchStudentCourses(detailStudent)
+        fetchData()
+      }
+    } catch {}
+  }
 
   useEffect(() => {
     if (!session?.user) return
@@ -233,6 +301,9 @@ export default function StudentsPage() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-slate-900 border-white/10">
+            <DropdownMenuItem onClick={() => handleOpenDetail(row.original)} className="text-slate-300">
+              <Eye className="w-4 h-4 mr-2" /> View Courses
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-slate-300">
               <Pencil className="w-4 h-4 mr-2" /> Edit
             </DropdownMenuItem>
@@ -388,6 +459,118 @@ export default function StudentsPage() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      {/* Student Detail Sheet */}
+      <Sheet open={detailOpen} onOpenChange={setDetailOpen}>
+        <SheetContent className="bg-slate-900 border-white/10 text-white w-full sm:max-w-2xl overflow-y-auto">
+          <SheetHeader className="mb-4">
+            <SheetTitle className="text-white flex items-center gap-2">
+              <BookOpen className="w-5 h-5 text-cyan-400" />
+              {detailStudent?.name}
+            </SheetTitle>
+            <SheetDescription className="text-slate-400">
+              {detailStudent?.regNumber} · {detailStudent?.department?.code} · {detailStudent?.level}L
+            </SheetDescription>
+          </SheetHeader>
+
+          {/* Summary badges */}
+          {courseSummary && (
+            <div className="flex flex-wrap gap-2 mb-4">
+              <Badge variant="outline" className="text-cyan-400 border-cyan-500/30">{courseSummary.total} Courses</Badge>
+              <Badge variant="outline" className="text-slate-300 border-white/10">{courseSummary.totalCreditUnits} CU</Badge>
+              {courseSummary.carryOver > 0 && <Badge className="bg-amber-500/20 text-amber-400">{courseSummary.carryOver} CO</Badge>}
+              {courseSummary.spillover > 0 && <Badge className="bg-red-500/20 text-red-400">{courseSummary.spillover} Spillover</Badge>}
+              {courseSummary.fyp > 0 && <Badge className="bg-purple-500/20 text-purple-400">{courseSummary.fyp} FYP</Badge>}
+              {detailStudent?.isSpillover && <Badge className="bg-amber-500/20 text-amber-400">Spillover Student</Badge>}
+            </div>
+          )}
+
+          {/* Course Picker */}
+          {(session?.user?.role === 'TO' || session?.user?.role === 'IA' || session?.user?.role === 'SA') && (
+            <div className="flex gap-2 mb-4">
+              <Select value={addCourseId} onValueChange={setAddCourseId}>
+                <SelectTrigger className="flex-1 bg-white/5 border-white/10 text-white text-sm">
+                  <SelectValue placeholder="Add a course..." />
+                </SelectTrigger>
+                <SelectContent className="bg-slate-900 border-white/10 max-h-48">
+                  {allCourses
+                    .filter(c => !studentCourses.some(sc => sc.course.id === c.id))
+                    .map(c => (
+                      <SelectItem key={c.id} value={c.id} className="text-white text-sm">
+                        {c.code} – {c.name} ({c.level}L)
+                      </SelectItem>
+                    ))}
+                </SelectContent>
+              </Select>
+              <Button
+                onClick={handleAddCourse}
+                disabled={!addCourseId || addingCourse}
+                size="sm"
+                className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white border-0"
+              >
+                {addingCourse ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Add'}
+              </Button>
+            </div>
+          )}
+
+          {/* Course list */}
+          {coursesLoading ? (
+            <div className="flex justify-center py-8"><Loader2 className="w-6 h-6 animate-spin text-cyan-400" /></div>
+          ) : (
+            <div className="space-y-2">
+              {studentCourses.map(reg => (
+                <div
+                  key={reg.id}
+                  className={`p-3 rounded-lg border ${
+                    reg.isCO ? 'border-amber-500/30 bg-amber-500/5'
+                    : reg.isSpillover ? 'border-red-500/30 bg-red-500/5'
+                    : reg.isFYP ? 'border-purple-500/30 bg-purple-500/5'
+                    : 'border-white/10 bg-white/5'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Badge variant="outline" className="text-cyan-400 border-cyan-500/20 font-mono text-xs">
+                        {reg.course.code}
+                      </Badge>
+                      {reg.isCO && <Badge className="bg-amber-500/20 text-amber-400 text-xs">CO</Badge>}
+                      {reg.isSpillover && <Badge className="bg-red-500/20 text-red-400 text-xs">Spillover</Badge>}
+                      {reg.isFYP && <Badge className="bg-purple-500/20 text-purple-400 text-xs">FYP</Badge>}
+                      {reg.course.isShared && <Badge className="bg-pink-500/20 text-pink-400 text-xs">GST</Badge>}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {reg.roomSplitNeeded && (
+                        <Badge className="bg-orange-500/20 text-orange-400 text-xs" title="Large class — multiple rooms needed">
+                          ✂ Split ({reg.totalEnrolled})
+                        </Badge>
+                      )}
+                      {(session?.user?.role === 'TO' || session?.user?.role === 'IA' || session?.user?.role === 'SA') && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleRemoveCourse(reg.id)}
+                          className="h-6 w-6 p-0 text-red-400 hover:text-red-300"
+                        >
+                          ×
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                  <div className="mt-1 text-sm text-white">{reg.course.name}</div>
+                  <div className="mt-1 flex items-center gap-3 text-xs text-slate-400">
+                    <span>{reg.course.level}L · Sem {reg.course.semester}</span>
+                    <span>{reg.course.creditUnits} CU</span>
+                    <span>{reg.course.department?.code}</span>
+                    <span className="text-slate-500">{reg.totalEnrolled} enrolled total</span>
+                  </div>
+                </div>
+              ))}
+              {studentCourses.length === 0 && (
+                <div className="text-center py-8 text-slate-400">No courses registered</div>
+              )}
+            </div>
+          )}
+        </SheetContent>
+      </Sheet>
     </div>
   )
 }

@@ -660,7 +660,7 @@ async function main() {
     )
 
     // Register for 6-9 courses (realistic load)
-    const coursesToRegister = randomPick(studentCourses, 6 + Math.floor(Math.random() * 4))
+    const coursesToRegister = randomPick(studentCourses, 8 + Math.floor(Math.random() * 2))
     
     for (const course of coursesToRegister) {
       // Determine if this is a carry-over (realistic rates)
