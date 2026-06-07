@@ -1,0 +1,36 @@
+name: Reseed FEDKO Database
+
+on:
+  workflow_dispatch:  # manual trigger only
+
+jobs:
+  reseed:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Install ts-node
+        run: npm install -g ts-node typescript
+
+      - name: Step 1 — Purge existing FEDKO data
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          echo "=== PURGING FEDKO ==="
+          npx ts-node --compiler-options '{"module":"commonjs"}' prisma/purge-fedko.ts
+
+      - name: Step 2 — Seed fresh FEDKO data
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          echo "=== SEEDING FEDKO ==="
+          npx ts-node --compiler-options '{"module":"commonjs"}' prisma/seed-fedko.ts
