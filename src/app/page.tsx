@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
@@ -19,64 +18,6 @@ import {
   BookOpen,
   AlertTriangle,
 } from 'lucide-react'
-
-const roles = [
-  {
-    id: 'SA',
-    title: 'Super Admin',
-    subtitle: 'Platform Control',
-    description: 'Full platform management. All institutions, users, system health, global settings.',
-    icon: Shield,
-    color: 'from-red-500 to-orange-500',
-    features: ['47+ institutions', 'User management', 'System health', 'Activity logs'],
-    demoEmail: 'admin@clashfree.com',
-    demoPassword: 'admin123',
-  },
-  {
-    id: 'IA',
-    title: 'Institution Admin',
-    subtitle: 'Institution Scope',
-    description: 'Full control within your institution. Setup, generation, approval, publication.',
-    icon: Building2,
-    color: 'from-blue-500 to-cyan-500',
-    features: ['10 faculties', 'Multi-institution', 'Approval workflow', 'Reports'],
-    demoEmail: 'admin@fedko.edu.ng',
-    demoPassword: 'demo1234',
-  },
-  {
-    id: 'TO',
-    title: 'Timetable Officer',
-    subtitle: 'Faculty Scope',
-    description: 'Manage scheduling data within assigned faculty. Submit for admin approval.',
-    icon: Calendar,
-    color: 'from-purple-500 to-pink-500',
-    features: ['Course management', 'Student data', 'Room inventory', 'Conflict resolution'],
-    demoEmail: 'officer@fedko.edu.ng',
-    demoPassword: 'demo1234',
-  },
-  {
-    id: 'LC',
-    title: 'Lecturer',
-    subtitle: 'Personal View',
-    description: 'View personal schedule, set availability, see invigilation assignments.',
-    icon: BookOpen,
-    color: 'from-green-500 to-emerald-500',
-    features: ['My schedule', 'Availability setter', 'Invigilation duties', 'Course assignments'],
-    demoEmail: 'lecturer@fedko.edu.ng',
-    demoPassword: 'demo1234',
-  },
-  {
-    id: 'ST',
-    title: 'Student',
-    subtitle: 'Personal Timetable',
-    description: 'View personal exam timetable with carry-over courses and venue assignments.',
-    icon: GraduationCap,
-    color: 'from-amber-500 to-yellow-500',
-    features: ['My exams', 'Venue locations', 'Carry-over status', 'Calendar sync'],
-    demoEmail: 'student@fedko.edu.ng',
-    demoPassword: 'demo1234',
-  },
-]
 
 const features = [
   {
@@ -115,9 +56,6 @@ const institutions = [
 export default function LandingPage() {
   const router = useRouter()
 
-  const handleRoleClick = (role: typeof roles[0]) => {
-    router.push(`/login?email=${encodeURIComponent(role.demoEmail)}&password=${encodeURIComponent(role.demoPassword)}`)
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
@@ -186,11 +124,6 @@ export default function LandingPage() {
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
           </Link>
-          <Link href="/login?email=admin%40clashfree.com&password=admin123">
-            <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 h-12 px-8">
-              Try Live Demo
-            </Button>
-          </Link>
         </div>
 
         {/* Platform Highlights */}
@@ -220,44 +153,6 @@ export default function LandingPage() {
                 </div>
                 <h3 className="font-semibold text-white mb-2">{feature.title}</h3>
                 <p className="text-sm text-slate-400">{feature.description}</p>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      </section>
-
-      {/* Roles Section */}
-      <section id="roles" className="relative z-10 container mx-auto px-4 py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Role-Based Access</h2>
-          <p className="text-slate-400 max-w-2xl mx-auto">
-            Every user sees only what they need. Zero privilege escalation. All actions logged.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-          {roles.map((role) => (
-            <Card
-              key={role.id}
-              onClick={() => handleRoleClick(role)}
-              className="group bg-white/5 border-white/10 backdrop-blur-sm hover:border-white/20 transition-all hover:scale-[1.02] cursor-pointer"
-            >
-              <CardHeader className="pb-3">
-                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${role.color} flex items-center justify-center mb-3`}>
-                  <role.icon className="w-5 h-5 text-white" />
-                </div>
-                <CardTitle className="text-lg text-white">{role.title}</CardTitle>
-                <CardDescription className="text-slate-400">{role.subtitle}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-slate-400 mb-4">{role.description}</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {role.features.map((f, i) => (
-                    <Badge key={i} variant="secondary" className="bg-white/10 text-slate-300 text-xs">
-                      {f}
-                    </Badge>
-                  ))}
-                </div>
               </CardContent>
             </Card>
           ))}
@@ -300,11 +195,6 @@ export default function LandingPage() {
             <Link href="/login">
               <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white border-0 px-8 h-12">
                 Get Started Free
-              </Button>
-            </Link>
-            <Link href="/login?email=admin%40clashfree.com&password=admin123">
-              <Button size="lg" variant="outline" className="border-white/20 text-white hover:bg-white/10 h-12 px-8">
-                Request a Demo
               </Button>
             </Link>
           </div>
