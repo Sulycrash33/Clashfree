@@ -22,7 +22,6 @@ import {
   ChevronDown,
   Menu,
   X,
-  Eye,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useState } from 'react'
@@ -139,16 +138,6 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
                 <p className="text-xs text-slate-400">{roleLabels[userRole]}</p>
               </div>
             </div>
-            {/* Demo mode indicator */}
-            {demoMode && (
-              <div className="mt-3 flex items-center gap-2 px-3 py-2 rounded-lg bg-amber-500/10 border border-amber-500/20">
-                <Eye className="w-4 h-4 text-amber-400 flex-shrink-0" />
-                <div>
-                  <p className="text-xs font-medium text-amber-400">Demo Showcase</p>
-                  <p className="text-[10px] text-amber-400/60">Read-only investor view</p>
-                </div>
-              </div>
-            )}
           </div>
 
           {/* Navigation */}
