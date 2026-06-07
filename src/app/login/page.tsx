@@ -9,62 +9,8 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { setDemoCookie } from '@/lib/demo'
-import { Loader2, Mail, Lock, ArrowLeft, Shield, Building2, Calendar, BookOpen, GraduationCap } from 'lucide-react'
+import { Loader2, Mail, Lock, ArrowLeft, Building2, Calendar, BookOpen, GraduationCap } from 'lucide-react'
 
-const demoAccounts = [
-  {
-    id: 'SA',
-    title: 'Super Admin',
-    subtitle: 'Platform Control',
-    email: 'admin@clashfree.com',
-    password: 'admin123',
-    icon: Shield,
-    color: 'from-red-500 to-orange-500',
-    description: 'Full platform management. All institutions, users, system health, global settings.',
-  },
-  {
-    id: 'IA',
-    title: 'Institution Admin',
-    subtitle: 'Institution Scope',
-    email: 'admin@fedko.edu.ng',
-    password: 'admin123',
-    icon: Building2,
-    color: 'from-blue-500 to-cyan-500',
-    description: 'Full control within your institution. Setup, generation, approval, publication.',
-  },
-  {
-    id: 'TO',
-    title: 'Timetable Officer',
-    subtitle: 'Faculty Scope',
-    email: 'officer@fedko.edu.ng',
-    password: 'admin123',
-    icon: Calendar,
-    color: 'from-purple-500 to-pink-500',
-    description: 'Manage scheduling data within assigned faculty. Submit for admin approval.',
-  },
-  {
-    id: 'LC',
-    title: 'Lecturer',
-    subtitle: 'Personal View',
-    email: 'lecturer@fedko.edu.ng',
-    password: 'admin123',
-    icon: BookOpen,
-    color: 'from-green-500 to-emerald-500',
-    description: 'View personal schedule, set availability, see invigilation assignments.',
-  },
-  {
-    id: 'ST',
-    title: 'Student',
-    subtitle: 'Personal Timetable',
-    email: 'student@fedko.edu.ng',
-    password: 'admin123',
-    icon: GraduationCap,
-    color: 'from-amber-500 to-yellow-500',
-    description: 'View personal exam timetable with carry-over courses and venue assignments.',
-  },
-]
 
 function LoginForm() {
   const router = useRouter()
@@ -76,7 +22,6 @@ function LoginForm() {
   const [password, setPassword] = useState(initialPassword)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const [demoDialogOpen, setDemoDialogOpen] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -104,13 +49,6 @@ function LoginForm() {
     }
   }
 
-  const handleDemoSelect = (account: typeof demoAccounts[0]) => {
-    setEmail(account.email)
-    setPassword(account.password)
-    setDemoDialogOpen(false)
-    // Set demo mode cookie so dashboard knows to lock down
-    setDemoCookie()
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white flex items-center justify-center p-4">
@@ -217,48 +155,6 @@ function LoginForm() {
                 )}
               </Button>
             </form>
-
-            {/* Demo Account Button */}
-            <Dialog open={demoDialogOpen} onOpenChange={setDemoDialogOpen}>
-              <DialogTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full mt-4 border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 hover:text-cyan-300"
-                >
-                  <Shield className="w-4 h-4 mr-2" />
-                  Demo Account (FEDKO)
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="bg-slate-900 border-white/10 text-white max-w-md">
-                <DialogHeader>
-                  <DialogTitle className="text-xl">Choose Demo Access</DialogTitle>
-                  <DialogDescription className="text-slate-400">
-                    Select a role to explore the platform. All accounts use password: <code className="text-cyan-400">admin123</code>
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="grid gap-3 py-4">
-                  {demoAccounts.map((account) => (
-                    <button
-                      key={account.id}
-                      onClick={() => handleDemoSelect(account)}
-                      className="flex items-center gap-4 p-3 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 transition-all text-left group"
-                    >
-                      <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${account.color} flex items-center justify-center flex-shrink-0`}>
-                        <account.icon className="w-5 h-5 text-white" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium text-white">{account.title}</span>
-                          <span className="text-xs text-slate-500">({account.id})</span>
-                        </div>
-                        <p className="text-xs text-slate-400 truncate">{account.email}</p>
-                      </div>
-                      <ArrowLeft className="w-4 h-4 text-slate-500 rotate-180 group-hover:text-cyan-400 group-hover:translate-x-1 transition-all" />
-                    </button>
-                  ))}
-                </div>
-              </DialogContent>
-            </Dialog>
           </CardContent>
         </Card>
 
