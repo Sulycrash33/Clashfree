@@ -23,9 +23,14 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-slate-950 text-white">
       <Sidebar />
       <main
-        className="lg:ml-64 min-h-screen"
+        className={[
+          // Desktop: offset by sidebar width
+          'lg:ml-64',
+          // Mobile: offset by top bar (56px) and bottom nav (64px)
+          'min-h-screen',
+        ].join(' ')}
       >
-        <div className={'p-4 lg:p-8 pt-16 lg:pt-8'}>
+        <div className="p-4 lg:p-8 pt-[70px] lg:pt-8 pb-[80px] lg:pb-8">
           {children}
         </div>
       </main>

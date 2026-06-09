@@ -159,10 +159,10 @@ function LoginForm() {
         </Card>
 
         <p className="text-center text-sm text-slate-400 mt-6">
-          Don't have an account?{' '}
-          <a href="#" className="text-cyan-400 hover:text-cyan-300 transition-colors">
-            Contact your administrator
-          </a>
+          Institution not on ClashFree?{' '}
+          <Link href="/signup" className="text-cyan-400 hover:text-cyan-300 transition-colors">
+            Register your institution
+          </Link>
         </p>
       </div>
     </div>

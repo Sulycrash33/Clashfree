@@ -657,3 +657,53 @@ enum NotificationType {
   CONFLICT_DETECTED
   APPROVAL_REQUIRED
 }
+
+// ============================================
+// INSTITUTION SIGNUP & INVITATIONS
+// ============================================
+
+enum SignupStatus {
+  PENDING   // Waiting SA approval
+  APPROVED  // Approved, IA account created
+  REJECTED  // Rejected by SA
+}
+
+model InstitutionSignup {
+  id              String       @id @default(cuid())
+  institutionName String
+  shortName       String
+  type            InstitutionType
+  city            String
+  state           String
+  website         String?
+  emailDomain     String?
+  contactName     String
+  contactEmail    String
+  contactPhone    String?
+  message         String?      // Why they want ClashFree
+  status          SignupStatus @default(PENDING)
+  reviewedBy      String?
+  reviewedAt      DateTime?
+  rejectionReason String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  @@index([status])
+  @@index([contactEmail])
+}
+
+model InviteToken {
+  id            String    @id @default(cuid())
+  token         String    @unique @default(cuid())
+  email         String
+  role          UserRole
+  institutionId String?
+  invitedBy     String    // User ID of who sent it
+  expiresAt     DateTime
+  usedAt        DateTime?
+  createdAt     DateTime  @default(now())
+
+  @@index([token])
+  @@index([email])
+  @@index([institutionId])
+}
