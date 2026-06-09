@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { prisma } from '@/lib/db'
+import { db as prisma } from '@/lib/db'
 import { sendInviteEmail } from '@/lib/email'
 import { z } from 'zod'
 import { v4 as uuidv4 } from 'uuid'

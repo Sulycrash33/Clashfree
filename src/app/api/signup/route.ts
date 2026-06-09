@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { prisma } from '@/lib/db'
+import { db as prisma } from '@/lib/db'
 import { sendSignupConfirmation } from '@/lib/email'
 import { z } from 'zod'
 
