@@ -377,20 +377,11 @@ export function BulkUpload({ institutionId, onUploadComplete }: BulkUploadProps)
             {file && status !== 'uploading' && status !== 'processing' && (
               <Button
                 onClick={handleUpload}
-                disabled={!file || status === 'uploading'}
+                disabled={!file}
                 className="bg-gradient-to-r from-cyan-500 to-blue-600"
               >
-                {status === 'uploading' ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Uploading...
-                  </>
-                ) : (
-                  <>
-                    <Upload className="w-4 h-4 mr-2" />
-                    Upload {uploadType.charAt(0).toUpperCase() + uploadType.slice(1)}
-                  </>
-                )}
+                <Upload className="w-4 h-4 mr-2" />
+                Upload {uploadType.charAt(0).toUpperCase() + uploadType.slice(1)}
               </Button>
             )}
           </div>

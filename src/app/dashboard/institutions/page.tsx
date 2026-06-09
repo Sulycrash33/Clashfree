@@ -207,7 +207,7 @@ export default function InstitutionsPage() {
       header: 'Type',
       cell: ({ row }) => (
         <Badge variant="secondary" className="bg-white/10 text-slate-300">
-          {institutionTypes[row.getValue('type')] || row.getValue('type')}
+          {institutionTypes[row.getValue('type') as string] || row.getValue('type')}
         </Badge>
       ),
     },

@@ -1,15 +1,20 @@
 import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { UserRole } from '@prisma/client'
+import { UserRole } from '@/types/enums'
 
 type RoleCheck = UserRole | UserRole[]
+
+// Discriminated union so TypeScript narrows correctly in every route
+type AuthError = { error: string; status: 401 | 403 }
+type AuthSuccess = { user: { id: string; email: string; name: string; role: 'SA' | 'IA' | 'TO' | 'LC' | 'ST'; institutionId?: string; facultyId?: string } }
+type AuthResult = AuthError | AuthSuccess
 
 export async function getSession() {
   return getServerSession(authOptions)
 }
 
-export async function requireAuth() {
+export async function requireAuth(): Promise<AuthResult> {
   const session = await getSession()
   if (!session?.user) {
     return { error: 'Unauthorized', status: 401 }
@@ -17,12 +22,12 @@ export async function requireAuth() {
   return { user: session.user }
 }
 
-export async function requireRole(roles: RoleCheck) {
+export async function requireRole(roles: RoleCheck): Promise<AuthResult> {
   const authResult = await requireAuth()
   if ('error' in authResult) return authResult
 
   const allowedRoles = Array.isArray(roles) ? roles : [roles]
-  if (!allowedRoles.includes(authResult.user.role)) {
+  if (!allowedRoles.includes(authResult.user.role as UserRole)) {
     return { error: 'Forbidden', status: 403 }
   }
 
@@ -45,7 +50,7 @@ export function apiResponse<T>(data: T, status = 200) {
   return NextResponse.json(data, { status })
 }
 
-export function apiError(message: string, status = 400) {
+export function apiError(message: string, status: number = 400) {
   return NextResponse.json({ error: message }, { status })
 }
 
@@ -55,4 +60,20 @@ export function handleApiError(error: unknown) {
     return apiError(error.message, 500)
   }
   return apiError('Internal server error', 500)
+}
+
+/**
+ * Type-safe guard for institutionId.
+ * SA users have no institutionId — always check before using in DB queries.
+ */
+export function requireInstitutionId(id: string | undefined | null): string | null {
+  return id ?? null
+}
+
+/**
+ * Non-null assertion for institutionId — use only after confirming non-SA role.
+ */
+export function assertInstitutionId(id: string | undefined | null): { error: string; status: 400 } | string {
+  if (!id) return { error: 'Institution context required', status: 400 }
+  return id
 }

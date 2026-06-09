@@ -54,7 +54,7 @@ export interface StudentWithCOs {
     courseCode: string
     courseName: string
     courseLevel: number
-    status: 'REGISTERED' | 'CARRY_OVER' | 'SPILLOVER'
+    status: 'CURRENT' | 'CARRY_OVER' | 'SPILLOVER'
   }[]
 }
 
@@ -80,7 +80,7 @@ export async function getStudentsWithCOs(institutionId: string): Promise<Student
       studentCourses: {
         where: {
           OR: [
-            { status: 'REGISTERED' },
+            { status: 'CURRENT' },
             { status: 'CARRY_OVER' },
             { status: 'SPILLOVER' },
           ],
@@ -110,7 +110,7 @@ export async function getStudentsWithCOs(institutionId: string): Promise<Student
       courseCode: sc.course.code,
       courseName: sc.course.name,
       courseLevel: sc.course.level,
-      status: sc.status as 'REGISTERED' | 'CARRY_OVER' | 'SPILLOVER',
+      status: sc.status as 'CURRENT' | 'CARRY_OVER' | 'SPILLOVER',
     })),
   }))
 }
@@ -132,7 +132,7 @@ export async function detectCOClashes(examPeriodId: string): Promise<COClashResu
               studentCourses: {
                 where: {
                   OR: [
-                    { status: 'REGISTERED' },
+                    { status: 'CURRENT' },
                     { status: 'CARRY_OVER' },
                     { status: 'SPILLOVER' },
                   ],
@@ -200,7 +200,7 @@ export async function detectCOClashes(examPeriodId: string): Promise<COClashResu
         
         if (dateA === dateB && slotA.slot.slotNumber === slotB.slot.slotNumber) {
           // Clash detected!
-          const hasCO = slotA.status !== 'REGISTERED' || slotB.status !== 'REGISTERED'
+          const hasCO = slotA.status !== 'CURRENT' || slotB.status !== 'CURRENT'
           
           studentClashes.push({
             courseA: {
@@ -263,7 +263,7 @@ export async function predictCOClashes(institutionId: string): Promise<{
   
   for (const student of studentsWithCOs) {
     const coCourses = student.courses.filter(c => c.status === 'CARRY_OVER' || c.status === 'SPILLOVER')
-    const currentCourses = student.courses.filter(c => c.status === 'REGISTERED')
+    const currentCourses = student.courses.filter(c => c.status === 'CURRENT')
     
     // Flag if student has both CO and current level courses
     if (coCourses.length > 0 && currentCourses.length > 0) {

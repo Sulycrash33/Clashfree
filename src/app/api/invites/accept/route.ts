@@ -47,7 +47,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: 'Account created. You can now log in.' })
   } catch (err) {
     if (err instanceof z.ZodError) {
-      return NextResponse.json({ error: 'Validation failed', details: err.errors }, { status: 400 })
+      return NextResponse.json({ error: 'Validation failed', details: err.issues }, { status: 400 })
     }
     console.error('[invites/accept]', err)
     return NextResponse.json({ error: 'Server error' }, { status: 500 })

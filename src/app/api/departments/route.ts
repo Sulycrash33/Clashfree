@@ -21,7 +21,7 @@ export async function GET(request: NextRequest) {
     } else if (institutionId) {
       whereClause.faculty = { institutionId }
     } else if (authResult.user.role !== 'SA' && authResult.user.institutionId) {
-      whereClause.faculty = { institutionId: authResult.user.institutionId }
+      whereClause.faculty = { institutionId: authResult.user.institutionId! }
     }
 
     const departments = await db.department.findMany({

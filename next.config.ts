@@ -2,11 +2,15 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: "standalone",
-  /* config options here */
   typescript: {
-    ignoreBuildErrors: true,
+    // TypeScript errors now surfaced at build time
+    ignoreBuildErrors: false,
   },
-  reactStrictMode: false,
+  reactStrictMode: true,
+  experimental: {
+    // Required for next-auth v4 compatibility with Next.js 16
+    authInterrupts: true,
+  },
 };
 
 export default nextConfig;

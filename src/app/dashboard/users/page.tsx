@@ -199,7 +199,7 @@ export default function UsersPage() {
       accessorKey: 'role',
       header: 'Role',
       cell: ({ row }) => {
-        const role = roleLabels[row.getValue('role')] || roleLabels.ST
+        const role = roleLabels[row.getValue('role') as string] || roleLabels.ST
         return (
           <Badge className={`bg-gradient-to-r ${role.color} text-white`}>
             {role.label}

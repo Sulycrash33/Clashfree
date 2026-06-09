@@ -9,7 +9,7 @@
  */
 
 import { db } from '@/lib/db'
-import { ConstraintType, ConstraintViolation, ValidationContext } from './constraints'
+import { ConstraintType, ConstraintSeverity, ConstraintViolation, ValidationContext } from './constraints'
 import { detectCOClashes } from './co-detector'
 
 // Generation configuration
@@ -190,7 +190,7 @@ export async function generateExamTimetable(
       if (suitableRooms.length === 0) {
         conflicts.push({
           type: ConstraintType.ROOM_CAPACITY,
-          severity: 'HARD',
+          severity: ConstraintSeverity.HARD,
           message: `No suitable room for ${course.code} (${enrollment} students)`,
           affectedEntities: [course.id],
           suggestion: `Add a room with capacity >= ${enrollment}`,
@@ -275,7 +275,7 @@ export async function generateExamTimetable(
       if (!assigned) {
         conflicts.push({
           type: ConstraintType.NO_STUDENT_DOUBLE_BOOKING,
-          severity: 'HARD',
+          severity: ConstraintSeverity.HARD,
           message: `Could not find conflict-free slot for ${course.code}`,
           affectedEntities: [course.id],
           suggestion: 'Consider adding more exam days or slots',
@@ -306,7 +306,7 @@ export async function generateExamTimetable(
         for (const detail of clash.clashes) {
           conflicts.push({
             type: ConstraintType.CO_CLASH_DETECTION,
-            severity: 'HARD',
+            severity: ConstraintSeverity.HARD,
             message: detail.message,
             affectedEntities: [clash.studentId, detail.courseA.id, detail.courseB.id],
             suggestion: 'Reschedule one of the conflicting exams',
@@ -522,7 +522,7 @@ export async function validateTimetable(examPeriodId: string): Promise<{
         if (slotA.roomId === slotB.roomId) {
           violations.push({
             type: ConstraintType.NO_ROOM_DOUBLE_BOOKING,
-            severity: 'HARD',
+            severity: ConstraintSeverity.HARD,
             message: `Room ${slotA.room.code} double-booked for ${slotA.course.code} and ${slotB.course.code}`,
             affectedEntities: [slotA.id, slotB.id],
             slotA: slotA.id,
@@ -531,14 +531,14 @@ export async function validateTimetable(examPeriodId: string): Promise<{
         }
 
         // Check student overlap
-        const studentsA = new Set(slotA.course.studentCourses.map((sc: any) => sc.studentId))
-        const studentsB = new Set(slotB.course.studentCourses.map((sc: any) => sc.studentId))
-        const overlap = [...studentsA].filter(id => studentsB.has(id))
+        const studentsA = new Set<string>(slotA.course.studentCourses.map((sc: any) => sc.studentId as string))
+        const studentsB = new Set<string>(slotB.course.studentCourses.map((sc: any) => sc.studentId as string))
+        const overlap: string[] = [...studentsA].filter(id => studentsB.has(id))
 
         if (overlap.length > 0) {
           violations.push({
             type: ConstraintType.NO_STUDENT_DOUBLE_BOOKING,
-            severity: 'HARD',
+            severity: ConstraintSeverity.HARD,
             message: `${overlap.length} students have ${slotA.course.code} and ${slotB.course.code} at the same time`,
             affectedEntities: overlap,
             slotA: slotA.id,
@@ -553,7 +553,7 @@ export async function validateTimetable(examPeriodId: string): Promise<{
     if (enrollment > slotA.room.capacity) {
       violations.push({
         type: ConstraintType.ROOM_CAPACITY,
-        severity: 'HARD',
+        severity: ConstraintSeverity.HARD,
         message: `${slotA.course.code}: ${enrollment} students in room with capacity ${slotA.room.capacity}`,
         affectedEntities: [slotA.id],
       })
@@ -561,7 +561,7 @@ export async function validateTimetable(examPeriodId: string): Promise<{
   }
 
   return {
-    valid: violations.filter(v => v.severity === 'HARD').length === 0,
+    valid: violations.filter(v => v.severity === ConstraintSeverity.HARD).length === 0,
     violations,
     statistics: {
       totalSlots: examSlots.length,

@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     const timetable = await db.lectureTimetable.findFirst({
       where: {
         id: timetableId,
-        institutionId: authResult.user.institutionId!,
+        institutionId: authResult.user.institutionId!!,
       },
       select: { id: true, name: true, status: true },
     })

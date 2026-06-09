@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
     } else if (institutionId) {
       whereClause.department = { faculty: { institutionId } }
     } else if (authResult.user.role !== 'SA' && authResult.user.institutionId) {
-      whereClause.department = { faculty: { institutionId: authResult.user.institutionId } }
+      whereClause.department = { faculty: { institutionId: authResult.user.institutionId! } }
     }
 
     if (level) {

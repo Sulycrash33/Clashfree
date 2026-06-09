@@ -24,7 +24,11 @@ export async function GET(request: NextRequest) {
       const coClashes = await detectCOClashes(examPeriodId)
       
       // Convert to conflict format
-      const conflicts = []
+      const conflicts: Array<{
+        id: string; type: string; severity: string; status: string
+        description: string; affectedEntity: string; affectedName: string
+        createdAt: string; details: Record<string, unknown>
+      }> = []
       for (const clash of coClashes) {
         for (const detail of clash.clashes) {
           conflicts.push({

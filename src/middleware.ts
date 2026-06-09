@@ -1,9 +1,11 @@
 import { withAuth } from 'next-auth/middleware'
 import { NextResponse } from 'next/server'
 
+// Public routes that never require authentication
+const PUBLIC_ROUTES = ['/', '/login', '/signup', '/invite/accept']
+
 export default withAuth(
   function middleware(req) {
-    // Allow the request to proceed
     return NextResponse.next()
   },
   {
@@ -11,19 +13,19 @@ export default withAuth(
       authorized: ({ token, req }) => {
         const { pathname } = req.nextUrl
 
-        // Allow public routes
-        if (pathname === '/' || pathname === '/login') {
+        // Allow all public routes
+        if (PUBLIC_ROUTES.some(route => pathname === route || pathname.startsWith(route + '?'))) {
           return true
         }
 
-        // Require authentication for dashboard routes
-        if (pathname.startsWith('/dashboard')) {
-          return !!token
-        }
-
-        // Allow API routes (they have their own auth)
+        // Allow API routes (they handle their own auth via getServerSession)
         if (pathname.startsWith('/api')) {
           return true
+        }
+
+        // Require valid session token for all dashboard routes
+        if (pathname.startsWith('/dashboard')) {
+          return !!token
         }
 
         return true
@@ -37,13 +39,6 @@ export default withAuth(
 
 export const config = {
   matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - public folder
-     */
     '/((?!_next/static|_next/image|favicon.ico|public/).*)',
   ],
 }

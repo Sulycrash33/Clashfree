@@ -55,7 +55,8 @@ export async function GET(request: NextRequest) {
       lines.push('')
 
       // Group by date
-      const byDate = examPeriod.examSlots.reduce((acc, slot) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const byDate = (examPeriod.examSlots as any[]).reduce<Record<string, any[]>>((acc, slot) => {
         const date = new Date(slot.date).toLocaleDateString('en-GB', {
           weekday: 'long',
           day: 'numeric',
@@ -65,7 +66,7 @@ export async function GET(request: NextRequest) {
         if (!acc[date]) acc[date] = []
         acc[date].push(slot)
         return acc
-      }, {} as Record<string, typeof examPeriod.examSlots>)
+      }, {})
 
       for (const [date, slots] of Object.entries(byDate)) {
         lines.push(`📅 ${date}`)

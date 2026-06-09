@@ -62,23 +62,27 @@ export async function POST(request: NextRequest) {
     const departments = await db.department.findMany({
       where: { faculty: { institutionId } },
       select: { id: true, code: true, name: true },
-    })
-    const deptMap = new Map(departments.map(d => [d.code.toUpperCase(), d]))
+    }) as Array<{ id: string; code: string; name: string }>
+    const deptMap = new Map<string, { id: string; code: string; name: string }>(
+      departments.map(d => [d.code.toUpperCase(), d])
+    )
     const deptList = departments.map(d => d.code).join(', ')
 
     // Pre-load lecturer map: UPPER(staffId) → { id, name }
     const lecturers = await db.lecturer.findMany({
       where: { department: { faculty: { institutionId } } },
       select: { id: true, staffId: true, name: true },
-    })
-    const lecMap = new Map(lecturers.map(l => [l.staffId.toUpperCase(), l]))
+    }) as Array<{ id: string; staffId: string; name: string }>
+    const lecMap = new Map<string, { id: string; staffId: string; name: string }>(
+      lecturers.map(l => [l.staffId.toUpperCase(), l])
+    )
 
     // Pre-load existing courses: UPPER(code) → id
     const existingCourses = await db.course.findMany({
       where: { institutionId },
       select: { id: true, code: true },
-    })
-    const existingMap = new Map(existingCourses.map(c => [c.code.toUpperCase(), c.id]))
+    }) as Array<{ id: string; code: string }>
+    const existingMap = new Map<string, string>(existingCourses.map(c => [c.code.toUpperCase(), c.id]))
 
     type RowError = { row: number; code: string; field: string; message: string }
 

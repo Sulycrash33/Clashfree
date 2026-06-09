@@ -2,7 +2,7 @@ import { db } from '@/lib/db'
 import { apiResponse, apiError, handleApiError, requireSuperAdmin } from '@/lib/api-utils'
 import { hashPassword } from '@/lib/password'
 import { NextRequest } from 'next/server'
-import { UserRole } from '@prisma/client'
+import { UserRole } from '@/types/enums'
 
 // GET /api/users - List users
 export async function GET(request: NextRequest) {

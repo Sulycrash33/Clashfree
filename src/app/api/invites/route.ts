@@ -83,7 +83,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: 'Invite sent.', expiresAt }, { status: 201 })
   } catch (err) {
     if (err instanceof z.ZodError) {
-      return NextResponse.json({ error: 'Validation failed', details: err.errors }, { status: 400 })
+      return NextResponse.json({ error: 'Validation failed', details: err.issues }, { status: 400 })
     }
     console.error('[invites POST]', err)
     return NextResponse.json({ error: 'Server error' }, { status: 500 })

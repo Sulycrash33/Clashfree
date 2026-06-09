@@ -52,7 +52,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Unknown type' }, { status: 400 })
   } catch (err) {
     if (err instanceof z.ZodError) {
-      return NextResponse.json({ error: 'Validation failed', details: err.errors }, { status: 400 })
+      return NextResponse.json({ error: 'Validation failed', details: err.issues }, { status: 400 })
     }
     console.error('[notify/whatsapp]', err)
     return NextResponse.json({ error: 'Server error' }, { status: 500 })
@@ -220,14 +220,14 @@ async function handleExamReminder(examPeriodId: string, daysAhead: number) {
       .map(sc => ({ phone: sc.student.phone!, name: sc.student.name }))
 
     const { sent: s, failed: f } = await batchNotifyWA(studentsWithPhone, async (r) =>
-      sendExamReminder ? (await import('@/lib/whatsapp')).sendExamReminder({
+      (await import('@/lib/whatsapp')).sendExamReminder({
         to: r.phone,
         name: r.name,
         course: slot.course.name,
         date: new Date(slot.date).toLocaleDateString('en-NG', { weekday: 'long', day: 'numeric', month: 'long' }),
         time: `${slot.startTime} – ${slot.endTime}`,
         room: `${slot.room.name} (${slot.room.code})`,
-      }) : { success: false }
+      })
     )
     sent += s; failed += f
   }

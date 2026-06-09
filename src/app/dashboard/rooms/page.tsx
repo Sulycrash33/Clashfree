@@ -210,7 +210,7 @@ export default function RoomsPage() {
       header: 'Type',
       cell: ({ row }) => (
         <Badge variant="secondary" className="bg-white/10 text-slate-300">
-          {roomTypes[row.getValue('type')] || row.getValue('type')}
+          {roomTypes[row.getValue('type') as string] || row.getValue('type')}
         </Badge>
       ),
     },

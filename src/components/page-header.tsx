@@ -3,9 +3,12 @@
 import { Button } from '@/components/ui/button'
 import { Plus, RefreshCw } from 'lucide-react'
 
+import type { LucideIcon } from 'lucide-react'
+
 interface PageHeaderProps {
   title: string
   description: string
+  icon?: LucideIcon
   actionLabel?: string
   onAction?: () => void
   onRefresh?: () => void
@@ -15,6 +18,7 @@ interface PageHeaderProps {
 export function PageHeader({
   title,
   description,
+  icon: Icon,
   actionLabel,
   onAction,
   onRefresh,

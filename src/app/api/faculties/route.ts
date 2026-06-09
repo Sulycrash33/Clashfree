@@ -18,7 +18,7 @@ export async function GET(request: NextRequest) {
       authResult.user.role === 'SA' && institutionId
         ? { institutionId }
         : authResult.user.role !== 'SA' && authResult.user.institutionId
-          ? { institutionId: authResult.user.institutionId }
+          ? { institutionId: authResult.user.institutionId! }
           : authResult.user.role === 'SA'
             ? {}
             : { institutionId: 'none' } // Will return empty for non-SA without institution
