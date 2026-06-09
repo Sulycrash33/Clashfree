@@ -85,7 +85,7 @@ export default function LandingPage() {
                 Sign In
               </Button>
             </Link>
-            <Link href="/login">
+            <Link href="/signup">
               <Button className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white border-0">
                 Get Started
               </Button>
@@ -115,7 +115,7 @@ export default function LandingPage() {
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-          <Link href="/login">
+          <Link href="/signup">
             <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white border-0 px-8 h-12">
               Get Started Free
               <ArrowRight className="w-4 h-4 ml-2" />
@@ -189,7 +189,7 @@ export default function LandingPage() {
             ClashFree never generates a timetable on incomplete or invalid academic data.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/login">
+            <Link href="/signup">
               <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white border-0 px-8 h-12">
                 Get Started Free
               </Button>
@@ -205,7 +205,7 @@ export default function LandingPage() {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center font-bold text-sm">
               CF
             </div>
-            <span className="text-sm text-slate-400">© 2025 ClashFree. All rights reserved.</span>
+            <span className="text-sm text-slate-400">© 2026 ClashFree. All rights reserved.</span>
           </div>
           <div className="flex items-center gap-6 text-sm text-slate-400">
             <a href="#" className="hover:text-white transition-colors">Privacy</a>
