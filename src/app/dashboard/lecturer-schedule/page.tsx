@@ -71,7 +71,7 @@ export default function LecturerSchedulePage() {
       const [periodsRes, ttRes, lecturersRes] = await Promise.all([
         fetch('/api/exam-periods'),
         fetch('/api/lecture-timetables'),
-        fetch('/api/lecturers?limit=1'),
+        fetch('/api/lecturers?me=true'),
       ])
 
       if (periodsRes.ok) {

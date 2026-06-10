@@ -70,17 +70,16 @@ export default function MyTimetablePage() {
         }
       }
 
-      // In a real app, we'd fetch the student's info based on logged-in user
-      // For demo, we'll show a sample student's view
-      const studentsRes = await fetch('/api/students?limit=1')
-      if (studentsRes.ok) {
-        const students = await studentsRes.json()
+      // Fetch the actual logged-in student's profile via userId
+      const studentRes = await fetch('/api/students?me=true')
+      if (studentRes.ok) {
+        const data = await studentRes.json()
+        // API returns array — pick the one matching the session user
+        const students = Array.isArray(data) ? data : data.students || []
         if (students.length > 0) {
-          // Get student's courses
-          const student = students[0]
-          const studentRes = await fetch(`/api/students/${student.id}`)
-          if (studentRes.ok) {
-            setStudentInfo(await studentRes.json())
+          const studentDetail = await fetch(`/api/students/${students[0].id}`)
+          if (studentDetail.ok) {
+            setStudentInfo(await studentDetail.json())
           }
         }
       }

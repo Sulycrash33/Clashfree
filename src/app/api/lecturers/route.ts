@@ -11,6 +11,28 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url)
+    const me = searchParams.get('me') === 'true'
+
+    // LC role: return only their own lecturer record
+    if (me || authResult.user.role === 'LC') {
+      const lecturer = await db.lecturer.findFirst({
+        where: { userId: authResult.user.id },
+        select: {
+          id: true, staffId: true, name: true, email: true,
+          phone: true, rank: true, specialization: true, isActive: true, userId: true,
+          department: {
+            select: {
+              id: true, name: true, code: true,
+              faculty: { select: { id: true, name: true, code: true } },
+            },
+          },
+          _count: { select: { courses: true } },
+        },
+      })
+      if (!lecturer) return apiError('Lecturer profile not found for this account', 404)
+      return apiResponse([lecturer])
+    }
+
     const departmentId = searchParams.get('departmentId')
     const facultyId = searchParams.get('facultyId')
     const institutionId = searchParams.get('institutionId')

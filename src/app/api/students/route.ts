@@ -11,6 +11,28 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url)
+    const me = searchParams.get('me') === 'true'
+
+    // ST role: return only their own student record
+    if (me || authResult.user.role === 'ST') {
+      const student = await db.student.findFirst({
+        where: { userId: authResult.user.id },
+        select: {
+          id: true, regNumber: true, name: true, email: true,
+          level: true, admissionYear: true, isSpillover: true, isActive: true, userId: true,
+          department: {
+            select: {
+              id: true, name: true, code: true,
+              faculty: { select: { id: true, name: true, code: true } },
+            },
+          },
+          _count: { select: { studentCourses: { where: { status: { in: ['CURRENT', 'CARRY_OVER'] } } } } },
+        },
+      })
+      if (!student) return apiError('Student profile not found for this account', 404)
+      return apiResponse([student])
+    }
+
     const departmentId = searchParams.get('departmentId')
     const facultyId = searchParams.get('facultyId')
     const institutionId = searchParams.get('institutionId')
@@ -32,9 +54,7 @@ export async function GET(request: NextRequest) {
       whereClause.department = { faculty: { institutionId: authResult.user.institutionId! } }
     }
 
-    if (level) {
-      whereClause.level = parseInt(level)
-    }
+    if (level) whereClause.level = parseInt(level)
 
     if (search) {
       whereClause.OR = [
@@ -48,26 +68,15 @@ export async function GET(request: NextRequest) {
       db.student.findMany({
         where: whereClause,
         select: {
-          id: true,
-          regNumber: true,
-          name: true,
-          email: true,
-          level: true,
-          admissionYear: true,
-          isSpillover: true,
-          isActive: true,
-          userId: true,
+          id: true, regNumber: true, name: true, email: true,
+          level: true, admissionYear: true, isSpillover: true, isActive: true, userId: true,
           department: {
             select: {
-              id: true,
-              name: true,
-              code: true,
+              id: true, name: true, code: true,
               faculty: { select: { id: true, name: true, code: true } },
             },
           },
-          _count: {
-            select: { studentCourses: { where: { status: { in: ['REGISTERED', 'CARRY_OVER'] } } } },
-          },
+          _count: { select: { studentCourses: { where: { status: { in: ['CURRENT', 'CARRY_OVER'] } } } } },
         },
         orderBy: [{ level: 'asc' }, { regNumber: 'asc' }],
         skip,

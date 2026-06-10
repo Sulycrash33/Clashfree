@@ -356,7 +356,35 @@ export default function ExamTimetablePage() {
   const warningConflicts = conflicts.filter(c => c.severity === 'WARNING').length
   const stepIndex = STEPS.findIndex(s => s.id === step)
 
-  // ── Render ───────────────────────────────────────────────────────────────────
+  // Invigilation auto-assign
+  const [assigningInvig, setAssigningInvig] = useState(false)
+  const [invigResult, setInvigResult] = useState<null | { assigned: number; skipped: number; message: string }>(null)
+
+  const runAutoAssign = useCallback(async (dryRun = false) => {
+    if (!selectedPeriod) return
+    setAssigningInvig(true)
+    try {
+      const res = await fetch('/api/invigilations/auto-assign', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ examPeriodId: selectedPeriod, dryRun }),
+      })
+      const data = await res.json()
+      if (!res.ok) {
+        toast({ title: 'Auto-assign failed', description: data.error || 'Unknown error', variant: 'destructive' })
+        return
+      }
+      setInvigResult(data)
+      toast({
+        title: dryRun ? `Preview: ${data.assigned} invigilators to assign` : `✅ ${data.assigned} invigilators assigned`,
+        description: data.message,
+      })
+    } catch {
+      toast({ title: 'Error', description: 'Failed to run auto-assign', variant: 'destructive' })
+    } finally {
+      setAssigningInvig(false)
+    }
+  }, [selectedPeriod, toast])
 
   return (
     <div className="space-y-6">
@@ -908,6 +936,18 @@ export default function ExamTimetablePage() {
                   </div>
                   <ExportButtons data={exportData} disabled={examSlots.length === 0} />
                   <VersionHistory examPeriodId={selectedPeriod} currentVersion={currentVersion} />
+                  <Button
+                    variant="outline"
+                    onClick={() => runAutoAssign(false)}
+                    disabled={assigningInvig || examSlots.length === 0}
+                    className={`border-white/10 text-slate-300 hover:text-white ${invigResult ? 'border-green-500/30 text-green-400' : ''}`}
+                  >
+                    {assigningInvig
+                      ? <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      : <Users className="w-4 h-4 mr-2" />
+                    }
+                    {assigningInvig ? 'Assigning...' : invigResult ? `${invigResult.assigned} Assigned` : 'Auto-Assign Invigilators'}
+                  </Button>
                   <Button
                     variant="outline"
                     onClick={handleClearTimetable}

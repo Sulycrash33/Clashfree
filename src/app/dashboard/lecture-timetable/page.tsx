@@ -13,7 +13,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { PageHeader } from '@/components/page-header'
 import {
   Clock, MapPin, AlertTriangle, CheckCircle2, Loader2,
-  Plus, Trash2, BookOpen, Building2, RefreshCw, Moon, Calendar,
+  Plus, Trash2, BookOpen, Building2, RefreshCw, Moon, Calendar, ShieldCheck,
 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 
@@ -94,6 +94,46 @@ export default function LectureTimetablePage() {
   const [deletingId,   setDeletingId]   = useState<string | null>(null)
   const [createTTOpen, setCreateTTOpen] = useState(false)
   const [addSlotOpen,  setAddSlotOpen]  = useState(false)
+
+  // Clash detection state
+  const [clashRunning,  setClashRunning]  = useState(false)
+  const [clashResult,   setClashResult]   = useState<null | {
+    summary: { clashCount: number; errors: number; warnings: number; clean: boolean; byType: Record<string, number> }
+    clashes: Array<{ type: string; severity: string; courseA: string; courseB?: string; day: string; time: string; description: string }>
+    message: string
+    timetableName: string
+  }>(null)
+  const [clashOpen, setClashOpen] = useState(false)
+
+  const runClashDetect = useCallback(async () => {
+    if (!selectedTimetable) return
+    setClashRunning(true)
+    setClashResult(null)
+    try {
+      const res = await fetch('/api/clash-detect', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ timetableId: selectedTimetable, scope: 'full' }),
+      })
+      if (!res.ok) {
+        const err = await res.json()
+        toast({ title: 'Clash check failed', description: err.error || 'Unknown error', variant: 'destructive' })
+        return
+      }
+      const data = await res.json()
+      setClashResult(data)
+      setClashOpen(true)
+      if (data.summary.clean) {
+        toast({ title: '✅ No clashes found', description: data.message })
+      } else {
+        toast({ title: `⚠️ ${data.summary.errors} clash(es) detected`, description: data.message, variant: 'destructive' })
+      }
+    } catch {
+      toast({ title: 'Error', description: 'Failed to run clash check', variant: 'destructive' })
+    } finally {
+      setClashRunning(false)
+    }
+  }, [selectedTimetable, toast])
 
   const [ttForm, setTTForm] = useState({ name: '', session: '', semester: '1', startDate: '', endDate: '' })
   const [slotForm, setSlotForm] = useState({ courseId: '', roomId: '', dayOfWeek: '1', startTime: '08:00', endTime: '10:00', notes: '' })
@@ -290,9 +330,29 @@ export default function LectureTimetablePage() {
         {canManage && (
           <div className="flex items-center gap-2">
             {selectedTimetable && (
-              <Button size="sm" className="bg-cyan-500 hover:bg-cyan-600 text-white" onClick={() => openAddSlot()}>
-                <Plus className="w-4 h-4 mr-2" /> Add Slot
-              </Button>
+              <>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  className={`border-white/10 text-slate-300 hover:text-white ${clashResult && !clashResult.summary.clean ? 'border-red-500/40 text-red-400 hover:text-red-300' : clashResult?.summary.clean ? 'border-green-500/40 text-green-400' : ''}`}
+                  onClick={runClashDetect}
+                  disabled={clashRunning}
+                >
+                  {clashRunning ? (
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  ) : clashResult?.summary.clean ? (
+                    <CheckCircle2 className="w-4 h-4 mr-2" />
+                  ) : clashResult && !clashResult.summary.clean ? (
+                    <AlertTriangle className="w-4 h-4 mr-2" />
+                  ) : (
+                    <ShieldCheck className="w-4 h-4 mr-2" />
+                  )}
+                  {clashRunning ? 'Checking...' : clashResult ? `${clashResult.summary.errors} Error(s)` : 'Check Clashes'}
+                </Button>
+                <Button size="sm" className="bg-cyan-500 hover:bg-cyan-600 text-white" onClick={() => openAddSlot()}>
+                  <Plus className="w-4 h-4 mr-2" /> Add Slot
+                </Button>
+              </>
             )}
             <Button size="sm" variant="outline" className="border-white/10 text-slate-300 hover:text-white" onClick={() => setCreateTTOpen(true)}>
               <Calendar className="w-4 h-4 mr-2" /> New Timetable
@@ -757,6 +817,66 @@ export default function LectureTimetablePage() {
               </Button>
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Clash Detection Results Dialog */}
+      <Dialog open={clashOpen} onOpenChange={setClashOpen}>
+        <DialogContent className="bg-slate-900 border-white/10 text-white max-w-2xl max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center gap-2">
+              {clashResult?.summary.clean
+                ? <CheckCircle2 className="w-5 h-5 text-green-400" />
+                : <AlertTriangle className="w-5 h-5 text-red-400" />}
+              Clash Detection — {clashResult?.timetableName}
+            </DialogTitle>
+            <DialogDescription className="text-slate-400">{clashResult?.message}</DialogDescription>
+          </DialogHeader>
+
+          {clashResult && (
+            <div className="space-y-4">
+              {/* Summary badges */}
+              <div className="flex flex-wrap gap-2">
+                {Object.entries(clashResult.summary.byType).map(([type, count]) => count > 0 && (
+                  <Badge key={type} variant="outline" className={`text-xs ${
+                    type === 'JUMUAH' || type === 'SHARED' ? 'border-amber-500/30 text-amber-400' : 'border-red-500/30 text-red-400'
+                  }`}>
+                    {type}: {count}
+                  </Badge>
+                ))}
+                {clashResult.summary.clean && (
+                  <Badge variant="outline" className="border-green-500/30 text-green-400 text-xs">✅ All Clear</Badge>
+                )}
+              </div>
+
+              {/* Clash list */}
+              {clashResult.clashes.length > 0 ? (
+                <div className="space-y-2">
+                  {clashResult.clashes.map((clash, i) => (
+                    <div key={i} className={`rounded-lg p-3 border text-sm ${
+                      clash.severity === 'ERROR'
+                        ? 'bg-red-500/10 border-red-500/20'
+                        : 'bg-amber-500/10 border-amber-500/20'
+                    }`}>
+                      <div className="flex items-start gap-2">
+                        <span className={`font-semibold text-xs mt-0.5 ${clash.severity === 'ERROR' ? 'text-red-400' : 'text-amber-400'}`}>
+                          [{clash.type}]
+                        </span>
+                        <span className="text-slate-200">{clash.description}</span>
+                      </div>
+                      <div className="text-slate-400 text-xs mt-1 ml-10">{clash.day} · {clash.time}</div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-slate-400">
+                  <CheckCircle2 className="w-12 h-12 text-green-400 mx-auto mb-3" />
+                  <p className="font-medium text-white">Timetable is clean</p>
+                  <p className="text-sm">No room, lecturer, student or Jumu'ah clashes detected.</p>
+                </div>
+              )}
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>
