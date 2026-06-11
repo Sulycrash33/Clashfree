@@ -1,5 +1,7 @@
 'use client'
 
+import { DemoBanner } from '@/components/demo-banner'
+
 import { Suspense, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
@@ -155,6 +157,7 @@ function LoginForm() {
                 )}
               </Button>
             </form>
+          <DemoBanner />
           </CardContent>
         </Card>
 
