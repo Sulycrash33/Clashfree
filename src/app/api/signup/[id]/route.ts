@@ -11,7 +11,8 @@ function generateTempPassword(): string {
 }
 
 // PATCH /api/signup/[id] — SA approves or rejects
-export async function PATCH(req: Request, { params }: { params: { id: string } }) {
+export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user || (session.user as { role?: string }).role !== 'SA') {
