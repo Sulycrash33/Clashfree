@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { NextResponse, NextRequest } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { db as prisma } from '@/lib/db'
@@ -11,8 +11,11 @@ function generateTempPassword(): string {
 }
 
 // PATCH /api/signup/[id] — SA approves or rejects
-export async function PATCH(req: Request, { params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
+export async function PATCH(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { id } = await params
   try {
     const session = await getServerSession(authOptions)
     if (!session?.user || (session.user as { role?: string }).role !== 'SA') {
@@ -24,7 +27,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       rejectionReason?: string
     }
 
-    const signup = await prisma.institutionSignup.findUnique({ where: { id: params.id } })
+    const signup = await prisma.institutionSignup.findUnique({ where: { id } })
     if (!signup) return NextResponse.json({ error: 'Not found' }, { status: 404 })
     if (signup.status !== 'PENDING') {
       return NextResponse.json({ error: 'Already processed' }, { status: 409 })
@@ -32,7 +35,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
 
     if (action === 'reject') {
       await prisma.institutionSignup.update({
-        where: { id: params.id },
+        where: { id },
         data: {
           status: 'REJECTED',
           reviewedBy: session.user.email,
@@ -83,7 +86,7 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
       })
 
       await tx.institutionSignup.update({
-        where: { id: params.id },
+        where: { id },
         data: {
           status: 'APPROVED',
           reviewedBy: session!.user!.email,
