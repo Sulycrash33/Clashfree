@@ -1,4 +1,3 @@
-import { DemoBanner } from "@/components/DemoBanner";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -39,7 +38,6 @@ export default function RootLayout({
       <body
         className={`${inter.variable} font-sans antialiased`}
       >
-      <DemoBanner /> 
         {children}
         <Toaster />
       </body>
