@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import {
-  GraduationCap, ChevronRight, Clock, MapPin, BookOpen,
+  GraduationCap, CalendarClock, ChevronRight, Clock, MapPin, BookOpen,
   AlertTriangle, CheckCircle2, X, XCircle, FlaskConical,
   Presentation, Calendar, Award, FileText, Users,
   BarChart3, Bell, ChevronDown, Layers, Star,
