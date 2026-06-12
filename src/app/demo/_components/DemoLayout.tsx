@@ -1,4 +1,65 @@
- return (
+"use client";
+
+import React, { useState } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useTheme, ThemeProvider } from "./ThemeContext";
+import { 
+  Sun, 
+  Moon, 
+  User, 
+  GraduationCap, 
+  Calendar, 
+  Sliders, 
+  LayoutDashboard,
+  Menu,
+  X,
+  ChevronLeft,
+  ChevronRight,
+  AlertTriangle,
+  Sparkles,
+  CalendarClock
+} from "lucide-react";
+
+interface DemoLayoutProps {
+  children: React.ReactNode;
+}
+
+const NAV = [
+  { href: "/demo/student", label: "Student Portal", icon: User, color: "text-indigo-500", activeBg: "bg-indigo-500/10 border-indigo-500/20" },
+  { href: "/demo/lecturer", label: "Lecturer Portal", icon: GraduationCap, color: "text-emerald-500", activeBg: "bg-emerald-500/10 border-emerald-500/20" },
+  { href: "/demo/officer", label: "Timetable Officer", icon: Calendar, color: "text-amber-500", activeBg: "bg-amber-500/10 border-amber-500/20" },
+  { href: "/demo/admin", label: "Institution Admin", icon: Sliders, color: "text-rose-500", activeBg: "bg-rose-500/10 border-rose-500/20" },
+  { href: "/demo/dashboard", label: "Global Dashboard", icon: LayoutDashboard, color: "text-sky-500", activeBg: "bg-sky-500/10 border-sky-500/20" },
+];
+
+function DemoLayoutInner({ children }: DemoLayoutProps) {
+  const pathname = usePathname();
+  const { isDark: darkMode, toggleDark } = useTheme();
+  
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+
+  const conflictCount = 2;
+  const roleName = pathname.includes("student") ? "Student Workspace" 
+                 : pathname.includes("lecturer") ? "Lecturer Workspace"
+                 : pathname.includes("officer") ? "Officer Panel"
+                 : pathname.includes("admin") ? "Admin Panel"
+                 : "Global System Control";
+
+  const roleSubtitle = "Harmattan Term";
+
+  const bg = darkMode ? "bg-[#0a0a0f]" : "bg-gray-50";
+  const mainBg = darkMode ? "bg-[#0a0a0f]" : "bg-gray-50";
+  const text = darkMode ? "text-white" : "text-gray-900";
+  const sub = darkMode ? "text-zinc-400" : "text-gray-500";
+  const border = darkMode ? "border-zinc-800" : "border-gray-200";
+  const sidebar = darkMode ? "bg-[#111118]" : "bg-white";
+  const topbar = darkMode ? "bg-[#0a0a0f]/80" : "bg-white/80";
+  const navInactiveText = darkMode ? "text-zinc-400" : "text-gray-600";
+  const navHover = darkMode ? "hover:bg-zinc-800/50 hover:text-zinc-200" : "hover:bg-gray-100 hover:text-gray-900";
+
+  return (
     <div className={`min-h-screen ${bg} ${text} flex`}>
 
       {/* ── Mobile overlay */}
@@ -142,7 +203,7 @@
             className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border transition-all ${
               darkMode
                 ? "bg-violet-500/10 border-violet-400/20 text-violet-300"
-                : "bg-amber-50 border-amber-200 text-amber-600"
+                : "bg-amber-50 border-amber-200 text-amber-700"
             } hover:brightness-110`}>
             {darkMode ? <Moon className="w-3.5 h-3.5" /> : <Sun className="w-3.5 h-3.5" />}
             <span className="text-[11px] font-medium hidden sm:block">{darkMode ? "Dark" : "Light"}</span>
@@ -150,26 +211,3 @@
 
           <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-[11px] text-emerald-400 font-medium">FEDKO Live Demo</span>
-          </div>
-        </header>
-
-        {/* Page content */}
-        <main className="flex-1 overflow-auto">
-          {children}
-        </main>
-      </div>
-    </div>
-  );
-}
-
-// ─────────────────────────────────────────────
-// Exported wrapper that provides ThemeContext
-// ─────────────────────────────────────────────
-export function DemoLayout(props: DemoLayoutProps) {
-  return (
-    <ThemeProvider>
-      <DemoLayoutInner {...props} />
-    </ThemeProvider>
-  );
-}
