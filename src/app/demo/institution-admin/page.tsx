@@ -7,7 +7,8 @@ import {
   AlertTriangle, X, Save, RotateCcw, Eye, Lock,
   Unlock, Calendar, BookMarked, Users, FlaskConical,
   Settings, Bell, FileText, BarChart3, GraduationCap,
-  ClipboardList, Layers,
+  ClipboardList, Layers, Pause, Play, Zap, Crown, Database,
+  Shield, Globe, Activity, RefreshCw, Trash2, Download, Monitor, Ban,
 } from "lucide-react";
 import { DemoLayout } from "../_components/DemoLayout";
 import { DEPARTMENTS, LECTURE_FACILITIES } from "../_data/fedko-faculties";
@@ -544,7 +545,7 @@ function AddRemoveModal({
 // Main page
 // ─────────────────────────────────────────────
 export default function InstitutionAdminPage() {
-  const [activeTab, setActiveTab] = useState<"overrides" | "manage" | "summary">("overrides");
+  const [activeTab, setActiveTab] = useState<"overrides" | "manage" | "summary" | "control" | "system">("overrides");
   const [selectedOverride, setSelectedOverride] = useState<Override | null>(null);
   const [addRemoveModal, setAddRemoveModal] = useState<{
     type: "faculty" | "department" | "admin" | "lecturer";
@@ -553,10 +554,27 @@ export default function InstitutionAdminPage() {
 
   const activeOverrides = OVERRIDES.filter(o => o.active);
 
+  // Pause / Resume timetable
+  const [timetableStatus, setTimetableStatus] = useState<"active" | "paused" | "suspended">("active");
+  const [pauseReason, setPauseReason] = useState("ASUU strike action");
+  const [pauseToast, setPauseToast] = useState<string | null>(null);
+  const [systemToast, setSystemToast] = useState<string | null>(null);
+
+  const showPauseToast = (msg: string) => {
+    setPauseToast(msg);
+    setTimeout(() => setPauseToast(null), 3000);
+  };
+  const showSystemToast = (msg: string) => {
+    setSystemToast(msg);
+    setTimeout(() => setSystemToast(null), 3000);
+  };
+
   const TABS = [
     { id: "overrides", label: "Override Controls", icon: ShieldAlert },
     { id: "manage", label: "Add / Remove", icon: Settings },
     { id: "summary", label: "Faculty Summary", icon: BarChart3 },
+    { id: "control", label: "Timetable Control", icon: Pause },
+    { id: "system", label: "System Powers", icon: Crown },
   ] as const;
 
   return (
@@ -566,6 +584,22 @@ export default function InstitutionAdminPage() {
       roleSubtitle="Institution Admin · Faculty of Physical & Applied Sciences"
       conflictCount={activeOverrides.length}
     >
+
+      {/* Pause toast */}
+      {pauseToast && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-[#13131f] border border-white/15 shadow-2xl">
+          <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+          <span className="text-sm font-semibold text-white">{pauseToast}</span>
+        </div>
+      )}
+      {/* System toast */}
+      {systemToast && (
+        <div className="fixed bottom-6 left-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-violet-900/90 border border-violet-400/20 shadow-2xl">
+          <Zap className="w-4 h-4 text-violet-300 flex-shrink-0" />
+          <span className="text-sm font-semibold text-violet-100">{systemToast}</span>
+        </div>
+      )}
+
       {/* Modals */}
       {selectedOverride && (
         <OverrideModal override={selectedOverride} onClose={() => setSelectedOverride(null)} />
@@ -838,6 +872,284 @@ export default function InstitutionAdminPage() {
                     </div>
                   );
                 })}
+              </div>
+            </div>
+          </div>
+        )}
+
+
+        {/* ══ TIMETABLE CONTROL TAB ══════════════════ */}
+        {activeTab === "control" && (
+          <div className="space-y-6">
+            <p className="text-sm text-white/40">
+              Pause or resume the timetable system for this institution. Use this during strikes, emergencies, or semester breaks.
+              All students and lecturers are notified automatically via WhatsApp when status changes.
+            </p>
+
+            {/* Current status */}
+            <div className={`rounded-2xl border p-6 space-y-4 ${
+              timetableStatus === "active"
+                ? "border-emerald-400/20 bg-emerald-500/5"
+                : timetableStatus === "paused"
+                ? "border-amber-400/20 bg-amber-500/5"
+                : "border-red-400/20 bg-red-500/5"
+            }`}>
+              <div className="flex items-center justify-between flex-wrap gap-3">
+                <div className="flex items-center gap-3">
+                  <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
+                    timetableStatus === "active" ? "bg-emerald-600" : timetableStatus === "paused" ? "bg-amber-600" : "bg-red-600"
+                  }`}>
+                    {timetableStatus === "active"
+                      ? <Play className="w-5 h-5 text-white" />
+                      : timetableStatus === "paused"
+                      ? <Pause className="w-5 h-5 text-white" />
+                      : <Shield className="w-5 h-5 text-white" />
+                    }
+                  </div>
+                  <div>
+                    <div className={`text-lg font-bold ${
+                      timetableStatus === "active" ? "text-emerald-300" : timetableStatus === "paused" ? "text-amber-300" : "text-red-300"
+                    }`}>
+                      Timetable {timetableStatus === "active" ? "Active" : timetableStatus === "paused" ? "Paused" : "Suspended"}
+                    </div>
+                    <div className="text-sm text-white/40 mt-0.5">
+                      {timetableStatus === "active"
+                        ? "All lectures running as scheduled — Semester 1, 2024/2025"
+                        : timetableStatus === "paused"
+                        ? `Paused — Reason: ${pauseReason}`
+                        : "Suspended indefinitely — awaiting institution directive"
+                      }
+                    </div>
+                  </div>
+                </div>
+                <div className={`text-xs font-bold px-3 py-1.5 rounded-full border ${
+                  timetableStatus === "active"
+                    ? "bg-emerald-500/15 border-emerald-400/30 text-emerald-300"
+                    : timetableStatus === "paused"
+                    ? "bg-amber-500/15 border-amber-400/30 text-amber-300"
+                    : "bg-red-500/15 border-red-400/30 text-red-300"
+                } flex items-center gap-1.5`}>
+                  <span className="w-2 h-2 rounded-full bg-current animate-pulse" />
+                  {timetableStatus.toUpperCase()}
+                </div>
+              </div>
+
+              {/* Pause reason input */}
+              {timetableStatus !== "active" && (
+                <div className="rounded-xl bg-white/5 border border-white/10 p-4 space-y-2">
+                  <label className="text-xs text-white/50 font-medium">Pause Reason (displayed to all users)</label>
+                  <input
+                    value={pauseReason}
+                    onChange={e => setPauseReason(e.target.value)}
+                    className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-white/30"
+                    placeholder="e.g. ASUU strike action, public holiday, maintenance..."
+                  />
+                </div>
+              )}
+            </div>
+
+            {/* Action buttons */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <button
+                onClick={() => { setTimetableStatus("active"); showPauseToast("✓ Timetable resumed — students and lecturers notified"); }}
+                disabled={timetableStatus === "active"}
+                className={`flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-semibold text-sm transition-all ${
+                  timetableStatus === "active"
+                    ? "bg-emerald-600/30 border border-emerald-400/20 text-emerald-400/50 cursor-not-allowed"
+                    : "bg-emerald-600 text-white hover:bg-emerald-500 shadow-lg"
+                }`}>
+                <Play className="w-4 h-4" />
+                Resume Timetable
+              </button>
+
+              <button
+                onClick={() => { setTimetableStatus("paused"); showPauseToast("⏸ Timetable paused — all parties notified via WhatsApp"); }}
+                disabled={timetableStatus === "paused"}
+                className={`flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-semibold text-sm transition-all ${
+                  timetableStatus === "paused"
+                    ? "bg-amber-600/30 border border-amber-400/20 text-amber-400/50 cursor-not-allowed"
+                    : "bg-amber-600 text-white hover:bg-amber-500 shadow-lg"
+                }`}>
+                <Pause className="w-4 h-4" />
+                Pause Timetable
+              </button>
+
+              <button
+                onClick={() => { setTimetableStatus("suspended"); showPauseToast("⛔ Timetable suspended — full institution notified"); }}
+                disabled={timetableStatus === "suspended"}
+                className={`flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-semibold text-sm transition-all ${
+                  timetableStatus === "suspended"
+                    ? "bg-red-600/30 border border-red-400/20 text-red-400/50 cursor-not-allowed"
+                    : "bg-red-700 text-white hover:bg-red-600 shadow-lg"
+                }`}>
+                <Shield className="w-4 h-4" />
+                Suspend (Emergency)
+              </button>
+            </div>
+
+            {/* Info cards */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                {
+                  icon: Pause,
+                  color: "text-amber-400",
+                  bg: "bg-amber-500/10 border-amber-400/20",
+                  title: "Pause",
+                  desc: "Temporarily halts all scheduled lectures. Students and lecturers are notified. Timetable data is preserved. Use for short interruptions like strikes or public holidays.",
+                },
+                {
+                  icon: Play,
+                  color: "text-emerald-400",
+                  bg: "bg-emerald-500/10 border-emerald-400/20",
+                  title: "Resume",
+                  desc: "Restores the timetable to its active state. All previously scheduled lectures continue from the next applicable date. WhatsApp notifications sent to all parties.",
+                },
+                {
+                  icon: Shield,
+                  color: "text-red-400",
+                  bg: "bg-red-500/10 border-red-400/20",
+                  title: "Emergency Suspend",
+                  desc: "Full suspension — no lectures, no access updates. Reserved for serious situations (security, force majeure). Requires Super Admin acknowledgement to lift.",
+                },
+                {
+                  icon: Bell,
+                  color: "text-sky-400",
+                  bg: "bg-sky-500/10 border-sky-400/20",
+                  title: "Notifications",
+                  desc: "Every status change automatically triggers WhatsApp messages to all registered students, lecturers, and timetable officers via the Meta Cloud API integration.",
+                },
+              ].map(c => {
+                const Icon = c.icon;
+                return (
+                  <div key={c.title} className={`rounded-xl border ${c.bg} p-4 space-y-2`}>
+                    <div className="flex items-center gap-2">
+                      <Icon className={`w-4 h-4 ${c.color}`} />
+                      <span className={`text-sm font-semibold ${c.color}`}>{c.title}</span>
+                    </div>
+                    <p className="text-xs text-white/45 leading-relaxed">{c.desc}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* ══ SYSTEM POWERS TAB ══════════════════════ */}
+        {activeTab === "system" && (
+          <div className="space-y-6">
+            <div className="rounded-2xl border border-amber-400/20 bg-amber-500/5 p-4 flex items-start gap-3">
+              <Crown className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+              <div>
+                <div className="text-sm font-semibold text-amber-300">Institution Admin — Elevated System Powers</div>
+                <p className="text-xs text-white/40 mt-1 leading-relaxed">
+                  These powers were previously restricted to Super Admin. They are now available to Institution Admins
+                  for operational efficiency. Super Admin retains platform-level oversight and audit logs.
+                </p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {[
+                {
+                  label: "Bulk Enrolment Override",
+                  desc: "Force-enrol or remove multiple students from courses in a single batch operation.",
+                  icon: Users,
+                  color: "text-sky-400",
+                  bg: "bg-sky-500/10 border-sky-400/20",
+                  action: "Apply Bulk Override",
+                },
+                {
+                  label: "Course Suspension",
+                  desc: "Suspend a course for the semester — removes from all student and lecturer timetables.",
+                  icon: Ban,
+                  color: "text-red-400",
+                  bg: "bg-red-500/10 border-red-400/20",
+                  action: "Suspend Course",
+                },
+                {
+                  label: "Lecturer Substitution",
+                  desc: "Assign a substitute lecturer to all sessions of a course for a defined period.",
+                  icon: RefreshCw,
+                  color: "text-violet-400",
+                  bg: "bg-violet-500/10 border-violet-400/20",
+                  action: "Set Substitution",
+                },
+                {
+                  label: "Export Full Dataset",
+                  desc: "Export complete institution timetable, student enrolment, and lecturer data as CSV/PDF.",
+                  icon: Download,
+                  color: "text-emerald-400",
+                  bg: "bg-emerald-500/10 border-emerald-400/20",
+                  action: "Export All Data",
+                },
+                {
+                  label: "Broadcast Announcement",
+                  desc: "Send a system-wide WhatsApp message to all students and lecturers in this institution.",
+                  icon: Bell,
+                  color: "text-amber-400",
+                  bg: "bg-amber-500/10 border-amber-400/20",
+                  action: "Send Broadcast",
+                },
+                {
+                  label: "Audit Log",
+                  desc: "View full log of all admin actions, overrides, and system changes for this institution.",
+                  icon: ClipboardList,
+                  color: "text-white/50",
+                  bg: "bg-white/5 border-white/10",
+                  action: "View Audit Log",
+                },
+                {
+                  label: "Flush Clash Cache",
+                  desc: "Force ClashFree to re-detect all clashes from scratch. Run after bulk data changes.",
+                  icon: Zap,
+                  color: "text-fuchsia-400",
+                  bg: "bg-fuchsia-500/10 border-fuchsia-400/20",
+                  action: "Run Detection",
+                },
+                {
+                  label: "Session Rollover",
+                  desc: "Archive the current academic session and initialise the next one — 2025/2026.",
+                  icon: Globe,
+                  color: "text-teal-400",
+                  bg: "bg-teal-500/10 border-teal-400/20",
+                  action: "Begin Rollover",
+                },
+              ].map(item => {
+                const Icon = item.icon;
+                return (
+                  <button
+                    key={item.label}
+                    onClick={() => showSystemToast(`${item.label} action triggered — processing...`)}
+                    className={`rounded-2xl border ${item.bg} p-5 text-left space-y-3 hover:brightness-110 transition-all group`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-9 h-9 rounded-xl border ${item.bg} flex items-center justify-center`}>
+                          <Icon className={`w-4 h-4 ${item.color}`} />
+                        </div>
+                        <span className="text-sm font-semibold text-white">{item.label}</span>
+                      </div>
+                      <Zap className={`w-3.5 h-3.5 ${item.color} opacity-0 group-hover:opacity-100 transition-opacity`} />
+                    </div>
+                    <p className="text-xs text-white/40 leading-relaxed">{item.desc}</p>
+                    <div className={`text-xs font-semibold ${item.color} flex items-center gap-1.5`}>
+                      <span>{item.action}</span>
+                      <ChevronRight className="w-3 h-3" />
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="rounded-xl bg-white/[0.02] border border-white/10 p-4 flex items-start gap-3">
+              <Monitor className="w-4 h-4 text-white/30 flex-shrink-0 mt-0.5" />
+              <div>
+                <div className="text-xs font-semibold text-white/40">Super Admin Oversight</div>
+                <p className="text-xs text-white/25 mt-1 leading-relaxed">
+                  All system-level actions are logged and visible to the Super Admin in the platform audit trail.
+                  Super Admin can reverse any Institution Admin action within 72 hours.
+                  Platform health, billing, and multi-institution management remain Super Admin exclusive.
+                </p>
               </div>
             </div>
           </div>
