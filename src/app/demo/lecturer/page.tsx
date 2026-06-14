@@ -432,7 +432,7 @@ function LecturerSettings({ onClose }: { onClose: () => void }) {
               ))}
             </div>
           </div>
-          <p className="text-[10px] text-white/25 text-center">Settings applied to your ClashFree lecturer profile.</p>
+          <p className="text-[10px] text-white/25 text-center">Settings applied to your ScheduleFlex lecturer profile.</p>
         </div>
       </div>
     </div>

@@ -49,7 +49,7 @@ const ROLES = [
     badge: "bg-sky-500/20 text-sky-300",
     badgeText: "IA",
     href: "/demo/institution-admin",
-    stats: ["12 Departments", "35 Facilities", "2,948 Students"],
+    stats: ["12 Departments", "35 Facilities", "20,000+ Students"],
   },
   {
     id: "to",
@@ -87,7 +87,7 @@ const ROLES = [
     sublabel: "5 Profile Choices",
     name: "Select a student profile",
     description:
-      "Registered courses, credit units, ClashFree conflict detection — from clean registration to carryover spillover.",
+      "Registered courses, credit units, ScheduleFlex conflict detection — from clean registration to carryover spillover.",
     icon: BookOpen,
     gradient: "from-rose-500 to-pink-600",
     border: "border-rose-400/40",
@@ -126,7 +126,7 @@ export default function DemoLandingPage() {
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-blue-600 flex items-center justify-center">
               <CalendarClock className="w-4 h-4 text-white" />
             </div>
-            <span className="font-semibold text-white tracking-tight">ClashFree</span>
+            <span className="font-semibold text-white tracking-tight">ScheduleFlex</span>
             <span className="text-white/30 text-sm">·</span>
             <span className="text-white/50 text-sm">Live Demo</span>
           </div>
@@ -150,7 +150,7 @@ export default function DemoLandingPage() {
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
-            See ClashFree{" "}
+            See ScheduleFlex{" "}
             <span className="bg-gradient-to-r from-violet-400 via-blue-400 to-emerald-400 bg-clip-text text-transparent">
               in action
             </span>
@@ -166,7 +166,7 @@ export default function DemoLandingPage() {
             {[
               { label: "Departments", value: "64" },
               { label: "Courses (SCI)", value: "768" },
-              { label: "Students (SCI)", value: "2,948" },
+              { label: "Students (SCI)", value: "20,000+" },
               { label: "Lecturers (SCI)", value: "196" },
               { label: "Conflicts Detected", value: "127" },
             ].map((s) => (

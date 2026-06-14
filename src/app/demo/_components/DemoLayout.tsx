@@ -56,7 +56,7 @@ function DemoLayoutInner({ children, activeRole, roleName, roleSubtitle, conflic
             </div>
             {!sidebarCollapsed && (
               <div className="min-w-0">
-                <div className={`text-sm font-semibold ${text} truncate`}>ClashFree</div>
+                <div className={`text-sm font-semibold ${text} truncate`}>ScheduleFlex</div>
                 <div className={`text-[10px] ${sub} truncate`}>FEDKO Demo</div>
               </div>
             )}

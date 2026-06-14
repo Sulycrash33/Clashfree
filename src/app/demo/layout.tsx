@@ -6,7 +6,7 @@ import type { ReactNode } from "react";
 // This file just sets the base bg so there's no flash.
 
 export const metadata = {
-  title: "ClashFree — FEDKO Live Demo",
+  title: "ScheduleFlex — FEDKO Live Demo",
   description:
     "Federal University of Konoha demo environment — for investor and stakeholder presentations. Not linked to production data.",
 };

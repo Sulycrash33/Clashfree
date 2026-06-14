@@ -260,7 +260,7 @@ export default function SuperAdminPage() {
               <StatCard label="Students (SCI)" value={totalStudents.toLocaleString()} sub="Focus faculty" icon={Users} color="bg-emerald-600" />
               <StatCard label="Lecturers (SCI)" value={FOCUS_FACULTY.totalLecturers} sub="7:1 ratio maintained" icon={GraduationCap} color="bg-amber-600" />
               <StatCard label="Facilities (SCI)" value={FACILITY_SUMMARY.total} sub="Halls, labs, theatres" icon={FlaskConical} color="bg-rose-600" />
-              <StatCard label="Conflicts Detected" value={totalConflicts} sub="ClashFree active" icon={AlertTriangle} color="bg-red-700" />
+              <StatCard label="Conflicts Detected" value={totalConflicts} sub="ScheduleFlex active" icon={AlertTriangle} color="bg-red-700" />
             </div>
 
             {/* Ratio enforcement banner */}
@@ -270,7 +270,7 @@ export default function SuperAdminPage() {
                 <div className="font-semibold text-emerald-300 text-sm">Student–Lecturer Ratio: 7:1 Enforced</div>
                 <p className="text-sm text-white/50 mt-1">
                   All 12 departments in Faculty of Physical &amp; Applied Sciences maintain the NUC-mandated 7:1
-                  student-to-lecturer ratio. ClashFree monitors this in real time and alerts Institution Admin
+                  student-to-lecturer ratio. ScheduleFlex monitors this in real time and alerts Institution Admin
                   when any department breaches the threshold.
                 </p>
               </div>

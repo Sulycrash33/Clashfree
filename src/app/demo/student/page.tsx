@@ -168,7 +168,7 @@ function ConflictCard({ conflict }: { conflict: StudentConflict }) {
             <div className="rounded-xl bg-white/5 border border-white/10 p-4 space-y-1">
               <div className="flex items-center gap-2">
                 <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="text-xs font-semibold text-emerald-400">ClashFree Suggested Resolution</span>
+                <span className="text-xs font-semibold text-emerald-400">ScheduleFlex Suggested Resolution</span>
               </div>
               <p className="text-sm text-white/55 leading-relaxed">{conflict.resolution}</p>
             </div>
@@ -469,7 +469,7 @@ function DownloadPanel({ student, onDownload }: { student: Student; onDownload: 
   const items = [
     { id: "timetable", label: "My Weekly Timetable",  desc: "Full lecture schedule as PDF", icon: Calendar,      color: "text-sky-400",     bg: "bg-sky-500/10 border-sky-400/20" },
     { id: "courses",   label: "Course Registration",  desc: "All registered courses and CU",icon: BookOpen,      color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-400/20" },
-    { id: "conflicts", label: "Conflict Report",       desc: "Full ClashFree analysis",      icon: AlertTriangle, color: "text-red-400",     bg: "bg-red-500/10 border-red-400/20",      disabled: student.conflicts.length === 0 },
+    { id: "conflicts", label: "Conflict Report",       desc: "Full ScheduleFlex analysis",      icon: AlertTriangle, color: "text-red-400",     bg: "bg-red-500/10 border-red-400/20",      disabled: student.conflicts.length === 0 },
     { id: "profile",   label: "Student Profile Card", desc: "Academic summary and CGPA",    icon: User,          color: "text-violet-400",  bg: "bg-violet-500/10 border-violet-400/20" },
     { id: "exam",      label: "Exam Timetable",        desc: "Not yet available",            icon: FileText,      color: "text-white/20",    bg: "bg-white/5 border-white/10",           disabled: true },
   ];
@@ -552,7 +552,7 @@ function StudentSettings({ onClose }: { onClose: () => void }) {
               ))}
             </div>
           </div>
-          <p className="text-[10px] text-white/25 text-center">Settings saved automatically to your ClashFree profile.</p>
+          <p className="text-[10px] text-white/25 text-center">Settings saved automatically to your ScheduleFlex profile.</p>
         </div>
       </div>
     </div>
@@ -646,7 +646,7 @@ export default function StudentPage() {
             <div className="flex items-center gap-3 flex-wrap">
               <AlertTriangle className="w-5 h-5 text-red-400" />
               <span className="text-sm font-semibold text-red-300">
-                {student.conflicts.length} Issue{student.conflicts.length > 1 ? "s" : ""} Detected by ClashFree
+                {student.conflicts.length} Issue{student.conflicts.length > 1 ? "s" : ""} Detected by ScheduleFlex
               </span>
               <div className="flex gap-2 ml-auto">
                 {criticalCount > 0 && <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-red-600 text-white">{criticalCount} Critical</span>}

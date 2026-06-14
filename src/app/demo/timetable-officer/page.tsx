@@ -221,7 +221,7 @@ function SlotModal({
               <div className="flex items-start gap-2">
                 <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
                 <div>
-                  <div className="text-sm font-semibold text-red-300">ClashFree Conflict Detected</div>
+                  <div className="text-sm font-semibold text-red-300">ScheduleFlex Conflict Detected</div>
                   <p className="text-xs text-white/50 mt-1 leading-relaxed">{slot.conflictReason ?? "Scheduling conflict at this time and venue."}</p>
                 </div>
               </div>

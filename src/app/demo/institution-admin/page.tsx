@@ -147,7 +147,7 @@ const OVERRIDES: Override[] = [
         { label: "Substitute Lecturer", value: "Dr. Obito Uchiha", editable: true },
         { label: "Duration", value: "2 weeks (Oct 7 – Oct 18, 2024)", editable: true },
         { label: "Lecture Slots Affected", value: "Mon 14:00–16:00, Thu 10:00–12:00", editable: false },
-        { label: "Student Notification", value: "Sent via ClashFree WhatsApp broadcast", editable: false },
+        { label: "Student Notification", value: "Sent via ScheduleFlex WhatsApp broadcast", editable: false },
       ],
     },
   },
@@ -230,7 +230,7 @@ const OVERRIDES: Override[] = [
     id: "ov-08",
     type: "dept_merger_notice",
     label: "Department Notice / Circular",
-    description: "Issue an official circular to one or all departments. Delivered via ClashFree notification system.",
+    description: "Issue an official circular to one or all departments. Delivered via ScheduleFlex notification system.",
     icon: Bell,
     color: "text-cyan-400",
     badgeColor: "bg-cyan-500/15 border-cyan-400/30 text-cyan-300",
@@ -738,7 +738,7 @@ export default function InstitutionAdminPage() {
           <div className="space-y-6">
             <p className="text-sm text-white/40">
               Add or remove faculties, departments, administrators, and lecturers.
-              All actions are logged and trigger ClashFree notifications.
+              All actions are logged and trigger ScheduleFlex notifications.
             </p>
 
             {[
@@ -1100,7 +1100,7 @@ export default function InstitutionAdminPage() {
                 },
                 {
                   label: "Flush Clash Cache",
-                  desc: "Force ClashFree to re-detect all clashes from scratch. Run after bulk data changes.",
+                  desc: "Force ScheduleFlex to re-detect all clashes from scratch. Run after bulk data changes.",
                   icon: Zap,
                   color: "text-fuchsia-400",
                   bg: "bg-fuchsia-500/10 border-fuchsia-400/20",
