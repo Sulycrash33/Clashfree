@@ -59,9 +59,8 @@ export async function POST(request: NextRequest) {
       case 'students':
         for (const row of rows) {
           try {
-            // Find department
             const department = await prisma.department.findFirst({
-              where: { 
+              where: {
                 code: row.departmentCode,
                 faculty: { institutionId }
               }
@@ -95,7 +94,7 @@ export async function POST(request: NextRequest) {
         for (const row of rows) {
           try {
             const department = await prisma.department.findFirst({
-              where: { 
+              where: {
                 code: row.departmentCode,
                 faculty: { institutionId }
               }
@@ -131,7 +130,7 @@ export async function POST(request: NextRequest) {
         for (const row of rows) {
           try {
             const department = await prisma.department.findFirst({
-              where: { 
+              where: {
                 code: row.departmentCode,
                 faculty: { institutionId }
               }
@@ -199,6 +198,108 @@ export async function POST(request: NextRequest) {
           }
         }
         break
+
+      case 'exam-slots': {
+        for (const row of rows) {
+          try {
+            // Resolve course
+            const course = await prisma.course.findFirst({
+              where: { code: row.courseCode, institutionId }
+            })
+            if (!course) {
+              errors.push(`Row ${rows.indexOf(row) + 1}: Course ${row.courseCode} not found`)
+              failed++
+              continue
+            }
+
+            // Resolve room
+            const room = await prisma.room.findFirst({
+              where: { code: row.roomCode, institutionId }
+            })
+            if (!room) {
+              errors.push(`Row ${rows.indexOf(row) + 1}: Room ${row.roomCode} not found`)
+              failed++
+              continue
+            }
+
+            // Build datetime objects
+            const startAt = new Date(`${row.date}T${row.startTime}:00`)
+            const endAt = new Date(`${row.date}T${row.endTime}:00`)
+
+            if (isNaN(startAt.getTime()) || isNaN(endAt.getTime())) {
+              errors.push(`Row ${rows.indexOf(row) + 1}: Invalid date/time format`)
+              failed++
+              continue
+            }
+
+            await prisma.examSlot.create({
+              data: {
+                courseId: course.id,
+                roomId: room.id,
+                startTime: startAt,
+                endTime: endAt,
+                ...(row.examPeriodId ? { examPeriodId: row.examPeriodId } : {}),
+              }
+            })
+            success++
+          } catch (error: any) {
+            errors.push(`Row ${rows.indexOf(row) + 1}: ${error.message}`)
+            failed++
+          }
+        }
+        break
+      }
+
+      case 'timetable-slots': {
+        for (const row of rows) {
+          try {
+            // Resolve course
+            const course = await prisma.course.findFirst({
+              where: { code: row.courseCode, institutionId }
+            })
+            if (!course) {
+              errors.push(`Row ${rows.indexOf(row) + 1}: Course ${row.courseCode} not found`)
+              failed++
+              continue
+            }
+
+            // Resolve room
+            const room = await prisma.room.findFirst({
+              where: { code: row.roomCode, institutionId }
+            })
+            if (!room) {
+              errors.push(`Row ${rows.indexOf(row) + 1}: Room ${row.roomCode} not found`)
+              failed++
+              continue
+            }
+
+            // Optionally resolve lecturer
+            let lecturerId: string | undefined
+            if (row.lecturerStaffId) {
+              const lecturer = await prisma.lecturer.findFirst({
+                where: { staffId: row.lecturerStaffId }
+              })
+              if (lecturer) lecturerId = lecturer.id
+            }
+
+            await prisma.timetableSlot.create({
+              data: {
+                courseId: course.id,
+                roomId: room.id,
+                day: row.day,
+                startTime: row.startTime,
+                endTime: row.endTime,
+                ...(lecturerId ? { lecturerId } : {}),
+              }
+            })
+            success++
+          } catch (error: any) {
+            errors.push(`Row ${rows.indexOf(row) + 1}: ${error.message}`)
+            failed++
+          }
+        }
+        break
+      }
 
       default:
         return NextResponse.json({ error: 'Invalid upload type' }, { status: 400 })
