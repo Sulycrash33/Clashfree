@@ -69,19 +69,19 @@ export function VersionHistory({ examPeriodId, currentVersion = 0 }: VersionHist
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="border-white/10 text-slate-300 hover:text-white"
+          className="border-white/10 text-muted hover:text-white"
         >
           <History className="w-4 h-4 mr-2" />
           v{currentVersion || '0'}
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-slate-900 border-white/10 text-white max-w-lg">
+      <DialogContent className="bg-muted border-white/10 text-white max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <GitBranch className="w-5 h-5 text-cyan-400" />
+            <GitBranch className="w-5 h-5 text-secondary" />
             Version History
           </DialogTitle>
-          <DialogDescription className="text-slate-400">
+          <DialogDescription className="text-muted">
             Track changes and restore previous versions of the timetable
           </DialogDescription>
         </DialogHeader>
@@ -89,10 +89,10 @@ export function VersionHistory({ examPeriodId, currentVersion = 0 }: VersionHist
         <div className="mt-4 max-h-[400px] overflow-y-auto">
           {loading ? (
             <div className="flex items-center justify-center py-8">
-              <Loader2 className="w-6 h-6 animate-spin text-cyan-400" />
+              <Loader2 className="w-6 h-6 animate-spin text-secondary" />
             </div>
           ) : versions.length === 0 ? (
-            <div className="text-center py-8 text-slate-400">
+            <div className="text-center py-8 text-muted">
               <GitBranch className="w-12 h-12 mx-auto mb-3 opacity-50" />
               <p>No version history yet</p>
               <p className="text-sm mt-1">Versions are created when you publish a timetable</p>
@@ -109,25 +109,25 @@ export function VersionHistory({ examPeriodId, currentVersion = 0 }: VersionHist
                   {/* Version node */}
                   <div className={`absolute left-0 top-0 w-3 h-3 rounded-full -translate-x-[7px] ${
                     version.isCurrent 
-                      ? 'bg-green-500 ring-2 ring-green-500/30' 
-                      : 'bg-slate-600'
+                      ? 'bg-success ring-2 ring-success/30' 
+                      : 'bg-muted'
                   }`} />
 
                   <div className={`p-3 rounded-lg ${
                     version.isCurrent 
-                      ? 'bg-green-500/10 border border-green-500/20' 
+                      ? 'bg-success/10 border border-success/20' 
                       : 'bg-white/5 border border-white/10'
                   }`}>
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
                         <span className="font-semibold text-white">Version {version.version}</span>
                         {version.isCurrent && (
-                          <Badge className="bg-green-500/20 text-green-400 border-0 text-xs">
+                          <Badge className="bg-success/20 text-success border-0 text-xs">
                             Current
                           </Badge>
                         )}
                       </div>
-                      <span className="text-xs text-slate-400">
+                      <span className="text-xs text-muted">
                         {new Date(version.createdAt).toLocaleDateString()}
                       </span>
                     </div>
@@ -137,8 +137,8 @@ export function VersionHistory({ examPeriodId, currentVersion = 0 }: VersionHist
                       <div className="space-y-1 mt-2">
                         {parseChanges(version.changes).map((change, i) => (
                           <div key={i} className="flex items-start gap-2 text-sm">
-                            <ChevronRight className="w-3 h-3 text-cyan-400 mt-0.5 flex-shrink-0" />
-                            <span className="text-slate-300">{change.description}</span>
+                            <ChevronRight className="w-3 h-3 text-secondary mt-0.5 flex-shrink-0" />
+                            <span className="text-muted">{change.description}</span>
                           </div>
                         ))}
                       </div>
@@ -146,7 +146,7 @@ export function VersionHistory({ examPeriodId, currentVersion = 0 }: VersionHist
 
                     {/* Publisher info */}
                     {version.publishedBy && (
-                      <div className="flex items-center gap-2 mt-3 pt-2 border-t border-white/5 text-xs text-slate-400">
+                      <div className="flex items-center gap-2 mt-3 pt-2 border-t border-white/5 text-xs text-muted">
                         <User className="w-3 h-3" />
                         <span>Published by {version.publishedBy}</span>
                         {version.publishedAt && (
@@ -165,14 +165,14 @@ export function VersionHistory({ examPeriodId, currentVersion = 0 }: VersionHist
         </div>
 
         <div className="mt-4 pt-4 border-t border-white/10 flex justify-between items-center">
-          <span className="text-xs text-slate-400">
+          <span className="text-xs text-muted">
             {versions.length} version(s) total
           </span>
           <Button
             variant="outline"
             size="sm"
             onClick={() => setOpen(false)}
-            className="border-white/10 text-slate-300"
+            className="border-white/10 text-muted"
           >
             Close
           </Button>
@@ -195,8 +195,8 @@ export function VersionBadge({ version, isCurrent = false, onClick }: VersionBad
       onClick={onClick}
       className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-xs font-medium transition-colors ${
         isCurrent
-          ? 'bg-green-500/20 text-green-400 hover:bg-green-500/30'
-          : 'bg-white/5 text-slate-400 hover:bg-white/10'
+          ? 'bg-success/20 text-success hover:bg-success/30'
+          : 'bg-white/5 text-muted hover:bg-white/10'
       } ${onClick ? 'cursor-pointer' : 'cursor-default'}`}
     >
       <GitBranch className="w-3 h-3" />

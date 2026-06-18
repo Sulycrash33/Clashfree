@@ -35,14 +35,14 @@ interface LectureSlot {
 }
 
 const slotColors = [
-  'from-cyan-500/20 to-blue-500/20 border-cyan-500/30',
-  'from-purple-500/20 to-pink-500/20 border-purple-500/30',
-  'from-amber-500/20 to-yellow-500/20 border-amber-500/30',
+  'from-secondary/20 to-secondary/20 border-secondary/30',
+  'from-primary/20 to-clash/20 border-primary/30',
+  'from-accent-gold/20 to-accent-gold/20 border-accent-gold/30',
 ]
 const roleColors: Record<string, string> = {
-  CHIEF: 'bg-amber-500/20 text-amber-400',
-  ASSISTANT: 'bg-cyan-500/20 text-cyan-400',
-  SUPERVISOR: 'bg-purple-500/20 text-purple-400',
+  CHIEF: 'bg-accent-gold/20 text-accent-gold',
+  ASSISTANT: 'bg-secondary/20 text-secondary',
+  SUPERVISOR: 'bg-primary/20 text-primary',
 }
 const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
@@ -172,8 +172,8 @@ export default function LecturerSchedulePage() {
 
   if (!['LC', 'TO', 'IA', 'SA'].includes(session?.user?.role || '')) {
     return (
-      <Alert className="bg-amber-500/10 border-amber-500/20">
-        <AlertDescription className="text-amber-400">Access denied.</AlertDescription>
+      <Alert className="bg-accent-gold/10 border-accent-gold/20">
+        <AlertDescription className="text-accent-gold">Access denied.</AlertDescription>
       </Alert>
     )
   }
@@ -189,14 +189,14 @@ export default function LecturerSchedulePage() {
 
       {loading ? (
         <div className="flex items-center justify-center py-16">
-          <Loader2 className="w-8 h-8 animate-spin text-cyan-500" />
+          <Loader2 className="w-8 h-8 animate-spin text-secondary" />
         </div>
       ) : !lecturer ? (
         <Card className="bg-white/5 border-white/10">
           <CardContent className="py-12 text-center">
-            <User className="w-12 h-12 mx-auto text-slate-500 mb-4" />
+            <User className="w-12 h-12 mx-auto text-muted mb-4" />
             <p className="text-white font-medium">No lecturer profile found</p>
-            <p className="text-sm text-slate-400">Contact your department administrator</p>
+            <p className="text-sm text-muted">Contact your department administrator</p>
           </CardContent>
         </Card>
       ) : (
@@ -206,16 +206,16 @@ export default function LecturerSchedulePage() {
             <CardContent className="pt-5">
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
-                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-2xl font-bold text-white">
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-success to-success flex items-center justify-center text-2xl font-bold text-white">
                     {lecturer.name?.charAt(0)}
                   </div>
                   <div>
                     <h2 className="text-xl font-bold text-white">{lecturer.name}</h2>
-                    <p className="text-slate-400 text-sm">{lecturer.staffId} · {lecturer.rank || 'Lecturer'}</p>
+                    <p className="text-muted text-sm">{lecturer.staffId} · {lecturer.rank || 'Lecturer'}</p>
                     <div className="flex items-center gap-2 mt-1 flex-wrap">
-                      <Badge variant="outline" className="border-green-500/30 text-green-400">{lecturer.department?.code}</Badge>
-                      <Badge variant="outline" className="border-white/10 text-slate-300">{courses.length} Course(s)</Badge>
-                      <Badge variant="outline" className={`border-white/10 ${slotsStatus === 'good' ? 'text-green-400' : slotsStatus === 'low' ? 'text-amber-400' : 'text-red-400'}`}>
+                      <Badge variant="outline" className="border-success/30 text-success">{lecturer.department?.code}</Badge>
+                      <Badge variant="outline" className="border-white/10 text-muted">{courses.length} Course(s)</Badge>
+                      <Badge variant="outline" className={`border-white/10 ${slotsStatus === 'good' ? 'text-success' : slotsStatus === 'low' ? 'text-accent-gold' : 'text-clash'}`}>
                         {totalLectureSlotsPerWeek}/{slotsPerWeekTarget} lecture slots/wk
                       </Badge>
                     </div>
@@ -226,7 +226,7 @@ export default function LecturerSchedulePage() {
                     <SelectTrigger className="w-56 bg-white/5 border-white/10 text-white text-sm">
                       <SelectValue placeholder="Exam period" />
                     </SelectTrigger>
-                    <SelectContent className="bg-slate-900 border-white/10">
+                    <SelectContent className="bg-muted border-white/10">
                       {examPeriods.map(p => (
                         <SelectItem key={p.id} value={p.id} className="text-white">{p.name}</SelectItem>
                       ))}
@@ -236,7 +236,7 @@ export default function LecturerSchedulePage() {
                     <SelectTrigger className="w-56 bg-white/5 border-white/10 text-white text-sm">
                       <SelectValue placeholder="Lecture timetable" />
                     </SelectTrigger>
-                    <SelectContent className="bg-slate-900 border-white/10">
+                    <SelectContent className="bg-muted border-white/10">
                       {lectureTimetables.map(t => (
                         <SelectItem key={t.id} value={t.id} className="text-white">{t.name}</SelectItem>
                       ))}
@@ -250,11 +250,11 @@ export default function LecturerSchedulePage() {
           {/* ── Stats Row ── */}
           <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
             {[
-              { label: 'Courses', value: courses.length, icon: BookOpen, color: 'from-cyan-500/20 to-blue-500/20', tc: 'text-cyan-400' },
-              { label: 'Exam Days', value: Object.keys(groupedExam).length, icon: Calendar, color: 'from-green-500/20 to-emerald-500/20', tc: 'text-green-400' },
-              { label: 'Lecture Slots/Wk', value: totalLectureSlotsPerWeek, icon: Clock, color: slotsStatus === 'good' ? 'from-green-500/20 to-emerald-500/20' : 'from-amber-500/20 to-yellow-500/20', tc: slotsStatus === 'good' ? 'text-green-400' : 'text-amber-400' },
-              { label: 'Invigilations', value: invigStats.total, icon: Shield, color: 'from-purple-500/20 to-pink-500/20', tc: 'text-purple-400' },
-              { label: 'Chief Invig', value: invigStats.chief, icon: Users, color: 'from-amber-500/20 to-yellow-500/20', tc: 'text-amber-400' },
+              { label: 'Courses', value: courses.length, icon: BookOpen, color: 'from-secondary/20 to-secondary/20', tc: 'text-secondary' },
+              { label: 'Exam Days', value: Object.keys(groupedExam).length, icon: Calendar, color: 'from-success/20 to-success/20', tc: 'text-success' },
+              { label: 'Lecture Slots/Wk', value: totalLectureSlotsPerWeek, icon: Clock, color: slotsStatus === 'good' ? 'from-success/20 to-success/20' : 'from-accent-gold/20 to-accent-gold/20', tc: slotsStatus === 'good' ? 'text-success' : 'text-accent-gold' },
+              { label: 'Invigilations', value: invigStats.total, icon: Shield, color: 'from-primary/20 to-clash/20', tc: 'text-primary' },
+              { label: 'Chief Invig', value: invigStats.chief, icon: Users, color: 'from-accent-gold/20 to-accent-gold/20', tc: 'text-accent-gold' },
             ].map(s => (
               <Card key={s.label} className="bg-white/5 border-white/10">
                 <CardContent className="pt-4">
@@ -264,7 +264,7 @@ export default function LecturerSchedulePage() {
                     </div>
                     <div>
                       <div className="text-xl font-bold text-white">{s.value}</div>
-                      <div className="text-xs text-slate-400">{s.label}</div>
+                      <div className="text-xs text-muted">{s.label}</div>
                     </div>
                   </div>
                 </CardContent>
@@ -274,9 +274,9 @@ export default function LecturerSchedulePage() {
 
           {/* ── Slots/week alert ── */}
           {slotsStatus !== 'good' && (
-            <Card className="bg-amber-500/5 border-amber-500/20">
+            <Card className="bg-accent-gold/5 border-accent-gold/20">
               <CardContent className="pt-4">
-                <div className="flex items-center gap-2 text-amber-400">
+                <div className="flex items-center gap-2 text-accent-gold">
                   <AlertTriangle className="w-4 h-4" />
                   <span className="text-sm">
                     Only {totalLectureSlotsPerWeek} lecture slot(s)/week assigned — target is {slotsPerWeekTarget}. Contact the Timetable Officer to update the schedule.
@@ -298,7 +298,7 @@ export default function LecturerSchedulePage() {
                 variant={activeTab === tab.id ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setActiveTab(tab.id)}
-                className={activeTab === tab.id ? 'bg-cyan-500 text-white' : 'text-slate-400 hover:text-white'}
+                className={activeTab === tab.id ? 'bg-secondary text-white' : 'text-muted hover:text-white'}
               >
                 {tab.label}
                 {tab.count > 0 && (
@@ -316,9 +316,9 @@ export default function LecturerSchedulePage() {
               {examSlots.length === 0 ? (
                 <Card className="bg-white/5 border-white/10">
                   <CardContent className="py-12 text-center">
-                    <Calendar className="w-12 h-12 mx-auto text-slate-500 mb-3" />
+                    <Calendar className="w-12 h-12 mx-auto text-muted mb-3" />
                     <p className="text-white font-medium">No exam slots yet</p>
-                    <p className="text-sm text-slate-400">Exam schedule will appear here once generated</p>
+                    <p className="text-sm text-muted">Exam schedule will appear here once generated</p>
                   </CardContent>
                 </Card>
               ) : (
@@ -327,7 +327,7 @@ export default function LecturerSchedulePage() {
                     <Card key={date} className="bg-white/5 border-white/10">
                       <CardHeader className="pb-2">
                         <CardTitle className="text-base text-white flex items-center gap-2">
-                          <Calendar className="w-4 h-4 text-cyan-400" /> {date}
+                          <Calendar className="w-4 h-4 text-secondary" /> {date}
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
@@ -335,12 +335,12 @@ export default function LecturerSchedulePage() {
                           {slots.sort((a, b) => a.slotNumber - b.slotNumber).map(slot => (
                             <div key={slot.id} className={`p-3 rounded-lg bg-gradient-to-r ${slotColors[slot.slotNumber - 1]} border`}>
                               <div className="flex items-center gap-2 mb-1 flex-wrap">
-                                <Badge variant="outline" className="border-white/20 text-cyan-400 font-mono">{slot.course.code}</Badge>
-                                <Badge className="bg-white/10 text-slate-300 text-xs">{['Morning', 'Afternoon', 'Evening'][slot.slotNumber - 1]}</Badge>
-                                <Badge className="bg-green-500/20 text-green-400 text-xs">Course Lecturer</Badge>
+                                <Badge variant="outline" className="border-white/20 text-secondary font-mono">{slot.course.code}</Badge>
+                                <Badge className="bg-white/10 text-muted text-xs">{['Morning', 'Afternoon', 'Evening'][slot.slotNumber - 1]}</Badge>
+                                <Badge className="bg-success/20 text-success text-xs">Course Lecturer</Badge>
                               </div>
                               <p className="text-white font-medium text-sm">{slot.course.name}</p>
-                              <div className="flex flex-wrap gap-4 mt-2 text-xs text-slate-400">
+                              <div className="flex flex-wrap gap-4 mt-2 text-xs text-muted">
                                 <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{slot.startTime}–{slot.endTime}</span>
                                 <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{slot.room.name} ({slot.room.code})</span>
                                 <span className="flex items-center gap-1"><Users className="w-3 h-3" />{slot.course._count?.studentCourses || 0} students</span>
@@ -364,9 +364,9 @@ export default function LecturerSchedulePage() {
               {lectureSlots.length === 0 ? (
                 <Card className="bg-white/5 border-white/10">
                   <CardContent className="py-12 text-center">
-                    <Clock className="w-12 h-12 mx-auto text-slate-500 mb-3" />
+                    <Clock className="w-12 h-12 mx-auto text-muted mb-3" />
                     <p className="text-white font-medium">No lecture slots assigned</p>
-                    <p className="text-sm text-slate-400">The timetable officer needs to assign lecture slots for your courses</p>
+                    <p className="text-sm text-muted">The timetable officer needs to assign lecture slots for your courses</p>
                   </CardContent>
                 </Card>
               ) : (
@@ -376,22 +376,22 @@ export default function LecturerSchedulePage() {
                       <CardHeader className="pb-2">
                         <CardTitle className="text-base text-white flex items-center justify-between">
                           <span className="flex items-center gap-2">
-                            <Clock className="w-4 h-4 text-purple-400" />
+                            <Clock className="w-4 h-4 text-primary" />
                             {DAY_NAMES[parseInt(dayIdx)]}
                           </span>
-                          <Badge variant="outline" className="text-slate-400 border-white/10">{slots.length} class(es)</Badge>
+                          <Badge variant="outline" className="text-muted border-white/10">{slots.length} class(es)</Badge>
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
                         <div className="space-y-2">
                           {slots.map(slot => (
-                            <div key={slot.id} className="p-3 rounded-lg bg-gradient-to-r from-purple-500/10 to-pink-500/10 border border-purple-500/20">
+                            <div key={slot.id} className="p-3 rounded-lg bg-gradient-to-r from-primary/10 to-clash/10 border border-primary/20">
                               <div className="flex items-center gap-2 mb-1">
-                                <Badge variant="outline" className="text-purple-400 border-purple-400/20 font-mono text-xs">{slot.course.code}</Badge>
-                                {slot.course.isShared && <Badge className="bg-pink-500/20 text-pink-400 text-xs">GST</Badge>}
+                                <Badge variant="outline" className="text-primary border-primary/20 font-mono text-xs">{slot.course.code}</Badge>
+                                {slot.course.isShared && <Badge className="bg-clash/20 text-clash text-xs">GST</Badge>}
                               </div>
                               <p className="text-white text-sm font-medium">{slot.course.name}</p>
-                              <div className="flex flex-wrap gap-4 mt-1 text-xs text-slate-400">
+                              <div className="flex flex-wrap gap-4 mt-1 text-xs text-muted">
                                 <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{slot.startTime}–{slot.endTime}</span>
                                 <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{slot.room.code}</span>
                                 <span>{slot.course.level}L</span>
@@ -424,9 +424,9 @@ export default function LecturerSchedulePage() {
               {invigAssignments.length === 0 ? (
                 <Card className="bg-white/5 border-white/10">
                   <CardContent className="py-12 text-center">
-                    <Shield className="w-12 h-12 mx-auto text-slate-500 mb-3" />
+                    <Shield className="w-12 h-12 mx-auto text-muted mb-3" />
                     <p className="text-white font-medium">No invigilation duties assigned</p>
-                    <p className="text-sm text-slate-400">The timetable officer will assign your invigilation duties after exam generation</p>
+                    <p className="text-sm text-muted">The timetable officer will assign your invigilation duties after exam generation</p>
                   </CardContent>
                 </Card>
               ) : (
@@ -435,7 +435,7 @@ export default function LecturerSchedulePage() {
                     <Card key={date} className="bg-white/5 border-white/10">
                       <CardHeader className="pb-2">
                         <CardTitle className="text-base text-white flex items-center gap-2">
-                          <Shield className="w-4 h-4 text-purple-400" /> {date}
+                          <Shield className="w-4 h-4 text-primary" /> {date}
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
@@ -445,15 +445,15 @@ export default function LecturerSchedulePage() {
                               <div className="flex items-center gap-2 mb-1 flex-wrap">
                                 <Badge variant="outline" className="border-white/20 text-white font-mono text-xs">{a.examSlot.course.code}</Badge>
                                 <Badge className={`${roleColors[a.role]} text-xs`}>{a.role}</Badge>
-                                <Badge className="bg-white/10 text-slate-300 text-xs">{['Morning', 'Afternoon', 'Evening'][a.examSlot.slotNumber - 1]}</Badge>
+                                <Badge className="bg-white/10 text-muted text-xs">{['Morning', 'Afternoon', 'Evening'][a.examSlot.slotNumber - 1]}</Badge>
                               </div>
                               <p className="text-white text-sm font-medium">{a.examSlot.course.name}</p>
-                              <div className="flex flex-wrap gap-4 mt-1 text-xs text-slate-400">
+                              <div className="flex flex-wrap gap-4 mt-1 text-xs text-muted">
                                 <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{a.examSlot.startTime}–{a.examSlot.endTime}</span>
                                 <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{a.examSlot.room.name}</span>
                                 <span className="flex items-center gap-1"><Users className="w-3 h-3" />{a.examSlot.course._count?.studentCourses || 0} students</span>
                               </div>
-                              {a.notes && <p className="text-xs text-slate-400 mt-1 italic">Note: {a.notes}</p>}
+                              {a.notes && <p className="text-xs text-muted mt-1 italic">Note: {a.notes}</p>}
                             </div>
                           ))}
                         </div>
@@ -470,16 +470,16 @@ export default function LecturerSchedulePage() {
             <Card className="bg-white/5 border-white/10">
               <CardHeader>
                 <CardTitle className="text-white flex items-center gap-2 text-base">
-                  <BookOpen className="w-4 h-4 text-cyan-400" /> Courses Teaching ({courses.length})
+                  <BookOpen className="w-4 h-4 text-secondary" /> Courses Teaching ({courses.length})
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                   {courses.map((c: any) => (
                     <div key={c.id} className="p-3 bg-white/5 rounded-lg border border-white/10">
-                      <Badge variant="outline" className="border-white/20 text-cyan-400 font-mono text-xs mb-1">{c.code}</Badge>
+                      <Badge variant="outline" className="border-white/20 text-secondary font-mono text-xs mb-1">{c.code}</Badge>
                       <p className="text-white text-sm">{c.name}</p>
-                      <p className="text-xs text-slate-400 mt-1">{c.level}L · {c.creditUnits} CU</p>
+                      <p className="text-xs text-muted mt-1">{c.level}L · {c.creditUnits} CU</p>
                     </div>
                   ))}
                 </div>

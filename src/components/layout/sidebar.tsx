@@ -164,8 +164,8 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
         className={cn(
           'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
           isActive
-            ? 'bg-cyan-500/10 text-cyan-400 border border-cyan-500/20'
-            : 'text-slate-400 hover:text-white hover:bg-white/5'
+            ? 'bg-secondary/10 text-secondary border border-secondary/20'
+            : 'text-muted hover:text-white hover:bg-white/5'
         )}
         onClick={onClick}
       >
@@ -178,16 +178,16 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
   return (
     <>
       {/* ── Desktop Sidebar ─────────────────────────────────── */}
-      <aside className="hidden lg:flex fixed left-0 top-0 z-40 h-screen w-64 bg-slate-900 border-r border-white/10 flex-col">
+      <aside className="hidden lg:flex fixed left-0 top-0 z-40 h-screen w-64 bg-muted border-r border-white/10 flex-col">
         {/* Logo */}
         <div className="p-4 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center font-bold text-white">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-secondary flex items-center justify-center font-bold text-white">
               CF
             </div>
             <div>
               <h1 className="font-bold text-white">ClashFree</h1>
-              <p className="text-xs text-slate-400">{roleLabels[userRole]}</p>
+              <p className="text-xs text-muted">{roleLabels[userRole]}</p>
             </div>
           </div>
         </div>
@@ -200,18 +200,18 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
         {/* User */}
         <div className="p-4 border-t border-white/10">
           <div className="flex items-center gap-3 mb-3">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-sm font-bold text-white shrink-0">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-clash flex items-center justify-center text-sm font-bold text-white shrink-0">
               {(session.user as { name?: string }).name?.charAt(0) || 'U'}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-white truncate">{(session.user as { name?: string }).name}</p>
-              <p className="text-xs text-slate-400 truncate">{session.user.email}</p>
+              <p className="text-xs text-muted truncate">{session.user.email}</p>
             </div>
           </div>
           <Button
             variant="ghost"
             size="sm"
-            className="w-full justify-start text-slate-400 hover:text-white hover:bg-white/5 h-9"
+            className="w-full justify-start text-muted hover:text-white hover:bg-white/5 h-9"
             onClick={handleSignOut}
           >
             <LogOut className="w-4 h-4 mr-2" /> Sign Out
@@ -220,7 +220,7 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
       </aside>
 
       {/* ── Mobile Top Bar ──────────────────────────────────── */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 h-14 bg-slate-900/95 backdrop-blur-sm border-b border-white/10 flex items-center px-4 gap-3">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 h-14 bg-muted/95 backdrop-blur-sm border-b border-white/10 flex items-center px-4 gap-3">
         <button
           className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
           onClick={() => setMobileOpen(true)}
@@ -229,10 +229,10 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
           <Menu className="w-5 h-5 text-white" />
         </button>
         <div className="flex items-center gap-2 flex-1">
-          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center font-bold text-xs text-white">CF</div>
+          <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-secondary to-secondary flex items-center justify-center font-bold text-xs text-white">CF</div>
           <span className="font-bold text-white text-sm">ClashFree</span>
         </div>
-        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-xs font-bold text-white">
+        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-clash flex items-center justify-center text-xs font-bold text-white">
           {(session.user as { name?: string }).name?.charAt(0) || 'U'}
         </div>
       </div>
@@ -248,7 +248,7 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
       {/* ── Mobile Drawer ───────────────────────────────────── */}
       <aside
         className={cn(
-          'lg:hidden fixed left-0 top-0 z-50 h-screen w-72 bg-slate-900 border-r border-white/10 flex flex-col',
+          'lg:hidden fixed left-0 top-0 z-50 h-screen w-72 bg-muted border-r border-white/10 flex flex-col',
           'transition-transform duration-300 ease-out',
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         )}
@@ -256,14 +256,14 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
         {/* Drawer header */}
         <div className="p-4 border-b border-white/10 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center font-bold text-white text-sm">CF</div>
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-secondary to-secondary flex items-center justify-center font-bold text-white text-sm">CF</div>
             <div>
               <h1 className="font-bold text-white text-sm">ClashFree</h1>
-              <p className="text-xs text-slate-400">{roleLabels[userRole]}</p>
+              <p className="text-xs text-muted">{roleLabels[userRole]}</p>
             </div>
           </div>
           <button
-            className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
+            className="p-1.5 rounded-lg hover:bg-white/10 text-muted hover:text-white transition-colors"
             onClick={() => setMobileOpen(false)}
           >
             <X className="w-5 h-5" />
@@ -273,12 +273,12 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
         {/* User card */}
         <div className="px-4 py-3 border-b border-white/10 bg-white/3">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-sm font-bold text-white shrink-0">
+            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-clash flex items-center justify-center text-sm font-bold text-white shrink-0">
               {(session.user as { name?: string }).name?.charAt(0) || 'U'}
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium text-white truncate">{(session.user as { name?: string }).name}</p>
-              <p className="text-xs text-slate-400 truncate">{session.user.email}</p>
+              <p className="text-xs text-muted truncate">{session.user.email}</p>
             </div>
           </div>
         </div>
@@ -294,7 +294,7 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
         <div className="p-4 border-t border-white/10">
           <Button
             variant="ghost"
-            className="w-full justify-start text-slate-400 hover:text-white hover:bg-white/5"
+            className="w-full justify-start text-muted hover:text-white hover:bg-white/5"
             onClick={handleSignOut}
           >
             <LogOut className="w-4 h-4 mr-2" /> Sign Out
@@ -303,7 +303,7 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
       </aside>
 
       {/* ── Mobile Bottom Nav ───────────────────────────────── */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 h-16 bg-slate-900/95 backdrop-blur-sm border-t border-white/10 flex items-center justify-around px-2">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 h-16 bg-muted/95 backdrop-blur-sm border-t border-white/10 flex items-center justify-around px-2">
         {bottomItems.map(item => {
           const isActive = pathname === item.href
           return (
@@ -313,12 +313,12 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
               data-allow-nav="true"
               className={cn(
                 'flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl min-w-0 flex-1 transition-colors',
-                isActive ? 'text-cyan-400' : 'text-slate-500 hover:text-slate-300'
+                isActive ? 'text-secondary' : 'text-muted hover:text-muted'
               )}
             >
               <item.icon className={cn('w-5 h-5', isActive && 'drop-shadow-[0_0_6px_rgba(34,211,238,0.6)]')} />
               <span className="text-[10px] font-medium truncate leading-tight">{item.name}</span>
-              {isActive && <div className="w-1 h-1 rounded-full bg-cyan-400 absolute bottom-2" />}
+              {isActive && <div className="w-1 h-1 rounded-full bg-secondary absolute bottom-2" />}
             </Link>
           )
         })}

@@ -23,9 +23,9 @@ type TabId = "timetable" | "profile" | "exam";
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ACTION_CONFIG: Record<SlotAction, { label: string; color: string; bg: string; border: string; icon: any }> = {
   none:         { label: "Lecture",      color: "text-white/60",   bg: "bg-white/5",          border: "border-white/10",      icon: BookOpen },
-  cancel:       { label: "Cancelled",    color: "text-red-400",    bg: "bg-red-500/10",       border: "border-red-400/30",    icon: XCircle },
-  test:         { label: "CA Test",      color: "text-amber-400",  bg: "bg-amber-500/10",     border: "border-amber-400/30",  icon: FlaskConical },
-  presentation: { label: "Presentation", color: "text-violet-400", bg: "bg-violet-500/10",    border: "border-violet-400/30", icon: Presentation },
+  cancel:       { label: "Cancelled",    color: "text-clash",    bg: "bg-clash/10",       border: "border-clash/30",    icon: XCircle },
+  test:         { label: "CA Test",      color: "text-accent-gold",  bg: "bg-accent-gold/10",     border: "border-accent-gold/30",  icon: FlaskConical },
+  presentation: { label: "Presentation", color: "text-primary", bg: "bg-primary/10",    border: "border-primary/30", icon: Presentation },
 };
 
 const TIME_BANDS = [
@@ -53,11 +53,11 @@ function getLecturerSlots(lecturer: Lecturer): TimetableSlot[] {
 
 function RankBadge({ rank }: { rank: Lecturer["rank"] }) {
   const config: Record<Lecturer["rank"], { color: string; bg: string }> = {
-    "Professor":           { color: "text-amber-300",   bg: "bg-amber-500/15 border-amber-400/30" },
-    "Associate Professor": { color: "text-violet-300",  bg: "bg-violet-500/15 border-violet-400/30" },
-    "Senior Lecturer":     { color: "text-sky-300",     bg: "bg-sky-500/15 border-sky-400/30" },
-    "Lecturer I":          { color: "text-emerald-300", bg: "bg-emerald-500/15 border-emerald-400/30" },
-    "Lecturer II":         { color: "text-teal-300",    bg: "bg-teal-500/15 border-teal-400/30" },
+    "Professor":           { color: "text-accent-gold",   bg: "bg-accent-gold/15 border-accent-gold/30" },
+    "Associate Professor": { color: "text-primary",  bg: "bg-primary/15 border-primary/30" },
+    "Senior Lecturer":     { color: "text-secondary",     bg: "bg-secondary/15 border-secondary/30" },
+    "Lecturer I":          { color: "text-success", bg: "bg-success/15 border-success/30" },
+    "Lecturer II":         { color: "text-success",    bg: "bg-success/15 border-success/30" },
     "Assistant Lecturer":  { color: "text-white/50",    bg: "bg-white/5 border-white/10" },
     "Graduate Assistant":  { color: "text-white/40",    bg: "bg-white/5 border-white/10" },
   };
@@ -97,7 +97,7 @@ function SlotActionModal({ slot, currentAction, onApply, onClose }: {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="w-full max-w-sm rounded-2xl border border-white/15 bg-[#13131f] shadow-2xl overflow-hidden">
+      <div className="w-full max-w-sm rounded-2xl border border-white/15 bg-muted shadow-2xl overflow-hidden">
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
           <div>
             <div className={`font-bold text-sm ${lc.text}`}>{slot.courseCode}</div>
@@ -123,7 +123,7 @@ function SlotActionModal({ slot, currentAction, onApply, onClose }: {
                     {a === "presentation" && "Convert to student presentation session"}
                   </div>
                 </div>
-                {selected === a && <CheckCircle2 className="w-4 h-4 text-emerald-400 ml-auto flex-shrink-0" />}
+                {selected === a && <CheckCircle2 className="w-4 h-4 text-success ml-auto flex-shrink-0" />}
               </button>
             );
           })}
@@ -131,7 +131,7 @@ function SlotActionModal({ slot, currentAction, onApply, onClose }: {
         <div className="flex gap-3 px-5 py-4 border-t border-white/10">
           <button onClick={onClose} className="px-4 py-2 rounded-xl border border-white/10 text-sm text-white/50 hover:text-white hover:bg-white/5 transition-colors">Cancel</button>
           <button onClick={handleApply}
-            className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${done ? "bg-emerald-600 text-white" : "bg-white text-black hover:bg-white/90"}`}>
+            className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${done ? "bg-success text-white" : "bg-white text-black hover:bg-white/90"}`}>
             {done ? <><CheckCircle2 className="w-4 h-4" /> Applied</> : "Apply"}
           </button>
         </div>
@@ -192,10 +192,10 @@ function PersonalTimetable({ slots, slotActions, onSlotClick }: {
 
                   if (isJumaat) {
                     return (
-                      <td key={day} className="px-1.5 py-1.5 border-r border-white/10 last:border-r-0 align-top min-w-[90px] bg-green-500/5">
-                        <div className="rounded-lg border border-green-400/20 bg-green-500/10 px-2 py-2 text-center">
-                          <div className="text-[9px] font-bold text-green-400">🕌 Jumu&apos;ah</div>
-                          <div className="text-[8px] text-green-300/50 mt-0.5">13:00–14:00</div>
+                      <td key={day} className="px-1.5 py-1.5 border-r border-white/10 last:border-r-0 align-top min-w-[90px] bg-success/5">
+                        <div className="rounded-lg border border-success/20 bg-success/10 px-2 py-2 text-center">
+                          <div className="text-[9px] font-bold text-success">🕌 Jumu&apos;ah</div>
+                          <div className="text-[8px] text-success/50 mt-0.5">13:00–14:00</div>
                         </div>
                       </td>
                     );
@@ -247,13 +247,13 @@ function PersonalTimetable({ slots, slotActions, onSlotClick }: {
 
       <div className="flex flex-wrap gap-3 text-[10px] text-white/35">
         {[
-          { bg: "bg-blue-100 border-blue-300",             label: "100L" },
-          { bg: "bg-green-100 border-green-300",           label: "200L" },
-          { bg: "bg-amber-100 border-amber-300",           label: "300L" },
-          { bg: "bg-red-100 border-red-300",               label: "400L" },
-          { bg: "bg-red-500/15 border-red-400/30",         label: "Cancelled" },
-          { bg: "bg-amber-500/15 border-amber-400/30",     label: "CA Test" },
-          { bg: "bg-violet-500/15 border-violet-400/30",   label: "Presentation" },
+          { bg: "bg-secondary border-secondary",             label: "100L" },
+          { bg: "bg-success border-success",           label: "200L" },
+          { bg: "bg-accent-gold border-accent-gold",           label: "300L" },
+          { bg: "bg-clash border-clash",               label: "400L" },
+          { bg: "bg-clash/15 border-clash/30",         label: "Cancelled" },
+          { bg: "bg-accent-gold/15 border-accent-gold/30",     label: "CA Test" },
+          { bg: "bg-primary/15 border-primary/30",   label: "Presentation" },
         ].map(l => (
           <div key={l.label} className="flex items-center gap-1.5">
             <div className={`w-3 h-3 rounded border ${l.bg}`} />
@@ -268,8 +268,8 @@ function PersonalTimetable({ slots, slotActions, onSlotClick }: {
 function ExamInvigilationPanel({ lecturerId }: { lecturerId: string }) {
   const duties = SAMPLE_INVIGILATION.filter((d: InvigilationDuty) => d.lecturerId === lecturerId);
   const roleColor: Record<InvigilationDuty["role"], string> = {
-    "Chief Invigilator":  "bg-amber-500/15 border-amber-400/30 text-amber-300",
-    "Invigilator":        "bg-sky-500/15 border-sky-400/30 text-sky-300",
+    "Chief Invigilator":  "bg-accent-gold/15 border-accent-gold/30 text-accent-gold",
+    "Invigilator":        "bg-secondary/15 border-secondary/30 text-secondary",
     "Relief Invigilator": "bg-white/10 border-white/10 text-white/40",
   };
 
@@ -278,11 +278,11 @@ function ExamInvigilationPanel({ lecturerId }: { lecturerId: string }) {
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div>
           <h3 className="text-sm font-semibold text-white/60 flex items-center gap-2">
-            <Award className="w-4 h-4 text-amber-400" /> Examination Invigilation Duties
+            <Award className="w-4 h-4 text-accent-gold" /> Examination Invigilation Duties
           </h3>
           <p className="text-xs text-white/35 mt-0.5">Semester 1, 2024/2025 — assigned by Examinations Officer</p>
         </div>
-        <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-sky-500/10 border border-sky-400/20 text-sky-300 text-xs hover:bg-sky-500/20 transition-colors">
+        <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-secondary/10 border border-secondary/20 text-secondary text-xs hover:bg-secondary/20 transition-colors">
           <Download className="w-3 h-3" /> Download Schedule
         </button>
       </div>
@@ -290,8 +290,8 @@ function ExamInvigilationPanel({ lecturerId }: { lecturerId: string }) {
       <div className="grid grid-cols-3 gap-3">
         {[
           { label: "Total Duties",      value: duties.length,                                                             color: "text-white" },
-          { label: "Chief Invigilator", value: duties.filter((d: InvigilationDuty) => d.role === "Chief Invigilator").length, color: "text-amber-300" },
-          { label: "Invigilator",       value: duties.filter((d: InvigilationDuty) => d.role === "Invigilator").length,       color: "text-sky-300" },
+          { label: "Chief Invigilator", value: duties.filter((d: InvigilationDuty) => d.role === "Chief Invigilator").length, color: "text-accent-gold" },
+          { label: "Invigilator",       value: duties.filter((d: InvigilationDuty) => d.role === "Invigilator").length,       color: "text-secondary" },
         ].map(s => (
           <div key={s.label} className="rounded-xl bg-white/5 border border-white/10 p-4 text-center">
             <div className={`text-2xl font-bold ${s.color}`}>{s.value}</div>
@@ -358,7 +358,7 @@ function ProfileSelector({ selected, onSelect }: { selected: Lecturer; onSelect:
         <ChevronDown className={`w-4 h-4 text-white/30 flex-shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
       {open && (
-        <div className="absolute top-full left-0 mt-2 w-72 rounded-2xl border border-white/15 bg-[#13131f] shadow-2xl z-40 overflow-hidden">
+        <div className="absolute top-full left-0 mt-2 w-72 rounded-2xl border border-white/15 bg-muted shadow-2xl z-40 overflow-hidden">
           <div className="px-4 py-2 border-b border-white/10">
             <p className="text-xs text-white/30 font-medium">Select Lecturer Profile</p>
           </div>
@@ -371,7 +371,7 @@ function ProfileSelector({ selected, onSelect }: { selected: Lecturer; onSelect:
                   <div className="text-sm font-semibold text-white truncate">{l.name}</div>
                   <div className="text-xs text-white/40 truncate">{l.dept} · {l.rank}</div>
                 </div>
-                {l.id === selected.id && <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />}
+                {l.id === selected.id && <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0" />}
               </button>
             ))}
           </div>
@@ -386,7 +386,7 @@ function LecturerSettings({ onClose }: { onClose: () => void }) {
   const [darkMode, setDarkMode] = useState(true);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="w-full max-w-sm rounded-2xl border border-white/15 bg-[#13131f] shadow-2xl overflow-hidden">
+      <div className="w-full max-w-sm rounded-2xl border border-white/15 bg-muted shadow-2xl overflow-hidden">
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
           <div className="flex items-center gap-2">
             <Settings className="w-4 h-4 text-white/40" />
@@ -397,27 +397,27 @@ function LecturerSettings({ onClose }: { onClose: () => void }) {
         <div className="p-5 space-y-3">
           <div className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10">
             <div className="flex items-center gap-3">
-              {darkMode ? <Moon className="w-4 h-4 text-violet-400" /> : <Sun className="w-4 h-4 text-amber-400" />}
+              {darkMode ? <Moon className="w-4 h-4 text-primary" /> : <Sun className="w-4 h-4 text-accent-gold" />}
               <div>
                 <div className="text-sm font-medium text-white">{darkMode ? "Dark" : "Light"} Mode</div>
                 <div className="text-xs text-white/35">Interface appearance</div>
               </div>
             </div>
             <button onClick={() => setDarkMode(!darkMode)}
-              className={`w-11 h-6 rounded-full transition-colors relative ${darkMode ? "bg-violet-600" : "bg-white/20"}`}>
+              className={`w-11 h-6 rounded-full transition-colors relative ${darkMode ? "bg-primary" : "bg-white/20"}`}>
               <div className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${darkMode ? "translate-x-5" : "translate-x-0.5"}`} />
             </button>
           </div>
           <div className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10">
             <div className="flex items-center gap-3">
-              <Bell className="w-4 h-4 text-sky-400" />
+              <Bell className="w-4 h-4 text-secondary" />
               <div>
                 <div className="text-sm font-medium text-white">WhatsApp Alerts</div>
                 <div className="text-xs text-white/35">Slot changes and exam notices</div>
               </div>
             </div>
             <button onClick={() => setNotifs(!notifs)}
-              className={`w-11 h-6 rounded-full transition-colors relative ${notifs ? "bg-sky-600" : "bg-white/20"}`}>
+              className={`w-11 h-6 rounded-full transition-colors relative ${notifs ? "bg-secondary" : "bg-white/20"}`}>
               <div className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${notifs ? "translate-x-5" : "translate-x-0.5"}`} />
             </button>
           </div>
@@ -426,7 +426,7 @@ function LecturerSettings({ onClose }: { onClose: () => void }) {
             <div className="grid grid-cols-3 gap-1.5">
               {["Timetable", "Profile", "Exam"].map(tab => (
                 <button key={tab}
-                  className={`text-xs px-2 py-1.5 rounded-lg border transition-colors ${tab === "Timetable" ? "bg-emerald-500/15 border-emerald-400/30 text-emerald-300" : "bg-white/5 border-white/10 text-white/40 hover:bg-white/10"}`}>
+                  className={`text-xs px-2 py-1.5 rounded-lg border transition-colors ${tab === "Timetable" ? "bg-success/15 border-success/30 text-success" : "bg-white/5 border-white/10 text-white/40 hover:bg-white/10"}`}>
                   {tab}
                 </button>
               ))}
@@ -496,8 +496,8 @@ export default function LecturerPage() {
               <div className="flex items-start justify-between gap-3 flex-wrap">
                 <div>
                   <div className="flex items-center gap-2 mb-0.5">
-                    <GraduationCap className="w-3.5 h-3.5 text-emerald-400" />
-                    <span className="text-[10px] font-semibold text-emerald-400 uppercase tracking-widest">Lecturer Portal</span>
+                    <GraduationCap className="w-3.5 h-3.5 text-success" />
+                    <span className="text-[10px] font-semibold text-success uppercase tracking-widest">Lecturer Portal</span>
                   </div>
                   <h1 className="text-2xl font-bold text-white">{lecturer.name}</h1>
                   <div className="flex items-center gap-2 mt-1 flex-wrap">
@@ -542,17 +542,17 @@ export default function LecturerPage() {
         {(cancelledCount + testCount + presentationCount) > 0 && (
           <div className="flex flex-wrap gap-2 items-center">
             {cancelledCount > 0 && (
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-500/15 border border-red-400/30 text-xs font-semibold text-red-300">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-clash/15 border border-clash/30 text-xs font-semibold text-clash">
                 <XCircle className="w-3.5 h-3.5" /> {cancelledCount} Cancelled
               </div>
             )}
             {testCount > 0 && (
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/15 border border-amber-400/30 text-xs font-semibold text-amber-300">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent-gold/15 border border-accent-gold/30 text-xs font-semibold text-accent-gold">
                 <FlaskConical className="w-3.5 h-3.5" /> {testCount} CA Test
               </div>
             )}
             {presentationCount > 0 && (
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-violet-500/15 border border-violet-400/30 text-xs font-semibold text-violet-300">
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary/15 border border-primary/30 text-xs font-semibold text-primary">
                 <Presentation className="w-3.5 h-3.5" /> {presentationCount} Presentation
               </div>
             )}
@@ -617,7 +617,7 @@ export default function LecturerPage() {
               </div>
               <div className="px-5 py-3 border-t border-white/10 bg-white/[0.02] flex items-center justify-between">
                 <span className="text-xs text-white/35">{lecturer.coursesCurrent.length} courses · {mySlots.length} total slots</span>
-                <span className="text-sm font-bold text-emerald-400">{totalHours} hrs/week</span>
+                <span className="text-sm font-bold text-success">{totalHours} hrs/week</span>
               </div>
             </div>
 
@@ -633,7 +633,7 @@ export default function LecturerPage() {
 
             <div className="flex gap-2 flex-wrap">
               <button onClick={() => handleDownload("timetable")}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-500/10 border border-sky-400/20 text-sky-300 text-sm hover:bg-sky-500/20 transition-colors">
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-secondary/10 border border-secondary/20 text-secondary text-sm hover:bg-secondary/20 transition-colors">
                 <Download className="w-3.5 h-3.5" /> Download Timetable PDF
               </button>
               <button onClick={() => handleDownload("print")}
@@ -669,10 +669,10 @@ export default function LecturerPage() {
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
-                { label: "Publications",     value: lecturer.publications ?? "—",                              icon: FileText,  color: "text-sky-400" },
-                { label: "Years of Service", value: lecturer.yearsService ? `${lecturer.yearsService} yrs` : "—", icon: Award,     color: "text-amber-400" },
-                { label: "Current Courses",  value: lecturer.coursesCurrent.length,                           icon: BookOpen,  color: "text-emerald-400" },
-                { label: "Weekly Hours",     value: `${totalHours}h`,                                         icon: Clock,     color: "text-violet-400" },
+                { label: "Publications",     value: lecturer.publications ?? "—",                              icon: FileText,  color: "text-secondary" },
+                { label: "Years of Service", value: lecturer.yearsService ? `${lecturer.yearsService} yrs` : "—", icon: Award,     color: "text-accent-gold" },
+                { label: "Current Courses",  value: lecturer.coursesCurrent.length,                           icon: BookOpen,  color: "text-success" },
+                { label: "Weekly Hours",     value: `${totalHours}h`,                                         icon: Clock,     color: "text-primary" },
               ].map(s => {
                 const Icon = s.icon;
                 return (
@@ -693,7 +693,7 @@ export default function LecturerPage() {
                 <ul className="space-y-2">
                   {lecturer.qualifications.map(q => (
                     <li key={q} className="flex items-start gap-2 text-sm text-white/60">
-                      <Star className="w-3.5 h-3.5 text-amber-400 flex-shrink-0 mt-0.5" />
+                      <Star className="w-3.5 h-3.5 text-accent-gold flex-shrink-0 mt-0.5" />
                       {q}
                     </li>
                   ))}
@@ -722,8 +722,8 @@ export default function LecturerPage() {
       </div>
 
       {downloadToast && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-[#13131f] border border-white/15 shadow-2xl">
-          <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-muted border border-white/15 shadow-2xl">
+          <CheckCircle2 className="w-5 h-5 text-success flex-shrink-0" />
           <div>
             <div className="text-sm font-semibold text-white capitalize">{downloadToast} ready</div>
             <div className="text-xs text-white/40">Demo: file would download to your device</div>

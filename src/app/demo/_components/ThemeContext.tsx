@@ -13,8 +13,8 @@ const ThemeContext = createContext<ThemeContextValue>({
 });
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  // Default: light mode
-  const [darkMode, setDarkMode] = useState(false);
+  // Default: dark mode (matches the rest of ClashFree)
+  const [darkMode, setDarkMode] = useState(true);
 
   // Persist in localStorage
   useEffect(() => {

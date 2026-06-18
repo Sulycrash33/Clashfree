@@ -55,38 +55,38 @@ const institutions = [
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white">
+    <div className="min-h-screen bg-gradient-to-br from-muted via-muted to-muted text-white">
       {/* Animated background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute top-1/2 -left-40 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
-        <div className="absolute -bottom-40 right-1/3 w-80 h-80 bg-cyan-500/20 rounded-full blur-3xl animate-pulse delay-500" />
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/20 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute top-1/2 -left-40 w-80 h-80 bg-secondary/20 rounded-full blur-3xl animate-pulse delay-1000" />
+        <div className="absolute -bottom-40 right-1/3 w-80 h-80 bg-secondary/20 rounded-full blur-3xl animate-pulse delay-500" />
       </div>
 
       {/* Header */}
       <header className="relative z-10 border-b border-white/10 backdrop-blur-xl">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center font-bold text-lg">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-secondary flex items-center justify-center font-bold text-lg">
               CF
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            <span className="text-xl font-bold bg-gradient-to-r from-secondary to-secondary bg-clip-text text-transparent">
               ClashFree
             </span>
           </div>
-          <nav className="hidden md:flex items-center gap-6 text-sm text-slate-400">
+          <nav className="hidden md:flex items-center gap-6 text-sm text-muted">
             <a href="#roles" className="hover:text-white transition-colors">Roles</a>
             <a href="#features" className="hover:text-white transition-colors">Features</a>
             <a href="#institutions" className="hover:text-white transition-colors">Institutions</a>
           </nav>
           <div className="flex items-center gap-3">
             <Link href="/login">
-              <Button variant="ghost" className="text-slate-300 hover:text-white hover:bg-white/10">
+              <Button variant="ghost" className="text-muted hover:text-white hover:bg-white/10">
                 Sign In
               </Button>
             </Link>
             <Link href="/signup">
-              <Button className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white border-0">
+              <Button className="bg-gradient-to-r from-secondary to-secondary hover:from-secondary hover:to-secondary text-white border-0">
                 Get Started
               </Button>
             </Link>
@@ -96,7 +96,7 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <section className="relative z-10 container mx-auto px-4 pt-20 pb-16 text-center">
-        <Badge className="mb-6 bg-cyan-500/10 text-cyan-400 border-cyan-500/20 px-4 py-1.5">
+        <Badge className="mb-6 bg-secondary/10 text-secondary border-secondary/20 px-4 py-1.5">
           <Sparkles className="w-4 h-4 mr-2" />
           Revolutionary Academic Scheduling
         </Badge>
@@ -104,19 +104,19 @@ export default function LandingPage() {
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
           End Timetable Clashes
           <br />
-          <span className="bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-secondary via-secondary to-primary bg-clip-text text-transparent">
             Permanently.
           </span>
         </h1>
 
-        <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-8">
+        <p className="text-lg md:text-xl text-muted max-w-2xl mx-auto mb-8">
           From data to published timetable in minutes. Smart engine detects conflicts before they happen.
           Carry-over students automatically validated.
         </p>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
           <Link href="/signup">
-            <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white border-0 px-8 h-12">
+            <Button size="lg" className="bg-gradient-to-r from-secondary to-secondary hover:from-secondary hover:to-secondary text-white border-0 px-8 h-12">
               Get Started Free
               <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
@@ -133,7 +133,7 @@ export default function LandingPage() {
           ].map((stat, i) => (
             <div key={i} className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
               <div className="text-2xl md:text-3xl font-bold text-white">{stat.value}</div>
-              <div className="text-sm text-slate-400">{stat.label}</div>
+              <div className="text-sm text-muted">{stat.label}</div>
             </div>
           ))}
         </div>
@@ -145,11 +145,11 @@ export default function LandingPage() {
           {features.map((feature, i) => (
             <Card key={i} className="bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors">
               <CardContent className="pt-6">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center mb-4">
-                  <feature.icon className="w-6 h-6 text-cyan-400" />
+                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary/20 to-secondary/20 flex items-center justify-center mb-4">
+                  <feature.icon className="w-6 h-6 text-secondary" />
                 </div>
                 <h3 className="font-semibold text-white mb-2">{feature.title}</h3>
-                <p className="text-sm text-slate-400">{feature.description}</p>
+                <p className="text-sm text-muted">{feature.description}</p>
               </CardContent>
             </Card>
           ))}
@@ -160,7 +160,7 @@ export default function LandingPage() {
       <section id="institutions" className="relative z-10 container mx-auto px-4 py-16">
         <div className="text-center mb-12">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Built for Every Nigerian Tertiary Structure</h2>
-          <p className="text-slate-400">
+          <p className="text-muted">
             From federal universities to health technology schools.
           </p>
         </div>
@@ -170,7 +170,7 @@ export default function LandingPage() {
             <Badge
               key={i}
               variant="outline"
-              className="px-4 py-2 text-sm border-white/20 text-slate-300 hover:bg-white/10 transition-colors"
+              className="px-4 py-2 text-sm border-white/20 text-muted hover:bg-white/10 transition-colors"
             >
               {inst}
             </Badge>
@@ -180,17 +180,17 @@ export default function LandingPage() {
 
       {/* CTA Section */}
       <section className="relative z-10 container mx-auto px-4 py-20">
-        <div className="bg-gradient-to-r from-cyan-500/10 via-blue-500/10 to-purple-500/10 rounded-3xl p-8 md:p-16 text-center border border-white/10 backdrop-blur-sm">
+        <div className="bg-gradient-to-r from-secondary/10 via-secondary/10 to-primary/10 rounded-3xl p-8 md:p-16 text-center border border-white/10 backdrop-blur-sm">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
             All Parameters Met → Guaranteed Conflict-Free Output
           </h2>
-          <p className="text-slate-400 max-w-2xl mx-auto mb-8">
+          <p className="text-muted max-w-2xl mx-auto mb-8">
             Parameters incomplete? Engine halts and returns a structured validation report detailing every missing or invalid parameter.
             ClashFree never generates a timetable on incomplete or invalid academic data.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/signup">
-              <Button size="lg" className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white border-0 px-8 h-12">
+              <Button size="lg" className="bg-gradient-to-r from-secondary to-secondary hover:from-secondary hover:to-secondary text-white border-0 px-8 h-12">
                 Get Started Free
               </Button>
             </Link>
@@ -202,12 +202,12 @@ export default function LandingPage() {
       <footer className="relative z-10 border-t border-white/10 py-8">
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center font-bold text-sm">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-secondary to-secondary flex items-center justify-center font-bold text-sm">
               CF
             </div>
-            <span className="text-sm text-slate-400">© 2026 ClashFree. All rights reserved.</span>
+            <span className="text-sm text-muted">© 2026 ClashFree. All rights reserved.</span>
           </div>
-          <div className="flex items-center gap-6 text-sm text-slate-400">
+          <div className="flex items-center gap-6 text-sm text-muted">
             <a href="#" className="hover:text-white transition-colors">Privacy</a>
             <a href="#" className="hover:text-white transition-colors">Terms</a>
             <a href="#" className="hover:text-white transition-colors">Contact</a>

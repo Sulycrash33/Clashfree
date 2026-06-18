@@ -64,16 +64,16 @@ const STEPS: { id: WizardStep; label: string; icon: React.ElementType }[] = [
 ]
 
 const slotColors = [
-  'from-cyan-500/20 to-blue-500/20 border-cyan-500/30',
-  'from-purple-500/20 to-pink-500/20 border-purple-500/30',
-  'from-amber-500/20 to-yellow-500/20 border-amber-500/30',
+  'from-secondary/20 to-secondary/20 border-secondary/30',
+  'from-primary/20 to-clash/20 border-primary/30',
+  'from-accent-gold/20 to-accent-gold/20 border-accent-gold/30',
 ]
 const levelColors: Record<number, string> = {
-  100: 'bg-green-500/20 text-green-400 border-green-500/30',
-  200: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
-  300: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
-  400: 'bg-amber-500/20 text-amber-400 border-amber-500/30',
-  500: 'bg-pink-500/20 text-pink-400 border-pink-500/30',
+  100: 'bg-success/20 text-success border-success/30',
+  200: 'bg-secondary/20 text-secondary border-secondary/30',
+  300: 'bg-primary/20 text-primary border-primary/30',
+  400: 'bg-accent-gold/20 text-accent-gold border-accent-gold/30',
+  500: 'bg-clash/20 text-clash border-clash/30',
 }
 
 // ─── Component ───────────────────────────────────────────────────────────────
@@ -416,21 +416,21 @@ export default function ExamTimetablePage() {
                     }`}
                   >
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all ${
-                      isActive ? 'bg-cyan-500 border-cyan-400 shadow-lg shadow-cyan-500/30'
-                      : isDone ? 'bg-green-500/20 border-green-500'
+                      isActive ? 'bg-secondary border-secondary shadow-lg shadow-cyan-500/30'
+                      : isDone ? 'bg-success/20 border-success'
                       : 'bg-white/5 border-white/10'
                     }`}>
                       {isDone
-                        ? <CheckCircle2 className="w-5 h-5 text-green-400" />
-                        : <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-slate-400'}`} />
+                        ? <CheckCircle2 className="w-5 h-5 text-success" />
+                        : <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'text-muted'}`} />
                       }
                     </div>
-                    <span className={`text-xs font-medium hidden sm:block ${isActive ? 'text-cyan-400' : isDone ? 'text-green-400' : 'text-slate-500'}`}>
+                    <span className={`text-xs font-medium hidden sm:block ${isActive ? 'text-secondary' : isDone ? 'text-success' : 'text-muted'}`}>
                       {s.label}
                     </span>
                   </button>
                   {idx < STEPS.length - 1 && (
-                    <div className={`flex-1 h-0.5 mx-2 transition-all ${idx < stepIndex ? 'bg-green-500/40' : 'bg-white/10'}`} />
+                    <div className={`flex-1 h-0.5 mx-2 transition-all ${idx < stepIndex ? 'bg-success/40' : 'bg-white/10'}`} />
                   )}
                 </div>
               )
@@ -447,7 +447,7 @@ export default function ExamTimetablePage() {
           <Card className="bg-white/5 border-white/10">
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-cyan-400" />
+                <Calendar className="w-5 h-5 text-secondary" />
                 Select or Create Exam Period
               </CardTitle>
               <CardDescription>Choose an existing exam period or create a new one</CardDescription>
@@ -456,7 +456,7 @@ export default function ExamTimetablePage() {
               {/* Existing periods */}
               {examPeriods.length > 0 && (
                 <div className="space-y-2">
-                  <Label className="text-slate-300">Existing Exam Periods</Label>
+                  <Label className="text-muted">Existing Exam Periods</Label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                     {examPeriods.map(p => (
                       <button
@@ -464,22 +464,22 @@ export default function ExamTimetablePage() {
                         onClick={() => { setSelectedPeriod(p.id); setSelectedPeriodData(p) }}
                         className={`p-4 rounded-lg border text-left transition-all ${
                           selectedPeriod === p.id
-                            ? 'border-cyan-500 bg-cyan-500/10'
+                            ? 'border-secondary bg-secondary/10'
                             : 'border-white/10 bg-white/5 hover:border-white/20'
                         }`}
                       >
                         <div className="flex items-center justify-between mb-1">
                           <span className="text-white font-medium">{p.name}</span>
                           <Badge variant="outline" className={
-                            p.status === 'PUBLISHED' ? 'text-green-400 border-green-500/30'
-                            : p.status === 'GENERATED' ? 'text-cyan-400 border-cyan-500/30'
-                            : 'text-amber-400 border-amber-500/30'
+                            p.status === 'PUBLISHED' ? 'text-success border-success/30'
+                            : p.status === 'GENERATED' ? 'text-secondary border-secondary/30'
+                            : 'text-accent-gold border-accent-gold/30'
                           }>{p.status}</Badge>
                         </div>
-                        <div className="text-sm text-slate-400">
+                        <div className="text-sm text-muted">
                           {p.session} · Sem {p.semester} · {new Date(p.startDate).toLocaleDateString()} – {new Date(p.endDate).toLocaleDateString()}
                         </div>
-                        <div className="text-xs text-slate-500 mt-1 flex gap-3">
+                        <div className="text-xs text-muted mt-1 flex gap-3">
                           <span>{p.excludeFridays ? '🕌 Jumu\'ah excluded' : 'Fridays included'}</span>
                           <span>{p.includeSaturday ? 'Sat included' : 'No Saturday'}</span>
                         </div>
@@ -494,7 +494,7 @@ export default function ExamTimetablePage() {
                 <Button
                   variant="outline"
                   onClick={() => setShowNewPeriod(!showNewPeriod)}
-                  className="border-white/10 text-slate-300 hover:text-white"
+                  className="border-white/10 text-muted hover:text-white"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   {showNewPeriod ? 'Cancel' : 'Create New Exam Period'}
@@ -506,7 +506,7 @@ export default function ExamTimetablePage() {
                   <CardContent className="pt-5 space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <Label className="text-slate-300">Period Name *</Label>
+                        <Label className="text-muted">Period Name *</Label>
                         <Input
                           value={newPeriod.name}
                           onChange={e => setNewPeriod(p => ({ ...p, name: e.target.value }))}
@@ -515,7 +515,7 @@ export default function ExamTimetablePage() {
                         />
                       </div>
                       <div>
-                        <Label className="text-slate-300">Academic Session</Label>
+                        <Label className="text-muted">Academic Session</Label>
                         <Input
                           value={newPeriod.session}
                           onChange={e => setNewPeriod(p => ({ ...p, session: e.target.value }))}
@@ -524,7 +524,7 @@ export default function ExamTimetablePage() {
                         />
                       </div>
                       <div>
-                        <Label className="text-slate-300">Start Date *</Label>
+                        <Label className="text-muted">Start Date *</Label>
                         <Input
                           type="date"
                           value={newPeriod.startDate}
@@ -533,7 +533,7 @@ export default function ExamTimetablePage() {
                         />
                       </div>
                       <div>
-                        <Label className="text-slate-300">End Date *</Label>
+                        <Label className="text-muted">End Date *</Label>
                         <Input
                           type="date"
                           value={newPeriod.endDate}
@@ -542,7 +542,7 @@ export default function ExamTimetablePage() {
                         />
                       </div>
                       <div>
-                        <Label className="text-slate-300">Semester</Label>
+                        <Label className="text-muted">Semester</Label>
                         <Select
                           value={newPeriod.semester.toString()}
                           onValueChange={v => setNewPeriod(p => ({ ...p, semester: parseInt(v) }))}
@@ -550,7 +550,7 @@ export default function ExamTimetablePage() {
                           <SelectTrigger className="bg-white/5 border-white/10 text-white mt-1">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent className="bg-slate-900 border-white/10">
+                          <SelectContent className="bg-muted border-white/10">
                             <SelectItem value="1" className="text-white">1st Semester</SelectItem>
                             <SelectItem value="2" className="text-white">2nd Semester</SelectItem>
                           </SelectContent>
@@ -560,7 +560,7 @@ export default function ExamTimetablePage() {
 
                     {/* Slot times */}
                     <div className="border-t border-white/10 pt-4">
-                      <Label className="text-slate-300 mb-3 block">Slot Times</Label>
+                      <Label className="text-muted mb-3 block">Slot Times</Label>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                         {[
                           { label: 'Morning', startKey: 'morningStart', endKey: 'morningEnd' },
@@ -568,7 +568,7 @@ export default function ExamTimetablePage() {
                           { label: 'Evening', startKey: 'eveningStart', endKey: 'eveningEnd' },
                         ].map(slot => (
                           <div key={slot.label} className="p-3 bg-white/5 rounded-lg border border-white/10">
-                            <div className="text-xs text-slate-400 mb-2">{slot.label}</div>
+                            <div className="text-xs text-muted mb-2">{slot.label}</div>
                             <div className="flex items-center gap-2">
                               <Input
                                 type="time"
@@ -576,7 +576,7 @@ export default function ExamTimetablePage() {
                                 onChange={e => setNewPeriod(p => ({ ...p, [slot.startKey]: e.target.value }))}
                                 className="bg-white/5 border-white/10 text-white text-xs p-1 h-8"
                               />
-                              <span className="text-slate-500 text-xs">to</span>
+                              <span className="text-muted text-xs">to</span>
                               <Input
                                 type="time"
                                 value={(newPeriod as any)[slot.endKey]}
@@ -598,7 +598,7 @@ export default function ExamTimetablePage() {
                         />
                         <div>
                           <div className="text-sm text-white">Exclude Fridays (Jumu'ah)</div>
-                          <div className="text-xs text-slate-500">No exams on Fridays — Islamic prayer consideration</div>
+                          <div className="text-xs text-muted">No exams on Fridays — Islamic prayer consideration</div>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
@@ -608,7 +608,7 @@ export default function ExamTimetablePage() {
                         />
                         <div>
                           <div className="text-sm text-white">Include Saturdays</div>
-                          <div className="text-xs text-slate-500">Schedule exams on Saturdays</div>
+                          <div className="text-xs text-muted">Schedule exams on Saturdays</div>
                         </div>
                       </div>
                     </div>
@@ -616,7 +616,7 @@ export default function ExamTimetablePage() {
                     <Button
                       onClick={handleCreatePeriod}
                       disabled={creatingPeriod}
-                      className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white border-0"
+                      className="bg-gradient-to-r from-secondary to-secondary text-white border-0"
                     >
                       {creatingPeriod ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <Plus className="w-4 h-4 mr-2" />}
                       Create Exam Period
@@ -632,7 +632,7 @@ export default function ExamTimetablePage() {
             <Button
               onClick={() => setStep('configure')}
               disabled={!selectedPeriod}
-              className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white border-0"
+              className="bg-gradient-to-r from-secondary to-secondary text-white border-0"
             >
               Next: Configure
               <ChevronRight className="w-4 h-4 ml-2" />
@@ -649,7 +649,7 @@ export default function ExamTimetablePage() {
           <Card className="bg-white/5 border-white/10">
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
-                <Settings className="w-5 h-5 text-cyan-400" />
+                <Settings className="w-5 h-5 text-secondary" />
                 Configure — {selectedPeriodData.name}
               </CardTitle>
               <CardDescription>Review period settings and select faculty scope for venue assignment</CardDescription>
@@ -664,7 +664,7 @@ export default function ExamTimetablePage() {
                   { label: 'End', value: new Date(selectedPeriodData.endDate).toLocaleDateString() },
                 ].map(item => (
                   <div key={item.label} className="p-3 bg-white/5 rounded-lg border border-white/10">
-                    <div className="text-xs text-slate-400">{item.label}</div>
+                    <div className="text-xs text-muted">{item.label}</div>
                     <div className="text-white font-medium mt-1">{item.value}</div>
                   </div>
                 ))}
@@ -672,7 +672,7 @@ export default function ExamTimetablePage() {
 
               {/* Slot times display */}
               <div>
-                <Label className="text-slate-300 mb-3 block">Scheduled Slot Times</Label>
+                <Label className="text-muted mb-3 block">Scheduled Slot Times</Label>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   {[1, 2, 3].map(n => (
                     <div key={n} className={`p-3 rounded-lg bg-gradient-to-br ${slotColors[n - 1]} border`}>
@@ -685,23 +685,23 @@ export default function ExamTimetablePage() {
 
               {/* Jumu'ah / Saturday flags */}
               <div className="flex flex-wrap gap-3">
-                <Badge variant="outline" className={selectedPeriodData.excludeFridays ? 'text-green-400 border-green-500/30' : 'text-slate-400 border-white/10'}>
+                <Badge variant="outline" className={selectedPeriodData.excludeFridays ? 'text-success border-success/30' : 'text-muted border-white/10'}>
                   🕌 Jumu'ah: {selectedPeriodData.excludeFridays ? 'Fridays Excluded ✓' : 'Fridays Included'}
                 </Badge>
-                <Badge variant="outline" className={selectedPeriodData.includeSaturday ? 'text-cyan-400 border-cyan-500/30' : 'text-slate-400 border-white/10'}>
+                <Badge variant="outline" className={selectedPeriodData.includeSaturday ? 'text-secondary border-secondary/30' : 'text-muted border-white/10'}>
                   📅 Saturday: {selectedPeriodData.includeSaturday ? 'Included' : 'Excluded'}
                 </Badge>
               </div>
 
               {/* Faculty/venue scope */}
               <div className="border-t border-white/10 pt-4">
-                <Label className="text-slate-300 mb-2 block">Faculty Scope for Venue Assignment</Label>
-                <p className="text-xs text-slate-500 mb-3">Select a faculty to assign only rooms within that faculty. Leave as "All" to use all institution rooms.</p>
+                <Label className="text-muted mb-2 block">Faculty Scope for Venue Assignment</Label>
+                <p className="text-xs text-muted mb-3">Select a faculty to assign only rooms within that faculty. Leave as "All" to use all institution rooms.</p>
                 <Select value={selectedFaculty} onValueChange={setSelectedFaculty}>
                   <SelectTrigger className="w-72 bg-white/5 border-white/10 text-white">
                     <SelectValue placeholder="Select faculty scope" />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-white/10">
+                  <SelectContent className="bg-muted border-white/10">
                     <SelectItem value="all" className="text-white">All Faculties (Global)</SelectItem>
                     {faculties.map(f => (
                       <SelectItem key={f.id} value={f.id} className="text-white">{f.code} – {f.name}</SelectItem>
@@ -711,13 +711,13 @@ export default function ExamTimetablePage() {
 
                 {rooms.length > 0 && (
                   <div className="mt-3 flex flex-wrap gap-2">
-                    <span className="text-xs text-slate-400">{rooms.length} venue(s) in scope:</span>
+                    <span className="text-xs text-muted">{rooms.length} venue(s) in scope:</span>
                     {rooms.slice(0, 8).map(r => (
-                      <Badge key={r.id} variant="outline" className="text-xs text-slate-300 border-white/10">
+                      <Badge key={r.id} variant="outline" className="text-xs text-muted border-white/10">
                         {r.code} ({r.capacity})
                       </Badge>
                     ))}
-                    {rooms.length > 8 && <Badge variant="outline" className="text-xs text-slate-400 border-white/10">+{rooms.length - 8} more</Badge>}
+                    {rooms.length > 8 && <Badge variant="outline" className="text-xs text-muted border-white/10">+{rooms.length - 8} more</Badge>}
                   </div>
                 )}
               </div>
@@ -725,10 +725,10 @@ export default function ExamTimetablePage() {
               {/* Departments in scope */}
               {departments.length > 0 && (
                 <div>
-                  <Label className="text-slate-300 mb-2 block">Departments in Scope ({departments.length})</Label>
+                  <Label className="text-muted mb-2 block">Departments in Scope ({departments.length})</Label>
                   <div className="flex flex-wrap gap-2">
                     {departments.map(d => (
-                      <Badge key={d.id} variant="outline" className="text-xs text-slate-300 border-white/10">{d.code}</Badge>
+                      <Badge key={d.id} variant="outline" className="text-xs text-muted border-white/10">{d.code}</Badge>
                     ))}
                   </div>
                 </div>
@@ -737,10 +737,10 @@ export default function ExamTimetablePage() {
           </Card>
 
           <div className="flex justify-between">
-            <Button variant="outline" onClick={() => setStep('setup')} className="border-white/10 text-slate-300">
+            <Button variant="outline" onClick={() => setStep('setup')} className="border-white/10 text-muted">
               <ChevronLeft className="w-4 h-4 mr-2" /> Back
             </Button>
-            <Button onClick={() => setStep('generate')} className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white border-0">
+            <Button onClick={() => setStep('generate')} className="bg-gradient-to-r from-secondary to-secondary text-white border-0">
               Next: Generate <ChevronRight className="w-4 h-4 ml-2" />
             </Button>
           </div>
@@ -755,7 +755,7 @@ export default function ExamTimetablePage() {
           <Card className="bg-white/5 border-white/10">
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-cyan-400" />
+                <Sparkles className="w-5 h-5 text-secondary" />
                 Generate Timetable
               </CardTitle>
               <CardDescription>
@@ -765,24 +765,24 @@ export default function ExamTimetablePage() {
             <CardContent className="space-y-6">
               {/* Summary before generate */}
               <div className="p-4 bg-white/5 rounded-lg border border-white/10 space-y-2">
-                <div className="text-sm text-slate-300 font-medium mb-2">Ready to Generate</div>
+                <div className="text-sm text-muted font-medium mb-2">Ready to Generate</div>
                 <div className="grid grid-cols-2 gap-2 text-xs">
-                  <div className="flex items-center gap-2 text-slate-400">
-                    <CheckCircle2 className="w-3 h-3 text-green-400" />
+                  <div className="flex items-center gap-2 text-muted">
+                    <CheckCircle2 className="w-3 h-3 text-success" />
                     Period: <span className="text-white">{selectedPeriodData?.name}</span>
                   </div>
-                  <div className="flex items-center gap-2 text-slate-400">
-                    <CheckCircle2 className="w-3 h-3 text-green-400" />
-                    Jumu'ah: <span className={selectedPeriodData?.excludeFridays ? 'text-green-400' : 'text-slate-300'}>
+                  <div className="flex items-center gap-2 text-muted">
+                    <CheckCircle2 className="w-3 h-3 text-success" />
+                    Jumu'ah: <span className={selectedPeriodData?.excludeFridays ? 'text-success' : 'text-muted'}>
                       {selectedPeriodData?.excludeFridays ? 'Fridays excluded ✓' : 'Not excluded'}
                     </span>
                   </div>
-                  <div className="flex items-center gap-2 text-slate-400">
-                    <CheckCircle2 className="w-3 h-3 text-green-400" />
+                  <div className="flex items-center gap-2 text-muted">
+                    <CheckCircle2 className="w-3 h-3 text-success" />
                     Venues: <span className="text-white">{rooms.length} rooms in scope</span>
                   </div>
-                  <div className="flex items-center gap-2 text-slate-400">
-                    <CheckCircle2 className="w-3 h-3 text-green-400" />
+                  <div className="flex items-center gap-2 text-muted">
+                    <CheckCircle2 className="w-3 h-3 text-success" />
                     Saturday: <span className="text-white">{selectedPeriodData?.includeSaturday ? 'Included' : 'Excluded'}</span>
                   </div>
                 </div>
@@ -791,18 +791,18 @@ export default function ExamTimetablePage() {
               {/* Generate button */}
               {!generating && (
                 <div className="flex flex-col items-center gap-4 py-6">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-cyan-500/20 to-blue-600/20 border border-cyan-500/30 flex items-center justify-center">
-                    <Sparkles className="w-10 h-10 text-cyan-400" />
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-secondary/20 to-secondary/20 border border-secondary/30 flex items-center justify-center">
+                    <Sparkles className="w-10 h-10 text-secondary" />
                   </div>
                   <div className="text-center">
                     <p className="text-white font-medium">Auto-Generate Clash-Free Timetable</p>
-                    <p className="text-sm text-slate-400 mt-1">Engine will detect CO clashes, assign venues, and respect Jumu'ah blocks</p>
+                    <p className="text-sm text-muted mt-1">Engine will detect CO clashes, assign venues, and respect Jumu'ah blocks</p>
                   </div>
                   <Button
                     onClick={handleGenerate}
                     disabled={!selectedPeriod}
                     size="lg"
-                    className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white border-0 px-10"
+                    className="bg-gradient-to-r from-secondary to-secondary hover:from-secondary hover:to-secondary text-white border-0 px-10"
                   >
                     <Play className="w-5 h-5 mr-2" />
                     Generate Timetable
@@ -814,16 +814,16 @@ export default function ExamTimetablePage() {
               {generating && (
                 <div className="space-y-3 py-6">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-300 flex items-center gap-2">
-                      <Loader2 className="w-4 h-4 animate-spin text-cyan-400" />
+                    <span className="text-muted flex items-center gap-2">
+                      <Loader2 className="w-4 h-4 animate-spin text-secondary" />
                       {progressMessage}
                     </span>
-                    <span className="text-cyan-400 font-medium">{progress}%</span>
+                    <span className="text-secondary font-medium">{progress}%</span>
                   </div>
                   <Progress value={progress} className="h-3 bg-white/10" />
                   <div className="grid grid-cols-7 gap-1 mt-2">
                     {[10, 25, 40, 55, 70, 85, 100].map(p => (
-                      <div key={p} className={`h-1 rounded-full transition-all ${progress >= p ? 'bg-cyan-400' : 'bg-white/10'}`} />
+                      <div key={p} className={`h-1 rounded-full transition-all ${progress >= p ? 'bg-secondary' : 'bg-white/10'}`} />
                     ))}
                   </div>
                 </div>
@@ -832,11 +832,11 @@ export default function ExamTimetablePage() {
           </Card>
 
           <div className="flex justify-between">
-            <Button variant="outline" onClick={() => setStep('configure')} className="border-white/10 text-slate-300" disabled={generating}>
+            <Button variant="outline" onClick={() => setStep('configure')} className="border-white/10 text-muted" disabled={generating}>
               <ChevronLeft className="w-4 h-4 mr-2" /> Back
             </Button>
             {examSlots.length > 0 && (
-              <Button onClick={() => setStep('review')} className="bg-gradient-to-r from-cyan-500 to-blue-600 text-white border-0">
+              <Button onClick={() => setStep('review')} className="bg-gradient-to-r from-secondary to-secondary text-white border-0">
                 View Results <ChevronRight className="w-4 h-4 ml-2" />
               </Button>
             )}
@@ -852,10 +852,10 @@ export default function ExamTimetablePage() {
           {/* Stats */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { label: 'Exam Days', value: sortedDates.length, icon: Calendar, color: 'from-cyan-500/20 to-blue-500/20', iconColor: 'text-cyan-400' },
-              { label: 'Exams Scheduled', value: stats.totalExams, icon: CheckCircle2, color: 'from-green-500/20 to-emerald-500/20', iconColor: 'text-green-400' },
-              { label: 'Students', value: stats.totalStudents.toLocaleString(), icon: Users, color: 'from-amber-500/20 to-yellow-500/20', iconColor: 'text-amber-400' },
-              { label: 'Venues Used', value: stats.roomsUsed, icon: MapPin, color: 'from-purple-500/20 to-pink-500/20', iconColor: 'text-purple-400' },
+              { label: 'Exam Days', value: sortedDates.length, icon: Calendar, color: 'from-secondary/20 to-secondary/20', iconColor: 'text-secondary' },
+              { label: 'Exams Scheduled', value: stats.totalExams, icon: CheckCircle2, color: 'from-success/20 to-success/20', iconColor: 'text-success' },
+              { label: 'Students', value: stats.totalStudents.toLocaleString(), icon: Users, color: 'from-accent-gold/20 to-accent-gold/20', iconColor: 'text-accent-gold' },
+              { label: 'Venues Used', value: stats.roomsUsed, icon: MapPin, color: 'from-primary/20 to-clash/20', iconColor: 'text-primary' },
             ].map(s => (
               <Card key={s.label} className="bg-white/5 border-white/10">
                 <CardContent className="pt-4">
@@ -865,7 +865,7 @@ export default function ExamTimetablePage() {
                     </div>
                     <div>
                       <div className="text-2xl font-bold text-white">{s.value}</div>
-                      <div className="text-xs text-slate-400">{s.label}</div>
+                      <div className="text-xs text-muted">{s.label}</div>
                     </div>
                   </div>
                 </CardContent>
@@ -875,11 +875,11 @@ export default function ExamTimetablePage() {
 
           {/* Conflicts alert */}
           {conflicts.length > 0 && (
-            <Card className="bg-red-500/5 border-red-500/20">
+            <Card className="bg-clash/5 border-clash/20">
               <CardContent className="pt-4">
                 <div className="flex items-center justify-between">
                   <ConflictBadge count={conflicts.length} critical={criticalConflicts} warnings={warningConflicts} />
-                  <Button variant="link" className="text-red-400 hover:text-red-300" onClick={() => window.location.href = '/dashboard/conflicts'}>
+                  <Button variant="link" className="text-clash hover:text-clash" onClick={() => window.location.href = '/dashboard/conflicts'}>
                     View All Conflicts →
                   </Button>
                 </div>
@@ -893,14 +893,14 @@ export default function ExamTimetablePage() {
               <div className="flex flex-wrap items-center gap-4 justify-between">
                 <div className="flex flex-wrap items-center gap-3">
                   <div className="flex items-center gap-2">
-                    <Filter className="w-4 h-4 text-slate-400" />
-                    <span className="text-sm text-slate-400">Filter:</span>
+                    <Filter className="w-4 h-4 text-muted" />
+                    <span className="text-sm text-muted">Filter:</span>
                   </div>
                   <Select value={filterLevel} onValueChange={setFilterLevel}>
                     <SelectTrigger className="w-32 bg-white/5 border-white/10 text-white text-sm">
                       <SelectValue placeholder="Level" />
                     </SelectTrigger>
-                    <SelectContent className="bg-slate-900 border-white/10">
+                    <SelectContent className="bg-muted border-white/10">
                       <SelectItem value="all" className="text-white">All Levels</SelectItem>
                       {[100, 200, 300, 400, 500].map(l => (
                         <SelectItem key={l} value={l.toString()} className="text-white">{l}L</SelectItem>
@@ -911,7 +911,7 @@ export default function ExamTimetablePage() {
                     <SelectTrigger className="w-48 bg-white/5 border-white/10 text-white text-sm">
                       <SelectValue placeholder="Department" />
                     </SelectTrigger>
-                    <SelectContent className="bg-slate-900 border-white/10">
+                    <SelectContent className="bg-muted border-white/10">
                       <SelectItem value="all" className="text-white">All Departments</SelectItem>
                       {slotDepts.map(([code, name]) => (
                         <SelectItem key={code} value={code} className="text-white">{code} – {name}</SelectItem>
@@ -928,7 +928,7 @@ export default function ExamTimetablePage() {
                         variant={viewMode === v ? 'default' : 'ghost'}
                         size="sm"
                         onClick={() => setViewMode(v)}
-                        className={viewMode === v ? 'bg-cyan-500 text-white' : 'text-slate-400'}
+                        className={viewMode === v ? 'bg-secondary text-white' : 'text-muted'}
                       >
                         {v === 'calendar' ? 'Calendar' : 'List'}
                       </Button>
@@ -940,7 +940,7 @@ export default function ExamTimetablePage() {
                     variant="outline"
                     onClick={() => runAutoAssign(false)}
                     disabled={assigningInvig || examSlots.length === 0}
-                    className={`border-white/10 text-slate-300 hover:text-white ${invigResult ? 'border-green-500/30 text-green-400' : ''}`}
+                    className={`border-white/10 text-muted hover:text-white ${invigResult ? 'border-success/30 text-success' : ''}`}
                   >
                     {assigningInvig
                       ? <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -951,7 +951,7 @@ export default function ExamTimetablePage() {
                   <Button
                     variant="outline"
                     onClick={handleClearTimetable}
-                    className="border-red-500/20 text-red-400 hover:bg-red-500/10"
+                    className="border-clash/20 text-clash hover:bg-clash/10"
                   >
                     <XCircle className="w-4 h-4 mr-2" /> Clear & Regenerate
                   </Button>
@@ -964,27 +964,27 @@ export default function ExamTimetablePage() {
           <Card className="bg-white/5 border-white/10">
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-cyan-400" />
+                <Calendar className="w-5 h-5 text-secondary" />
                 Exam Schedule Canvas
               </CardTitle>
               <CardDescription>
                 {filteredSlots.length} exams across {sortedDates.length} days
-                {selectedPeriodData?.excludeFridays && <span className="ml-2 text-green-400">· 🕌 Jumu'ah excluded</span>}
+                {selectedPeriodData?.excludeFridays && <span className="ml-2 text-success">· 🕌 Jumu'ah excluded</span>}
               </CardDescription>
             </CardHeader>
             <CardContent>
               {filteredSlots.length === 0 ? (
                 <div className="py-12 text-center">
-                  <Calendar className="w-16 h-16 mx-auto text-slate-600 mb-4" />
+                  <Calendar className="w-16 h-16 mx-auto text-muted mb-4" />
                   <p className="text-white font-medium mb-2">No matching exams</p>
-                  <p className="text-sm text-slate-400">Try adjusting your filters</p>
+                  <p className="text-sm text-muted">Try adjusting your filters</p>
                 </div>
               ) : viewMode === 'calendar' ? (
                 <div className="overflow-x-auto">
                   <div className="min-w-[800px]">
                     <div className="grid grid-cols-4 gap-2 mb-3">
                       <div className="p-3 bg-white/5 rounded-lg">
-                        <span className="text-slate-400 text-sm font-medium">Date</span>
+                        <span className="text-muted text-sm font-medium">Date</span>
                       </div>
                       {[1, 2, 3].map(n => (
                         <div key={n} className={`p-3 rounded-lg bg-gradient-to-br ${slotColors[n - 1]} border`}>
@@ -1004,31 +1004,31 @@ export default function ExamTimetablePage() {
                               {slots.length > 0 ? (
                                 <div className="space-y-1">
                                   {slots.map(slot => (
-                                    <div key={slot.id} className="p-2 bg-slate-900/60 rounded-md hover:bg-slate-900/80 transition-colors group">
+                                    <div key={slot.id} className="p-2 bg-muted/60 rounded-md hover:bg-muted/80 transition-colors group">
                                       <div className="flex items-center justify-between">
-                                        <Badge variant="outline" className={`${slot.course.isShared ? 'text-pink-400 border-pink-400/20' : 'text-cyan-400 border-cyan-400/20'} text-xs font-mono`}>
+                                        <Badge variant="outline" className={`${slot.course.isShared ? 'text-clash border-clash/20' : 'text-secondary border-secondary/20'} text-xs font-mono`}>
                                           {slot.course.code}{slot.course.isShared ? ' ★' : ''}
                                         </Badge>
-                                        <Badge variant="secondary" className={`${levelColors[slot.course.level] || 'bg-white/10 text-slate-300'} text-xs`}>
+                                        <Badge variant="secondary" className={`${levelColors[slot.course.level] || 'bg-white/10 text-muted'} text-xs`}>
                                           {slot.course.level}L
                                         </Badge>
                                       </div>
                                       <p className="text-xs text-white mt-1 truncate group-hover:whitespace-normal">{slot.course.name}</p>
                                       <div className="flex items-center justify-between mt-1">
                                         <div className="flex items-center gap-1">
-                                          <MapPin className="w-3 h-3 text-slate-500" />
-                                          <span className="text-xs text-slate-400">{slot.room.code}</span>
+                                          <MapPin className="w-3 h-3 text-muted" />
+                                          <span className="text-xs text-muted">{slot.room.code}</span>
                                         </div>
                                         <div className="flex items-center gap-1">
-                                          <Users className="w-3 h-3 text-slate-500" />
-                                          <span className="text-xs text-slate-400">{slot.course._count?.studentCourses || 0}</span>
+                                          <Users className="w-3 h-3 text-muted" />
+                                          <span className="text-xs text-muted">{slot.course._count?.studentCourses || 0}</span>
                                         </div>
                                       </div>
                                     </div>
                                   ))}
                                 </div>
                               ) : (
-                                <div className="h-full flex items-center justify-center text-slate-500 text-xs py-4">Free</div>
+                                <div className="h-full flex items-center justify-center text-muted text-xs py-4">Free</div>
                               )}
                             </div>
                           )
@@ -1041,25 +1041,25 @@ export default function ExamTimetablePage() {
                 <div className="space-y-4">
                   {sortedDates.map(date => (
                     <div key={date} className="space-y-2">
-                      <h3 className="text-white font-medium sticky top-0 bg-slate-900/80 py-2 px-1 rounded">{date}</h3>
+                      <h3 className="text-white font-medium sticky top-0 bg-muted/80 py-2 px-1 rounded">{date}</h3>
                       {[1, 2, 3].map(n => {
                         const slots = groupedSlots[date]?.[n] || []
                         if (!slots.length) return null
                         return (
                           <div key={n} className="pl-4 border-l-2 border-white/10">
                             <div className="flex items-center gap-2 mb-2">
-                              <Clock className="w-4 h-4 text-slate-400" />
-                              <span className="text-sm text-slate-300">{getSlotTime(n)}</span>
+                              <Clock className="w-4 h-4 text-muted" />
+                              <span className="text-sm text-muted">{getSlotTime(n)}</span>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                               {slots.map(slot => (
-                                <div key={slot.id} className="p-3 bg-white/5 rounded-lg border border-white/10 hover:border-cyan-500/30 transition-colors">
+                                <div key={slot.id} className="p-3 bg-white/5 rounded-lg border border-white/10 hover:border-secondary/30 transition-colors">
                                   <div className="flex items-center justify-between mb-2">
-                                    <Badge variant="outline" className="text-cyan-400 text-xs font-mono">{slot.course.code}</Badge>
-                                    <Badge variant="secondary" className={`${levelColors[slot.course.level] || 'bg-white/10 text-slate-300'} text-xs`}>{slot.course.level}L</Badge>
+                                    <Badge variant="outline" className="text-secondary text-xs font-mono">{slot.course.code}</Badge>
+                                    <Badge variant="secondary" className={`${levelColors[slot.course.level] || 'bg-white/10 text-muted'} text-xs`}>{slot.course.level}L</Badge>
                                   </div>
                                   <p className="text-sm text-white mb-2">{slot.course.name}</p>
-                                  <div className="flex items-center justify-between text-xs text-slate-400">
+                                  <div className="flex items-center justify-between text-xs text-muted">
                                     <div className="flex items-center gap-1"><MapPin className="w-3 h-3" />{slot.room.name}</div>
                                     <div className="flex items-center gap-1"><Users className="w-3 h-3" />{slot.course._count?.studentCourses || 0}</div>
                                   </div>
@@ -1080,26 +1080,26 @@ export default function ExamTimetablePage() {
           <Card className="bg-white/5 border-white/10">
             <CardContent className="pt-4">
               <div className="flex flex-wrap items-center gap-6">
-                <span className="text-sm text-slate-400">Legend:</span>
+                <span className="text-sm text-muted">Legend:</span>
                 {['Morning', 'Afternoon', 'Evening'].map((l, i) => (
                   <div key={l} className="flex items-center gap-2">
                     <div className={`w-4 h-4 rounded bg-gradient-to-br ${slotColors[i].split(' ')[0]} ${slotColors[i].split(' ')[1]}`} />
-                    <span className="text-sm text-slate-300">{l}</span>
+                    <span className="text-sm text-muted">{l}</span>
                   </div>
                 ))}
                 <div className="flex items-center gap-2">
-                  <Badge variant="outline" className="text-pink-400 border-pink-400/20 text-xs">★ GST</Badge>
-                  <span className="text-sm text-slate-300">Shared/General Course</span>
+                  <Badge variant="outline" className="text-clash border-clash/20 text-xs">★ GST</Badge>
+                  <span className="text-sm text-muted">Shared/General Course</span>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           <div className="flex justify-between">
-            <Button variant="outline" onClick={() => setStep('generate')} className="border-white/10 text-slate-300">
+            <Button variant="outline" onClick={() => setStep('generate')} className="border-white/10 text-muted">
               <ChevronLeft className="w-4 h-4 mr-2" /> Back to Generate
             </Button>
-            <Button variant="outline" onClick={() => setStep('setup')} className="border-white/10 text-slate-300">
+            <Button variant="outline" onClick={() => setStep('setup')} className="border-white/10 text-muted">
               New Period <Plus className="w-4 h-4 ml-2" />
             </Button>
           </div>

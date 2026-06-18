@@ -13,7 +13,7 @@ export const metadata = {
 
 export default function DemoRootLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="bg-[#0a0a0f] min-h-screen">
+    <div className="bg-background min-h-screen">
       {children}
     </div>
   );

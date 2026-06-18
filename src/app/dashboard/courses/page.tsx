@@ -165,7 +165,7 @@ export default function CoursesPage() {
       accessorKey: 'code',
       header: 'Code',
       cell: ({ row }) => (
-        <Badge variant="outline" className="border-amber-500/20 text-amber-400 font-mono">
+        <Badge variant="outline" className="border-accent-gold/20 text-accent-gold font-mono">
           {row.getValue('code')}
         </Badge>
       ),
@@ -175,12 +175,12 @@ export default function CoursesPage() {
       header: 'Course Name',
       cell: ({ row }) => (
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500/20 to-yellow-500/20 flex items-center justify-center">
-            <BookOpen className="w-5 h-5 text-amber-400" />
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-accent-gold/20 to-accent-gold/20 flex items-center justify-center">
+            <BookOpen className="w-5 h-5 text-accent-gold" />
           </div>
           <div>
             <div className="font-medium text-white">{row.getValue('name')}</div>
-            <div className="text-xs text-slate-400">
+            <div className="text-xs text-muted">
               {row.original.department?.code} • {row.original.creditUnits} CU
             </div>
           </div>
@@ -191,7 +191,7 @@ export default function CoursesPage() {
       accessorKey: 'level',
       header: 'Level',
       cell: ({ row }) => (
-        <Badge variant="secondary" className="bg-white/10 text-slate-300">
+        <Badge variant="secondary" className="bg-white/10 text-muted">
           {row.getValue('level')} Level
         </Badge>
       ),
@@ -200,7 +200,7 @@ export default function CoursesPage() {
       accessorKey: 'isShared',
       header: 'Type',
       cell: ({ row }) => (
-        <Badge className={row.getValue('isShared') ? 'bg-purple-500/10 text-purple-400' : 'bg-slate-500/10 text-slate-400'}>
+        <Badge className={row.getValue('isShared') ? 'bg-primary/10 text-primary' : 'bg-muted/10 text-muted'}>
           {row.getValue('isShared') ? 'GST/Shared' : 'Core'}
         </Badge>
       ),
@@ -209,7 +209,7 @@ export default function CoursesPage() {
       accessorKey: '_count.studentCourses',
       header: 'Enrolled',
       cell: ({ row }) => (
-        <div className="flex items-center gap-2 text-slate-400">
+        <div className="flex items-center gap-2 text-muted">
           <Users className="w-4 h-4" />
           {row.original._count?.studentCourses || 0}
         </div>
@@ -219,7 +219,7 @@ export default function CoursesPage() {
       accessorKey: 'isActive',
       header: 'Status',
       cell: ({ row }) => (
-        <Badge className={row.getValue('isActive') ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}>
+        <Badge className={row.getValue('isActive') ? 'bg-success/10 text-success' : 'bg-clash/10 text-clash'}>
           {row.getValue('isActive') ? 'Active' : 'Inactive'}
         </Badge>
       ),
@@ -229,15 +229,15 @@ export default function CoursesPage() {
       cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-slate-400">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted">
               <MoreHorizontal className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-slate-900 border-white/10">
-            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-slate-300">
+          <DropdownMenuContent align="end" className="bg-muted border-white/10">
+            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted">
               <Pencil className="w-4 h-4 mr-2" /> Edit
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-red-400">
+            <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-clash">
               <Trash2 className="w-4 h-4 mr-2" /> Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -248,8 +248,8 @@ export default function CoursesPage() {
 
   if (!['SA', 'IA', 'TO', 'LC'].includes(session?.user?.role || '')) {
     return (
-      <Alert className="bg-red-500/10 border-red-500/20">
-        <AlertDescription className="text-red-400">Access denied.</AlertDescription>
+      <Alert className="bg-clash/10 border-clash/20">
+        <AlertDescription className="text-clash">Access denied.</AlertDescription>
       </Alert>
     )
   }
@@ -269,7 +269,7 @@ export default function CoursesPage() {
         <CardContent className="pt-6">
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-amber-500" />
+              <Loader2 className="w-8 h-8 animate-spin text-accent-gold" />
             </div>
           ) : (
             <DataTable columns={columns} data={courses} searchKey="name" searchPlaceholder="Search courses..." />
@@ -278,10 +278,10 @@ export default function CoursesPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-slate-900 border-white/10 text-white max-w-xl">
+        <DialogContent className="bg-muted border-white/10 text-white max-w-xl">
           <DialogHeader>
             <DialogTitle>{editingCourse ? 'Edit Course' : 'Add New Course'}</DialogTitle>
-            <DialogDescription className="text-slate-400">
+            <DialogDescription className="text-muted">
               {editingCourse ? 'Update course details' : 'Create a new course'}
             </DialogDescription>
           </DialogHeader>
@@ -289,7 +289,7 @@ export default function CoursesPage() {
           <div className="space-y-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-slate-300">Course Code</Label>
+                <Label className="text-muted">Course Code</Label>
                 <Input
                   value={formData.code}
                   onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
@@ -298,12 +298,12 @@ export default function CoursesPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-slate-300">Credit Units</Label>
+                <Label className="text-muted">Credit Units</Label>
                 <Select value={formData.creditUnits} onValueChange={(v) => setFormData({ ...formData, creditUnits: v })}>
                   <SelectTrigger className="bg-white/5 border-white/10 text-white">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-white/10">
+                  <SelectContent className="bg-muted border-white/10">
                     {[1, 2, 3, 4, 5, 6].map((n) => (
                       <SelectItem key={n} value={n.toString()} className="text-white">{n} CU</SelectItem>
                     ))}
@@ -312,7 +312,7 @@ export default function CoursesPage() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-300">Course Name</Label>
+              <Label className="text-muted">Course Name</Label>
               <Input
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -322,12 +322,12 @@ export default function CoursesPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-slate-300">Department</Label>
+                <Label className="text-muted">Department</Label>
                 <Select value={formData.departmentId} onValueChange={(v) => setFormData({ ...formData, departmentId: v })}>
                   <SelectTrigger className="bg-white/5 border-white/10 text-white">
                     <SelectValue placeholder="Select department" />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-white/10">
+                  <SelectContent className="bg-muted border-white/10">
                     {departments.map((d) => (
                       <SelectItem key={d.id} value={d.id} className="text-white">{d.name} ({d.code})</SelectItem>
                     ))}
@@ -335,12 +335,12 @@ export default function CoursesPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label className="text-slate-300">Level</Label>
+                <Label className="text-muted">Level</Label>
                 <Select value={formData.level} onValueChange={(v) => setFormData({ ...formData, level: v })}>
                   <SelectTrigger className="bg-white/5 border-white/10 text-white">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-white/10">
+                  <SelectContent className="bg-muted border-white/10">
                     {levels.map((l) => (
                       <SelectItem key={l} value={l.toString()} className="text-white">{l} Level</SelectItem>
                     ))}
@@ -350,12 +350,12 @@ export default function CoursesPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-slate-300">Semester</Label>
+                <Label className="text-muted">Semester</Label>
                 <Select value={formData.semester} onValueChange={(v) => setFormData({ ...formData, semester: v })}>
                   <SelectTrigger className="bg-white/5 border-white/10 text-white">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-white/10">
+                  <SelectContent className="bg-muted border-white/10">
                     <SelectItem value="1" className="text-white">First Semester</SelectItem>
                     <SelectItem value="2" className="text-white">Second Semester</SelectItem>
                   </SelectContent>
@@ -363,22 +363,22 @@ export default function CoursesPage() {
               </div>
               <div className="space-y-2 pt-6">
                 <div className="flex items-center justify-between">
-                  <Label className="text-slate-300">GST/Shared Course</Label>
+                  <Label className="text-muted">GST/Shared Course</Label>
                   <Switch
                     checked={formData.isShared}
                     onCheckedChange={(v) => setFormData({ ...formData, isShared: v })}
                   />
                 </div>
-                <p className="text-xs text-slate-500">Enable for GST or cross-department courses</p>
+                <p className="text-xs text-muted">Enable for GST or cross-department courses</p>
               </div>
             </div>
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-white/10 text-slate-300">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-white/10 text-muted">
               Cancel
             </Button>
-            <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-amber-500 to-yellow-600">
+            <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-accent-gold to-accent-gold">
               {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
               {editingCourse ? 'Update' : 'Create'}
             </Button>

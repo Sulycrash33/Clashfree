@@ -11,11 +11,11 @@ import {
 import { ThemeProvider, useTheme } from "./ThemeContext";
 
 const NAV = [
-  { href: "/demo/super-admin",       label: "Super Admin",       icon: ShieldCheck,   color: "text-violet-400",  activeBg: "bg-violet-500/15 border-violet-400/30" },
-  { href: "/demo/institution-admin", label: "Institution Admin", icon: Building2,     color: "text-sky-400",     activeBg: "bg-sky-500/15 border-sky-400/30" },
-  { href: "/demo/timetable-officer", label: "Timetable Officer", icon: CalendarClock, color: "text-amber-400",   activeBg: "bg-amber-500/15 border-amber-400/30" },
-  { href: "/demo/lecturer",          label: "Lecturer",          icon: GraduationCap, color: "text-emerald-400", activeBg: "bg-emerald-500/15 border-emerald-400/30" },
-  { href: "/demo/student",           label: "Student",           icon: BookOpen,      color: "text-rose-400",    activeBg: "bg-rose-500/15 border-rose-400/30" },
+  { href: "/demo/super-admin",       label: "Super Admin",       icon: ShieldCheck,   color: "text-[#8C7FD8]",  activeBg: "bg-[#4A3D8F]/15 border-[#4A3D8F]/30" },
+  { href: "/demo/institution-admin", label: "Institution Admin", icon: Building2,     color: "text-[#E08A52]",     activeBg: "bg-[#BD5B2C]/15 border-[#BD5B2C]/30" },
+  { href: "/demo/timetable-officer", label: "Timetable Officer", icon: CalendarClock, color: "text-[#D7A33B]",   activeBg: "bg-[#D7A33B]/15 border-[#D7A33B]/30" },
+  { href: "/demo/lecturer",          label: "Lecturer",          icon: GraduationCap, color: "text-[#6F9A6A]", activeBg: "bg-[#4F7A4B]/15 border-[#4F7A4B]/30" },
+  { href: "/demo/student",           label: "Student",           icon: BookOpen,      color: "text-[#B98777]",    activeBg: "bg-[#8B5A4D]/15 border-[#8B5A4D]/30" },
 ];
 
 interface DemoLayoutProps {
@@ -32,14 +32,14 @@ function DemoLayoutInner({ children, activeRole, roleName, roleSubtitle, conflic
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const { darkMode, toggleDark } = useTheme();
 
-  const bg      = darkMode ? "bg-[#0a0a0f]"    : "bg-gray-50";
-  const sidebar  = darkMode ? "bg-[#0d0d14]"    : "bg-white";
-  const border   = darkMode ? "border-white/10" : "border-gray-200";
-  const text     = darkMode ? "text-white"       : "text-gray-900";
-  const sub      = darkMode ? "text-white/40"    : "text-gray-500";
-  const topbar   = darkMode ? "bg-[#0d0d14]/80" : "bg-white/90";
-  const navHover = darkMode ? "hover:bg-white/5": "hover:bg-gray-100";
-  const navInactiveText = darkMode ? "text-white/50" : "text-gray-500";
+  const bg      = darkMode ? "bg-[#110B27]"    : "bg-[#FAF8FF]";
+  const sidebar  = darkMode ? "bg-[#1C1638]"    : "bg-white";
+  const border   = darkMode ? "border-[#3A3163]" : "border-[#E4DEF5]";
+  const text     = darkMode ? "text-[#F5F3FA]"       : "text-[#1C1638]";
+  const sub      = darkMode ? "text-[#9089B8]"    : "text-[#6B6190]";
+  const topbar   = darkMode ? "bg-[#1C1638]/80" : "bg-white/90";
+  const navHover = darkMode ? "hover:bg-[#241D45]": "hover:bg-[#F0EDFB]";
+  const navInactiveText = darkMode ? "text-[#9089B8]" : "text-[#6B6190]";
 
   return (
     <div className={`min-h-screen ${bg} ${text} flex`}>
@@ -51,7 +51,7 @@ function DemoLayoutInner({ children, activeRole, roleName, roleSubtitle, conflic
       <aside className={`fixed top-0 left-0 h-full z-50 flex flex-col border-r ${border} ${sidebar} transition-all duration-300 ease-in-out ${sidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"} ${sidebarCollapsed ? "w-[68px]" : "w-[240px]"}`}>
         <div className={`h-16 flex items-center px-4 border-b ${border} flex-shrink-0`}>
           <Link href="/demo" className="flex items-center gap-2.5 min-w-0">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-blue-600 flex items-center justify-center flex-shrink-0">
+            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#4A3D8F] to-[#BD5B2C] flex items-center justify-center flex-shrink-0">
               <CalendarClock className="w-3.5 h-3.5 text-white" />
             </div>
             {!sidebarCollapsed && (
@@ -93,22 +93,22 @@ function DemoLayoutInner({ children, activeRole, roleName, roleSubtitle, conflic
         {!sidebarCollapsed && (
           <div className={`p-3 border-t ${border} space-y-2`}>
             <button onClick={toggleDark}
-              className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl border transition-all ${darkMode ? "bg-violet-500/10 border-violet-400/20 text-violet-300" : "bg-amber-50 border-amber-200 text-amber-700"} hover:brightness-110`}>
+              className={`w-full flex items-center gap-2.5 px-3 py-2 rounded-xl border transition-all ${darkMode ? "bg-[#4A3D8F]/10 border-[#4A3D8F]/20 text-[#A89BE0]" : "bg-[#FDF6E8] border-[#D7A33B]/30 text-[#8A6618]"} hover:brightness-110`}>
               {darkMode ? <Moon className="w-3.5 h-3.5" /> : <Sun className="w-3.5 h-3.5" />}
               <span className="text-xs font-medium">{darkMode ? "Dark Mode" : "Light Mode"}</span>
-              <div className={`ml-auto w-8 h-4 rounded-full relative transition-colors ${darkMode ? "bg-violet-600" : "bg-amber-300"}`}>
+              <div className={`ml-auto w-8 h-4 rounded-full relative transition-colors ${darkMode ? "bg-[#4A3D8F]" : "bg-[#D7A33B]"}`}>
                 <div className={`absolute top-0.5 w-3 h-3 rounded-full bg-white shadow transition-transform ${darkMode ? "translate-x-4" : "translate-x-0.5"}`} />
               </div>
             </button>
-            <div className={`rounded-xl ${darkMode ? "bg-amber-500/10 border-amber-500/20" : "bg-amber-50 border-amber-200"} border p-3 space-y-1`}>
+            <div className={`rounded-xl ${darkMode ? "bg-[#D7A33B]/10 border-[#D7A33B]/20" : "bg-[#FDF6E8] border-[#D7A33B]/30"} border p-3 space-y-1`}>
               <div className="flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-                <span className="text-xs font-semibold text-amber-500">Demo Mode</span>
+                <Sparkles className="w-3.5 h-3.5 text-[#D7A33B]" />
+                <span className="text-xs font-semibold text-[#D7A33B]">Demo Mode</span>
               </div>
-              <p className={`text-[11px] ${darkMode ? "text-white/40" : "text-gray-500"} leading-relaxed`}>
+              <p className={`text-[11px] ${darkMode ? "text-[#9089B8]" : "text-[#6B6190]"} leading-relaxed`}>
                 FEDKO — fictional institution for presentation use only.
               </p>
-              <Link href="/demo" className="text-[11px] text-amber-500 hover:text-amber-600 underline transition-colors">
+              <Link href="/demo" className="text-[11px] text-[#D7A33B] hover:text-[#BD5B2C] underline transition-colors">
                 ← Back to role picker
               </Link>
             </div>
@@ -116,7 +116,7 @@ function DemoLayoutInner({ children, activeRole, roleName, roleSubtitle, conflic
         )}
       </aside>
 
-      <div className={`flex-1 flex flex-col min-h-screen transition-all duration-300 ${darkMode ? "" : "bg-gray-50"} ${sidebarCollapsed ? "md:ml-[68px]" : "md:ml-[240px]"}`}>
+      <div className={`flex-1 flex flex-col min-h-screen transition-all duration-300 ${darkMode ? "" : "bg-[#FAF8FF]"} ${sidebarCollapsed ? "md:ml-[68px]" : "md:ml-[240px]"}`}>
         <header className={`h-16 border-b ${border} ${topbar} backdrop-blur-md sticky top-0 z-30 flex items-center px-4 sm:px-6 gap-4`}>
           <button onClick={() => setSidebarOpen(true)} className={`md:hidden ${sub} transition-colors`}>
             <Menu className="w-5 h-5" />
@@ -137,21 +137,21 @@ function DemoLayoutInner({ children, activeRole, roleName, roleSubtitle, conflic
           </div>
 
           {conflictCount > 0 && (
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-red-500/15 border border-red-500/30">
-              <AlertTriangle className="w-3.5 h-3.5 text-red-400" />
-              <span className="text-xs font-semibold text-red-400">{conflictCount} Conflict{conflictCount > 1 ? "s" : ""}</span>
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#9C3B30]/15 border border-[#9C3B30]/30">
+              <AlertTriangle className="w-3.5 h-3.5 text-[#E8857A]" />
+              <span className="text-xs font-semibold text-[#E8857A]">{conflictCount} Conflict{conflictCount > 1 ? "s" : ""}</span>
             </div>
           )}
 
           <button onClick={toggleDark}
-            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border transition-all ${darkMode ? "bg-violet-500/10 border-violet-400/20 text-violet-300" : "bg-amber-50 border-amber-200 text-amber-700"} hover:brightness-110`}>
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border transition-all ${darkMode ? "bg-[#4A3D8F]/10 border-[#4A3D8F]/20 text-[#A89BE0]" : "bg-[#FDF6E8] border-[#D7A33B]/30 text-[#8A6618]"} hover:brightness-110`}>
             {darkMode ? <Moon className="w-3.5 h-3.5" /> : <Sun className="w-3.5 h-3.5" />}
             <span className="text-[11px] font-medium hidden sm:block">{darkMode ? "Dark" : "Light"}</span>
           </button>
 
-          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-[11px] text-emerald-400 font-medium">FEDKO Live Demo</span>
+          <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#4F7A4B]/10 border border-[#4F7A4B]/20">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#6F9A6A] animate-pulse" />
+            <span className="text-[11px] text-[#6F9A6A] font-medium">FEDKO Live Demo</span>
           </div>
         </header>
 

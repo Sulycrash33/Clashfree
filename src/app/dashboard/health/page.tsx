@@ -41,22 +41,22 @@ export default function HealthPage() {
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'healthy':
-        return <CheckCircle className="w-5 h-5 text-green-500" />
+        return <CheckCircle className="w-5 h-5 text-success" />
       case 'degraded':
-        return <AlertTriangle className="w-5 h-5 text-yellow-500" />
+        return <AlertTriangle className="w-5 h-5 text-accent-gold" />
       case 'down':
-        return <XCircle className="w-5 h-5 text-red-500" />
+        return <XCircle className="w-5 h-5 text-clash" />
     }
   }
 
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'healthy':
-        return 'text-green-500'
+        return 'text-success'
       case 'degraded':
-        return 'text-yellow-500'
+        return 'text-accent-gold'
       case 'down':
-        return 'text-red-500'
+        return 'text-clash'
     }
   }
 

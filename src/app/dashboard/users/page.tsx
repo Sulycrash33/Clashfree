@@ -45,11 +45,11 @@ interface Faculty {
 }
 
 const roleLabels: Record<string, { label: string; icon: any; color: string }> = {
-  SA: { label: 'Super Admin', icon: Shield, color: 'from-red-500 to-orange-500' },
-  IA: { label: 'Institution Admin', icon: Building2, color: 'from-blue-500 to-cyan-500' },
-  TO: { label: 'Timetable Officer', icon: Calendar, color: 'from-purple-500 to-pink-500' },
-  LC: { label: 'Lecturer', icon: BookOpen, color: 'from-green-500 to-emerald-500' },
-  ST: { label: 'Student', icon: GraduationCap, color: 'from-amber-500 to-yellow-500' },
+  SA: { label: 'Super Admin', icon: Shield, color: 'from-clash to-accent-gold' },
+  IA: { label: 'Institution Admin', icon: Building2, color: 'from-secondary to-secondary' },
+  TO: { label: 'Timetable Officer', icon: Calendar, color: 'from-primary to-clash' },
+  LC: { label: 'Lecturer', icon: BookOpen, color: 'from-success to-success' },
+  ST: { label: 'Student', icon: GraduationCap, color: 'from-accent-gold to-accent-gold' },
 }
 
 export default function UsersPage() {
@@ -189,7 +189,7 @@ export default function UsersPage() {
             </div>
             <div>
               <div className="font-medium text-white">{row.getValue('name')}</div>
-              <div className="text-xs text-slate-400">{row.original.email}</div>
+              <div className="text-xs text-muted">{row.original.email}</div>
             </div>
           </div>
         )
@@ -211,7 +211,7 @@ export default function UsersPage() {
       accessorKey: 'institution',
       header: 'Institution',
       cell: ({ row }) => (
-        <span className="text-slate-400">
+        <span className="text-muted">
           {row.original.institution?.shortName || 'Platform'}
         </span>
       ),
@@ -220,7 +220,7 @@ export default function UsersPage() {
       accessorKey: 'lastLoginAt',
       header: 'Last Login',
       cell: ({ row }) => (
-        <span className="text-slate-400 text-sm">
+        <span className="text-muted text-sm">
           {row.original.lastLoginAt
             ? new Date(row.original.lastLoginAt).toLocaleDateString()
             : 'Never'}
@@ -231,7 +231,7 @@ export default function UsersPage() {
       accessorKey: 'isActive',
       header: 'Status',
       cell: ({ row }) => (
-        <Badge className={row.getValue('isActive') ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}>
+        <Badge className={row.getValue('isActive') ? 'bg-success/10 text-success' : 'bg-clash/10 text-clash'}>
           {row.getValue('isActive') ? 'Active' : 'Inactive'}
         </Badge>
       ),
@@ -241,15 +241,15 @@ export default function UsersPage() {
       cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-slate-400">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted">
               <MoreHorizontal className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-slate-900 border-white/10">
-            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-slate-300">
+          <DropdownMenuContent align="end" className="bg-muted border-white/10">
+            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted">
               <Pencil className="w-4 h-4 mr-2" /> Edit
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-red-400">
+            <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-clash">
               <Trash2 className="w-4 h-4 mr-2" /> Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -260,8 +260,8 @@ export default function UsersPage() {
 
   if (session?.user?.role !== 'SA') {
     return (
-      <Alert className="bg-red-500/10 border-red-500/20">
-        <AlertDescription className="text-red-400">Access denied. Super Admin role required.</AlertDescription>
+      <Alert className="bg-clash/10 border-clash/20">
+        <AlertDescription className="text-clash">Access denied. Super Admin role required.</AlertDescription>
       </Alert>
     )
   }
@@ -281,7 +281,7 @@ export default function UsersPage() {
         <CardContent className="pt-6">
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-red-500" />
+              <Loader2 className="w-8 h-8 animate-spin text-clash" />
             </div>
           ) : (
             <DataTable columns={columns} data={users} searchKey="name" searchPlaceholder="Search users..." />
@@ -290,17 +290,17 @@ export default function UsersPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-slate-900 border-white/10 text-white max-w-md">
+        <DialogContent className="bg-muted border-white/10 text-white max-w-md">
           <DialogHeader>
             <DialogTitle>{editingUser ? 'Edit User' : 'Add New User'}</DialogTitle>
-            <DialogDescription className="text-slate-400">
+            <DialogDescription className="text-muted">
               {editingUser ? 'Update user details' : 'Create a new user account'}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label className="text-slate-300">Full Name</Label>
+              <Label className="text-muted">Full Name</Label>
               <Input
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -308,7 +308,7 @@ export default function UsersPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-300">Email</Label>
+              <Label className="text-muted">Email</Label>
               <Input
                 type="email"
                 value={formData.email}
@@ -318,7 +318,7 @@ export default function UsersPage() {
             </div>
             {!editingUser && (
               <div className="space-y-2">
-                <Label className="text-slate-300">Password</Label>
+                <Label className="text-muted">Password</Label>
                 <Input
                   type="password"
                   value={formData.password}
@@ -328,12 +328,12 @@ export default function UsersPage() {
               </div>
             )}
             <div className="space-y-2">
-              <Label className="text-slate-300">Role</Label>
+              <Label className="text-muted">Role</Label>
               <Select value={formData.role} onValueChange={(v) => setFormData({ ...formData, role: v })}>
                 <SelectTrigger className="bg-white/5 border-white/10 text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-slate-900 border-white/10">
+                <SelectContent className="bg-muted border-white/10">
                   {Object.entries(roleLabels).map(([key, { label }]) => (
                     <SelectItem key={key} value={key} className="text-white">{label}</SelectItem>
                   ))}
@@ -342,12 +342,12 @@ export default function UsersPage() {
             </div>
             {formData.role !== 'SA' && (
               <div className="space-y-2">
-                <Label className="text-slate-300">Institution</Label>
+                <Label className="text-muted">Institution</Label>
                 <Select value={formData.institutionId} onValueChange={(v) => setFormData({ ...formData, institutionId: v })}>
                   <SelectTrigger className="bg-white/5 border-white/10 text-white">
                     <SelectValue placeholder="Select institution" />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-white/10">
+                  <SelectContent className="bg-muted border-white/10">
                     {institutions.map((i) => (
                       <SelectItem key={i.id} value={i.id} className="text-white">{i.name} ({i.shortName})</SelectItem>
                     ))}
@@ -358,10 +358,10 @@ export default function UsersPage() {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-white/10 text-slate-300">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-white/10 text-muted">
               Cancel
             </Button>
-            <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-red-500 to-orange-600">
+            <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-clash to-accent-gold">
               {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
               {editingUser ? 'Update' : 'Create'}
             </Button>

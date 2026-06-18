@@ -26,13 +26,13 @@ interface NotificationBadgeProps {
 }
 
 const typeConfig = {
-  INFO: { icon: Info, color: 'text-blue-400', bg: 'bg-blue-500/20' },
-  WARNING: { icon: AlertTriangle, color: 'text-amber-400', bg: 'bg-amber-500/20' },
-  ERROR: { icon: AlertCircle, color: 'text-red-400', bg: 'bg-red-500/20' },
-  SUCCESS: { icon: CheckCircle, color: 'text-green-400', bg: 'bg-green-500/20' },
-  SCHEDULE_CHANGE: { icon: Bell, color: 'text-purple-400', bg: 'bg-purple-500/20' },
-  CONFLICT_DETECTED: { icon: AlertTriangle, color: 'text-red-400', bg: 'bg-red-500/20' },
-  APPROVAL_REQUIRED: { icon: AlertCircle, color: 'text-amber-400', bg: 'bg-amber-500/20' },
+  INFO: { icon: Info, color: 'text-secondary', bg: 'bg-secondary/20' },
+  WARNING: { icon: AlertTriangle, color: 'text-accent-gold', bg: 'bg-accent-gold/20' },
+  ERROR: { icon: AlertCircle, color: 'text-clash', bg: 'bg-clash/20' },
+  SUCCESS: { icon: CheckCircle, color: 'text-success', bg: 'bg-success/20' },
+  SCHEDULE_CHANGE: { icon: Bell, color: 'text-primary', bg: 'bg-primary/20' },
+  CONFLICT_DETECTED: { icon: AlertTriangle, color: 'text-clash', bg: 'bg-clash/20' },
+  APPROVAL_REQUIRED: { icon: AlertCircle, color: 'text-accent-gold', bg: 'bg-accent-gold/20' },
 }
 
 export function NotificationBadge({ count = 0, maxDisplay = 5 }: NotificationBadgeProps) {
@@ -100,11 +100,11 @@ export function NotificationBadge({ count = 0, maxDisplay = 5 }: NotificationBad
         <Button
           variant="ghost"
           size="icon"
-          className="relative text-slate-400 hover:text-white"
+          className="relative text-muted hover:text-white"
         >
           <Bell className="w-5 h-5" />
           {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 text-white text-xs flex items-center justify-center font-medium">
+            <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-clash text-white text-xs flex items-center justify-center font-medium">
               {unreadCount > 9 ? '9+' : unreadCount}
             </span>
           )}
@@ -112,14 +112,14 @@ export function NotificationBadge({ count = 0, maxDisplay = 5 }: NotificationBad
       </PopoverTrigger>
       <PopoverContent 
         align="end" 
-        className="w-80 bg-slate-900 border-white/10 text-white p-0"
+        className="w-80 bg-muted border-white/10 text-white p-0"
       >
         <div className="flex items-center justify-between p-4 border-b border-white/10">
           <h3 className="font-semibold">Notifications</h3>
           {unreadCount > 0 && (
             <button
               onClick={markAllAsRead}
-              className="text-xs text-cyan-400 hover:text-cyan-300"
+              className="text-xs text-secondary hover:text-secondary"
             >
               Mark all as read
             </button>
@@ -129,10 +129,10 @@ export function NotificationBadge({ count = 0, maxDisplay = 5 }: NotificationBad
         <div className="max-h-[300px] overflow-y-auto">
           {loading ? (
             <div className="flex items-center justify-center py-8">
-              <Loader2 className="w-6 h-6 animate-spin text-cyan-400" />
+              <Loader2 className="w-6 h-6 animate-spin text-secondary" />
             </div>
           ) : notifications.length === 0 ? (
-            <div className="py-8 text-center text-slate-400">
+            <div className="py-8 text-center text-muted">
               <Bell className="w-8 h-8 mx-auto mb-2 opacity-50" />
               <p className="text-sm">No notifications</p>
             </div>
@@ -156,17 +156,17 @@ export function NotificationBadge({ count = 0, maxDisplay = 5 }: NotificationBad
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-2">
-                          <p className={`text-sm font-medium ${!notification.isRead ? 'text-white' : 'text-slate-300'}`}>
+                          <p className={`text-sm font-medium ${!notification.isRead ? 'text-white' : 'text-muted'}`}>
                             {notification.title}
                           </p>
                           {!notification.isRead && (
-                            <span className="w-2 h-2 rounded-full bg-cyan-400 flex-shrink-0 mt-1.5" />
+                            <span className="w-2 h-2 rounded-full bg-secondary flex-shrink-0 mt-1.5" />
                           )}
                         </div>
-                        <p className="text-xs text-slate-400 mt-0.5 line-clamp-2">
+                        <p className="text-xs text-muted mt-0.5 line-clamp-2">
                           {notification.message}
                         </p>
-                        <p className="text-xs text-slate-500 mt-1">
+                        <p className="text-xs text-muted mt-1">
                           {formatTime(notification.createdAt)}
                         </p>
                       </div>
@@ -180,7 +180,7 @@ export function NotificationBadge({ count = 0, maxDisplay = 5 }: NotificationBad
 
         {notifications.length > maxDisplay && (
           <div className="p-3 border-t border-white/10">
-            <button className="w-full text-center text-sm text-cyan-400 hover:text-cyan-300">
+            <button className="w-full text-center text-sm text-secondary hover:text-secondary">
               View all notifications
             </button>
           </div>
@@ -204,12 +204,12 @@ export function ConflictBadge({ count, critical = 0, warnings = 0, onClick }: Co
   return (
     <button
       onClick={onClick}
-      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 transition-colors"
+      className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-clash/10 border border-clash/20 text-clash hover:bg-clash/20 transition-colors"
     >
       <AlertTriangle className="w-4 h-4" />
       <span className="font-medium">{count} Conflict{count !== 1 ? 's' : ''}</span>
       {critical > 0 && (
-        <Badge className="bg-red-500 text-white text-xs ml-1">{critical} Critical</Badge>
+        <Badge className="bg-clash text-white text-xs ml-1">{critical} Critical</Badge>
       )}
     </button>
   )

@@ -57,10 +57,10 @@ const ENTITY_CONFIG: Record<UploadType, EntityConfig> = {
   students: {
     label: 'Students',
     icon: GraduationCap,
-    color: 'text-emerald-400',
-    bg: 'bg-emerald-500/8',
-    border: 'border-emerald-400/20',
-    accent: 'bg-emerald-500',
+    color: 'text-success',
+    bg: 'bg-success/8',
+    border: 'border-success/20',
+    accent: 'bg-success',
     description: 'Register multiple students at once',
     fields: ['regNumber', 'name', 'email', 'level', 'admissionYear', 'departmentCode'],
     requiredFields: ['regNumber', 'name', 'level', 'departmentCode'],
@@ -73,10 +73,10 @@ COE/2022/PHY/003,Ibrahim Sani,,200,2022,PHY`,
   courses: {
     label: 'Courses',
     icon: BookOpen,
-    color: 'text-violet-400',
-    bg: 'bg-violet-500/8',
-    border: 'border-violet-400/20',
-    accent: 'bg-violet-500',
+    color: 'text-primary',
+    bg: 'bg-primary/8',
+    border: 'border-primary/20',
+    accent: 'bg-primary',
     description: 'Import course catalogue in bulk',
     fields: ['code', 'name', 'creditUnits', 'level', 'semester', 'isShared', 'departmentCode'],
     requiredFields: ['code', 'name', 'creditUnits', 'level', 'semester', 'departmentCode'],
@@ -89,10 +89,10 @@ MTH 201,Mathematical Methods,3,200,1,false,MTH`,
   lecturers: {
     label: 'Lecturers',
     icon: Users,
-    color: 'text-sky-400',
-    bg: 'bg-sky-500/8',
-    border: 'border-sky-400/20',
-    accent: 'bg-sky-500',
+    color: 'text-secondary',
+    bg: 'bg-secondary/8',
+    border: 'border-secondary/20',
+    accent: 'bg-secondary',
     description: 'Add lecturer profiles for scheduling',
     fields: ['staffId', 'name', 'email', 'rank', 'departmentCode'],
     requiredFields: ['staffId', 'name', 'email', 'departmentCode'],
@@ -104,10 +104,10 @@ COE/STAFF/002,Prof. Musa Ibrahim,m.ibrahim@coeminna.edu.ng,Professor,MTH`,
   rooms: {
     label: 'Rooms / Venues',
     icon: Home,
-    color: 'text-amber-400',
-    bg: 'bg-amber-500/8',
-    border: 'border-amber-400/20',
-    accent: 'bg-amber-500',
+    color: 'text-accent-gold',
+    bg: 'bg-accent-gold/8',
+    border: 'border-accent-gold/20',
+    accent: 'bg-accent-gold',
     description: 'Add lecture halls, labs, and exam venues',
     fields: ['code', 'name', 'capacity', 'type', 'hasProjector', 'hasAC'],
     requiredFields: ['code', 'name', 'capacity', 'type'],
@@ -120,10 +120,10 @@ GH-A,General Hall A,200,LECTURE_HALL,true,false`,
   departments: {
     label: 'Departments',
     icon: Building2,
-    color: 'text-pink-400',
-    bg: 'bg-pink-500/8',
-    border: 'border-pink-400/20',
-    accent: 'bg-pink-500',
+    color: 'text-clash',
+    bg: 'bg-clash/8',
+    border: 'border-clash/20',
+    accent: 'bg-clash',
     description: 'Create departments under faculties',
     fields: ['code', 'name', 'facultyId'],
     requiredFields: ['code', 'name', 'facultyId'],
@@ -136,10 +136,10 @@ ECO,Economics,faculty-social-sciences`,
   'exam-slots': {
     label: 'Exam Timetable',
     icon: ClipboardList,
-    color: 'text-red-400',
-    bg: 'bg-red-500/8',
-    border: 'border-red-400/20',
-    accent: 'bg-red-500',
+    color: 'text-clash',
+    bg: 'bg-clash/8',
+    border: 'border-clash/20',
+    accent: 'bg-clash',
     description: 'Import exam schedule directly',
     fields: ['courseCode', 'date', 'startTime', 'endTime', 'roomCode', 'examPeriodId'],
     requiredFields: ['courseCode', 'date', 'startTime', 'endTime', 'roomCode'],
@@ -152,10 +152,10 @@ CSC 201,2025-01-17,14:00,17:00,LT1,period-001`,
   'timetable-slots': {
     label: 'Lecture Timetable',
     icon: CalendarClock,
-    color: 'text-cyan-400',
-    bg: 'bg-cyan-500/8',
-    border: 'border-cyan-400/20',
-    accent: 'bg-cyan-500',
+    color: 'text-secondary',
+    bg: 'bg-secondary/8',
+    border: 'border-secondary/20',
+    accent: 'bg-secondary',
     description: 'Bulk-load semester lecture schedule',
     fields: ['courseCode', 'day', 'startTime', 'endTime', 'roomCode', 'lecturerStaffId', 'departmentCode', 'level'],
     requiredFields: ['courseCode', 'day', 'startTime', 'endTime', 'roomCode'],
@@ -313,7 +313,7 @@ function FieldPills({ fields, required }: { fields: string[]; required: string[]
             }`}
           >
             {f}
-            {isReq && <span className="text-red-400">*</span>}
+            {isReq && <span className="text-clash">*</span>}
           </span>
         )
       })}
@@ -324,14 +324,14 @@ function FieldPills({ fields, required }: { fields: string[]; required: string[]
 function ResultPanel({ result, cfg }: { result: UploadResult; cfg: EntityConfig }) {
   const allOk = result.failed === 0
   return (
-    <div className={`rounded-2xl border p-5 space-y-4 ${allOk ? 'bg-emerald-500/8 border-emerald-400/20' : 'bg-amber-500/8 border-amber-400/20'}`}>
+    <div className={`rounded-2xl border p-5 space-y-4 ${allOk ? 'bg-success/8 border-success/20' : 'bg-accent-gold/8 border-accent-gold/20'}`}>
       <div className="flex items-center gap-3">
         {allOk
-          ? <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
-          : <FileWarning className="w-5 h-5 text-amber-400 flex-shrink-0" />
+          ? <CheckCircle2 className="w-5 h-5 text-success flex-shrink-0" />
+          : <FileWarning className="w-5 h-5 text-accent-gold flex-shrink-0" />
         }
         <div>
-          <div className={`text-sm font-semibold ${allOk ? 'text-emerald-300' : 'text-amber-300'}`}>
+          <div className={`text-sm font-semibold ${allOk ? 'text-success' : 'text-accent-gold'}`}>
             {allOk ? 'All records imported successfully' : 'Import completed with warnings'}
           </div>
           <div className="text-xs text-white/35 mt-0.5">
@@ -343,8 +343,8 @@ function ResultPanel({ result, cfg }: { result: UploadResult; cfg: EntityConfig 
       <div className="grid grid-cols-3 gap-3">
         {[
           { label: 'Total',   value: result.total,   color: 'text-white' },
-          { label: 'Imported', value: result.success, color: 'text-emerald-400' },
-          { label: 'Failed',  value: result.failed,  color: result.failed > 0 ? 'text-red-400' : 'text-white/30' },
+          { label: 'Imported', value: result.success, color: 'text-success' },
+          { label: 'Failed',  value: result.failed,  color: result.failed > 0 ? 'text-clash' : 'text-white/30' },
         ].map((s) => (
           <div key={s.label} className="rounded-xl bg-white/5 border border-white/10 py-3 text-center">
             <div className={`text-xl font-bold ${s.color}`}>{s.value}</div>
@@ -354,11 +354,11 @@ function ResultPanel({ result, cfg }: { result: UploadResult; cfg: EntityConfig 
       </div>
 
       {result.errors.length > 0 && (
-        <div className="rounded-xl bg-red-500/8 border border-red-400/15 p-3 max-h-36 overflow-y-auto space-y-1">
+        <div className="rounded-xl bg-clash/8 border border-clash/15 p-3 max-h-36 overflow-y-auto space-y-1">
           {result.errors.map((err, i) => (
             <div key={i} className="flex items-start gap-2">
-              <AlertCircle className="w-3 h-3 text-red-400 flex-shrink-0 mt-0.5" />
-              <span className="text-[11px] text-red-300/80">{err}</span>
+              <AlertCircle className="w-3 h-3 text-clash flex-shrink-0 mt-0.5" />
+              <span className="text-[11px] text-clash/80">{err}</span>
             </div>
           ))}
           {result.errors.length >= 10 && (
@@ -607,13 +607,13 @@ export function BulkUpload({
             status === 'success'
               ? <ResultPanel result={result} cfg={cfg} />
               : (
-                <div className="rounded-2xl bg-red-500/8 border border-red-400/20 p-5 space-y-3">
+                <div className="rounded-2xl bg-clash/8 border border-clash/20 p-5 space-y-3">
                   <div className="flex items-center gap-3">
-                    <AlertCircle className="w-5 h-5 text-red-400" />
-                    <div className="text-sm font-semibold text-red-300">Upload failed</div>
+                    <AlertCircle className="w-5 h-5 text-clash" />
+                    <div className="text-sm font-semibold text-clash">Upload failed</div>
                   </div>
                   {result.errors.map((e, i) => (
-                    <p key={i} className="text-xs text-red-300/70 pl-8">{e}</p>
+                    <p key={i} className="text-xs text-clash/70 pl-8">{e}</p>
                   ))}
                 </div>
               )
@@ -652,7 +652,7 @@ export function BulkUpload({
 
   if (variant === 'inline') {
     return (
-      <div className="rounded-2xl border border-white/10 bg-[#0d0d14] overflow-hidden">
+      <div className="rounded-2xl border border-white/10 bg-card overflow-hidden">
         <Panel />
       </div>
     )
@@ -662,18 +662,18 @@ export function BulkUpload({
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-600 to-blue-600 text-white text-sm font-semibold hover:opacity-90 transition-opacity shadow-lg shadow-blue-900/30"
+        className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-secondary to-secondary text-white text-sm font-semibold hover:opacity-90 transition-opacity shadow-lg shadow-blue-900/30"
       >
         <Upload className="w-4 h-4" />
         Bulk Upload
       </button>
 
       <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) resetUpload() }}>
-        <DialogContent className="bg-[#0d0d14] border-white/10 text-white p-0 max-w-3xl w-full max-h-[90vh] overflow-hidden rounded-2xl">
+        <DialogContent className="bg-card border-white/10 text-white p-0 max-w-3xl w-full max-h-[90vh] overflow-hidden rounded-2xl">
           <DialogHeader className="px-6 py-4 border-b border-white/8">
             <DialogTitle className="flex items-center gap-2.5 text-base">
-              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 border border-cyan-500/20 flex items-center justify-center">
-                <Upload className="w-3.5 h-3.5 text-cyan-400" />
+              <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-secondary/20 to-secondary/20 border border-secondary/20 flex items-center justify-center">
+                <Upload className="w-3.5 h-3.5 text-secondary" />
               </div>
               Bulk Upload
               <span className="text-white/25 font-normal text-sm ml-1">— Import data via CSV or Excel</span>

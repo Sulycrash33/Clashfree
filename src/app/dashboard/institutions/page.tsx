@@ -182,7 +182,7 @@ export default function InstitutionsPage() {
       accessorKey: 'shortName',
       header: 'Code',
       cell: ({ row }) => (
-        <Badge variant="outline" className="border-cyan-500/20 text-cyan-400">
+        <Badge variant="outline" className="border-secondary/20 text-secondary">
           {row.getValue('shortName')}
         </Badge>
       ),
@@ -192,12 +192,12 @@ export default function InstitutionsPage() {
       header: 'Institution Name',
       cell: ({ row }) => (
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center">
-            <Building2 className="w-5 h-5 text-cyan-400" />
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-secondary/20 to-secondary/20 flex items-center justify-center">
+            <Building2 className="w-5 h-5 text-secondary" />
           </div>
           <div>
             <div className="font-medium text-white">{row.getValue('name')}</div>
-            <div className="text-xs text-slate-400">{row.original._count?.faculties || 0} faculties</div>
+            <div className="text-xs text-muted">{row.original._count?.faculties || 0} faculties</div>
           </div>
         </div>
       ),
@@ -206,7 +206,7 @@ export default function InstitutionsPage() {
       accessorKey: 'type',
       header: 'Type',
       cell: ({ row }) => (
-        <Badge variant="secondary" className="bg-white/10 text-slate-300">
+        <Badge variant="secondary" className="bg-white/10 text-muted">
           {institutionTypes[row.getValue('type') as string] || row.getValue('type')}
         </Badge>
       ),
@@ -215,7 +215,7 @@ export default function InstitutionsPage() {
       accessorKey: 'city',
       header: 'Location',
       cell: ({ row }) => (
-        <div className="flex items-center gap-2 text-slate-400">
+        <div className="flex items-center gap-2 text-muted">
           <MapPin className="w-4 h-4" />
           {row.getValue('city')}, {row.original.state}
         </div>
@@ -226,9 +226,9 @@ export default function InstitutionsPage() {
       header: 'Session',
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
-          <Calendar className="w-4 h-4 text-slate-400" />
+          <Calendar className="w-4 h-4 text-muted" />
           <span className="text-white">{row.getValue('currentSession')}</span>
-          <Badge variant="outline" className="border-white/10 text-slate-400">
+          <Badge variant="outline" className="border-white/10 text-muted">
             Sem {row.original.currentSemester}
           </Badge>
         </div>
@@ -238,7 +238,7 @@ export default function InstitutionsPage() {
       accessorKey: 'isActive',
       header: 'Status',
       cell: ({ row }) => (
-        <Badge className={row.getValue('isActive') ? 'bg-green-500/10 text-green-400 border-green-500/20' : 'bg-red-500/10 text-red-400 border-red-500/20'}>
+        <Badge className={row.getValue('isActive') ? 'bg-success/10 text-success border-success/20' : 'bg-clash/10 text-clash border-clash/20'}>
           {row.getValue('isActive') ? 'Active' : 'Inactive'}
         </Badge>
       ),
@@ -248,16 +248,16 @@ export default function InstitutionsPage() {
       cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-slate-400">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted">
               <MoreHorizontal className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-slate-900 border-white/10">
-            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-slate-300 focus:text-white focus:bg-white/5">
+          <DropdownMenuContent align="end" className="bg-muted border-white/10">
+            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted focus:text-white focus:bg-white/5">
               <Pencil className="w-4 h-4 mr-2" />
               Edit
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-red-400 focus:text-red-300 focus:bg-red-500/10">
+            <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-clash focus:text-clash focus:bg-clash/10">
               <Trash2 className="w-4 h-4 mr-2" />
               Delete
             </DropdownMenuItem>
@@ -269,8 +269,8 @@ export default function InstitutionsPage() {
 
   if (session?.user?.role !== 'SA') {
     return (
-      <Alert className="bg-red-500/10 border-red-500/20">
-        <AlertDescription className="text-red-400">Access denied. Super Admin role required.</AlertDescription>
+      <Alert className="bg-clash/10 border-clash/20">
+        <AlertDescription className="text-clash">Access denied. Super Admin role required.</AlertDescription>
       </Alert>
     )
   }
@@ -290,7 +290,7 @@ export default function InstitutionsPage() {
         <CardContent className="pt-6">
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-cyan-500" />
+              <Loader2 className="w-8 h-8 animate-spin text-secondary" />
             </div>
           ) : (
             <DataTable
@@ -304,17 +304,17 @@ export default function InstitutionsPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-slate-900 border-white/10 text-white max-w-2xl">
+        <DialogContent className="bg-muted border-white/10 text-white max-w-2xl">
           <DialogHeader>
             <DialogTitle>{editingInstitution ? 'Edit Institution' : 'Add New Institution'}</DialogTitle>
-            <DialogDescription className="text-slate-400">
+            <DialogDescription className="text-muted">
               {editingInstitution ? 'Update institution details' : 'Register a new tertiary institution'}
             </DialogDescription>
           </DialogHeader>
 
           <div className="grid grid-cols-2 gap-4 py-4">
             <div className="space-y-2">
-              <Label className="text-slate-300">Institution Name</Label>
+              <Label className="text-muted">Institution Name</Label>
               <Input
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -323,7 +323,7 @@ export default function InstitutionsPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-300">Short Name</Label>
+              <Label className="text-muted">Short Name</Label>
               <Input
                 value={formData.shortName}
                 onChange={(e) => setFormData({ ...formData, shortName: e.target.value.toUpperCase() })}
@@ -333,12 +333,12 @@ export default function InstitutionsPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-300">Institution Type</Label>
+              <Label className="text-muted">Institution Type</Label>
               <Select value={formData.type} onValueChange={(v) => setFormData({ ...formData, type: v })}>
                 <SelectTrigger className="bg-white/5 border-white/10 text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-slate-900 border-white/10">
+                <SelectContent className="bg-muted border-white/10">
                   {Object.entries(institutionTypes).map(([key, label]) => (
                     <SelectItem key={key} value={key} className="text-white focus:bg-white/5">{label}</SelectItem>
                   ))}
@@ -346,7 +346,7 @@ export default function InstitutionsPage() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-300">Current Session</Label>
+              <Label className="text-muted">Current Session</Label>
               <Input
                 value={formData.currentSession}
                 onChange={(e) => setFormData({ ...formData, currentSession: e.target.value })}
@@ -355,7 +355,7 @@ export default function InstitutionsPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-300">City</Label>
+              <Label className="text-muted">City</Label>
               <Input
                 value={formData.city}
                 onChange={(e) => setFormData({ ...formData, city: e.target.value })}
@@ -364,7 +364,7 @@ export default function InstitutionsPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-300">State</Label>
+              <Label className="text-muted">State</Label>
               <Input
                 value={formData.state}
                 onChange={(e) => setFormData({ ...formData, state: e.target.value })}
@@ -373,7 +373,7 @@ export default function InstitutionsPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-300">Country</Label>
+              <Label className="text-muted">Country</Label>
               <Input
                 value={formData.country}
                 onChange={(e) => setFormData({ ...formData, country: e.target.value })}
@@ -381,12 +381,12 @@ export default function InstitutionsPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-300">Current Semester</Label>
+              <Label className="text-muted">Current Semester</Label>
               <Select value={formData.currentSemester} onValueChange={(v) => setFormData({ ...formData, currentSemester: v })}>
                 <SelectTrigger className="bg-white/5 border-white/10 text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-slate-900 border-white/10">
+                <SelectContent className="bg-muted border-white/10">
                   <SelectItem value="1" className="text-white focus:bg-white/5">First Semester</SelectItem>
                   <SelectItem value="2" className="text-white focus:bg-white/5">Second Semester</SelectItem>
                 </SelectContent>
@@ -395,10 +395,10 @@ export default function InstitutionsPage() {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-white/10 text-slate-300">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-white/10 text-muted">
               Cancel
             </Button>
-            <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-cyan-500 to-blue-600">
+            <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-secondary to-secondary">
               {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
               {editingInstitution ? 'Update' : 'Create'}
             </Button>

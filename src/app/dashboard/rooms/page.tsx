@@ -183,7 +183,7 @@ export default function RoomsPage() {
       accessorKey: 'code',
       header: 'Code',
       cell: ({ row }) => (
-        <Badge variant="outline" className="border-pink-500/20 text-pink-400 font-mono">
+        <Badge variant="outline" className="border-clash/20 text-clash font-mono">
           {row.getValue('code')}
         </Badge>
       ),
@@ -193,12 +193,12 @@ export default function RoomsPage() {
       header: 'Room Name',
       cell: ({ row }) => (
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-pink-500/20 to-rose-500/20 flex items-center justify-center">
-            <MapPin className="w-5 h-5 text-pink-400" />
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-clash/20 to-clash/20 flex items-center justify-center">
+            <MapPin className="w-5 h-5 text-clash" />
           </div>
           <div>
             <div className="font-medium text-white">{row.getValue('name')}</div>
-            <div className="text-xs text-slate-400">
+            <div className="text-xs text-muted">
               {row.original.building || 'No building'} • {row.original.faculty?.code || 'Central'}
             </div>
           </div>
@@ -209,7 +209,7 @@ export default function RoomsPage() {
       accessorKey: 'type',
       header: 'Type',
       cell: ({ row }) => (
-        <Badge variant="secondary" className="bg-white/10 text-slate-300">
+        <Badge variant="secondary" className="bg-white/10 text-muted">
           {roomTypes[row.getValue('type') as string] || row.getValue('type')}
         </Badge>
       ),
@@ -218,7 +218,7 @@ export default function RoomsPage() {
       accessorKey: 'capacity',
       header: 'Capacity',
       cell: ({ row }) => (
-        <div className="flex items-center gap-2 text-slate-400">
+        <div className="flex items-center gap-2 text-muted">
           <Users className="w-4 h-4" />
           <span>{row.getValue('capacity')}</span>
         </div>
@@ -230,17 +230,17 @@ export default function RoomsPage() {
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
           {row.original.hasProjector && (
-            <div className="w-6 h-6 rounded bg-blue-500/10 flex items-center justify-center" title="Projector">
-              <Monitor className="w-3 h-3 text-blue-400" />
+            <div className="w-6 h-6 rounded bg-secondary/10 flex items-center justify-center" title="Projector">
+              <Monitor className="w-3 h-3 text-secondary" />
             </div>
           )}
           {row.original.hasAC && (
-            <div className="w-6 h-6 rounded bg-cyan-500/10 flex items-center justify-center" title="AC">
-              <Snowflake className="w-3 h-3 text-cyan-400" />
+            <div className="w-6 h-6 rounded bg-secondary/10 flex items-center justify-center" title="AC">
+              <Snowflake className="w-3 h-3 text-secondary" />
             </div>
           )}
           {row.original.hasComputers && (
-            <Badge className="bg-purple-500/10 text-purple-400 text-xs">Lab</Badge>
+            <Badge className="bg-primary/10 text-primary text-xs">Lab</Badge>
           )}
         </div>
       ),
@@ -249,7 +249,7 @@ export default function RoomsPage() {
       accessorKey: 'isActive',
       header: 'Status',
       cell: ({ row }) => (
-        <Badge className={row.getValue('isActive') ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}>
+        <Badge className={row.getValue('isActive') ? 'bg-success/10 text-success' : 'bg-clash/10 text-clash'}>
           {row.getValue('isActive') ? 'Active' : 'Inactive'}
         </Badge>
       ),
@@ -259,15 +259,15 @@ export default function RoomsPage() {
       cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-slate-400">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted">
               <MoreHorizontal className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-slate-900 border-white/10">
-            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-slate-300">
+          <DropdownMenuContent align="end" className="bg-muted border-white/10">
+            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted">
               <Pencil className="w-4 h-4 mr-2" /> Edit
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-red-400">
+            <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-clash">
               <Trash2 className="w-4 h-4 mr-2" /> Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -278,8 +278,8 @@ export default function RoomsPage() {
 
   if (!['SA', 'IA', 'TO', 'LC'].includes(session?.user?.role || '')) {
     return (
-      <Alert className="bg-red-500/10 border-red-500/20">
-        <AlertDescription className="text-red-400">Access denied.</AlertDescription>
+      <Alert className="bg-clash/10 border-clash/20">
+        <AlertDescription className="text-clash">Access denied.</AlertDescription>
       </Alert>
     )
   }
@@ -299,7 +299,7 @@ export default function RoomsPage() {
         <CardContent className="pt-6">
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-pink-500" />
+              <Loader2 className="w-8 h-8 animate-spin text-clash" />
             </div>
           ) : (
             <DataTable columns={columns} data={rooms} searchKey="name" searchPlaceholder="Search rooms..." />
@@ -308,10 +308,10 @@ export default function RoomsPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-slate-900 border-white/10 text-white max-w-xl">
+        <DialogContent className="bg-muted border-white/10 text-white max-w-xl">
           <DialogHeader>
             <DialogTitle>{editingRoom ? 'Edit Room' : 'Add New Room'}</DialogTitle>
-            <DialogDescription className="text-slate-400">
+            <DialogDescription className="text-muted">
               {editingRoom ? 'Update room details' : 'Add a new venue'}
             </DialogDescription>
           </DialogHeader>
@@ -319,7 +319,7 @@ export default function RoomsPage() {
           <div className="space-y-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-slate-300">Room Code</Label>
+                <Label className="text-muted">Room Code</Label>
                 <Input
                   value={formData.code}
                   onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
@@ -328,12 +328,12 @@ export default function RoomsPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-slate-300">Room Type</Label>
+                <Label className="text-muted">Room Type</Label>
                 <Select value={formData.type} onValueChange={(v) => setFormData({ ...formData, type: v })}>
                   <SelectTrigger className="bg-white/5 border-white/10 text-white">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-white/10">
+                  <SelectContent className="bg-muted border-white/10">
                     {Object.entries(roomTypes).map(([key, label]) => (
                       <SelectItem key={key} value={key} className="text-white">{label}</SelectItem>
                     ))}
@@ -342,7 +342,7 @@ export default function RoomsPage() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-300">Room Name</Label>
+              <Label className="text-muted">Room Name</Label>
               <Input
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -352,7 +352,7 @@ export default function RoomsPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-slate-300">Building</Label>
+                <Label className="text-muted">Building</Label>
                 <Input
                   value={formData.building}
                   onChange={(e) => setFormData({ ...formData, building: e.target.value })}
@@ -361,7 +361,7 @@ export default function RoomsPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-slate-300">Capacity</Label>
+                <Label className="text-muted">Capacity</Label>
                 <Input
                   type="number"
                   value={formData.capacity}
@@ -372,12 +372,12 @@ export default function RoomsPage() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-300">Faculty (Optional - leave empty for central)</Label>
+              <Label className="text-muted">Faculty (Optional - leave empty for central)</Label>
               <Select value={formData.facultyId} onValueChange={(v) => setFormData({ ...formData, facultyId: v })}>
                 <SelectTrigger className="bg-white/5 border-white/10 text-white">
                   <SelectValue placeholder="Central / All Faculties" />
                 </SelectTrigger>
-                <SelectContent className="bg-slate-900 border-white/10">
+                <SelectContent className="bg-muted border-white/10">
                   <SelectItem value="" className="text-white">Central / All Faculties</SelectItem>
                   {faculties.map((f) => (
                     <SelectItem key={f.id} value={f.id} className="text-white">{f.name} ({f.code})</SelectItem>
@@ -387,29 +387,29 @@ export default function RoomsPage() {
             </div>
             <div className="grid grid-cols-4 gap-4 pt-2">
               <div className="flex items-center justify-between p-3 rounded-lg bg-white/5">
-                <Label className="text-xs text-slate-400">Projector</Label>
+                <Label className="text-xs text-muted">Projector</Label>
                 <Switch checked={formData.hasProjector} onCheckedChange={(v) => setFormData({ ...formData, hasProjector: v })} />
               </div>
               <div className="flex items-center justify-between p-3 rounded-lg bg-white/5">
-                <Label className="text-xs text-slate-400">AC</Label>
+                <Label className="text-xs text-muted">AC</Label>
                 <Switch checked={formData.hasAC} onCheckedChange={(v) => setFormData({ ...formData, hasAC: v })} />
               </div>
               <div className="flex items-center justify-between p-3 rounded-lg bg-white/5">
-                <Label className="text-xs text-slate-400">Computers</Label>
+                <Label className="text-xs text-muted">Computers</Label>
                 <Switch checked={formData.hasComputers} onCheckedChange={(v) => setFormData({ ...formData, hasComputers: v })} />
               </div>
               <div className="flex items-center justify-between p-3 rounded-lg bg-white/5">
-                <Label className="text-xs text-slate-400">Accessible</Label>
+                <Label className="text-xs text-muted">Accessible</Label>
                 <Switch checked={formData.isAccessible} onCheckedChange={(v) => setFormData({ ...formData, isAccessible: v })} />
               </div>
             </div>
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-white/10 text-slate-300">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-white/10 text-muted">
               Cancel
             </Button>
-            <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-pink-500 to-rose-600">
+            <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-clash to-clash">
               {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
               {editingRoom ? 'Update' : 'Create'}
             </Button>

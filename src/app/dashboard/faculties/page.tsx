@@ -130,7 +130,7 @@ export default function FacultiesPage() {
       accessorKey: 'code',
       header: 'Code',
       cell: ({ row }) => (
-        <Badge variant="outline" className="border-purple-500/20 text-purple-400">
+        <Badge variant="outline" className="border-primary/20 text-primary">
           {row.getValue('code')}
         </Badge>
       ),
@@ -140,12 +140,12 @@ export default function FacultiesPage() {
       header: 'Faculty Name',
       cell: ({ row }) => (
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center">
-            <Building2 className="w-5 h-5 text-purple-400" />
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/20 to-clash/20 flex items-center justify-center">
+            <Building2 className="w-5 h-5 text-primary" />
           </div>
           <div>
             <div className="font-medium text-white">{row.getValue('name')}</div>
-            {row.original.deanName && <div className="text-xs text-slate-400">Dean: {row.original.deanName}</div>}
+            {row.original.deanName && <div className="text-xs text-muted">Dean: {row.original.deanName}</div>}
           </div>
         </div>
       ),
@@ -154,7 +154,7 @@ export default function FacultiesPage() {
       accessorKey: '_count.departments',
       header: 'Departments',
       cell: ({ row }) => (
-        <div className="flex items-center gap-2 text-slate-400">
+        <div className="flex items-center gap-2 text-muted">
           <Users className="w-4 h-4" />
           <span>{row.original._count?.departments || 0} departments</span>
         </div>
@@ -164,7 +164,7 @@ export default function FacultiesPage() {
       accessorKey: 'isActive',
       header: 'Status',
       cell: ({ row }) => (
-        <Badge className={row.getValue('isActive') ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}>
+        <Badge className={row.getValue('isActive') ? 'bg-success/10 text-success' : 'bg-clash/10 text-clash'}>
           {row.getValue('isActive') ? 'Active' : 'Inactive'}
         </Badge>
       ),
@@ -174,16 +174,16 @@ export default function FacultiesPage() {
       cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-slate-400">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted">
               <MoreHorizontal className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-slate-900 border-white/10">
-            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-slate-300 focus:text-white">
+          <DropdownMenuContent align="end" className="bg-muted border-white/10">
+            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted focus:text-white">
               <Pencil className="w-4 h-4 mr-2" />
               Edit
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-red-400">
+            <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-clash">
               <Trash2 className="w-4 h-4 mr-2" />
               Delete
             </DropdownMenuItem>
@@ -195,8 +195,8 @@ export default function FacultiesPage() {
 
   if (!['SA', 'IA'].includes(session?.user?.role || '')) {
     return (
-      <Alert className="bg-red-500/10 border-red-500/20">
-        <AlertDescription className="text-red-400">Access denied. Admin role required.</AlertDescription>
+      <Alert className="bg-clash/10 border-clash/20">
+        <AlertDescription className="text-clash">Access denied. Admin role required.</AlertDescription>
       </Alert>
     )
   }
@@ -216,7 +216,7 @@ export default function FacultiesPage() {
         <CardContent className="pt-6">
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-purple-500" />
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
             </div>
           ) : (
             <DataTable columns={columns} data={faculties} searchKey="name" searchPlaceholder="Search faculties..." />
@@ -225,10 +225,10 @@ export default function FacultiesPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-slate-900 border-white/10 text-white">
+        <DialogContent className="bg-muted border-white/10 text-white">
           <DialogHeader>
             <DialogTitle>{editingFaculty ? 'Edit Faculty' : 'Add New Faculty'}</DialogTitle>
-            <DialogDescription className="text-slate-400">
+            <DialogDescription className="text-muted">
               {editingFaculty ? 'Update faculty details' : 'Create a new faculty'}
             </DialogDescription>
           </DialogHeader>
@@ -236,7 +236,7 @@ export default function FacultiesPage() {
           <div className="space-y-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-slate-300">Faculty Name</Label>
+                <Label className="text-muted">Faculty Name</Label>
                 <Input
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -245,7 +245,7 @@ export default function FacultiesPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-slate-300">Code</Label>
+                <Label className="text-muted">Code</Label>
                 <Input
                   value={formData.code}
                   onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
@@ -256,7 +256,7 @@ export default function FacultiesPage() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-300">Dean's Name</Label>
+              <Label className="text-muted">Dean's Name</Label>
               <Input
                 value={formData.deanName}
                 onChange={(e) => setFormData({ ...formData, deanName: e.target.value })}
@@ -265,7 +265,7 @@ export default function FacultiesPage() {
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-300">Description</Label>
+              <Label className="text-muted">Description</Label>
               <Input
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
@@ -276,10 +276,10 @@ export default function FacultiesPage() {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-white/10 text-slate-300">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-white/10 text-muted">
               Cancel
             </Button>
-            <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-purple-500 to-pink-600">
+            <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-primary to-clash">
               {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
               {editingFaculty ? 'Update' : 'Create'}
             </Button>

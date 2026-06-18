@@ -18,27 +18,27 @@ type TabId = "courses" | "timetable" | "conflicts" | "exam" | "profile";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const CONFLICT_CONFIG: Record<ConflictType, { label: string; color: string; bg: string; border: string; icon: any; severityMap: Record<string, string> }> = {
-  none:                       { label: "No Conflict",           color: "text-emerald-400", bg: "bg-emerald-500/10", border: "border-emerald-400/20", icon: CheckCircle2,  severityMap: {} },
-  timetable_clash:            { label: "Timetable Clash",       color: "text-red-400",     bg: "bg-red-500/10",     border: "border-red-400/30",    icon: XCircle,       severityMap: {} },
-  credit_overload:            { label: "Credit Overload",       color: "text-orange-400",  bg: "bg-orange-500/10",  border: "border-orange-400/30", icon: AlertTriangle,  severityMap: {} },
-  credit_underload:           { label: "Credit Underload",      color: "text-amber-400",   bg: "bg-amber-500/10",   border: "border-amber-400/30",  icon: AlertTriangle,  severityMap: {} },
-  course_prerequisite_missing:{ label: "Prerequisite Missing",  color: "text-purple-400",  bg: "bg-purple-500/10",  border: "border-purple-400/30", icon: Shield,         severityMap: {} },
-  carryover_spillover:        { label: "Carryover / Spillover", color: "text-amber-400",   bg: "bg-amber-500/10",   border: "border-amber-400/30",  icon: RefreshCw,      severityMap: {} },
-  venue_capacity_exceeded:    { label: "Venue Overcapacity",    color: "text-sky-400",     bg: "bg-sky-500/10",     border: "border-sky-400/30",    icon: BarChart3,      severityMap: {} },
-  lecturer_double_booked:     { label: "Lecturer Double-Booked",color: "text-rose-400",    bg: "bg-rose-500/10",    border: "border-rose-400/30",   icon: User,           severityMap: {} },
-  multiple:                   { label: "Multiple Issues",       color: "text-fuchsia-400", bg: "bg-fuchsia-500/10", border: "border-fuchsia-400/30",icon: Zap,            severityMap: {} },
+  none:                       { label: "No Conflict",           color: "text-success", bg: "bg-success/10", border: "border-success/20", icon: CheckCircle2,  severityMap: {} },
+  timetable_clash:            { label: "Timetable Clash",       color: "text-clash",     bg: "bg-clash/10",     border: "border-clash/30",    icon: XCircle,       severityMap: {} },
+  credit_overload:            { label: "Credit Overload",       color: "text-accent-gold",  bg: "bg-accent-gold/10",  border: "border-accent-gold/30", icon: AlertTriangle,  severityMap: {} },
+  credit_underload:           { label: "Credit Underload",      color: "text-accent-gold",   bg: "bg-accent-gold/10",   border: "border-accent-gold/30",  icon: AlertTriangle,  severityMap: {} },
+  course_prerequisite_missing:{ label: "Prerequisite Missing",  color: "text-primary",  bg: "bg-primary/10",  border: "border-primary/30", icon: Shield,         severityMap: {} },
+  carryover_spillover:        { label: "Carryover / Spillover", color: "text-accent-gold",   bg: "bg-accent-gold/10",   border: "border-accent-gold/30",  icon: RefreshCw,      severityMap: {} },
+  venue_capacity_exceeded:    { label: "Venue Overcapacity",    color: "text-secondary",     bg: "bg-secondary/10",     border: "border-secondary/30",    icon: BarChart3,      severityMap: {} },
+  lecturer_double_booked:     { label: "Lecturer Double-Booked",color: "text-clash",    bg: "bg-clash/10",    border: "border-clash/30",   icon: User,           severityMap: {} },
+  multiple:                   { label: "Multiple Issues",       color: "text-clash", bg: "bg-clash/10", border: "border-clash/30",icon: Zap,            severityMap: {} },
 };
 
 function severityBadge(severity: StudentConflict["severity"]) {
-  const map = { critical: "bg-red-600 text-white", warning: "bg-amber-500 text-black", info: "bg-sky-600 text-white" };
+  const map = { critical: "bg-clash text-white", warning: "bg-accent-gold text-black", info: "bg-secondary text-white" };
   return map[severity];
 }
 
 function cgpaColor(cgpa: number) {
-  if (cgpa >= 4.5) return "text-emerald-400";
-  if (cgpa >= 3.5) return "text-sky-400";
-  if (cgpa >= 2.4) return "text-amber-400";
-  return "text-red-400";
+  if (cgpa >= 4.5) return "text-success";
+  if (cgpa >= 3.5) return "text-secondary";
+  if (cgpa >= 2.4) return "text-accent-gold";
+  return "text-clash";
 }
 
 function cgpaClass(cgpa: number) {
@@ -67,7 +67,7 @@ function StudentPassport({ student, size = "lg" }: { student: Student; size?: "s
 
 function CGPABar({ cgpa }: { cgpa: number }) {
   const pct = (cgpa / 5.0) * 100;
-  const color = cgpa >= 4.5 ? "bg-emerald-500" : cgpa >= 3.5 ? "bg-sky-500" : cgpa >= 2.4 ? "bg-amber-500" : "bg-red-500";
+  const color = cgpa >= 4.5 ? "bg-success" : cgpa >= 3.5 ? "bg-secondary" : cgpa >= 2.4 ? "bg-accent-gold" : "bg-clash";
   return (
     <div className="space-y-1.5">
       <div className="flex items-center justify-between">
@@ -94,14 +94,14 @@ function ProfileSelector({ selected, onSelect }: { selected: Student; onSelect: 
           <div className="text-xs text-white/40 truncate">{selected.dept} · {selected.level}L</div>
         </div>
         {selected.conflicts.length > 0 && (
-          <span className="flex-shrink-0 w-5 h-5 rounded-full bg-red-600 text-white text-[10px] font-bold flex items-center justify-center">
+          <span className="flex-shrink-0 w-5 h-5 rounded-full bg-clash text-white text-[10px] font-bold flex items-center justify-center">
             {selected.conflicts.length}
           </span>
         )}
         <ChevronDown className={`w-4 h-4 text-white/30 flex-shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
       </button>
       {open && (
-        <div className="absolute top-full left-0 mt-2 w-80 rounded-2xl border border-white/15 bg-[#13131f] shadow-2xl z-40 overflow-hidden">
+        <div className="absolute top-full left-0 mt-2 w-80 rounded-2xl border border-white/15 bg-muted shadow-2xl z-40 overflow-hidden">
           <div className="px-4 py-2 border-b border-white/10">
             <p className="text-xs text-white/30 font-medium">Select Student Profile</p>
           </div>
@@ -118,9 +118,9 @@ function ProfileSelector({ selected, onSelect }: { selected: Student; onSelect: 
                     <div className="text-xs text-white/40 truncate">{s.dept} · {s.level}L · CGPA {s.cgpa}</div>
                   </div>
                   <div className="flex items-center gap-1 flex-shrink-0">
-                    {criticalCount > 0 && <span className="w-5 h-5 rounded-full bg-red-600 text-white text-[9px] font-bold flex items-center justify-center">{criticalCount}</span>}
-                    {hasWarning && criticalCount === 0 && <AlertTriangle className="w-4 h-4 text-amber-400" />}
-                    {s.conflicts.length === 0 && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
+                    {criticalCount > 0 && <span className="w-5 h-5 rounded-full bg-clash text-white text-[9px] font-bold flex items-center justify-center">{criticalCount}</span>}
+                    {hasWarning && criticalCount === 0 && <AlertTriangle className="w-4 h-4 text-accent-gold" />}
+                    {s.conflicts.length === 0 && <CheckCircle2 className="w-4 h-4 text-success" />}
                   </div>
                 </button>
               );
@@ -167,8 +167,8 @@ function ConflictCard({ conflict }: { conflict: StudentConflict }) {
           {conflict.resolution && (
             <div className="rounded-xl bg-white/5 border border-white/10 p-4 space-y-1">
               <div className="flex items-center gap-2">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                <span className="text-xs font-semibold text-emerald-400">ScheduleFlex Suggested Resolution</span>
+                <CheckCircle2 className="w-3.5 h-3.5 text-success" />
+                <span className="text-xs font-semibold text-success">ScheduleFlex Suggested Resolution</span>
               </div>
               <p className="text-sm text-white/55 leading-relaxed">{conflict.resolution}</p>
             </div>
@@ -181,10 +181,10 @@ function ConflictCard({ conflict }: { conflict: StudentConflict }) {
 
 function CourseTable({ student }: { student: Student }) {
   const typeConfig: Record<RegisteredCourse["type"], { label: string; dot: string }> = {
-    core:      { label: "Core",      dot: "bg-sky-400" },
-    elective:  { label: "Elective",  dot: "bg-violet-400" },
-    general:   { label: "GST",       dot: "bg-amber-400" },
-    practical: { label: "Practical", dot: "bg-emerald-400" },
+    core:      { label: "Core",      dot: "bg-secondary" },
+    elective:  { label: "Elective",  dot: "bg-primary" },
+    general:   { label: "GST",       dot: "bg-accent-gold" },
+    practical: { label: "Practical", dot: "bg-success" },
   };
   const totalCU = student.registeredCourses.reduce((s, c) => s + c.creditUnit, 0);
   const isOverload = totalCU > 24;
@@ -199,7 +199,7 @@ function CourseTable({ student }: { student: Student }) {
         </div>
         <div className="flex items-center gap-2">
           <span className="text-xs text-white/35">{student.registeredCourses.length} courses</span>
-          <span className={`text-sm font-bold px-3 py-1 rounded-lg border ${isOverload ? "bg-red-500/15 border-red-400/30 text-red-300" : isUnderload ? "bg-amber-500/15 border-amber-400/30 text-amber-300" : "bg-emerald-500/15 border-emerald-400/30 text-emerald-300"}`}>{totalCU} CU</span>
+          <span className={`text-sm font-bold px-3 py-1 rounded-lg border ${isOverload ? "bg-clash/15 border-clash/30 text-clash" : isUnderload ? "bg-accent-gold/15 border-accent-gold/30 text-accent-gold" : "bg-success/15 border-success/30 text-success"}`}>{totalCU} CU</span>
         </div>
       </div>
       <div className="divide-y divide-white/5">
@@ -209,7 +209,7 @@ function CourseTable({ student }: { student: Student }) {
           const tc = typeConfig[course.type];
           return (
             <div key={`${course.code}-${i}`}
-              className={`px-5 py-3.5 flex items-center gap-4 ${hasClash ? "bg-red-500/5 border-l-2 border-red-500" : isCarryover ? "bg-amber-500/5 border-l-2 border-amber-500" : "hover:bg-white/[0.02]"} transition-colors`}>
+              className={`px-5 py-3.5 flex items-center gap-4 ${hasClash ? "bg-clash/5 border-l-2 border-clash" : isCarryover ? "bg-accent-gold/5 border-l-2 border-accent-gold" : "hover:bg-white/[0.02]"} transition-colors`}>
               <div className="w-5 text-center text-xs text-white/20 flex-shrink-0">{i + 1}</div>
               <div className="w-28 flex-shrink-0">
                 <div className="font-bold text-white text-sm">{course.code}</div>
@@ -221,9 +221,9 @@ function CourseTable({ student }: { student: Student }) {
               <div className="flex-1 min-w-0">
                 <div className="text-sm text-white/70 truncate">{course.title}</div>
                 <div className="flex items-center gap-2 mt-0.5 flex-wrap">
-                  {isCarryover && <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-500/20 border border-amber-400/30 text-amber-300">CARRYOVER</span>}
+                  {isCarryover && <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-accent-gold/20 border border-accent-gold/30 text-accent-gold">CARRYOVER</span>}
                   {hasClash && (
-                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-red-500/20 border border-red-400/30 text-red-300 flex items-center gap-1">
+                    <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-clash/20 border border-clash/30 text-clash flex items-center gap-1">
                       <AlertTriangle className="w-2.5 h-2.5" /> CLASH w/ {course.clashWith}
                     </span>
                   )}
@@ -246,7 +246,7 @@ function CourseTable({ student }: { student: Student }) {
             </div>
           ))}
         </div>
-        <span className={`text-xs font-bold ${isOverload ? "text-red-400" : isUnderload ? "text-amber-400" : "text-emerald-400"}`}>
+        <span className={`text-xs font-bold ${isOverload ? "text-clash" : isUnderload ? "text-accent-gold" : "text-success"}`}>
           {isOverload ? "⚠ Overloaded" : isUnderload ? "⚠ Underloaded" : "✓ Load OK"}
         </span>
       </div>
@@ -293,7 +293,7 @@ function StudentWeeklyTimetable({ student }: { student: Student }) {
         <div className="flex gap-2 flex-wrap text-[10px]">
           <span className="px-2 py-0.5 rounded bg-white/5 border border-white/10 text-white/40">Mon – Fri · 08:00–18:00</span>
           {student.conflicts.some(c => c.type === "timetable_clash") && (
-            <span className="px-2 py-0.5 rounded bg-red-500/15 border border-red-400/30 text-red-300 flex items-center gap-1">
+            <span className="px-2 py-0.5 rounded bg-clash/15 border border-clash/30 text-clash flex items-center gap-1">
               <AlertTriangle className="w-2.5 h-2.5" /> Clash Detected
             </span>
           )}
@@ -323,10 +323,10 @@ function StudentWeeklyTimetable({ student }: { student: Student }) {
                   const isJumaat = day === "Friday" && band.start === "12:00";
                   if (isJumaat) {
                     return (
-                      <td key={day} className="px-1.5 py-1.5 border-r border-white/10 last:border-r-0 bg-green-500/5 align-top min-w-[80px]">
-                        <div className="rounded-lg border border-green-400/20 bg-green-500/10 px-2 py-1.5 text-center">
-                          <div className="text-[9px] font-bold text-green-400">🕌 Jumu&apos;ah</div>
-                          <div className="text-[8px] text-green-300/60 mt-0.5">13:00–14:00</div>
+                      <td key={day} className="px-1.5 py-1.5 border-r border-white/10 last:border-r-0 bg-success/5 align-top min-w-[80px]">
+                        <div className="rounded-lg border border-success/20 bg-success/10 px-2 py-1.5 text-center">
+                          <div className="text-[9px] font-bold text-success">🕌 Jumu&apos;ah</div>
+                          <div className="text-[8px] text-success/60 mt-0.5">13:00–14:00</div>
                         </div>
                       </td>
                     );
@@ -342,7 +342,7 @@ function StudentWeeklyTimetable({ student }: { student: Student }) {
                   }
                   const hasMultiple = slots.length > 1;
                   return (
-                    <td key={day} className={`px-1.5 py-1.5 border-r border-white/10 last:border-r-0 align-top min-w-[80px] ${hasMultiple ? "bg-red-500/5" : ""}`}>
+                    <td key={day} className={`px-1.5 py-1.5 border-r border-white/10 last:border-r-0 align-top min-w-[80px] ${hasMultiple ? "bg-clash/5" : ""}`}>
                       <div className="space-y-1">
                         {slots.map((slot, si) => {
                           const isClashing = clashCodes.has(slot.courseCode) || hasMultiple;
@@ -350,21 +350,21 @@ function StudentWeeklyTimetable({ student }: { student: Student }) {
                           const slotLc = LEVEL_COLORS[slot.level as Level] ?? LEVEL_COLORS[100];
                           return (
                             <div key={`${slot.id}-${si}`}
-                              className={`rounded-lg border px-2 py-1.5 ${isClashing ? "bg-red-500/15 border-red-400/40" : isCarryover ? "bg-amber-500/15 border-amber-400/40" : `${slotLc.bg} ${slotLc.border}`}`}>
-                              <div className={`text-[10px] font-extrabold truncate leading-tight ${isClashing ? "text-red-300" : isCarryover ? "text-amber-300" : slotLc.text}`}>
+                              className={`rounded-lg border px-2 py-1.5 ${isClashing ? "bg-clash/15 border-clash/40" : isCarryover ? "bg-accent-gold/15 border-accent-gold/40" : `${slotLc.bg} ${slotLc.border}`}`}>
+                              <div className={`text-[10px] font-extrabold truncate leading-tight ${isClashing ? "text-clash" : isCarryover ? "text-accent-gold" : slotLc.text}`}>
                                 {slot.courseCode}
                               </div>
-                              <div className={`text-[8px] mt-0.5 truncate ${isClashing ? "text-red-300/70" : isCarryover ? "text-amber-300/70" : slotLc.text}`}>
+                              <div className={`text-[8px] mt-0.5 truncate ${isClashing ? "text-clash/70" : isCarryover ? "text-accent-gold/70" : slotLc.text}`}>
                                 <MapPin className="inline w-2 h-2 mr-0.5" />
                                 {slot.venue.replace("SCI ", "").replace("LAB-", "")}
                               </div>
-                              {isClashing && <div className="text-[8px] font-bold text-red-400 flex items-center gap-0.5 mt-0.5"><AlertTriangle className="w-2 h-2" /> CLASH</div>}
-                              {isCarryover && !isClashing && <div className="text-[8px] font-bold text-amber-400 mt-0.5">CARRY</div>}
+                              {isClashing && <div className="text-[8px] font-bold text-clash flex items-center gap-0.5 mt-0.5"><AlertTriangle className="w-2 h-2" /> CLASH</div>}
+                              {isCarryover && !isClashing && <div className="text-[8px] font-bold text-accent-gold mt-0.5">CARRY</div>}
                             </div>
                           );
                         })}
                         {hasMultiple && (
-                          <div className="text-[8px] font-bold text-red-400 text-center py-0.5">⚠ {slots.length} overlap!</div>
+                          <div className="text-[8px] font-bold text-clash text-center py-0.5">⚠ {slots.length} overlap!</div>
                         )}
                       </div>
                     </td>
@@ -378,12 +378,12 @@ function StudentWeeklyTimetable({ student }: { student: Student }) {
 
       <div className="flex flex-wrap gap-3 text-[10px] text-white/40">
         {[
-          { bg: "bg-blue-100 border-blue-300", label: "100 Level" },
-          { bg: "bg-green-100 border-green-300", label: "200 Level" },
-          { bg: "bg-amber-100 border-amber-300", label: "300 Level" },
-          { bg: "bg-red-100 border-red-300", label: "400 Level" },
-          { bg: "bg-red-500/20 border-red-400/40", label: "Clash" },
-          { bg: "bg-amber-500/20 border-amber-400/40", label: "Carryover" },
+          { bg: "bg-secondary border-secondary", label: "100 Level" },
+          { bg: "bg-success border-success", label: "200 Level" },
+          { bg: "bg-accent-gold border-accent-gold", label: "300 Level" },
+          { bg: "bg-clash border-clash", label: "400 Level" },
+          { bg: "bg-clash/20 border-clash/40", label: "Clash" },
+          { bg: "bg-accent-gold/20 border-accent-gold/40", label: "Carryover" },
         ].map(l => (
           <div key={l.label} className="flex items-center gap-1.5">
             <div className={`w-3 h-3 rounded border ${l.bg}`} />
@@ -393,14 +393,14 @@ function StudentWeeklyTimetable({ student }: { student: Student }) {
       </div>
 
       {student.conflicts.some(c => c.type === "timetable_clash" || c.type === "carryover_spillover") && (
-        <div className="rounded-xl bg-red-500/8 border border-red-400/20 p-4 space-y-2">
+        <div className="rounded-xl bg-clash/8 border border-clash/20 p-4 space-y-2">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4 text-red-400" />
-            <span className="text-sm font-semibold text-red-300">Active Timetable Conflicts</span>
+            <AlertTriangle className="w-4 h-4 text-clash" />
+            <span className="text-sm font-semibold text-clash">Active Timetable Conflicts</span>
           </div>
           {student.conflicts.filter(c => c.type === "timetable_clash" || c.type === "carryover_spillover").map((c, i) => (
             <div key={i} className="text-xs text-white/50 flex items-start gap-2">
-              <XCircle className="w-3 h-3 text-red-400 flex-shrink-0 mt-0.5" />
+              <XCircle className="w-3 h-3 text-clash flex-shrink-0 mt-0.5" />
               <span>{c.description}</span>
             </div>
           ))}
@@ -417,7 +417,7 @@ function ExamTimetablePlaceholder({ student }: { student: Student }) {
         <h3 className="text-sm font-semibold text-white/60 flex items-center gap-2">
           <FileText className="w-4 h-4" /> Exam Timetable — Semester {student.semester}
         </h3>
-        <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 border border-amber-400/30 text-amber-300 font-semibold">Not Yet Released</span>
+        <span className="text-[10px] px-2 py-0.5 rounded-full bg-accent-gold/15 border border-accent-gold/30 text-accent-gold font-semibold">Not Yet Released</span>
       </div>
 
       <div className="rounded-2xl border border-white/10 overflow-hidden">
@@ -445,20 +445,20 @@ function ExamTimetablePlaceholder({ student }: { student: Student }) {
         ))}
       </div>
 
-      <div className="rounded-2xl border border-violet-400/20 bg-violet-500/5 p-8 flex flex-col items-center justify-center text-center space-y-3">
-        <div className="w-14 h-14 rounded-2xl bg-violet-500/15 border border-violet-400/20 flex items-center justify-center">
-          <Calendar className="w-7 h-7 text-violet-400" />
+      <div className="rounded-2xl border border-primary/20 bg-primary/5 p-8 flex flex-col items-center justify-center text-center space-y-3">
+        <div className="w-14 h-14 rounded-2xl bg-primary/15 border border-primary/20 flex items-center justify-center">
+          <Calendar className="w-7 h-7 text-primary" />
         </div>
         <div>
-          <div className="text-lg font-bold text-violet-300">Exam Timetable Coming Soon</div>
+          <div className="text-lg font-bold text-primary">Exam Timetable Coming Soon</div>
           <p className="text-sm text-white/40 mt-1.5 max-w-sm">
             The Examination Officer has not yet published the exam timetable for Semester {student.semester}, 2024/2025.
             You will be notified via WhatsApp and email when it is released.
           </p>
         </div>
         <div className="flex items-center gap-2 pt-1">
-          <Bell className="w-3.5 h-3.5 text-violet-400" />
-          <span className="text-xs text-violet-300/70">Notifications enabled for your exam schedule</span>
+          <Bell className="w-3.5 h-3.5 text-primary" />
+          <span className="text-xs text-primary/70">Notifications enabled for your exam schedule</span>
         </div>
       </div>
     </div>
@@ -467,10 +467,10 @@ function ExamTimetablePlaceholder({ student }: { student: Student }) {
 
 function DownloadPanel({ student, onDownload }: { student: Student; onDownload: (type: string) => void }) {
   const items = [
-    { id: "timetable", label: "My Weekly Timetable",  desc: "Full lecture schedule as PDF", icon: Calendar,      color: "text-sky-400",     bg: "bg-sky-500/10 border-sky-400/20" },
-    { id: "courses",   label: "Course Registration",  desc: "All registered courses and CU",icon: BookOpen,      color: "text-emerald-400", bg: "bg-emerald-500/10 border-emerald-400/20" },
-    { id: "conflicts", label: "Conflict Report",       desc: "Full ScheduleFlex analysis",      icon: AlertTriangle, color: "text-red-400",     bg: "bg-red-500/10 border-red-400/20",      disabled: student.conflicts.length === 0 },
-    { id: "profile",   label: "Student Profile Card", desc: "Academic summary and CGPA",    icon: User,          color: "text-violet-400",  bg: "bg-violet-500/10 border-violet-400/20" },
+    { id: "timetable", label: "My Weekly Timetable",  desc: "Full lecture schedule as PDF", icon: Calendar,      color: "text-secondary",     bg: "bg-secondary/10 border-secondary/20" },
+    { id: "courses",   label: "Course Registration",  desc: "All registered courses and CU",icon: BookOpen,      color: "text-success", bg: "bg-success/10 border-success/20" },
+    { id: "conflicts", label: "Conflict Report",       desc: "Full ScheduleFlex analysis",      icon: AlertTriangle, color: "text-clash",     bg: "bg-clash/10 border-clash/20",      disabled: student.conflicts.length === 0 },
+    { id: "profile",   label: "Student Profile Card", desc: "Academic summary and CGPA",    icon: User,          color: "text-primary",  bg: "bg-primary/10 border-primary/20" },
     { id: "exam",      label: "Exam Timetable",        desc: "Not yet available",            icon: FileText,      color: "text-white/20",    bg: "bg-white/5 border-white/10",           disabled: true },
   ];
   return (
@@ -506,7 +506,7 @@ function StudentSettings({ onClose }: { onClose: () => void }) {
   const [darkMode, setDarkMode] = useState(true);
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="w-full max-w-sm rounded-2xl border border-white/15 bg-[#13131f] shadow-2xl overflow-hidden">
+      <div className="w-full max-w-sm rounded-2xl border border-white/15 bg-muted shadow-2xl overflow-hidden">
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/10">
           <div className="flex items-center gap-2">
             <Settings className="w-4 h-4 text-white/40" />
@@ -517,27 +517,27 @@ function StudentSettings({ onClose }: { onClose: () => void }) {
         <div className="p-5 space-y-4">
           <div className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10">
             <div className="flex items-center gap-3">
-              {darkMode ? <Moon className="w-4 h-4 text-violet-400" /> : <Sun className="w-4 h-4 text-amber-400" />}
+              {darkMode ? <Moon className="w-4 h-4 text-primary" /> : <Sun className="w-4 h-4 text-accent-gold" />}
               <div>
                 <div className="text-sm font-medium text-white">{darkMode ? "Dark" : "Light"} Mode</div>
                 <div className="text-xs text-white/35">Toggle appearance</div>
               </div>
             </div>
             <button onClick={() => setDarkMode(!darkMode)}
-              className={`w-11 h-6 rounded-full transition-colors relative ${darkMode ? "bg-violet-600" : "bg-white/20"}`}>
+              className={`w-11 h-6 rounded-full transition-colors relative ${darkMode ? "bg-primary" : "bg-white/20"}`}>
               <div className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${darkMode ? "translate-x-5" : "translate-x-0.5"}`} />
             </button>
           </div>
           <div className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/10">
             <div className="flex items-center gap-3">
-              <Bell className="w-4 h-4 text-sky-400" />
+              <Bell className="w-4 h-4 text-secondary" />
               <div>
                 <div className="text-sm font-medium text-white">WhatsApp Notifications</div>
                 <div className="text-xs text-white/35">Clash alerts and exam notices</div>
               </div>
             </div>
             <button onClick={() => setNotifs(!notifs)}
-              className={`w-11 h-6 rounded-full transition-colors relative ${notifs ? "bg-sky-600" : "bg-white/20"}`}>
+              className={`w-11 h-6 rounded-full transition-colors relative ${notifs ? "bg-secondary" : "bg-white/20"}`}>
               <div className={`absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform ${notifs ? "translate-x-5" : "translate-x-0.5"}`} />
             </button>
           </div>
@@ -546,7 +546,7 @@ function StudentSettings({ onClose }: { onClose: () => void }) {
             <div className="grid grid-cols-2 gap-1.5">
               {["Courses", "Timetable", "Conflicts", "Profile"].map(tab => (
                 <button key={tab}
-                  className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${tab === "Courses" ? "bg-rose-500/15 border-rose-400/30 text-rose-300" : "bg-white/5 border-white/10 text-white/40 hover:bg-white/10"}`}>
+                  className={`text-xs px-3 py-1.5 rounded-lg border transition-colors ${tab === "Courses" ? "bg-clash/15 border-clash/30 text-clash" : "bg-white/5 border-white/10 text-white/40 hover:bg-white/10"}`}>
                   {tab}
                 </button>
               ))}
@@ -602,8 +602,8 @@ export default function StudentPage() {
               <div className="flex items-start justify-between gap-3 flex-wrap">
                 <div>
                   <div className="flex items-center gap-2 mb-0.5">
-                    <BookOpen className="w-3.5 h-3.5 text-rose-400" />
-                    <span className="text-[10px] font-semibold text-rose-400 uppercase tracking-widest">Student Portal</span>
+                    <BookOpen className="w-3.5 h-3.5 text-clash" />
+                    <span className="text-[10px] font-semibold text-clash uppercase tracking-widest">Student Portal</span>
                   </div>
                   <h1 className="text-2xl font-bold text-white">{student.name}</h1>
                   <p className="text-white/40 text-sm mt-0.5">{student.matric}</p>
@@ -625,7 +625,7 @@ export default function StudentPage() {
                   { label: "CGPA",      value: student.cgpa, className: cgpaColor(student.cgpa) },
                   { label: "Credit CU", value: student.totalCreditUnits, className: "text-white" },
                   { label: "Courses",   value: student.registeredCourses.length, className: "text-white" },
-                  { label: "Conflicts", value: student.conflicts.length, className: student.conflicts.length === 0 ? "text-emerald-400" : criticalCount > 0 ? "text-red-400" : "text-amber-400" },
+                  { label: "Conflicts", value: student.conflicts.length, className: student.conflicts.length === 0 ? "text-success" : criticalCount > 0 ? "text-clash" : "text-accent-gold" },
                   { label: "Level",     value: `${student.level}L`, className: lc.badge.replace("bg-", "text-").replace("-600", "-400") },
                   { label: "Semester",  value: `S${student.semester}`, className: "text-white" },
                 ].map(s => (
@@ -642,15 +642,15 @@ export default function StudentPage() {
 
         {/* Conflict banner */}
         {student.conflicts.length > 0 && (
-          <div className="rounded-2xl border border-red-400/20 bg-red-500/5 p-4 space-y-2">
+          <div className="rounded-2xl border border-clash/20 bg-clash/5 p-4 space-y-2">
             <div className="flex items-center gap-3 flex-wrap">
-              <AlertTriangle className="w-5 h-5 text-red-400" />
-              <span className="text-sm font-semibold text-red-300">
+              <AlertTriangle className="w-5 h-5 text-clash" />
+              <span className="text-sm font-semibold text-clash">
                 {student.conflicts.length} Issue{student.conflicts.length > 1 ? "s" : ""} Detected by ScheduleFlex
               </span>
               <div className="flex gap-2 ml-auto">
-                {criticalCount > 0 && <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-red-600 text-white">{criticalCount} Critical</span>}
-                {warningCount > 0 && <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-amber-500 text-black">{warningCount} Warning</span>}
+                {criticalCount > 0 && <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-clash text-white">{criticalCount} Critical</span>}
+                {warningCount > 0 && <span className="text-xs font-bold px-2.5 py-1 rounded-full bg-accent-gold text-black">{warningCount} Warning</span>}
               </div>
             </div>
             {student.conflicts.map((c, i) => {
@@ -658,7 +658,7 @@ export default function StudentPage() {
               const Icon = cfg.icon;
               return (
                 <button key={i} onClick={() => setActiveTab("conflicts")}
-                  className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-red-500/10 transition-colors text-left group">
+                  className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-clash/10 transition-colors text-left group">
                   <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${cfg.color}`} />
                   <span className="text-xs text-white/60 group-hover:text-white flex-1 truncate">{c.title}</span>
                   <ChevronRight className="w-3 h-3 text-white/20 flex-shrink-0" />
@@ -678,7 +678,7 @@ export default function StudentPage() {
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                   activeTab === t.id
                     ? isConflictTab && student.conflicts.length > 0
-                      ? "bg-red-500/20 text-red-300 shadow"
+                      ? "bg-clash/20 text-clash shadow"
                       : "bg-white/10 text-white shadow"
                     : "text-white/40 hover:text-white/70"
                 }`}>
@@ -699,10 +699,10 @@ export default function StudentPage() {
               </h3>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {[
-                  { type: "core",      label: "Core",      color: "bg-sky-500" },
-                  { type: "elective",  label: "Elective",  color: "bg-violet-500" },
-                  { type: "general",   label: "GST",       color: "bg-amber-500" },
-                  { type: "practical", label: "Practical", color: "bg-emerald-500" },
+                  { type: "core",      label: "Core",      color: "bg-secondary" },
+                  { type: "elective",  label: "Elective",  color: "bg-primary" },
+                  { type: "general",   label: "GST",       color: "bg-accent-gold" },
+                  { type: "practical", label: "Practical", color: "bg-success" },
                 ].map(t => {
                   const cu = student.registeredCourses.filter(c => c.type === t.type).reduce((s, c) => s + c.creditUnit, 0);
                   return (
@@ -723,11 +723,11 @@ export default function StudentPage() {
             </div>
             <div className="flex gap-2 flex-wrap">
               <button onClick={() => handleDownload("courses")}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-500/10 border border-emerald-400/20 text-emerald-300 text-sm hover:bg-emerald-500/20 transition-colors">
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-success/10 border border-success/20 text-success text-sm hover:bg-success/20 transition-colors">
                 <Download className="w-3.5 h-3.5" /> Download Course List
               </button>
               <button onClick={() => handleDownload("timetable")}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-500/10 border border-sky-400/20 text-sky-300 text-sm hover:bg-sky-500/20 transition-colors">
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-secondary/10 border border-secondary/20 text-secondary text-sm hover:bg-secondary/20 transition-colors">
                 <Printer className="w-3.5 h-3.5" /> Print Timetable
               </button>
             </div>
@@ -740,12 +740,12 @@ export default function StudentPage() {
             <StudentWeeklyTimetable student={student} />
             <div className="flex gap-2 flex-wrap">
               <button onClick={() => handleDownload("timetable")}
-                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-sky-500/10 border border-sky-400/20 text-sky-300 text-sm hover:bg-sky-500/20 transition-colors">
+                className="flex items-center gap-2 px-4 py-2 rounded-xl bg-secondary/10 border border-secondary/20 text-secondary text-sm hover:bg-secondary/20 transition-colors">
                 <Download className="w-3.5 h-3.5" /> Download Timetable PDF
               </button>
               {student.conflicts.length > 0 && (
                 <button onClick={() => handleDownload("conflicts")}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-red-500/10 border border-red-400/20 text-red-300 text-sm hover:bg-red-500/20 transition-colors">
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-clash/10 border border-clash/20 text-clash text-sm hover:bg-clash/20 transition-colors">
                   <Download className="w-3.5 h-3.5" /> Download Clash Report
                 </button>
               )}
@@ -757,9 +757,9 @@ export default function StudentPage() {
         {activeTab === "conflicts" && (
           <div className="space-y-4">
             {student.conflicts.length === 0 ? (
-              <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/5 p-12 text-center space-y-3">
-                <CheckCircle2 className="w-10 h-10 text-emerald-400 mx-auto" />
-                <div className="text-lg font-semibold text-emerald-300">All Clear — Zero Conflicts</div>
+              <div className="rounded-2xl border border-success/20 bg-success/5 p-12 text-center space-y-3">
+                <CheckCircle2 className="w-10 h-10 text-success mx-auto" />
+                <div className="text-lg font-semibold text-success">All Clear — Zero Conflicts</div>
                 <p className="text-sm text-white/40 max-w-sm mx-auto">
                   {student.name}&apos;s registration has been verified. All {student.registeredCourses.length} courses are scheduled without conflict.
                 </p>
@@ -769,7 +769,7 @@ export default function StudentPage() {
                 <div className="flex items-center justify-between flex-wrap gap-2">
                   <p className="text-sm text-white/40">{student.conflicts.length} issue{student.conflicts.length > 1 ? "s" : ""} — {criticalCount} critical, {warningCount} warning</p>
                   <button onClick={() => handleDownload("conflicts")}
-                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-400/20 text-red-300 text-xs hover:bg-red-500/20 transition-colors">
+                    className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-clash/10 border border-clash/20 text-clash text-xs hover:bg-clash/20 transition-colors">
                     <Download className="w-3 h-3" /> Export Report
                   </button>
                 </div>
@@ -818,7 +818,7 @@ export default function StudentPage() {
               <div className="grid grid-cols-2 gap-3 pt-1">
                 <div className="rounded-xl bg-white/5 border border-white/10 p-3">
                   <div className="text-xs text-white/30">Registered CU</div>
-                  <div className={`text-xl font-bold mt-1 ${student.totalCreditUnits > 24 ? "text-red-400" : "text-white"}`}>{student.totalCreditUnits}</div>
+                  <div className={`text-xl font-bold mt-1 ${student.totalCreditUnits > 24 ? "text-clash" : "text-white"}`}>{student.totalCreditUnits}</div>
                 </div>
                 <div className="rounded-xl bg-white/5 border border-white/10 p-3">
                   <div className="text-xs text-white/30">Courses</div>
@@ -833,8 +833,8 @@ export default function StudentPage() {
 
       {/* Download toast */}
       {downloadToast && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-[#13131f] border border-white/15 shadow-2xl">
-          <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0" />
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-muted border border-white/15 shadow-2xl">
+          <CheckCircle2 className="w-5 h-5 text-success flex-shrink-0" />
           <div>
             <div className="text-sm font-semibold text-white capitalize">{downloadToast} ready</div>
             <div className="text-xs text-white/40">Demo: file would download to your device</div>

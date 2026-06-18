@@ -51,7 +51,7 @@ export function ExportButtons({ data, disabled = false }: ExportButtonsProps) {
       <DropdownMenuTrigger asChild>
         <Button
           variant="outline"
-          className="border-white/10 text-slate-300 hover:text-white"
+          className="border-white/10 text-muted hover:text-white"
           disabled={disabled || data.slots.length === 0}
         >
           {exporting ? (
@@ -67,25 +67,25 @@ export function ExportButtons({ data, disabled = false }: ExportButtonsProps) {
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-slate-900 border-white/10">
+      <DropdownMenuContent align="end" className="bg-muted border-white/10">
         <DropdownMenuLabel className="text-white">Export Options</DropdownMenuLabel>
         <DropdownMenuSeparator className="bg-white/10" />
         
         <DropdownMenuItem
           onClick={() => handleExport('excel')}
           disabled={exporting !== null}
-          className="text-slate-300 hover:text-white hover:bg-white/5 cursor-pointer"
+          className="text-muted hover:text-white hover:bg-white/5 cursor-pointer"
         >
-          <FileSpreadsheet className="w-4 h-4 mr-2 text-green-400" />
+          <FileSpreadsheet className="w-4 h-4 mr-2 text-success" />
           Export to Excel
         </DropdownMenuItem>
         
         <DropdownMenuItem
           onClick={() => handleExport('csv')}
           disabled={exporting !== null}
-          className="text-slate-300 hover:text-white hover:bg-white/5 cursor-pointer"
+          className="text-muted hover:text-white hover:bg-white/5 cursor-pointer"
         >
-          <FileText className="w-4 h-4 mr-2 text-blue-400" />
+          <FileText className="w-4 h-4 mr-2 text-secondary" />
           Export to CSV
         </DropdownMenuItem>
         
@@ -94,9 +94,9 @@ export function ExportButtons({ data, disabled = false }: ExportButtonsProps) {
         <DropdownMenuItem
           onClick={() => handleExport('print')}
           disabled={exporting !== null}
-          className="text-slate-300 hover:text-white hover:bg-white/5 cursor-pointer"
+          className="text-muted hover:text-white hover:bg-white/5 cursor-pointer"
         >
-          <Printer className="w-4 h-4 mr-2 text-purple-400" />
+          <Printer className="w-4 h-4 mr-2 text-primary" />
           Print / PDF
         </DropdownMenuItem>
       </DropdownMenuContent>
@@ -125,7 +125,7 @@ export function SimpleExportButton({
       variant="outline"
       onClick={onClick}
       disabled={disabled || loading}
-      className="border-white/10 text-slate-300 hover:text-white"
+      className="border-white/10 text-muted hover:text-white"
     >
       {loading ? (
         <Loader2 className="w-4 h-4 mr-2 animate-spin" />

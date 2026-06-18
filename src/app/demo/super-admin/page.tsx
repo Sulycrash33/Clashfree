@@ -98,8 +98,8 @@ function SCIDeptCard({ dept }: { dept: (typeof DEPARTMENTS)[number] }) {
         className="w-full flex items-center justify-between px-5 py-4 hover:bg-white/5 transition-colors text-left"
       >
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600/30 to-blue-600/30 border border-violet-400/20 flex items-center justify-center">
-            <BookMarked className="w-4 h-4 text-violet-300" />
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary/30 to-secondary/30 border border-primary/20 flex items-center justify-center">
+            <BookMarked className="w-4 h-4 text-primary" />
           </div>
           <div>
             <div className="font-semibold text-white text-sm">{dept.name}</div>
@@ -119,7 +119,7 @@ function SCIDeptCard({ dept }: { dept: (typeof DEPARTMENTS)[number] }) {
           </div>
           <div className="hidden md:flex flex-col items-end">
             <span className={`text-sm font-semibold ${
-              parseInt(lecturerRatio) <= 7 ? "text-emerald-400" : "text-amber-400"
+              parseInt(lecturerRatio) <= 7 ? "text-success" : "text-accent-gold"
             }`}>{lecturerRatio}</span>
             <span className="text-xs text-white/35">ratio</span>
           </div>
@@ -135,7 +135,7 @@ function SCIDeptCard({ dept }: { dept: (typeof DEPARTMENTS)[number] }) {
         <div className="border-t border-white/10 px-5 py-5 bg-white/[0.01] space-y-5">
           {/* HOD */}
           <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-xs font-bold text-white">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-accent-gold to-accent-gold flex items-center justify-center text-xs font-bold text-white">
               {dept.hod.split(" ").slice(-1)[0][0]}
             </div>
             <div>
@@ -150,10 +150,10 @@ function SCIDeptCard({ dept }: { dept: (typeof DEPARTMENTS)[number] }) {
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {Object.entries(distribution).map(([level, count]) => {
                 const colors: Record<string, string> = {
-                  "100 Level": "from-blue-600/20 to-blue-700/10 border-blue-400/20 text-blue-300",
-                  "200 Level": "from-green-600/20 to-green-700/10 border-green-400/20 text-green-300",
-                  "300 Level": "from-amber-600/20 to-amber-700/10 border-amber-400/20 text-amber-300",
-                  "400 Level": "from-red-600/20 to-red-700/10 border-red-400/20 text-red-300",
+                  "100 Level": "from-secondary/20 to-secondary/10 border-secondary/20 text-secondary",
+                  "200 Level": "from-success/20 to-success/10 border-success/20 text-success",
+                  "300 Level": "from-accent-gold/20 to-accent-gold/10 border-accent-gold/20 text-accent-gold",
+                  "400 Level": "from-clash/20 to-clash/10 border-clash/20 text-clash",
                 };
                 const conflicts = popRows.find(
                   p => p.level === parseInt(level) as 100|200|300|400
@@ -163,7 +163,7 @@ function SCIDeptCard({ dept }: { dept: (typeof DEPARTMENTS)[number] }) {
                     <div className="text-lg font-bold text-white">{count}</div>
                     <div className="text-xs text-white/50">{level}</div>
                     {conflicts > 0 && (
-                      <div className="mt-1.5 flex items-center gap-1 text-amber-400 text-[10px]">
+                      <div className="mt-1.5 flex items-center gap-1 text-accent-gold text-[10px]">
                         <AlertTriangle className="w-3 h-3" />
                         {conflicts} conflict{conflicts > 1 ? "s" : ""}
                       </div>
@@ -221,15 +221,15 @@ export default function SuperAdminPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <ShieldCheck className="w-5 h-5 text-violet-400" />
-              <span className="text-xs font-semibold text-violet-400 uppercase tracking-widest">Super Admin</span>
+              <ShieldCheck className="w-5 h-5 text-primary" />
+              <span className="text-xs font-semibold text-primary uppercase tracking-widest">Super Admin</span>
             </div>
             <h1 className="text-2xl font-bold text-white">Institutional Overview</h1>
             <p className="text-white/40 text-sm mt-1">Federal University of Konoha · 2024/2025 Session</p>
           </div>
-          <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-violet-500/10 border border-violet-400/20">
-            <ShieldCheck className="w-4 h-4 text-violet-400" />
-            <span className="text-sm font-medium text-violet-300">Full Access</span>
+          <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 border border-primary/20">
+            <ShieldCheck className="w-4 h-4 text-primary" />
+            <span className="text-sm font-medium text-primary">Full Access</span>
           </div>
         </div>
 
@@ -255,19 +255,19 @@ export default function SuperAdminPage() {
           <div className="space-y-8">
             {/* Stats */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
-              <StatCard label="Faculties" value={9} icon={Building2} color="bg-violet-600" />
-              <StatCard label="Departments" value={64} icon={Layers} color="bg-sky-600" />
-              <StatCard label="Students (SCI)" value={totalStudents.toLocaleString()} sub="Focus faculty" icon={Users} color="bg-emerald-600" />
-              <StatCard label="Lecturers (SCI)" value={FOCUS_FACULTY.totalLecturers} sub="7:1 ratio maintained" icon={GraduationCap} color="bg-amber-600" />
-              <StatCard label="Facilities (SCI)" value={FACILITY_SUMMARY.total} sub="Halls, labs, theatres" icon={FlaskConical} color="bg-rose-600" />
-              <StatCard label="Conflicts Detected" value={totalConflicts} sub="ScheduleFlex active" icon={AlertTriangle} color="bg-red-700" />
+              <StatCard label="Faculties" value={9} icon={Building2} color="bg-primary" />
+              <StatCard label="Departments" value={64} icon={Layers} color="bg-secondary" />
+              <StatCard label="Students (SCI)" value={totalStudents.toLocaleString()} sub="Focus faculty" icon={Users} color="bg-success" />
+              <StatCard label="Lecturers (SCI)" value={FOCUS_FACULTY.totalLecturers} sub="7:1 ratio maintained" icon={GraduationCap} color="bg-accent-gold" />
+              <StatCard label="Facilities (SCI)" value={FACILITY_SUMMARY.total} sub="Halls, labs, theatres" icon={FlaskConical} color="bg-clash" />
+              <StatCard label="Conflicts Detected" value={totalConflicts} sub="ScheduleFlex active" icon={AlertTriangle} color="bg-clash" />
             </div>
 
             {/* Ratio enforcement banner */}
-            <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-5 flex items-start gap-4">
-              <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
+            <div className="rounded-2xl border border-success/20 bg-success/5 p-5 flex items-start gap-4">
+              <CheckCircle2 className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
               <div>
-                <div className="font-semibold text-emerald-300 text-sm">Student–Lecturer Ratio: 7:1 Enforced</div>
+                <div className="font-semibold text-success text-sm">Student–Lecturer Ratio: 7:1 Enforced</div>
                 <p className="text-sm text-white/50 mt-1">
                   All 12 departments in Faculty of Physical &amp; Applied Sciences maintain the NUC-mandated 7:1
                   student-to-lecturer ratio. ScheduleFlex monitors this in real time and alerts Institution Admin
@@ -283,11 +283,11 @@ export default function SuperAdminPage() {
                 {/* Focus faculty card */}
                 <button
                   onClick={() => setActiveTab("science")}
-                  className="rounded-2xl border border-violet-400/30 bg-violet-500/10 p-4 text-left hover:bg-violet-500/15 transition-colors group"
+                  className="rounded-2xl border border-primary/30 bg-primary/10 p-4 text-left hover:bg-primary/15 transition-colors group"
                 >
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-xs font-bold text-violet-400 uppercase tracking-wide">FOCUS</span>
-                    <ChevronRight className="w-4 h-4 text-violet-400 group-hover:translate-x-0.5 transition-transform" />
+                    <span className="text-xs font-bold text-primary uppercase tracking-wide">FOCUS</span>
+                    <ChevronRight className="w-4 h-4 text-primary group-hover:translate-x-0.5 transition-transform" />
                   </div>
                   <div className="font-semibold text-white text-sm">{FOCUS_FACULTY.name}</div>
                   <div className="text-xs text-white/40 mt-1">12 departments · Full data available</div>
@@ -313,7 +313,7 @@ export default function SuperAdminPage() {
         {activeTab === "science" && (
           <div className="space-y-6">
             {/* Faculty header */}
-            <div className="rounded-2xl border border-violet-400/20 bg-violet-500/5 p-6 space-y-4">
+            <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6 space-y-4">
               <div className="flex items-start justify-between gap-4 flex-wrap">
                 <div>
                   <h2 className="text-lg font-bold text-white">{FOCUS_FACULTY.name}</h2>
@@ -352,10 +352,10 @@ export default function SuperAdminPage() {
             {/* Summary */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {[
-                { label: "Lecture Halls", value: FACILITY_SUMMARY.lectureHalls, icon: BarChart3, color: "bg-sky-600" },
-                { label: "Laboratories", value: FACILITY_SUMMARY.laboratories, icon: FlaskConical, color: "bg-emerald-600" },
-                { label: "Computer Labs", value: FACILITY_SUMMARY.computerLabs, icon: Monitor, color: "bg-violet-600" },
-                { label: "Theatres", value: FACILITY_SUMMARY.theatres, icon: Users, color: "bg-amber-600" },
+                { label: "Lecture Halls", value: FACILITY_SUMMARY.lectureHalls, icon: BarChart3, color: "bg-secondary" },
+                { label: "Laboratories", value: FACILITY_SUMMARY.laboratories, icon: FlaskConical, color: "bg-success" },
+                { label: "Computer Labs", value: FACILITY_SUMMARY.computerLabs, icon: Monitor, color: "bg-primary" },
+                { label: "Theatres", value: FACILITY_SUMMARY.theatres, icon: Users, color: "bg-accent-gold" },
               ].map(s => (
                 <StatCard key={s.label} label={s.label} value={s.value} icon={s.icon} color={s.color} />
               ))}
@@ -372,9 +372,9 @@ export default function SuperAdminPage() {
                   <div key={f.id} className="flex items-center justify-between px-5 py-3 hover:bg-white/[0.02] transition-colors">
                     <div className="flex items-center gap-3">
                       <div className={`w-2 h-2 rounded-full ${
-                        f.type === "Lecture Hall" ? "bg-sky-400" :
-                        f.type === "Laboratory" ? "bg-emerald-400" :
-                        f.type === "Computer Lab" ? "bg-violet-400" : "bg-amber-400"
+                        f.type === "Lecture Hall" ? "bg-secondary" :
+                        f.type === "Laboratory" ? "bg-success" :
+                        f.type === "Computer Lab" ? "bg-primary" : "bg-accent-gold"
                       }`} />
                       <div>
                         <div className="text-sm font-medium text-white/80">{f.name}</div>
@@ -404,15 +404,15 @@ export default function SuperAdminPage() {
               All 9 Faculties — Department Lists
             </p>
             {/* Focus faculty */}
-            <div className="rounded-xl border border-violet-400/30 bg-violet-500/5 px-5 py-4">
+            <div className="rounded-xl border border-primary/30 bg-primary/5 px-5 py-4">
               <div className="flex items-center gap-2">
-                <Building2 className="w-4 h-4 text-violet-400" />
-                <span className="font-semibold text-violet-300 text-sm">{FOCUS_FACULTY.name}</span>
+                <Building2 className="w-4 h-4 text-primary" />
+                <span className="font-semibold text-primary text-sm">{FOCUS_FACULTY.name}</span>
                 <span className="text-xs text-white/30">(Full data — see Science tab)</span>
               </div>
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {DEPARTMENTS.map(d => (
-                  <span key={d.code} className="text-xs px-2 py-0.5 rounded-md bg-violet-500/10 border border-violet-400/20 text-violet-300">
+                  <span key={d.code} className="text-xs px-2 py-0.5 rounded-md bg-primary/10 border border-primary/20 text-primary">
                     {d.code}
                   </span>
                 ))}

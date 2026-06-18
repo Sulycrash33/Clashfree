@@ -58,8 +58,8 @@ const OVERRIDES: Override[] = [
     label: "Timetable Lock",
     description: "Lock or unlock timetable editing for the current semester. When locked, Timetable Officers cannot make changes.",
     icon: Lock,
-    color: "text-amber-400",
-    badgeColor: "bg-amber-500/15 border-amber-400/30 text-amber-300",
+    color: "text-accent-gold",
+    badgeColor: "bg-accent-gold/15 border-accent-gold/30 text-accent-gold",
     active: false,
     details: {
       current: "Timetable UNLOCKED — editing active",
@@ -82,8 +82,8 @@ const OVERRIDES: Override[] = [
     label: "Venue Reassignment",
     description: "Override a course's assigned venue due to capacity breach, maintenance, or scheduling conflict.",
     icon: Building2,
-    color: "text-sky-400",
-    badgeColor: "bg-sky-500/15 border-sky-400/30 text-sky-300",
+    color: "text-secondary",
+    badgeColor: "bg-secondary/15 border-secondary/30 text-secondary",
     active: true,
     details: {
       current: "CSC 411 assigned to SCI LH 9 (100 seats) — 118 students registered",
@@ -107,8 +107,8 @@ const OVERRIDES: Override[] = [
     label: "Credit Unit Waiver",
     description: "Grant a student permission to exceed the 24 CU semester cap. Requires CGPA ≥ 4.0 and Senate approval.",
     icon: BookMarked,
-    color: "text-violet-400",
-    badgeColor: "bg-violet-500/15 border-violet-400/30 text-violet-300",
+    color: "text-primary",
+    badgeColor: "bg-primary/15 border-primary/30 text-primary",
     active: false,
     details: {
       current: "Standard limit: 24 CU/semester. Waiver allows up to 26 CU.",
@@ -132,8 +132,8 @@ const OVERRIDES: Override[] = [
     label: "Lecturer Substitution",
     description: "Assign a substitute lecturer to cover a course when the primary lecturer is unavailable.",
     icon: GraduationCap,
-    color: "text-emerald-400",
-    badgeColor: "bg-emerald-500/15 border-emerald-400/30 text-emerald-300",
+    color: "text-success",
+    badgeColor: "bg-success/15 border-success/30 text-success",
     active: true,
     details: {
       current: "PHY 317 (Classical Waves) — primary lecturer on sick leave",
@@ -157,8 +157,8 @@ const OVERRIDES: Override[] = [
     label: "Enrollment Cap Override",
     description: "Temporarily raise or lower the enrollment cap for a specific course or department.",
     icon: Users,
-    color: "text-rose-400",
-    badgeColor: "bg-rose-500/15 border-rose-400/30 text-rose-300",
+    color: "text-clash",
+    badgeColor: "bg-clash/15 border-clash/30 text-clash",
     active: false,
     details: {
       current: "Default cap: 70 students/course section for CSC; 60 for CHM/PHY",
@@ -182,8 +182,8 @@ const OVERRIDES: Override[] = [
     label: "Examination Date Change",
     description: "Reschedule an examination date for a specific course. Triggers automatic student and lecturer notification.",
     icon: Calendar,
-    color: "text-orange-400",
-    badgeColor: "bg-orange-500/15 border-orange-400/30 text-orange-300",
+    color: "text-accent-gold",
+    badgeColor: "bg-accent-gold/15 border-accent-gold/30 text-accent-gold",
     active: false,
     details: {
       current: "Exam timetable published — changes require IA approval",
@@ -207,8 +207,8 @@ const OVERRIDES: Override[] = [
     label: "Course Suspension",
     description: "Temporarily suspend a course offering for this semester due to lack of manpower or infrastructure.",
     icon: AlertTriangle,
-    color: "text-red-400",
-    badgeColor: "bg-red-500/15 border-red-400/30 text-red-300",
+    color: "text-clash",
+    badgeColor: "bg-clash/15 border-clash/30 text-clash",
     active: false,
     details: {
       current: "No courses currently suspended",
@@ -232,8 +232,8 @@ const OVERRIDES: Override[] = [
     label: "Department Notice / Circular",
     description: "Issue an official circular to one or all departments. Delivered via ScheduleFlex notification system.",
     icon: Bell,
-    color: "text-cyan-400",
-    badgeColor: "bg-cyan-500/15 border-cyan-400/30 text-cyan-300",
+    color: "text-secondary",
+    badgeColor: "bg-secondary/15 border-secondary/30 text-secondary",
     active: false,
     details: {
       current: "Last circular: 2024-09-30 — Semester 1 Commencement",
@@ -273,7 +273,7 @@ function OverrideModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="w-full max-w-lg rounded-2xl border border-white/15 bg-[#13131f] shadow-2xl overflow-hidden">
+      <div className="w-full max-w-lg rounded-2xl border border-white/15 bg-muted shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
           <div className="flex items-center gap-3">
@@ -354,7 +354,7 @@ function OverrideModal({
             onClick={handleSave}
             className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
               saved
-                ? "bg-emerald-600 text-white"
+                ? "bg-success text-white"
                 : "bg-white text-black hover:bg-white/90"
             }`}
           >
@@ -436,14 +436,14 @@ function AddRemoveModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="w-full max-w-md rounded-2xl border border-white/15 bg-[#13131f] shadow-2xl overflow-hidden">
+      <div className="w-full max-w-md rounded-2xl border border-white/15 bg-muted shadow-2xl overflow-hidden">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
           <div className="flex items-center gap-3">
-            <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${isRemove ? "bg-red-500/20" : "bg-emerald-500/20"}`}>
+            <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${isRemove ? "bg-clash/20" : "bg-success/20"}`}>
               {isRemove
-                ? <MinusCircle className="w-4 h-4 text-red-400" />
-                : <PlusCircle className="w-4 h-4 text-emerald-400" />
+                ? <MinusCircle className="w-4 h-4 text-clash" />
+                : <PlusCircle className="w-4 h-4 text-success" />
               }
             </div>
             <span className="font-semibold text-white text-sm">
@@ -458,8 +458,8 @@ function AddRemoveModal({
         <div className="px-6 py-5 space-y-4 max-h-[55vh] overflow-y-auto">
           {isRemove ? (
             <div className="space-y-3">
-              <div className="rounded-xl bg-red-500/10 border border-red-400/20 p-3 flex items-start gap-2">
-                <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+              <div className="rounded-xl bg-clash/10 border border-clash/20 p-3 flex items-start gap-2">
+                <AlertTriangle className="w-4 h-4 text-clash flex-shrink-0 mt-0.5" />
                 <p className="text-sm text-white/60">
                   Removing a {config.singular.toLowerCase()} is irreversible in this demo.
                   All associated data will be unlinked.
@@ -521,9 +521,9 @@ function AddRemoveModal({
             onClick={() => { setDone(true); setTimeout(onClose, 1200); }}
             className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all ${
               done
-                ? "bg-emerald-600 text-white"
+                ? "bg-success text-white"
                 : isRemove
-                ? "bg-red-600 hover:bg-red-500 text-white"
+                ? "bg-clash hover:bg-clash text-white"
                 : "bg-white text-black hover:bg-white/90"
             }`}
           >
@@ -587,16 +587,16 @@ export default function InstitutionAdminPage() {
 
       {/* Pause toast */}
       {pauseToast && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-[#13131f] border border-white/15 shadow-2xl">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-muted border border-white/15 shadow-2xl">
+          <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0" />
           <span className="text-sm font-semibold text-white">{pauseToast}</span>
         </div>
       )}
       {/* System toast */}
       {systemToast && (
-        <div className="fixed bottom-6 left-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-violet-900/90 border border-violet-400/20 shadow-2xl">
-          <Zap className="w-4 h-4 text-violet-300 flex-shrink-0" />
-          <span className="text-sm font-semibold text-violet-100">{systemToast}</span>
+        <div className="fixed bottom-6 left-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-primary/90 border border-primary/20 shadow-2xl">
+          <Zap className="w-4 h-4 text-primary flex-shrink-0" />
+          <span className="text-sm font-semibold text-primary">{systemToast}</span>
         </div>
       )}
 
@@ -618,16 +618,16 @@ export default function InstitutionAdminPage() {
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <Building2 className="w-4 h-4 text-sky-400" />
-              <span className="text-xs font-semibold text-sky-400 uppercase tracking-widest">Institution Admin</span>
+              <Building2 className="w-4 h-4 text-secondary" />
+              <span className="text-xs font-semibold text-secondary uppercase tracking-widest">Institution Admin</span>
             </div>
             <h1 className="text-2xl font-bold text-white">Faculty Control Panel</h1>
             <p className="text-white/40 text-sm mt-1">Faculty of Physical and Applied Sciences · 2024/2025 S1</p>
           </div>
           {activeOverrides.length > 0 && (
-            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500/10 border border-amber-400/20">
-              <AlertTriangle className="w-4 h-4 text-amber-400" />
-              <span className="text-sm font-medium text-amber-300">
+            <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent-gold/10 border border-accent-gold/20">
+              <AlertTriangle className="w-4 h-4 text-accent-gold" />
+              <span className="text-sm font-medium text-accent-gold">
                 {activeOverrides.length} active override{activeOverrides.length > 1 ? "s" : ""}
               </span>
             </div>
@@ -665,22 +665,22 @@ export default function InstitutionAdminPage() {
 
             {/* Active overrides banner */}
             {activeOverrides.length > 0 && (
-              <div className="rounded-2xl border border-amber-400/20 bg-amber-500/5 p-4 space-y-2">
+              <div className="rounded-2xl border border-accent-gold/20 bg-accent-gold/5 p-4 space-y-2">
                 <div className="flex items-center gap-2">
-                  <AlertTriangle className="w-4 h-4 text-amber-400" />
-                  <span className="text-sm font-semibold text-amber-300">Active Overrides</span>
+                  <AlertTriangle className="w-4 h-4 text-accent-gold" />
+                  <span className="text-sm font-semibold text-accent-gold">Active Overrides</span>
                 </div>
                 <div className="space-y-1">
                   {activeOverrides.map(o => (
                     <button
                       key={o.id}
                       onClick={() => setSelectedOverride(o)}
-                      className="w-full flex items-center justify-between text-left px-3 py-2 rounded-lg hover:bg-amber-500/10 transition-colors group"
+                      className="w-full flex items-center justify-between text-left px-3 py-2 rounded-lg hover:bg-accent-gold/10 transition-colors group"
                     >
                       <span className="text-sm text-white/70 group-hover:text-white transition-colors">
                         {o.label} — {o.details.proposedAction}
                       </span>
-                      <ChevronRight className="w-3.5 h-3.5 text-amber-400/60" />
+                      <ChevronRight className="w-3.5 h-3.5 text-accent-gold/60" />
                     </button>
                   ))}
                 </div>
@@ -698,7 +698,7 @@ export default function InstitutionAdminPage() {
                     className={`
                       group rounded-2xl border p-5 text-left transition-all duration-200 hover:scale-[1.01] hover:shadow-xl
                       ${o.active
-                        ? "border-amber-400/30 bg-amber-500/5 hover:bg-amber-500/10"
+                        ? "border-accent-gold/30 bg-accent-gold/5 hover:bg-accent-gold/10"
                         : "border-white/10 bg-white/[0.02] hover:bg-white/[0.05]"
                       }
                     `}
@@ -722,7 +722,7 @@ export default function InstitutionAdminPage() {
                     </div>
                     <p className="text-xs text-white/45 mt-3 leading-relaxed">{o.description}</p>
                     {o.active && (
-                      <div className="mt-3 text-xs text-amber-300/70 bg-amber-500/10 rounded-lg px-2 py-1.5 leading-relaxed">
+                      <div className="mt-3 text-xs text-accent-gold/70 bg-accent-gold/10 rounded-lg px-2 py-1.5 leading-relaxed">
                         {o.details.proposedAction}
                       </div>
                     )}
@@ -745,36 +745,36 @@ export default function InstitutionAdminPage() {
               {
                 label: "Faculty",
                 icon: Building2,
-                color: "text-violet-400",
-                bg: "bg-violet-500/10",
-                border: "border-violet-400/20",
+                color: "text-primary",
+                bg: "bg-primary/10",
+                border: "border-primary/20",
                 type: "faculty" as const,
                 description: "Add a new faculty or remove an existing one from the institution registry.",
               },
               {
                 label: "Department",
                 icon: Layers,
-                color: "text-sky-400",
-                bg: "bg-sky-500/10",
-                border: "border-sky-400/20",
+                color: "text-secondary",
+                bg: "bg-secondary/10",
+                border: "border-secondary/20",
                 type: "department" as const,
                 description: "Add a new department under a faculty or remove a department.",
               },
               {
                 label: "Admin / Officer",
                 icon: ShieldAlert,
-                color: "text-amber-400",
-                bg: "bg-amber-500/10",
-                border: "border-amber-400/20",
+                color: "text-accent-gold",
+                bg: "bg-accent-gold/10",
+                border: "border-accent-gold/20",
                 type: "admin" as const,
                 description: "Add or remove Institution Admins and Timetable Officers.",
               },
               {
                 label: "Lecturer",
                 icon: GraduationCap,
-                color: "text-emerald-400",
-                bg: "bg-emerald-500/10",
-                border: "border-emerald-400/20",
+                color: "text-success",
+                bg: "bg-success/10",
+                border: "border-success/20",
                 type: "lecturer" as const,
                 description: "Add a new lecturer or remove one from a department.",
               },
@@ -794,14 +794,14 @@ export default function InstitutionAdminPage() {
                       onClick={() => setAddRemoveModal({ type: item.type, action: "add" })}
                       className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-colors"
                     >
-                      <PlusCircle className="w-4 h-4 text-emerald-400" />
+                      <PlusCircle className="w-4 h-4 text-success" />
                       Add {item.label}
                     </button>
                     <button
                       onClick={() => setAddRemoveModal({ type: item.type, action: "remove" })}
-                      className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-white/70 hover:bg-red-500/10 hover:text-red-300 transition-colors"
+                      className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-white/70 hover:bg-clash/10 hover:text-clash transition-colors"
                     >
-                      <MinusCircle className="w-4 h-4 text-red-400" />
+                      <MinusCircle className="w-4 h-4 text-clash" />
                       Remove {item.label}
                     </button>
                   </div>
@@ -817,10 +817,10 @@ export default function InstitutionAdminPage() {
             {/* Quick stats */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
               {[
-                { label: "Departments", value: DEPARTMENTS.length, icon: Layers, color: "bg-sky-600" },
-                { label: "Total Lecturers", value: DEPARTMENTS.reduce((s, d) => s + d.totalLecturers, 0), icon: GraduationCap, color: "bg-emerald-600" },
-                { label: "Lecture Facilities", value: LECTURE_FACILITIES.length, icon: FlaskConical, color: "bg-violet-600" },
-                { label: "Active Overrides", value: activeOverrides.length, icon: ShieldAlert, color: "bg-amber-600" },
+                { label: "Departments", value: DEPARTMENTS.length, icon: Layers, color: "bg-secondary" },
+                { label: "Total Lecturers", value: DEPARTMENTS.reduce((s, d) => s + d.totalLecturers, 0), icon: GraduationCap, color: "bg-success" },
+                { label: "Lecture Facilities", value: LECTURE_FACILITIES.length, icon: FlaskConical, color: "bg-primary" },
+                { label: "Active Overrides", value: activeOverrides.length, icon: ShieldAlert, color: "bg-accent-gold" },
               ].map(s => {
                 const Icon = s.icon;
                 return (
@@ -862,8 +862,8 @@ export default function InstitutionAdminPage() {
                         </div>
                         <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-semibold ${
                           ok
-                            ? "bg-emerald-500/10 border-emerald-400/20 text-emerald-300"
-                            : "bg-red-500/10 border-red-400/20 text-red-300"
+                            ? "bg-success/10 border-success/20 text-success"
+                            : "bg-clash/10 border-clash/20 text-clash"
                         }`}>
                           {ok ? <CheckCircle2 className="w-3 h-3" /> : <AlertTriangle className="w-3 h-3" />}
                           {ratio}:1
@@ -889,15 +889,15 @@ export default function InstitutionAdminPage() {
             {/* Current status */}
             <div className={`rounded-2xl border p-6 space-y-4 ${
               timetableStatus === "active"
-                ? "border-emerald-400/20 bg-emerald-500/5"
+                ? "border-success/20 bg-success/5"
                 : timetableStatus === "paused"
-                ? "border-amber-400/20 bg-amber-500/5"
-                : "border-red-400/20 bg-red-500/5"
+                ? "border-accent-gold/20 bg-accent-gold/5"
+                : "border-clash/20 bg-clash/5"
             }`}>
               <div className="flex items-center justify-between flex-wrap gap-3">
                 <div className="flex items-center gap-3">
                   <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                    timetableStatus === "active" ? "bg-emerald-600" : timetableStatus === "paused" ? "bg-amber-600" : "bg-red-600"
+                    timetableStatus === "active" ? "bg-success" : timetableStatus === "paused" ? "bg-accent-gold" : "bg-clash"
                   }`}>
                     {timetableStatus === "active"
                       ? <Play className="w-5 h-5 text-white" />
@@ -908,7 +908,7 @@ export default function InstitutionAdminPage() {
                   </div>
                   <div>
                     <div className={`text-lg font-bold ${
-                      timetableStatus === "active" ? "text-emerald-300" : timetableStatus === "paused" ? "text-amber-300" : "text-red-300"
+                      timetableStatus === "active" ? "text-success" : timetableStatus === "paused" ? "text-accent-gold" : "text-clash"
                     }`}>
                       Timetable {timetableStatus === "active" ? "Active" : timetableStatus === "paused" ? "Paused" : "Suspended"}
                     </div>
@@ -924,10 +924,10 @@ export default function InstitutionAdminPage() {
                 </div>
                 <div className={`text-xs font-bold px-3 py-1.5 rounded-full border ${
                   timetableStatus === "active"
-                    ? "bg-emerald-500/15 border-emerald-400/30 text-emerald-300"
+                    ? "bg-success/15 border-success/30 text-success"
                     : timetableStatus === "paused"
-                    ? "bg-amber-500/15 border-amber-400/30 text-amber-300"
-                    : "bg-red-500/15 border-red-400/30 text-red-300"
+                    ? "bg-accent-gold/15 border-accent-gold/30 text-accent-gold"
+                    : "bg-clash/15 border-clash/30 text-clash"
                 } flex items-center gap-1.5`}>
                   <span className="w-2 h-2 rounded-full bg-current animate-pulse" />
                   {timetableStatus.toUpperCase()}
@@ -955,8 +955,8 @@ export default function InstitutionAdminPage() {
                 disabled={timetableStatus === "active"}
                 className={`flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-semibold text-sm transition-all ${
                   timetableStatus === "active"
-                    ? "bg-emerald-600/30 border border-emerald-400/20 text-emerald-400/50 cursor-not-allowed"
-                    : "bg-emerald-600 text-white hover:bg-emerald-500 shadow-lg"
+                    ? "bg-success/30 border border-success/20 text-success/50 cursor-not-allowed"
+                    : "bg-success text-white hover:bg-success shadow-lg"
                 }`}>
                 <Play className="w-4 h-4" />
                 Resume Timetable
@@ -967,8 +967,8 @@ export default function InstitutionAdminPage() {
                 disabled={timetableStatus === "paused"}
                 className={`flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-semibold text-sm transition-all ${
                   timetableStatus === "paused"
-                    ? "bg-amber-600/30 border border-amber-400/20 text-amber-400/50 cursor-not-allowed"
-                    : "bg-amber-600 text-white hover:bg-amber-500 shadow-lg"
+                    ? "bg-accent-gold/30 border border-accent-gold/20 text-accent-gold/50 cursor-not-allowed"
+                    : "bg-accent-gold text-white hover:bg-accent-gold shadow-lg"
                 }`}>
                 <Pause className="w-4 h-4" />
                 Pause Timetable
@@ -979,8 +979,8 @@ export default function InstitutionAdminPage() {
                 disabled={timetableStatus === "suspended"}
                 className={`flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-semibold text-sm transition-all ${
                   timetableStatus === "suspended"
-                    ? "bg-red-600/30 border border-red-400/20 text-red-400/50 cursor-not-allowed"
-                    : "bg-red-700 text-white hover:bg-red-600 shadow-lg"
+                    ? "bg-clash/30 border border-clash/20 text-clash/50 cursor-not-allowed"
+                    : "bg-clash text-white hover:bg-clash shadow-lg"
                 }`}>
                 <Shield className="w-4 h-4" />
                 Suspend (Emergency)
@@ -992,29 +992,29 @@ export default function InstitutionAdminPage() {
               {[
                 {
                   icon: Pause,
-                  color: "text-amber-400",
-                  bg: "bg-amber-500/10 border-amber-400/20",
+                  color: "text-accent-gold",
+                  bg: "bg-accent-gold/10 border-accent-gold/20",
                   title: "Pause",
                   desc: "Temporarily halts all scheduled lectures. Students and lecturers are notified. Timetable data is preserved. Use for short interruptions like strikes or public holidays.",
                 },
                 {
                   icon: Play,
-                  color: "text-emerald-400",
-                  bg: "bg-emerald-500/10 border-emerald-400/20",
+                  color: "text-success",
+                  bg: "bg-success/10 border-success/20",
                   title: "Resume",
                   desc: "Restores the timetable to its active state. All previously scheduled lectures continue from the next applicable date. WhatsApp notifications sent to all parties.",
                 },
                 {
                   icon: Shield,
-                  color: "text-red-400",
-                  bg: "bg-red-500/10 border-red-400/20",
+                  color: "text-clash",
+                  bg: "bg-clash/10 border-clash/20",
                   title: "Emergency Suspend",
                   desc: "Full suspension — no lectures, no access updates. Reserved for serious situations (security, force majeure). Requires Super Admin acknowledgement to lift.",
                 },
                 {
                   icon: Bell,
-                  color: "text-sky-400",
-                  bg: "bg-sky-500/10 border-sky-400/20",
+                  color: "text-secondary",
+                  bg: "bg-secondary/10 border-secondary/20",
                   title: "Notifications",
                   desc: "Every status change automatically triggers WhatsApp messages to all registered students, lecturers, and timetable officers via the Meta Cloud API integration.",
                 },
@@ -1037,10 +1037,10 @@ export default function InstitutionAdminPage() {
         {/* ══ SYSTEM POWERS TAB ══════════════════════ */}
         {activeTab === "system" && (
           <div className="space-y-6">
-            <div className="rounded-2xl border border-amber-400/20 bg-amber-500/5 p-4 flex items-start gap-3">
-              <Crown className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />
+            <div className="rounded-2xl border border-accent-gold/20 bg-accent-gold/5 p-4 flex items-start gap-3">
+              <Crown className="w-5 h-5 text-accent-gold flex-shrink-0 mt-0.5" />
               <div>
-                <div className="text-sm font-semibold text-amber-300">Institution Admin — Elevated System Powers</div>
+                <div className="text-sm font-semibold text-accent-gold">Institution Admin — Elevated System Powers</div>
                 <p className="text-xs text-white/40 mt-1 leading-relaxed">
                   These powers were previously restricted to Super Admin. They are now available to Institution Admins
                   for operational efficiency. Super Admin retains platform-level oversight and audit logs.
@@ -1054,40 +1054,40 @@ export default function InstitutionAdminPage() {
                   label: "Bulk Enrolment Override",
                   desc: "Force-enrol or remove multiple students from courses in a single batch operation.",
                   icon: Users,
-                  color: "text-sky-400",
-                  bg: "bg-sky-500/10 border-sky-400/20",
+                  color: "text-secondary",
+                  bg: "bg-secondary/10 border-secondary/20",
                   action: "Apply Bulk Override",
                 },
                 {
                   label: "Course Suspension",
                   desc: "Suspend a course for the semester — removes from all student and lecturer timetables.",
                   icon: Ban,
-                  color: "text-red-400",
-                  bg: "bg-red-500/10 border-red-400/20",
+                  color: "text-clash",
+                  bg: "bg-clash/10 border-clash/20",
                   action: "Suspend Course",
                 },
                 {
                   label: "Lecturer Substitution",
                   desc: "Assign a substitute lecturer to all sessions of a course for a defined period.",
                   icon: RefreshCw,
-                  color: "text-violet-400",
-                  bg: "bg-violet-500/10 border-violet-400/20",
+                  color: "text-primary",
+                  bg: "bg-primary/10 border-primary/20",
                   action: "Set Substitution",
                 },
                 {
                   label: "Export Full Dataset",
                   desc: "Export complete institution timetable, student enrolment, and lecturer data as CSV/PDF.",
                   icon: Download,
-                  color: "text-emerald-400",
-                  bg: "bg-emerald-500/10 border-emerald-400/20",
+                  color: "text-success",
+                  bg: "bg-success/10 border-success/20",
                   action: "Export All Data",
                 },
                 {
                   label: "Broadcast Announcement",
                   desc: "Send a system-wide WhatsApp message to all students and lecturers in this institution.",
                   icon: Bell,
-                  color: "text-amber-400",
-                  bg: "bg-amber-500/10 border-amber-400/20",
+                  color: "text-accent-gold",
+                  bg: "bg-accent-gold/10 border-accent-gold/20",
                   action: "Send Broadcast",
                 },
                 {
@@ -1102,16 +1102,16 @@ export default function InstitutionAdminPage() {
                   label: "Flush Clash Cache",
                   desc: "Force ScheduleFlex to re-detect all clashes from scratch. Run after bulk data changes.",
                   icon: Zap,
-                  color: "text-fuchsia-400",
-                  bg: "bg-fuchsia-500/10 border-fuchsia-400/20",
+                  color: "text-clash",
+                  bg: "bg-clash/10 border-clash/20",
                   action: "Run Detection",
                 },
                 {
                   label: "Session Rollover",
                   desc: "Archive the current academic session and initialise the next one — 2025/2026.",
                   icon: Globe,
-                  color: "text-teal-400",
-                  bg: "bg-teal-500/10 border-teal-400/20",
+                  color: "text-success",
+                  bg: "bg-success/10 border-success/20",
                   action: "Begin Rollover",
                 },
               ].map(item => {

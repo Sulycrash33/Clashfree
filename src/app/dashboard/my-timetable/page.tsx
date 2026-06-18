@@ -43,9 +43,9 @@ interface StudentInfo {
 
 const slotLabels = ['Morning', 'Afternoon', 'Evening']
 const slotColors = [
-  'from-cyan-500/20 to-blue-500/20 border-cyan-500/30',
-  'from-purple-500/20 to-pink-500/20 border-purple-500/30',
-  'from-amber-500/20 to-yellow-500/20 border-amber-500/30',
+  'from-secondary/20 to-secondary/20 border-secondary/30',
+  'from-primary/20 to-clash/20 border-primary/30',
+  'from-accent-gold/20 to-accent-gold/20 border-accent-gold/30',
 ]
 
 export default function MyTimetablePage() {
@@ -132,8 +132,8 @@ export default function MyTimetablePage() {
 
   if (session?.user?.role && !['ST', 'LC'].includes(session.user.role)) {
     return (
-      <Alert className="bg-amber-500/10 border-amber-500/20">
-        <AlertDescription className="text-amber-400">
+      <Alert className="bg-accent-gold/10 border-accent-gold/20">
+        <AlertDescription className="text-accent-gold">
           This page is for students. Admins can view individual student timetables from the Students page.
         </AlertDescription>
       </Alert>
@@ -151,14 +151,14 @@ export default function MyTimetablePage() {
 
       {loading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 className="w-8 h-8 animate-spin text-cyan-500" />
+          <Loader2 className="w-8 h-8 animate-spin text-secondary" />
         </div>
       ) : !studentInfo ? (
         <Card className="bg-white/5 border-white/10">
           <CardContent className="py-12 text-center">
-            <User className="w-12 h-12 mx-auto text-slate-500 mb-4" />
+            <User className="w-12 h-12 mx-auto text-muted mb-4" />
             <p className="text-white font-medium">No student profile found</p>
-            <p className="text-sm text-slate-400">Please contact your department if you cannot see your timetable</p>
+            <p className="text-sm text-muted">Please contact your department if you cannot see your timetable</p>
           </CardContent>
         </Card>
       ) : (
@@ -168,18 +168,18 @@ export default function MyTimetablePage() {
             <CardContent className="pt-6">
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
-                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center text-2xl font-bold">
+                  <div className="w-16 h-16 rounded-full bg-gradient-to-br from-secondary to-secondary flex items-center justify-center text-2xl font-bold">
                     {studentInfo.name.charAt(0)}
                   </div>
                   <div>
                     <h2 className="text-xl font-bold text-white">{studentInfo.name}</h2>
-                    <p className="text-slate-400">{studentInfo.regNumber}</p>
+                    <p className="text-muted">{studentInfo.regNumber}</p>
                     <div className="flex items-center gap-2 mt-1">
-                      <Badge variant="outline" className="border-white/10 text-cyan-400">
+                      <Badge variant="outline" className="border-white/10 text-secondary">
                         {studentInfo.department?.code} - {studentInfo.level} Level
                       </Badge>
                       {coCourses.length > 0 && (
-                        <Badge variant="outline" className="border-amber-500/20 text-amber-400">
+                        <Badge variant="outline" className="border-accent-gold/20 text-accent-gold">
                           {coCourses.length} Carry-over(s)
                         </Badge>
                       )}
@@ -192,7 +192,7 @@ export default function MyTimetablePage() {
                     <SelectTrigger className="w-64 bg-white/5 border-white/10 text-white">
                       <SelectValue placeholder="Select exam period" />
                     </SelectTrigger>
-                    <SelectContent className="bg-slate-900 border-white/10">
+                    <SelectContent className="bg-muted border-white/10">
                       {examPeriods.map((p) => (
                         <SelectItem key={p.id} value={p.id} className="text-white">
                           {p.name} - {p.session} Sem {p.semester}
@@ -202,7 +202,7 @@ export default function MyTimetablePage() {
                   </Select>
                   <Button
                     variant="outline"
-                    className="border-white/10 text-slate-300 hover:text-white"
+                    className="border-white/10 text-muted hover:text-white"
                   >
                     <Download className="w-4 h-4 mr-2" />
                     Download
@@ -214,9 +214,9 @@ export default function MyTimetablePage() {
 
           {/* CO Warning */}
           {coCourses.length > 0 && (
-            <Alert className="bg-amber-500/10 border-amber-500/20">
-              <AlertTriangle className="w-4 h-4 text-amber-400" />
-              <AlertDescription className="text-amber-400">
+            <Alert className="bg-accent-gold/10 border-accent-gold/20">
+              <AlertTriangle className="w-4 h-4 text-accent-gold" />
+              <AlertDescription className="text-accent-gold">
                 You have <strong>{coCourses.length}</strong> carry-over/spillover course(s):{' '}
                 {coCourses.map(c => c.courseCode).join(', ')}. Please ensure these don't clash with your current courses.
               </AlertDescription>
@@ -228,12 +228,12 @@ export default function MyTimetablePage() {
             <Card className="bg-white/5 border-white/10">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-blue-500/20 flex items-center justify-center">
-                    <BookOpen className="w-5 h-5 text-cyan-400" />
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-secondary/20 to-secondary/20 flex items-center justify-center">
+                    <BookOpen className="w-5 h-5 text-secondary" />
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-white">{studentInfo.courses.length}</div>
-                    <div className="text-xs text-slate-400">Registered Courses</div>
+                    <div className="text-xs text-muted">Registered Courses</div>
                   </div>
                 </div>
               </CardContent>
@@ -241,12 +241,12 @@ export default function MyTimetablePage() {
             <Card className="bg-white/5 border-white/10">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center">
-                    <Calendar className="w-5 h-5 text-green-400" />
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-success/20 to-success/20 flex items-center justify-center">
+                    <Calendar className="w-5 h-5 text-success" />
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-white">{sortedDates.length}</div>
-                    <div className="text-xs text-slate-400">Exam Days</div>
+                    <div className="text-xs text-muted">Exam Days</div>
                   </div>
                 </div>
               </CardContent>
@@ -254,12 +254,12 @@ export default function MyTimetablePage() {
             <Card className="bg-white/5 border-white/10">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500/20 to-yellow-500/20 flex items-center justify-center">
-                    <AlertTriangle className="w-5 h-5 text-amber-400" />
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-accent-gold/20 to-accent-gold/20 flex items-center justify-center">
+                    <AlertTriangle className="w-5 h-5 text-accent-gold" />
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-white">{coCourses.length}</div>
-                    <div className="text-xs text-slate-400">Carry-overs</div>
+                    <div className="text-xs text-muted">Carry-overs</div>
                   </div>
                 </div>
               </CardContent>
@@ -267,12 +267,12 @@ export default function MyTimetablePage() {
             <Card className="bg-white/5 border-white/10">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center">
-                    <CheckCircle2 className="w-5 h-5 text-purple-400" />
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/20 to-clash/20 flex items-center justify-center">
+                    <CheckCircle2 className="w-5 h-5 text-primary" />
                   </div>
                   <div>
                     <div className="text-2xl font-bold text-white">{examSlots.length}</div>
-                    <div className="text-xs text-slate-400">Exams Scheduled</div>
+                    <div className="text-xs text-muted">Exams Scheduled</div>
                   </div>
                 </div>
               </CardContent>
@@ -283,9 +283,9 @@ export default function MyTimetablePage() {
           {examSlots.length === 0 ? (
             <Card className="bg-white/5 border-white/10">
               <CardContent className="py-12 text-center">
-                <Calendar className="w-12 h-12 mx-auto text-slate-500 mb-4" />
+                <Calendar className="w-12 h-12 mx-auto text-muted mb-4" />
                 <p className="text-white font-medium">No exams scheduled yet</p>
-                <p className="text-sm text-slate-400">Your timetable will appear here once exams are scheduled</p>
+                <p className="text-sm text-muted">Your timetable will appear here once exams are scheduled</p>
               </CardContent>
             </Card>
           ) : (
@@ -294,7 +294,7 @@ export default function MyTimetablePage() {
                 <Card key={date} className="bg-white/5 border-white/10">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-lg text-white flex items-center gap-2">
-                      <Calendar className="w-5 h-5 text-cyan-400" />
+                      <Calendar className="w-5 h-5 text-secondary" />
                       {date}
                     </CardTitle>
                   </CardHeader>
@@ -314,20 +314,20 @@ export default function MyTimetablePage() {
                               <div className="flex items-start justify-between">
                                 <div>
                                   <div className="flex items-center gap-2 mb-1">
-                                    <Badge variant="outline" className="border-white/20 text-cyan-400 font-mono">
+                                    <Badge variant="outline" className="border-white/20 text-secondary font-mono">
                                       {slot.course.code}
                                     </Badge>
-                                    <Badge variant="secondary" className="bg-white/10 text-slate-300">
+                                    <Badge variant="secondary" className="bg-white/10 text-muted">
                                       {slotLabels[slot.slotNumber - 1]}
                                     </Badge>
                                     {isCO && (
-                                      <Badge variant="outline" className="border-amber-500/20 text-amber-400">
+                                      <Badge variant="outline" className="border-accent-gold/20 text-accent-gold">
                                         {courseInfo?.status === 'CARRY_OVER' ? 'CO' : 'Spillover'}
                                       </Badge>
                                     )}
                                   </div>
                                   <p className="text-white font-medium">{slot.course.name}</p>
-                                  <div className="flex items-center gap-4 mt-2 text-sm text-slate-400">
+                                  <div className="flex items-center gap-4 mt-2 text-sm text-muted">
                                     <span className="flex items-center gap-1">
                                       <Clock className="w-4 h-4" />
                                       {slot.startTime} - {slot.endTime}

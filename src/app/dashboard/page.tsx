@@ -126,7 +126,7 @@ export default function DashboardPage() {
           <h1 className="text-2xl font-bold text-white">
             Welcome back, {session.user.name?.split(' ')[0] || 'User'}
           </h1>
-          <p className="text-slate-400">
+          <p className="text-muted">
             {roleLabels[userRole]} Dashboard • {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
           </p>
         </div>
@@ -136,11 +136,11 @@ export default function DashboardPage() {
             size="sm"
             onClick={fetchStats}
             disabled={loading}
-            className="border-white/10 text-slate-300 hover:text-white"
+            className="border-white/10 text-muted hover:text-white"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
           </Button>
-          <Badge className="bg-cyan-500/10 text-cyan-400 border-cyan-500/20">
+          <Badge className="bg-secondary/10 text-secondary border-secondary/20">
             {userRole}
           </Badge>
         </div>
@@ -158,10 +158,10 @@ export default function DashboardPage() {
 
 function SuperAdminStats({ stats, loading }: { stats: DashboardStats | null; loading: boolean }) {
   const statCards = [
-    { label: 'Institutions', value: stats?.institutions || 0, icon: Building2, color: 'from-blue-500 to-cyan-500' },
-    { label: 'Total Users', value: stats?.users || 0, icon: Users, color: 'from-purple-500 to-pink-500' },
-    { label: 'Students', value: stats?.students || 0, icon: GraduationCap, color: 'from-green-500 to-emerald-500' },
-    { label: 'Courses', value: stats?.courses || 0, icon: BookOpen, color: 'from-amber-500 to-yellow-500' },
+    { label: 'Institutions', value: stats?.institutions || 0, icon: Building2, color: 'from-secondary to-secondary' },
+    { label: 'Total Users', value: stats?.users || 0, icon: Users, color: 'from-primary to-clash' },
+    { label: 'Students', value: stats?.students || 0, icon: GraduationCap, color: 'from-success to-success' },
+    { label: 'Courses', value: stats?.courses || 0, icon: BookOpen, color: 'from-accent-gold to-accent-gold' },
   ]
 
   return (
@@ -176,11 +176,11 @@ function SuperAdminStats({ stats, loading }: { stats: DashboardStats | null; loa
                 </div>
               </div>
               {loading ? (
-                <Loader2 className="w-6 h-6 animate-spin text-slate-500" />
+                <Loader2 className="w-6 h-6 animate-spin text-muted" />
               ) : (
                 <>
                   <div className="text-3xl font-bold text-white">{stat.value.toLocaleString()}</div>
-                  <div className="text-sm text-slate-400">{stat.label}</div>
+                  <div className="text-sm text-muted">{stat.label}</div>
                 </>
               )}
             </CardContent>
@@ -197,25 +197,25 @@ function SuperAdminStats({ stats, loading }: { stats: DashboardStats | null; loa
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <Link href="/dashboard/institutions">
-              <Button variant="outline" className="w-full border-white/10 text-slate-300 hover:text-white">
+              <Button variant="outline" className="w-full border-white/10 text-muted hover:text-white">
                 <Building2 className="w-4 h-4 mr-2" />
                 Institutions
               </Button>
             </Link>
             <Link href="/dashboard/users">
-              <Button variant="outline" className="w-full border-white/10 text-slate-300 hover:text-white">
+              <Button variant="outline" className="w-full border-white/10 text-muted hover:text-white">
                 <Users className="w-4 h-4 mr-2" />
                 Users
               </Button>
             </Link>
             <Link href="/dashboard/conflicts">
-              <Button variant="outline" className="w-full border-white/10 text-slate-300 hover:text-white">
+              <Button variant="outline" className="w-full border-white/10 text-muted hover:text-white">
                 <AlertTriangle className="w-4 h-4 mr-2" />
                 Conflicts
               </Button>
             </Link>
             <Link href="/dashboard/exam-timetable">
-              <Button variant="outline" className="w-full border-white/10 text-slate-300 hover:text-white">
+              <Button variant="outline" className="w-full border-white/10 text-muted hover:text-white">
                 <Calendar className="w-4 h-4 mr-2" />
                 Timetables
               </Button>
@@ -229,23 +229,23 @@ function SuperAdminStats({ stats, loading }: { stats: DashboardStats | null; loa
         <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-green-400" />
+              <CheckCircle2 className="w-5 h-5 text-success" />
               System Health
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">Database</span>
-                <Badge className="bg-green-500/10 text-green-400 border-green-500/20">Operational</Badge>
+                <span className="text-muted">Database</span>
+                <Badge className="bg-success/10 text-success border-success/20">Operational</Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">API Endpoints</span>
-                <Badge className="bg-green-500/10 text-green-400 border-green-500/20">All Running</Badge>
+                <span className="text-muted">API Endpoints</span>
+                <Badge className="bg-success/10 text-success border-success/20">All Running</Badge>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">Active Conflicts</span>
-                <Badge className={stats?.conflicts ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : 'bg-green-500/10 text-green-400 border-green-500/20'}>
+                <span className="text-muted">Active Conflicts</span>
+                <Badge className={stats?.conflicts ? 'bg-accent-gold/10 text-accent-gold border-accent-gold/20' : 'bg-success/10 text-success border-success/20'}>
                   {stats?.conflicts || 0}
                 </Badge>
               </div>
@@ -256,7 +256,7 @@ function SuperAdminStats({ stats, loading }: { stats: DashboardStats | null; loa
         <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-cyan-400" />
+              <TrendingUp className="w-5 h-5 text-secondary" />
               Platform Statistics
             </CardTitle>
           </CardHeader>
@@ -264,19 +264,19 @@ function SuperAdminStats({ stats, loading }: { stats: DashboardStats | null; loa
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center p-3 bg-white/5 rounded-lg">
                 <div className="text-2xl font-bold text-white">{stats?.faculties || 0}</div>
-                <div className="text-xs text-slate-400">Faculties</div>
+                <div className="text-xs text-muted">Faculties</div>
               </div>
               <div className="text-center p-3 bg-white/5 rounded-lg">
                 <div className="text-2xl font-bold text-white">{stats?.departments || 0}</div>
-                <div className="text-xs text-slate-400">Departments</div>
+                <div className="text-xs text-muted">Departments</div>
               </div>
               <div className="text-center p-3 bg-white/5 rounded-lg">
                 <div className="text-2xl font-bold text-white">{stats?.lecturers || 0}</div>
-                <div className="text-xs text-slate-400">Lecturers</div>
+                <div className="text-xs text-muted">Lecturers</div>
               </div>
               <div className="text-center p-3 bg-white/5 rounded-lg">
                 <div className="text-2xl font-bold text-white">{stats?.rooms || 0}</div>
-                <div className="text-xs text-slate-400">Rooms</div>
+                <div className="text-xs text-muted">Rooms</div>
               </div>
             </div>
           </CardContent>
@@ -287,7 +287,7 @@ function SuperAdminStats({ stats, loading }: { stats: DashboardStats | null; loa
       <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="text-white flex items-center gap-2">
-            <Building2 className="w-5 h-5 text-cyan-400" />
+            <Building2 className="w-5 h-5 text-secondary" />
             Faculty Breakdown
           </CardTitle>
           <CardDescription>
@@ -295,10 +295,10 @@ function SuperAdminStats({ stats, loading }: { stats: DashboardStats | null; loa
             {stats?.studentLecturerRatio && (
               <span className={`ml-3 font-medium ${
                 parseInt(stats.studentLecturerRatio) <= 20
-                  ? 'text-green-400'
+                  ? 'text-success'
                   : parseInt(stats.studentLecturerRatio) <= 40
-                  ? 'text-amber-400'
-                  : 'text-red-400'
+                  ? 'text-accent-gold'
+                  : 'text-clash'
               }`}>
                 Student:Lecturer ratio — {stats.studentLecturerRatio}
               </span>
@@ -307,15 +307,15 @@ function SuperAdminStats({ stats, loading }: { stats: DashboardStats | null; loa
         </CardHeader>
         <CardContent>
           {loading ? (
-            <Loader2 className="w-6 h-6 animate-spin text-slate-500" />
+            <Loader2 className="w-6 h-6 animate-spin text-muted" />
           ) : (stats?.facultyDrilldown?.length || 0) === 0 ? (
-            <p className="text-slate-400 text-sm">No faculties found</p>
+            <p className="text-muted text-sm">No faculties found</p>
           ) : (
             <div className="space-y-2">
               {stats?.facultyDrilldown?.map(f => (
                 <div key={f.id} className="flex items-center justify-between p-3 bg-white/5 rounded-lg border border-white/10 hover:border-white/20 transition-colors">
                   <div className="flex items-center gap-3">
-                    <Badge variant="outline" className="text-cyan-400 border-cyan-500/30 font-mono text-xs min-w-[50px] text-center">
+                    <Badge variant="outline" className="text-secondary border-secondary/30 font-mono text-xs min-w-[50px] text-center">
                       {f.code}
                     </Badge>
                     <span className="text-white text-sm">{f.name}</span>
@@ -323,14 +323,14 @@ function SuperAdminStats({ stats, loading }: { stats: DashboardStats | null; loa
                   <div className="flex items-center gap-4">
                     <div className="text-center">
                       <div className="text-white font-medium">{f.departments}</div>
-                      <div className="text-xs text-slate-400">Depts</div>
+                      <div className="text-xs text-muted">Depts</div>
                     </div>
                     <div className="text-center">
                       <div className="text-white font-medium">{f.courses}</div>
-                      <div className="text-xs text-slate-400">Courses</div>
+                      <div className="text-xs text-muted">Courses</div>
                     </div>
                     <Link href={`/dashboard/departments?facultyId=${f.id}`}>
-                      <Button variant="outline" size="sm" className="border-white/10 text-slate-300 hover:text-white text-xs">
+                      <Button variant="outline" size="sm" className="border-white/10 text-muted hover:text-white text-xs">
                         View Depts →
                       </Button>
                     </Link>
@@ -368,17 +368,17 @@ function InstitutionAdminStats({ stats, loading }: { stats: DashboardStats | nul
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div className="flex-1">
               <div className="flex items-center gap-3 mb-2">
-                <Sparkles className="w-5 h-5 text-cyan-400" />
+                <Sparkles className="w-5 h-5 text-secondary" />
                 <h3 className="text-lg font-semibold text-white">Setup Progress</h3>
               </div>
-              <p className="text-sm text-slate-400 mb-4">
+              <p className="text-sm text-muted mb-4">
                 {completed} of {setupProgress.length} steps complete ({progressPercent}%)
               </p>
               <Progress value={progressPercent} className="h-2 bg-white/10" />
             </div>
             {progressPercent < 100 && (
               <Link href="/dashboard/exam-timetable">
-                <Button className="bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white border-0">
+                <Button className="bg-gradient-to-r from-secondary to-secondary hover:from-secondary hover:to-secondary text-white border-0">
                   Continue Setup
                 </Button>
               </Link>
@@ -390,10 +390,10 @@ function InstitutionAdminStats({ stats, loading }: { stats: DashboardStats | nul
       {/* Stats Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Faculties', value: stats?.faculties || 0, sublabel: `${stats?.departments || 0} departments`, icon: Building2, color: 'from-blue-500 to-cyan-500' },
-          { label: 'Students', value: stats?.students || 0, sublabel: `${stats?.coStudents || 0} with COs`, icon: GraduationCap, color: 'from-purple-500 to-pink-500' },
-          { label: 'Courses', value: stats?.courses || 0, sublabel: 'Active courses', icon: BookOpen, color: 'from-green-500 to-emerald-500' },
-          { label: 'Lecturers', value: stats?.lecturers || 0, sublabel: 'Teaching staff', icon: Users, color: 'from-amber-500 to-yellow-500' },
+          { label: 'Faculties', value: stats?.faculties || 0, sublabel: `${stats?.departments || 0} departments`, icon: Building2, color: 'from-secondary to-secondary' },
+          { label: 'Students', value: stats?.students || 0, sublabel: `${stats?.coStudents || 0} with COs`, icon: GraduationCap, color: 'from-primary to-clash' },
+          { label: 'Courses', value: stats?.courses || 0, sublabel: 'Active courses', icon: BookOpen, color: 'from-success to-success' },
+          { label: 'Lecturers', value: stats?.lecturers || 0, sublabel: 'Teaching staff', icon: Users, color: 'from-accent-gold to-accent-gold' },
         ].map((stat, i) => (
           <Card key={i} className="bg-white/5 border-white/10 backdrop-blur-sm">
             <CardContent className="pt-6">
@@ -401,12 +401,12 @@ function InstitutionAdminStats({ stats, loading }: { stats: DashboardStats | nul
                 <stat.icon className="w-6 h-6 text-white" />
               </div>
               {loading ? (
-                <Loader2 className="w-6 h-6 animate-spin text-slate-500" />
+                <Loader2 className="w-6 h-6 animate-spin text-muted" />
               ) : (
                 <>
                   <div className="text-3xl font-bold text-white">{stat.value.toLocaleString()}</div>
-                  <div className="text-sm text-slate-400">{stat.label}</div>
-                  <div className="text-xs text-cyan-400 mt-1">{stat.sublabel}</div>
+                  <div className="text-sm text-muted">{stat.label}</div>
+                  <div className="text-xs text-secondary mt-1">{stat.sublabel}</div>
                 </>
               )}
             </CardContent>
@@ -416,20 +416,20 @@ function InstitutionAdminStats({ stats, loading }: { stats: DashboardStats | nul
 
       {/* Conflicts Alert */}
       {(stats?.conflicts || 0) > 0 && (
-        <Card className="bg-amber-500/5 border-amber-500/20">
+        <Card className="bg-accent-gold/5 border-accent-gold/20">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center">
-                <AlertTriangle className="w-6 h-6 text-amber-400" />
+              <div className="w-12 h-12 rounded-xl bg-accent-gold/20 flex items-center justify-center">
+                <AlertTriangle className="w-6 h-6 text-accent-gold" />
               </div>
               <div className="flex-1">
                 <h3 className="text-white font-medium">Attention Required</h3>
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-muted">
                   {stats?.conflicts} conflict(s) detected. Please review and resolve before publishing timetable.
                 </p>
               </div>
               <Link href="/dashboard/conflicts">
-                <Button variant="outline" className="border-amber-500/20 text-amber-400 hover:bg-amber-500/10">
+                <Button variant="outline" className="border-accent-gold/20 text-accent-gold hover:bg-accent-gold/10">
                   View Conflicts
                 </Button>
               </Link>
@@ -441,25 +441,25 @@ function InstitutionAdminStats({ stats, loading }: { stats: DashboardStats | nul
       {/* Quick Actions */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Link href="/dashboard/exam-timetable">
-          <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white border-0">
+          <Button className="w-full bg-gradient-to-r from-secondary to-secondary hover:from-secondary hover:to-secondary text-white border-0">
             <Sparkles className="w-4 h-4 mr-2" />
             Generate Timetable
           </Button>
         </Link>
         <Link href="/dashboard/students">
-          <Button variant="outline" className="w-full border-white/10 text-slate-300 hover:text-white">
+          <Button variant="outline" className="w-full border-white/10 text-muted hover:text-white">
             <GraduationCap className="w-4 h-4 mr-2" />
             Students
           </Button>
         </Link>
         <Link href="/dashboard/courses">
-          <Button variant="outline" className="w-full border-white/10 text-slate-300 hover:text-white">
+          <Button variant="outline" className="w-full border-white/10 text-muted hover:text-white">
             <BookOpen className="w-4 h-4 mr-2" />
             Courses
           </Button>
         </Link>
         <Link href="/dashboard/rooms">
-          <Button variant="outline" className="w-full border-white/10 text-slate-300 hover:text-white">
+          <Button variant="outline" className="w-full border-white/10 text-muted hover:text-white">
             <MapPin className="w-4 h-4 mr-2" />
             Rooms
           </Button>
@@ -474,10 +474,10 @@ function TimetableOfficerStats({ stats, loading }: { stats: DashboardStats | nul
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Courses', value: stats?.courses || 0, icon: BookOpen, color: 'from-blue-500 to-cyan-500' },
-          { label: 'Students', value: stats?.students || 0, sublabel: `${stats?.coStudents || 0} with COs`, icon: GraduationCap, color: 'from-purple-500 to-pink-500' },
-          { label: 'Lecturers', value: stats?.lecturers || 0, icon: Users, color: 'from-green-500 to-emerald-500' },
-          { label: 'Rooms', value: stats?.rooms || 0, icon: MapPin, color: 'from-amber-500 to-yellow-500' },
+          { label: 'Courses', value: stats?.courses || 0, icon: BookOpen, color: 'from-secondary to-secondary' },
+          { label: 'Students', value: stats?.students || 0, sublabel: `${stats?.coStudents || 0} with COs`, icon: GraduationCap, color: 'from-primary to-clash' },
+          { label: 'Lecturers', value: stats?.lecturers || 0, icon: Users, color: 'from-success to-success' },
+          { label: 'Rooms', value: stats?.rooms || 0, icon: MapPin, color: 'from-accent-gold to-accent-gold' },
         ].map((stat, i) => (
           <Card key={i} className="bg-white/5 border-white/10 backdrop-blur-sm">
             <CardContent className="pt-6">
@@ -485,12 +485,12 @@ function TimetableOfficerStats({ stats, loading }: { stats: DashboardStats | nul
                 <stat.icon className="w-6 h-6 text-white" />
               </div>
               {loading ? (
-                <Loader2 className="w-6 h-6 animate-spin text-slate-500" />
+                <Loader2 className="w-6 h-6 animate-spin text-muted" />
               ) : (
                 <>
                   <div className="text-3xl font-bold text-white">{stat.value.toLocaleString()}</div>
-                  <div className="text-sm text-slate-400">{stat.label}</div>
-                  {stat.sublabel && <div className="text-xs text-amber-400 mt-1">{stat.sublabel}</div>}
+                  <div className="text-sm text-muted">{stat.label}</div>
+                  {stat.sublabel && <div className="text-xs text-accent-gold mt-1">{stat.sublabel}</div>}
                 </>
               )}
             </CardContent>
@@ -516,13 +516,13 @@ function TimetableOfficerStats({ stats, loading }: { stats: DashboardStats | nul
               <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-white/5">
                 <div className="flex items-center gap-3">
                   {item.status === 'complete' ? (
-                    <CheckCircle2 className="w-5 h-5 text-green-400" />
+                    <CheckCircle2 className="w-5 h-5 text-success" />
                   ) : item.status === 'warning' ? (
-                    <AlertCircle className="w-5 h-5 text-amber-400" />
+                    <AlertCircle className="w-5 h-5 text-accent-gold" />
                   ) : (
-                    <div className="w-5 h-5 rounded-full border border-slate-500" />
+                    <div className="w-5 h-5 rounded-full border border-muted" />
                   )}
-                  <span className="text-slate-300">{item.label}</span>
+                  <span className="text-muted">{item.label}</span>
                 </div>
                 <span className="text-sm text-white font-medium">{item.value}</span>
               </div>
@@ -572,7 +572,7 @@ function LecturerDashboard({ stats, loading }: { stats: DashboardStats | null; l
       <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="text-white flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-cyan-400" />
+            <Calendar className="w-5 h-5 text-secondary" />
             My Schedule Overview
           </CardTitle>
           <CardDescription>Your teaching and invigilation schedule</CardDescription>
@@ -580,24 +580,24 @@ function LecturerDashboard({ stats, loading }: { stats: DashboardStats | null; l
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <div className="text-center p-4 bg-white/5 rounded-lg">
-              <BookOpen className="w-8 h-8 mx-auto text-cyan-400 mb-2" />
+              <BookOpen className="w-8 h-8 mx-auto text-secondary mb-2" />
               <div className="text-2xl font-bold text-white">{displayCourses}</div>
-              <div className="text-sm text-slate-400">Courses Teaching</div>
+              <div className="text-sm text-muted">Courses Teaching</div>
             </div>
             <div className="text-center p-4 bg-white/5 rounded-lg">
-              <Calendar className="w-8 h-8 mx-auto text-green-400 mb-2" />
+              <Calendar className="w-8 h-8 mx-auto text-success mb-2" />
               <div className="text-2xl font-bold text-white">{stats?.examPeriods || 0}</div>
-              <div className="text-sm text-slate-400">Exam Periods</div>
+              <div className="text-sm text-muted">Exam Periods</div>
             </div>
             <div className="text-center p-4 bg-white/5 rounded-lg">
-              <Users className="w-8 h-8 mx-auto text-purple-400 mb-2" />
+              <Users className="w-8 h-8 mx-auto text-primary mb-2" />
               <div className="text-2xl font-bold text-white">{displayStudents}</div>
-              <div className="text-sm text-slate-400">My Students</div>
+              <div className="text-sm text-muted">My Students</div>
             </div>
           </div>
 
           <Link href="/dashboard/lecturer-schedule">
-            <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white border-0">
+            <Button className="w-full bg-gradient-to-r from-secondary to-secondary hover:from-secondary hover:to-secondary text-white border-0">
               View Full Schedule
             </Button>
           </Link>
@@ -668,16 +668,16 @@ function StudentDashboard({ stats, loading }: { stats: DashboardStats | null; lo
         <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center text-2xl font-bold text-white">
+              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-accent-gold to-accent-gold flex items-center justify-center text-2xl font-bold text-white">
                 {studentProfile.name.charAt(0)}
               </div>
               <div>
                 <h2 className="text-lg font-bold text-white">{studentProfile.name}</h2>
-                <p className="text-slate-400 text-sm">{studentProfile.regNumber} • {studentProfile.dept} • {studentProfile.level}L</p>
+                <p className="text-muted text-sm">{studentProfile.regNumber} • {studentProfile.dept} • {studentProfile.level}L</p>
                 <div className="flex items-center gap-2 mt-1">
-                  <Badge variant="outline" className="border-white/10 text-cyan-400">{studentProfile.dept} Department</Badge>
+                  <Badge variant="outline" className="border-white/10 text-secondary">{studentProfile.dept} Department</Badge>
                   {studentProfile.isSpillover && (
-                    <Badge variant="outline" className="border-amber-500/20 text-amber-400">Spillover Student</Badge>
+                    <Badge variant="outline" className="border-accent-gold/20 text-accent-gold">Spillover Student</Badge>
                   )}
                 </div>
               </div>
@@ -688,19 +688,19 @@ function StudentDashboard({ stats, loading }: { stats: DashboardStats | null; lo
 
       {/* Carry-over Banner */}
       {myCourses.carryOver > 0 && (
-        <Card className="bg-amber-500/5 border-amber-500/20">
+        <Card className="bg-accent-gold/5 border-accent-gold/20">
           <CardContent className="pt-6">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-amber-500/20 flex items-center justify-center">
-                <AlertTriangle className="w-6 h-6 text-amber-400" />
+              <div className="w-12 h-12 rounded-xl bg-accent-gold/20 flex items-center justify-center">
+                <AlertTriangle className="w-6 h-6 text-accent-gold" />
               </div>
               <div className="flex-1">
                 <h3 className="text-white font-medium">Carry-over Courses Detected</h3>
-                <p className="text-sm text-slate-400">
+                <p className="text-sm text-muted">
                   You have {myCourses.carryOver} carry-over course(s) from previous semesters. The timetable has been optimized to avoid clashes.
                 </p>
               </div>
-              <Badge className="bg-amber-500/10 text-amber-400 border-amber-500/20 text-lg px-4 py-2">
+              <Badge className="bg-accent-gold/10 text-accent-gold border-accent-gold/20 text-lg px-4 py-2">
                 {myCourses.carryOver}
               </Badge>
             </div>
@@ -711,7 +711,7 @@ function StudentDashboard({ stats, loading }: { stats: DashboardStats | null; lo
       <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="text-white flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-cyan-400" />
+            <Calendar className="w-5 h-5 text-secondary" />
             My Exam Timetable
           </CardTitle>
           <CardDescription>Your personalized exam schedule</CardDescription>
@@ -719,29 +719,29 @@ function StudentDashboard({ stats, loading }: { stats: DashboardStats | null; lo
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             <div className="text-center p-4 bg-white/5 rounded-lg">
-              <BookOpen className="w-8 h-8 mx-auto text-cyan-400 mb-2" />
+              <BookOpen className="w-8 h-8 mx-auto text-secondary mb-2" />
               <div className="text-2xl font-bold text-white">{myCourses.registered || myCourses.total || stats?.courses || 0}</div>
-              <div className="text-sm text-slate-400">Registered Courses</div>
+              <div className="text-sm text-muted">Registered Courses</div>
             </div>
             <div className="text-center p-4 bg-white/5 rounded-lg">
-              <AlertTriangle className="w-8 h-8 mx-auto text-amber-400 mb-2" />
+              <AlertTriangle className="w-8 h-8 mx-auto text-accent-gold mb-2" />
               <div className="text-2xl font-bold text-white">{myCourses.carryOver}</div>
-              <div className="text-sm text-slate-400">Carry-over Courses</div>
+              <div className="text-sm text-muted">Carry-over Courses</div>
             </div>
             <div className="text-center p-4 bg-white/5 rounded-lg">
-              <Calendar className="w-8 h-8 mx-auto text-green-400 mb-2" />
+              <Calendar className="w-8 h-8 mx-auto text-success mb-2" />
               <div className="text-2xl font-bold text-white">{myExams}</div>
-              <div className="text-sm text-slate-400">Exams Scheduled</div>
+              <div className="text-sm text-muted">Exams Scheduled</div>
             </div>
             <div className="text-center p-4 bg-white/5 rounded-lg">
-              <GraduationCap className="w-8 h-8 mx-auto text-purple-400 mb-2" />
+              <GraduationCap className="w-8 h-8 mx-auto text-primary mb-2" />
               <div className="text-2xl font-bold text-white">{studentProfile?.level || 0}00</div>
-              <div className="text-sm text-slate-400">Level</div>
+              <div className="text-sm text-muted">Level</div>
             </div>
           </div>
 
           <Link href="/dashboard/my-timetable">
-            <Button className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white border-0">
+            <Button className="w-full bg-gradient-to-r from-secondary to-secondary hover:from-secondary hover:to-secondary text-white border-0">
               View My Timetable
             </Button>
           </Link>

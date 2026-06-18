@@ -166,7 +166,7 @@ export default function LecturersPage() {
       accessorKey: 'staffId',
       header: 'Staff ID',
       cell: ({ row }) => (
-        <Badge variant="outline" className="border-green-500/20 text-green-400 font-mono">
+        <Badge variant="outline" className="border-success/20 text-success font-mono">
           {row.getValue('staffId')}
         </Badge>
       ),
@@ -176,12 +176,12 @@ export default function LecturersPage() {
       header: 'Name',
       cell: ({ row }) => (
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center">
-            <Users className="w-5 h-5 text-green-400" />
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-success/20 to-success/20 flex items-center justify-center">
+            <Users className="w-5 h-5 text-success" />
           </div>
           <div>
             <div className="font-medium text-white">{row.getValue('name')}</div>
-            <div className="text-xs text-slate-400">
+            <div className="text-xs text-muted">
               {row.original.rank || 'N/A'} • {row.original.department?.code}
             </div>
           </div>
@@ -193,12 +193,12 @@ export default function LecturersPage() {
       header: 'Contact',
       cell: ({ row }) => (
         <div className="space-y-1">
-          <div className="flex items-center gap-2 text-slate-400">
+          <div className="flex items-center gap-2 text-muted">
             <Mail className="w-3 h-3" />
             <span className="text-sm">{row.getValue('email')}</span>
           </div>
           {row.original.phone && (
-            <div className="flex items-center gap-2 text-slate-500">
+            <div className="flex items-center gap-2 text-muted">
               <Phone className="w-3 h-3" />
               <span className="text-xs">{row.original.phone}</span>
             </div>
@@ -210,14 +210,14 @@ export default function LecturersPage() {
       accessorKey: 'specialization',
       header: 'Specialization',
       cell: ({ row }) => (
-        <span className="text-slate-400">{row.getValue('specialization') || 'N/A'}</span>
+        <span className="text-muted">{row.getValue('specialization') || 'N/A'}</span>
       ),
     },
     {
       accessorKey: '_count.courses',
       header: 'Assignments',
       cell: ({ row }) => (
-        <div className="text-slate-400">
+        <div className="text-muted">
           {row.original._count?.courses || 0} courses • {row.original._count?.invigilations || 0} invigilations
         </div>
       ),
@@ -226,7 +226,7 @@ export default function LecturersPage() {
       accessorKey: 'isActive',
       header: 'Status',
       cell: ({ row }) => (
-        <Badge className={row.getValue('isActive') ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}>
+        <Badge className={row.getValue('isActive') ? 'bg-success/10 text-success' : 'bg-clash/10 text-clash'}>
           {row.getValue('isActive') ? 'Active' : 'Inactive'}
         </Badge>
       ),
@@ -236,15 +236,15 @@ export default function LecturersPage() {
       cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-slate-400">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted">
               <MoreHorizontal className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-slate-900 border-white/10">
-            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-slate-300">
+          <DropdownMenuContent align="end" className="bg-muted border-white/10">
+            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted">
               <Pencil className="w-4 h-4 mr-2" /> Edit
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-red-400">
+            <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-clash">
               <Trash2 className="w-4 h-4 mr-2" /> Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -255,8 +255,8 @@ export default function LecturersPage() {
 
   if (!['SA', 'IA', 'TO', 'LC'].includes(session?.user?.role || '')) {
     return (
-      <Alert className="bg-red-500/10 border-red-500/20">
-        <AlertDescription className="text-red-400">Access denied.</AlertDescription>
+      <Alert className="bg-clash/10 border-clash/20">
+        <AlertDescription className="text-clash">Access denied.</AlertDescription>
       </Alert>
     )
   }
@@ -276,7 +276,7 @@ export default function LecturersPage() {
         <CardContent className="pt-6">
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-green-500" />
+              <Loader2 className="w-8 h-8 animate-spin text-success" />
             </div>
           ) : (
             <DataTable columns={columns} data={lecturers} searchKey="name" searchPlaceholder="Search lecturers..." />
@@ -285,10 +285,10 @@ export default function LecturersPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-slate-900 border-white/10 text-white max-w-xl">
+        <DialogContent className="bg-muted border-white/10 text-white max-w-xl">
           <DialogHeader>
             <DialogTitle>{editingLecturer ? 'Edit Lecturer' : 'Add New Lecturer'}</DialogTitle>
-            <DialogDescription className="text-slate-400">
+            <DialogDescription className="text-muted">
               {editingLecturer ? 'Update lecturer details' : 'Register a new lecturer'}
             </DialogDescription>
           </DialogHeader>
@@ -296,7 +296,7 @@ export default function LecturersPage() {
           <div className="space-y-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-slate-300">Staff ID</Label>
+                <Label className="text-muted">Staff ID</Label>
                 <Input
                   value={formData.staffId}
                   onChange={(e) => setFormData({ ...formData, staffId: e.target.value.toUpperCase() })}
@@ -305,12 +305,12 @@ export default function LecturersPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-slate-300">Academic Rank</Label>
+                <Label className="text-muted">Academic Rank</Label>
                 <Select value={formData.rank} onValueChange={(v) => setFormData({ ...formData, rank: v })}>
                   <SelectTrigger className="bg-white/5 border-white/10 text-white">
                     <SelectValue placeholder="Select rank" />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-white/10">
+                  <SelectContent className="bg-muted border-white/10">
                     {academicRanks.map((r) => (
                       <SelectItem key={r} value={r} className="text-white">{r}</SelectItem>
                     ))}
@@ -319,7 +319,7 @@ export default function LecturersPage() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-300">Full Name</Label>
+              <Label className="text-muted">Full Name</Label>
               <Input
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -329,7 +329,7 @@ export default function LecturersPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-slate-300">Email</Label>
+                <Label className="text-muted">Email</Label>
                 <Input
                   type="email"
                   value={formData.email}
@@ -339,7 +339,7 @@ export default function LecturersPage() {
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-slate-300">Phone</Label>
+                <Label className="text-muted">Phone</Label>
                 <Input
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -350,12 +350,12 @@ export default function LecturersPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-slate-300">Department</Label>
+                <Label className="text-muted">Department</Label>
                 <Select value={formData.departmentId} onValueChange={(v) => setFormData({ ...formData, departmentId: v })}>
                   <SelectTrigger className="bg-white/5 border-white/10 text-white">
                     <SelectValue placeholder="Select department" />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-white/10">
+                  <SelectContent className="bg-muted border-white/10">
                     {departments.map((d) => (
                       <SelectItem key={d.id} value={d.id} className="text-white">{d.name} ({d.code})</SelectItem>
                     ))}
@@ -363,7 +363,7 @@ export default function LecturersPage() {
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label className="text-slate-300">Specialization</Label>
+                <Label className="text-muted">Specialization</Label>
                 <Input
                   value={formData.specialization}
                   onChange={(e) => setFormData({ ...formData, specialization: e.target.value })}
@@ -375,10 +375,10 @@ export default function LecturersPage() {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-white/10 text-slate-300">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-white/10 text-muted">
               Cancel
             </Button>
-            <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-green-500 to-emerald-600">
+            <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-success to-success">
               {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
               {editingLecturer ? 'Update' : 'Create'}
             </Button>

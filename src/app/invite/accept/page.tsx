@@ -75,21 +75,21 @@ function AcceptInviteForm() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center">
-        <Loader2 className="w-8 h-8 text-cyan-400 animate-spin" />
+      <div className="min-h-screen bg-gradient-to-br from-muted via-muted to-muted flex items-center justify-center">
+        <Loader2 className="w-8 h-8 text-secondary animate-spin" />
       </div>
     )
   }
 
   if (!token || !info?.valid) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-muted via-muted to-muted text-white flex items-center justify-center p-4">
         <div className="max-w-md w-full text-center space-y-4">
-          <div className="w-16 h-16 rounded-full bg-red-500/20 flex items-center justify-center mx-auto">
-            <AlertTriangle className="w-8 h-8 text-red-400" />
+          <div className="w-16 h-16 rounded-full bg-clash/20 flex items-center justify-center mx-auto">
+            <AlertTriangle className="w-8 h-8 text-clash" />
           </div>
           <h2 className="text-2xl font-bold">Invalid or Expired Link</h2>
-          <p className="text-slate-400">{info?.error || 'This invite link is no longer valid. Contact your administrator for a new invite.'}</p>
+          <p className="text-muted">{info?.error || 'This invite link is no longer valid. Contact your administrator for a new invite.'}</p>
           <Link href="/login">
             <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">Go to Login</Button>
           </Link>
@@ -100,103 +100,103 @@ function AcceptInviteForm() {
 
   if (done) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-muted via-muted to-muted text-white flex items-center justify-center p-4">
         <div className="max-w-md w-full text-center space-y-4">
-          <div className="w-16 h-16 rounded-full bg-cyan-500/20 flex items-center justify-center mx-auto">
-            <CheckCircle2 className="w-8 h-8 text-cyan-400" />
+          <div className="w-16 h-16 rounded-full bg-secondary/20 flex items-center justify-center mx-auto">
+            <CheckCircle2 className="w-8 h-8 text-secondary" />
           </div>
           <h2 className="text-2xl font-bold">Account Created!</h2>
-          <p className="text-slate-400">Redirecting you to login...</p>
+          <p className="text-muted">Redirecting you to login...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-muted via-muted to-muted text-white flex items-center justify-center p-4">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-cyan-500/10 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse delay-1000" />
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-secondary/10 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary/10 rounded-full blur-3xl animate-pulse delay-1000" />
       </div>
 
       <div className="w-full max-w-md relative z-10">
         <div className="flex items-center gap-3 mb-8">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center font-bold text-xl">CF</div>
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary to-secondary flex items-center justify-center font-bold text-xl">CF</div>
           <div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">ClashFree</h1>
-            <p className="text-xs text-slate-400">Academic Scheduling Platform</p>
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-secondary to-secondary bg-clip-text text-transparent">ClashFree</h1>
+            <p className="text-xs text-muted">Academic Scheduling Platform</p>
           </div>
         </div>
 
         <Card className="bg-white/5 border-white/10 backdrop-blur-xl">
           <CardHeader className="space-y-3 pb-4">
             <CardTitle className="text-2xl font-bold">Accept Invitation</CardTitle>
-            <CardDescription className="text-slate-400">
+            <CardDescription className="text-muted">
               Set up your account to join ClashFree.
             </CardDescription>
             {info.institutionName && (
-              <div className="flex items-center gap-2 bg-cyan-500/10 border border-cyan-500/20 rounded-lg px-3 py-2">
-                <Building2 className="w-4 h-4 text-cyan-400 shrink-0" />
+              <div className="flex items-center gap-2 bg-secondary/10 border border-secondary/20 rounded-lg px-3 py-2">
+                <Building2 className="w-4 h-4 text-secondary shrink-0" />
                 <div>
-                  <p className="text-xs text-slate-400">Institution</p>
+                  <p className="text-xs text-muted">Institution</p>
                   <p className="text-sm text-white font-medium">{info.institutionName}</p>
                 </div>
-                <Badge className="ml-auto bg-cyan-500/20 text-cyan-300 border-cyan-500/20 text-xs">
+                <Badge className="ml-auto bg-secondary/20 text-secondary border-secondary/20 text-xs">
                   {ROLE_LABELS[info.role!] || info.role}
                 </Badge>
               </div>
             )}
-            <div className="text-sm text-slate-400">
+            <div className="text-sm text-muted">
               Email: <span className="text-white font-medium">{info.email}</span>
             </div>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
-                <Alert className="bg-red-500/10 border-red-500/20 text-red-400">
+                <Alert className="bg-clash/10 border-clash/20 text-clash">
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
 
               <div className="space-y-2">
-                <Label className="text-slate-300">Your Full Name *</Label>
+                <Label className="text-muted">Your Full Name *</Label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
                   <Input
                     value={form.name}
                     onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
                     placeholder="Dr. Amina Bello"
-                    className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-slate-500 focus:border-cyan-500"
+                    className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-muted focus:border-secondary"
                     required
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label className="text-slate-300">Password *</Label>
+                <Label className="text-muted">Password *</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
                   <Input
                     value={form.password}
                     onChange={e => setForm(p => ({ ...p, password: e.target.value }))}
                     type="password"
                     placeholder="Min 8 characters"
-                    className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-slate-500 focus:border-cyan-500"
+                    className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-muted focus:border-secondary"
                     required minLength={8}
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label className="text-slate-300">Confirm Password *</Label>
+                <Label className="text-muted">Confirm Password *</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
                   <Input
                     value={form.confirmPassword}
                     onChange={e => setForm(p => ({ ...p, confirmPassword: e.target.value }))}
                     type="password"
                     placeholder="Repeat password"
-                    className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-slate-500 focus:border-cyan-500"
+                    className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-muted focus:border-secondary"
                     required
                   />
                 </div>
@@ -204,7 +204,7 @@ function AcceptInviteForm() {
 
               <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white h-11"
+                className="w-full bg-gradient-to-r from-secondary to-secondary hover:from-secondary hover:to-secondary text-white h-11"
                 disabled={submitting}
               >
                 {submitting ? <><Loader2 className="w-4 h-4 mr-2 animate-spin" /> Creating account...</> : 'Create My Account →'}
@@ -218,5 +218,5 @@ function AcceptInviteForm() {
 }
 
 export default function AcceptInvitePage() {
-  return <Suspense fallback={<div className="min-h-screen bg-slate-950 flex items-center justify-center"><Loader2 className="w-8 h-8 text-cyan-400 animate-spin" /></div>}><AcceptInviteForm /></Suspense>
+  return <Suspense fallback={<div className="min-h-screen bg-muted flex items-center justify-center"><Loader2 className="w-8 h-8 text-secondary animate-spin" /></div>}><AcceptInviteForm /></Suspense>
 }

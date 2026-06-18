@@ -29,9 +29,9 @@ const ROLES = [
     description:
       "Full institutional overview — all 9 faculties, department drill-down, student & lecturer distribution, facility ratios.",
     icon: ShieldCheck,
-    gradient: "from-violet-600 to-purple-700",
-    border: "border-violet-400/40",
-    badge: "bg-violet-500/20 text-violet-300",
+    gradient: "from-primary to-primary",
+    border: "border-primary/40",
+    badge: "bg-primary/20 text-primary",
     badgeText: "SA",
     href: "/demo/super-admin",
     stats: ["9 Faculties", "64 Departments", "196 Lecturers (SCI)"],
@@ -44,9 +44,9 @@ const ROLES = [
     description:
       "Faculty-level control — override panel, add/remove departments and staff, manage faculty resources.",
     icon: Building2,
-    gradient: "from-sky-600 to-blue-700",
-    border: "border-sky-400/40",
-    badge: "bg-sky-500/20 text-sky-300",
+    gradient: "from-secondary to-secondary",
+    border: "border-secondary/40",
+    badge: "bg-secondary/20 text-secondary",
     badgeText: "IA",
     href: "/demo/institution-admin",
     stats: ["12 Departments", "35 Facilities", "20,000+ Students"],
@@ -59,9 +59,9 @@ const ROLES = [
     description:
       "Full weekly timetable — colour-coded by level, dept/level filters, conflict flags, generate timetable wizard.",
     icon: CalendarClock,
-    gradient: "from-amber-500 to-orange-600",
-    border: "border-amber-400/40",
-    badge: "bg-amber-500/20 text-amber-300",
+    gradient: "from-accent-gold to-accent-gold",
+    border: "border-accent-gold/40",
+    badge: "bg-accent-gold/20 text-accent-gold",
     badgeText: "TO",
     href: "/demo/timetable-officer",
     stats: ["Mon–Fri 08:00–18:00", "All SCI Courses", "3 Active Conflicts"],
@@ -74,9 +74,9 @@ const ROLES = [
     description:
       "Personal timetable, invigilation duties, cancel/reschedule/convert lectures. 5 profiles from Prof to Assistant.",
     icon: GraduationCap,
-    gradient: "from-emerald-500 to-teal-600",
-    border: "border-emerald-400/40",
-    badge: "bg-emerald-500/20 text-emerald-300",
+    gradient: "from-success to-success",
+    border: "border-success/40",
+    badge: "bg-success/20 text-success",
     badgeText: "LC",
     href: "/demo/lecturer",
     stats: ["5 Profiles", "CHM · PHY · CSC · BCH · MTH", "Invigilation Duties"],
@@ -89,9 +89,9 @@ const ROLES = [
     description:
       "Registered courses, credit units, ScheduleFlex conflict detection — from clean registration to carryover spillover.",
     icon: BookOpen,
-    gradient: "from-rose-500 to-pink-600",
-    border: "border-rose-400/40",
-    badge: "bg-rose-500/20 text-rose-300",
+    gradient: "from-clash to-clash",
+    border: "border-clash/40",
+    badge: "bg-clash/20 text-clash",
     badgeText: "ST",
     href: "/demo/student",
     stats: ["5 Profiles", "6 Conflict Types", "Live Detection"],
@@ -102,12 +102,12 @@ const ROLES = [
 // Capability highlights
 // ─────────────────────────────────────────────
 const CAPABILITIES = [
-  { icon: CheckCircle2, text: "Clash-free timetable generation", color: "text-emerald-400" },
-  { icon: AlertTriangle, text: "Cross-level carryover conflict detection", color: "text-amber-400" },
-  { icon: Users, text: "7:1 Student–Lecturer ratio enforcement", color: "text-sky-400" },
-  { icon: BookMarked, text: "CCMAS-accurate course registry (64 per dept)", color: "text-violet-400" },
-  { icon: LayoutGrid, text: "Multi-role dashboards (SA → Student)", color: "text-rose-400" },
-  { icon: Sparkles, text: "WhatsApp + Email notifications on conflict", color: "text-orange-400" },
+  { icon: CheckCircle2, text: "Clash-free timetable generation", color: "text-success" },
+  { icon: AlertTriangle, text: "Cross-level carryover conflict detection", color: "text-accent-gold" },
+  { icon: Users, text: "7:1 Student–Lecturer ratio enforcement", color: "text-secondary" },
+  { icon: BookMarked, text: "CCMAS-accurate course registry (64 per dept)", color: "text-primary" },
+  { icon: LayoutGrid, text: "Multi-role dashboards (SA → Student)", color: "text-clash" },
+  { icon: Sparkles, text: "WhatsApp + Email notifications on conflict", color: "text-accent-gold" },
 ];
 
 // ─────────────────────────────────────────────
@@ -118,12 +118,12 @@ export default function DemoLandingPage() {
   const [hoveredRole, setHoveredRole] = useState<string | null>(null);
 
   return (
-    <div className="min-h-screen bg-[#0a0a0f] text-white">
+    <div className="min-h-screen bg-background text-white">
       {/* ── Header ─────────────────────────────── */}
-      <header className="border-b border-white/10 bg-[#0d0d14]/80 backdrop-blur-md sticky top-0 z-50">
+      <header className="border-b border-white/10 bg-card/80 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-500 to-blue-600 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
               <CalendarClock className="w-4 h-4 text-white" />
             </div>
             <span className="font-semibold text-white tracking-tight">ScheduleFlex</span>
@@ -131,8 +131,8 @@ export default function DemoLandingPage() {
             <span className="text-white/50 text-sm">Live Demo</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-medium">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success/15 border border-success/30 text-success text-xs font-medium">
+              <span className="w-1.5 h-1.5 rounded-full bg-success animate-pulse" />
               Demo Environment
             </span>
           </div>
@@ -145,13 +145,13 @@ export default function DemoLandingPage() {
         <section className="text-center space-y-6 pt-4">
           {/* University badge */}
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-white/70">
-            <Building2 className="w-4 h-4 text-violet-400" />
+            <Building2 className="w-4 h-4 text-primary" />
             Federal University of Konoha (FEDKO) — Demo Institution
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
             See ScheduleFlex{" "}
-            <span className="bg-gradient-to-r from-violet-400 via-blue-400 to-emerald-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-primary via-secondary to-success bg-clip-text text-transparent">
               in action
             </span>
           </h1>

@@ -95,8 +95,8 @@ function SlotChip({ slot, onClick, overridden }: { slot: TimetableSlot; onClick:
 
   if (isJumuah) {
     return (
-      <div className="rounded-md border border-green-400/20 bg-green-500/10 px-1.5 py-1 text-center">
-        <div className="text-[9px] font-bold text-green-400">🕌 Jumu&apos;ah</div>
+      <div className="rounded-md border border-success/20 bg-success/10 px-1.5 py-1 text-center">
+        <div className="text-[9px] font-bold text-success">🕌 Jumu&apos;ah</div>
       </div>
     );
   }
@@ -104,31 +104,35 @@ function SlotChip({ slot, onClick, overridden }: { slot: TimetableSlot; onClick:
   return (
     <button
       onClick={() => onClick(slot)}
+      style={isConflict && !overridden ? {
+        backgroundImage: "repeating-linear-gradient(45deg, rgba(255,255,255,0.07) 0px, rgba(255,255,255,0.07) 2px, transparent 2px, transparent 10px)",
+        backgroundColor: "rgba(156,59,48,0.22)",
+      } : undefined}
       className={`w-full text-left rounded-md border px-1.5 py-1 transition-all hover:brightness-110 hover:scale-[1.01] active:scale-95 ${
         overridden
-          ? "bg-emerald-500/15 border-emerald-400/30"
+          ? "bg-success/15 border-success/30"
           : isConflict
-          ? "bg-red-500/20 border-red-400/40 ring-1 ring-red-500/20"
+          ? "border-clash/50 ring-1 ring-clash/30"
           : `${lc.bg} ${lc.border}`
       }`}
     >
       <div className={`text-[10px] font-black truncate leading-tight ${
-        overridden ? "text-emerald-300" : isConflict ? "text-red-200" : lc.text
+        overridden ? "text-success" : isConflict ? "text-clash" : lc.text
       }`}>
         {slot.courseCode}
       </div>
       <div className={`text-[8px] truncate mt-0.5 ${
-        overridden ? "text-emerald-300/60" : isConflict ? "text-red-300/70" : lc.text + " opacity-60"
+        overridden ? "text-success/60" : isConflict ? "text-clash/70" : lc.text + " opacity-60"
       }`}>
         {slot.lecturerName.split(" ").slice(-1)[0]}
       </div>
       {isConflict && !overridden && (
-        <div className="text-[8px] font-bold text-red-400 flex items-center gap-0.5 mt-0.5">
+        <div className="text-[8px] font-bold text-clash flex items-center gap-0.5 mt-0.5">
           <AlertTriangle className="w-2 h-2" /> CLASH
         </div>
       )}
       {overridden && (
-        <div className="text-[8px] font-bold text-emerald-400 mt-0.5">✓ OVERRIDDEN</div>
+        <div className="text-[8px] font-bold text-success mt-0.5">✓ OVERRIDDEN</div>
       )}
     </button>
   );
@@ -154,30 +158,30 @@ function SlotModal({
   };
 
   const ADMIN_ACTIONS: { id: AdminAction; label: string; desc: string; icon: typeof Gavel; color: string; bg: string }[] = [
-    { id: "override",   label: "Override Conflict",   desc: "Force this slot through despite the detected conflict", icon: Gavel,      color: "text-amber-300",   bg: "bg-amber-500/10 border-amber-400/30" },
-    { id: "enforce",    label: "Enforce Original",    desc: "Lock slot — no further changes allowed without SO approval", icon: ShieldCheck, color: "text-emerald-300", bg: "bg-emerald-500/10 border-emerald-400/30" },
-    { id: "waive",      label: "Waive Conflict",      desc: "Acknowledge conflict but allow both slots to coexist", icon: ShieldAlert,  color: "text-sky-300",     bg: "bg-sky-500/10 border-sky-400/30" },
-    { id: "reschedule", label: "Reschedule Slot",     desc: "Move to next available band in same venue",            icon: RotateCcw,   color: "text-violet-300",  bg: "bg-violet-500/10 border-violet-400/30" },
-    { id: "cancel",     label: "Cancel This Slot",    desc: "Remove from timetable — students notified via WhatsApp", icon: Ban,        color: "text-red-300",     bg: "bg-red-500/10 border-red-400/30" },
+    { id: "override",   label: "Override Conflict",   desc: "Force this slot through despite the detected conflict", icon: Gavel,      color: "text-accent-gold",   bg: "bg-accent-gold/10 border-accent-gold/30" },
+    { id: "enforce",    label: "Enforce Original",    desc: "Lock slot — no further changes allowed without SO approval", icon: ShieldCheck, color: "text-success", bg: "bg-success/10 border-success/30" },
+    { id: "waive",      label: "Waive Conflict",      desc: "Acknowledge conflict but allow both slots to coexist", icon: ShieldAlert,  color: "text-secondary",     bg: "bg-secondary/10 border-secondary/30" },
+    { id: "reschedule", label: "Reschedule Slot",     desc: "Move to next available band in same venue",            icon: RotateCcw,   color: "text-primary",  bg: "bg-primary/10 border-primary/30" },
+    { id: "cancel",     label: "Cancel This Slot",    desc: "Remove from timetable — students notified via WhatsApp", icon: Ban,        color: "text-clash",     bg: "bg-clash/10 border-clash/30" },
   ];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="w-full max-w-md rounded-2xl border border-white/15 bg-[#13131f] shadow-2xl overflow-hidden">
+      <div className="w-full max-w-md rounded-2xl border border-white/15 bg-muted shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className={`px-6 py-4 border-b border-white/10 ${slot.conflictFlag ? "bg-red-900/20" : "bg-white/[0.02]"}`}>
+        <div className={`px-6 py-4 border-b border-white/10 ${slot.conflictFlag ? "bg-clash/20" : "bg-white/[0.02]"}`}>
           <div className="flex items-start justify-between gap-3">
             <div>
               <div className="flex items-center gap-2 flex-wrap">
                 <span className={`text-xs font-bold px-2 py-0.5 rounded ${lc.badge} text-white`}>{slot.level} Level</span>
                 <span className="text-xs font-bold px-2 py-0.5 rounded bg-white/10 text-white/60">{slot.dept}</span>
                 {slot.conflictFlag && !overridden && (
-                  <span className="text-xs font-bold px-2 py-0.5 rounded bg-red-600 text-white flex items-center gap-1">
+                  <span className="text-xs font-bold px-2 py-0.5 rounded bg-clash text-white flex items-center gap-1">
                     <AlertTriangle className="w-3 h-3" /> CONFLICT
                   </span>
                 )}
                 {overridden && (
-                  <span className="text-xs font-bold px-2 py-0.5 rounded bg-emerald-600 text-white flex items-center gap-1">
+                  <span className="text-xs font-bold px-2 py-0.5 rounded bg-success text-white flex items-center gap-1">
                     <ShieldCheck className="w-3 h-3" /> OVERRIDDEN
                   </span>
                 )}
@@ -217,18 +221,18 @@ function SlotModal({
 
           {/* Conflict + suggestion */}
           {slot.conflictFlag && !overridden && (
-            <div className="rounded-xl bg-red-500/8 border border-red-400/20 p-4 space-y-3">
+            <div className="rounded-xl bg-clash/8 border border-clash/20 p-4 space-y-3">
               <div className="flex items-start gap-2">
-                <AlertTriangle className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" />
+                <AlertTriangle className="w-4 h-4 text-clash flex-shrink-0 mt-0.5" />
                 <div>
-                  <div className="text-sm font-semibold text-red-300">ScheduleFlex Conflict Detected</div>
+                  <div className="text-sm font-semibold text-clash">ClashFree Conflict Detected</div>
                   <p className="text-xs text-white/50 mt-1 leading-relaxed">{slot.conflictReason ?? "Scheduling conflict at this time and venue."}</p>
                 </div>
               </div>
-              <div className="rounded-lg bg-emerald-500/8 border border-emerald-400/15 p-3 space-y-1">
+              <div className="rounded-lg bg-success/8 border border-success/15 p-3 space-y-1">
                 <div className="flex items-center gap-1.5">
-                  <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-                  <span className="text-[10px] font-semibold text-emerald-400">Suggested Resolution</span>
+                  <CheckCircle2 className="w-3 h-3 text-success" />
+                  <span className="text-[10px] font-semibold text-success">Suggested Resolution</span>
                 </div>
                 <p className="text-xs text-white/50 leading-relaxed">{suggestResolution(slot)}</p>
               </div>
@@ -238,7 +242,7 @@ function SlotModal({
           {/* Admin powers */}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <Zap className="w-3.5 h-3.5 text-amber-400" />
+              <Zap className="w-3.5 h-3.5 text-accent-gold" />
               <span className="text-xs font-semibold text-white/60 uppercase tracking-wider">Timetable Officer Powers</span>
             </div>
             {ADMIN_ACTIONS.filter(a => !overridden || a.id !== "override").map(action => {
@@ -249,12 +253,12 @@ function SlotModal({
                   key={action.id}
                   onClick={() => handleAction(action.id)}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl border text-left transition-all hover:brightness-110 ${
-                    isDone ? "bg-emerald-600/20 border-emerald-400/30" : `${action.bg} hover:scale-[1.005]`
+                    isDone ? "bg-success/20 border-success/30" : `${action.bg} hover:scale-[1.005]`
                   }`}
                 >
-                  <Icon className={`w-4 h-4 flex-shrink-0 ${isDone ? "text-emerald-400" : action.color}`} />
+                  <Icon className={`w-4 h-4 flex-shrink-0 ${isDone ? "text-success" : action.color}`} />
                   <div className="flex-1 min-w-0">
-                    <div className={`text-sm font-semibold ${isDone ? "text-emerald-300" : action.color}`}>
+                    <div className={`text-sm font-semibold ${isDone ? "text-success" : action.color}`}>
                       {isDone ? "✓ Applied" : action.label}
                     </div>
                     <div className="text-xs text-white/35 mt-0.5 leading-relaxed">{action.desc}</div>
@@ -303,10 +307,10 @@ function GenerateWizard({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
-      <div className="w-full max-w-lg rounded-2xl border border-white/15 bg-[#13131f] shadow-2xl overflow-hidden">
+      <div className="w-full max-w-lg rounded-2xl border border-white/15 bg-muted shadow-2xl overflow-hidden">
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
           <div className="flex items-center gap-2">
-            <Wand2 className="w-4 h-4 text-violet-400" />
+            <Wand2 className="w-4 h-4 text-primary" />
             <span className="font-semibold text-white text-sm">Generate Timetable</span>
           </div>
           <button onClick={onClose} className="text-white/30 hover:text-white p-1"><X className="w-4 h-4" /></button>
@@ -317,7 +321,7 @@ function GenerateWizard({ onClose }: { onClose: () => void }) {
           {STEPS.map((s, i) => (
             <div key={s.n} className="flex items-center gap-1 flex-1">
               <div className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 ${
-                step > s.n ? "bg-emerald-600 text-white" : step === s.n ? "bg-violet-600 text-white" : "bg-white/10 text-white/30"
+                step > s.n ? "bg-success text-white" : step === s.n ? "bg-primary text-white" : "bg-white/10 text-white/30"
               }`}>
                 {step > s.n ? <CheckCircle2 className="w-3.5 h-3.5" /> : s.n}
               </div>
@@ -346,7 +350,7 @@ function GenerateWizard({ onClose }: { onClose: () => void }) {
                       onChange={e => setParams(p => ({ ...p, [f.key]: e.target.value }))}
                       className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none"
                     >
-                      {f.options.map(o => <option key={o} value={o} className="bg-[#13131f]">{o}</option>)}
+                      {f.options.map(o => <option key={o} value={o} className="bg-muted">{o}</option>)}
                     </select>
                   </div>
                 ))}
@@ -357,7 +361,7 @@ function GenerateWizard({ onClose }: { onClose: () => void }) {
                   <div className="text-xs text-white/35">13:00–14:00 reserved for prayers</div>
                 </div>
                 <button onClick={() => setParams(p => ({ ...p, jumuah: !p.jumuah }))}
-                  className={`w-10 h-5 rounded-full transition-colors relative ${params.jumuah ? "bg-emerald-600" : "bg-white/20"}`}>
+                  className={`w-10 h-5 rounded-full transition-colors relative ${params.jumuah ? "bg-success" : "bg-white/20"}`}>
                   <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all ${params.jumuah ? "left-[22px]" : "left-0.5"}`} />
                 </button>
               </div>
@@ -374,7 +378,7 @@ function GenerateWizard({ onClose }: { onClose: () => void }) {
                     <button key={d.value}
                       onClick={() => setParams(p => ({ ...p, depts: sel ? p.depts.filter(x => x !== d.value) : [...p.depts.filter(x => x !== "ALL"), d.value] }))}
                       className={`px-3 py-2 rounded-xl border text-xs font-medium text-left transition-colors ${
-                        sel ? "bg-violet-600/20 border-violet-400/30 text-violet-300" : "bg-white/5 border-white/10 text-white/40 hover:text-white/70"
+                        sel ? "bg-primary/20 border-primary/30 text-primary" : "bg-white/5 border-white/10 text-white/40 hover:text-white/70"
                       }`}>
                       {d.label}
                     </button>
@@ -414,13 +418,13 @@ function GenerateWizard({ onClose }: { onClose: () => void }) {
                   </div>
                   <button
                     onClick={() => setParams(p => ({ ...p, [r.key]: !(p as Record<string, unknown>)[r.key] }))}
-                    className={`w-10 h-5 rounded-full transition-colors relative flex-shrink-0 ${(params as Record<string, unknown>)[r.key] ? "bg-emerald-600" : "bg-white/20"}`}>
+                    className={`w-10 h-5 rounded-full transition-colors relative flex-shrink-0 ${(params as Record<string, unknown>)[r.key] ? "bg-success" : "bg-white/20"}`}>
                     <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-all ${(params as Record<string, unknown>)[r.key] ? "left-[22px]" : "left-0.5"}`} />
                   </button>
                 </div>
               ))}
-              <div className="rounded-xl bg-amber-500/5 border border-amber-400/20 p-3 flex gap-2">
-                <Info className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+              <div className="rounded-xl bg-accent-gold/5 border border-accent-gold/20 p-3 flex gap-2">
+                <Info className="w-4 h-4 text-accent-gold flex-shrink-0 mt-0.5" />
                 <p className="text-xs text-white/50">NUC rule: no student or lecturer has 3 consecutive 2-hour lectures without a break. This is enforced automatically.</p>
               </div>
             </div>
@@ -446,17 +450,17 @@ function GenerateWizard({ onClose }: { onClose: () => void }) {
               </div>
 
               {done ? (
-                <div className="rounded-xl bg-emerald-500/10 border border-emerald-400/20 p-4 flex items-center gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                <div className="rounded-xl bg-success/10 border border-success/20 p-4 flex items-center gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-success" />
                   <div>
-                    <div className="text-sm font-semibold text-emerald-300">Timetable Generated Successfully</div>
+                    <div className="text-sm font-semibold text-success">Timetable Generated Successfully</div>
                     <div className="text-xs text-white/40 mt-0.5">No conflicts detected. 768 courses scheduled across 5 days.</div>
                   </div>
                 </div>
               ) : (
                 <button onClick={handleGenerate} disabled={generating}
                   className={`w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
-                    generating ? "bg-violet-600/50 text-white/60 cursor-not-allowed" : "bg-gradient-to-r from-violet-600 to-blue-600 text-white hover:opacity-90"
+                    generating ? "bg-primary/50 text-white/60 cursor-not-allowed" : "bg-gradient-to-r from-primary to-secondary text-white hover:opacity-90"
                   }`}>
                   {generating ? <><RefreshCw className="w-4 h-4 animate-spin" /> Generating…</> : <><Wand2 className="w-4 h-4" /> Generate Timetable</>}
                 </button>
@@ -477,7 +481,7 @@ function GenerateWizard({ onClose }: { onClose: () => void }) {
             </button>
           ) : done ? (
             <button onClick={onClose}
-              className="px-5 py-2 rounded-xl bg-emerald-600 text-white text-sm font-semibold hover:bg-emerald-500 transition-colors">
+              className="px-5 py-2 rounded-xl bg-success text-white text-sm font-semibold hover:bg-success transition-colors">
               Close
             </button>
           ) : null}
@@ -506,7 +510,7 @@ function MasterGrid({
       <table className="w-full min-w-[700px] border-collapse">
         <thead>
           <tr className="border-b border-white/10 bg-white/[0.02]">
-            <th className="px-3 py-3 text-left text-[10px] font-bold text-white/35 uppercase tracking-wider w-32 border-r border-white/10 sticky left-0 bg-[#0d0d14] z-10">
+            <th className="px-3 py-3 text-left text-[10px] font-bold text-white/35 uppercase tracking-wider w-32 border-r border-white/10 sticky left-0 bg-card z-10">
               Time Band
             </th>
             {DAYS.map(d => (
@@ -520,10 +524,10 @@ function MasterGrid({
           {TIME_BANDS.map((band, bi) => (
             <tr key={band.start} className={`border-b border-white/5 last:border-b-0 ${bi % 2 === 0 ? "" : "bg-white/[0.01]"}`}>
               {/* Time label column — sticky */}
-              <td className="px-3 py-2 border-r border-white/10 align-top sticky left-0 bg-[#0d0d14] z-10">
+              <td className="px-3 py-2 border-r border-white/10 align-top sticky left-0 bg-card z-10">
                 <div className="font-bold text-white/55 text-[10px] leading-tight whitespace-nowrap">{band.label}</div>
                 {band.start === "12:00" && (
-                  <div className="text-[8px] text-green-400/60 mt-1">incl. Jumu&apos;ah 13:00</div>
+                  <div className="text-[8px] text-success/60 mt-1">incl. Jumu&apos;ah 13:00</div>
                 )}
               </td>
 
@@ -537,13 +541,13 @@ function MasterGrid({
                   <td
                     key={day}
                     className={`px-1.5 py-1.5 border-r border-white/10 last:border-r-0 align-top min-w-[120px] ${
-                      hasConflict ? "bg-red-500/5" : isJumaat ? "bg-green-500/5" : ""
+                      hasConflict ? "bg-clash/5" : isJumaat ? "bg-success/5" : ""
                     }`}
                   >
                     {/* Jumu'ah marker always present on Fri 12:00 band */}
                     {isJumaat && (
-                      <div className="rounded-md border border-green-400/20 bg-green-500/10 px-1.5 py-1 text-center mb-1">
-                        <div className="text-[9px] font-bold text-green-400">🕌 Jumu&apos;ah 13:00</div>
+                      <div className="rounded-md border border-success/20 bg-success/10 px-1.5 py-1 text-center mb-1">
+                        <div className="text-[9px] font-bold text-success">🕌 Jumu&apos;ah 13:00</div>
                       </div>
                     )}
 
@@ -566,7 +570,7 @@ function MasterGrid({
 
                     {/* Conflict count badge */}
                     {hasConflict && (
-                      <div className="text-[8px] font-bold text-red-400 text-center mt-1 flex items-center justify-center gap-0.5">
+                      <div className="text-[8px] font-bold text-clash text-center mt-1 flex items-center justify-center gap-0.5">
                         <AlertTriangle className="w-2 h-2" />
                         {cellSlots.filter(s => s.conflictFlag && !overrides[s.id]).length} clash
                       </div>
@@ -610,8 +614,8 @@ export default function TimetableOfficerPage() {
       cancel:     "Slot cancelled — students notified via WhatsApp",
     };
     const colors: Record<AdminAction, string> = {
-      override:   "bg-amber-600", enforce: "bg-emerald-600",
-      waive:      "bg-sky-600",   reschedule: "bg-violet-600", cancel: "bg-red-600",
+      override:   "bg-accent-gold", enforce: "bg-success",
+      waive:      "bg-secondary",   reschedule: "bg-primary", cancel: "bg-clash",
     };
     showToast(labels[action], colors[action]);
   };
@@ -675,8 +679,8 @@ export default function TimetableOfficerPage() {
         <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <CalendarClock className="w-4 h-4 text-amber-400" />
-              <span className="text-[10px] font-semibold text-amber-400 uppercase tracking-widest">Timetable Officer</span>
+              <CalendarClock className="w-4 h-4 text-accent-gold" />
+              <span className="text-[10px] font-semibold text-accent-gold uppercase tracking-widest">Timetable Officer</span>
             </div>
             <h1 className="text-2xl font-bold text-white">Faculty Master Timetable</h1>
             <p className="text-white/40 text-sm mt-1">
@@ -684,12 +688,12 @@ export default function TimetableOfficerPage() {
             </p>
           </div>
           <div className="flex items-center gap-2 flex-wrap">
-            <button onClick={() => showToast("Timetable exported as PDF", "bg-sky-600")}
+            <button onClick={() => showToast("Timetable exported as PDF", "bg-secondary")}
               className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-white/60 text-sm hover:bg-white/10 transition-colors">
               <Download className="w-3.5 h-3.5" /> Export PDF
             </button>
             <button onClick={() => setShowWizard(true)}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-blue-600 text-white text-sm font-semibold hover:opacity-90 transition-opacity shadow-lg">
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-secondary text-white text-sm font-semibold hover:opacity-90 transition-opacity shadow-lg">
               <Wand2 className="w-4 h-4" /> Generate Timetable
             </button>
           </div>
@@ -699,9 +703,9 @@ export default function TimetableOfficerPage() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {[
             { label: "Slots Showing",   value: totalSlots,     color: "text-white" },
-            { label: "Active Conflicts", value: conflictCount,  color: conflictCount > 0 ? "text-red-400" : "text-emerald-400" },
-            { label: "Resolved",        value: resolvedCount,  color: "text-emerald-400" },
-            { label: "Practical Slots", value: practicalCount, color: "text-violet-400" },
+            { label: "Active Conflicts", value: conflictCount,  color: conflictCount > 0 ? "text-clash" : "text-success" },
+            { label: "Resolved",        value: resolvedCount,  color: "text-success" },
+            { label: "Practical Slots", value: practicalCount, color: "text-primary" },
           ].map(s => (
             <div key={s.label} className="rounded-xl bg-white/[0.03] border border-white/10 px-4 py-3 flex items-center justify-between">
               <span className="text-xs text-white/35">{s.label}</span>
@@ -712,30 +716,30 @@ export default function TimetableOfficerPage() {
 
         {/* ── Active conflicts banner ───────────── */}
         {activeConflicts.length > 0 && (
-          <div className="rounded-2xl border border-red-400/20 bg-red-500/5 p-4 space-y-2">
+          <div className="rounded-2xl border border-clash/20 bg-clash/5 p-4 space-y-2">
             <div className="flex items-center justify-between flex-wrap gap-2">
               <div className="flex items-center gap-2">
-                <AlertTriangle className="w-4 h-4 text-red-400" />
-                <span className="text-sm font-semibold text-red-300">
+                <AlertTriangle className="w-4 h-4 text-clash" />
+                <span className="text-sm font-semibold text-clash">
                   {activeConflicts.length} Unresolved Conflict{activeConflicts.length > 1 ? "s" : ""} — Action Required
                 </span>
               </div>
               <button onClick={() => setConflictsOnly(true)}
-                className="text-xs text-red-400 hover:text-red-300 underline transition-colors">
+                className="text-xs text-clash hover:text-clash underline transition-colors">
                 Show conflicts only
               </button>
             </div>
             <div className="space-y-1">
               {activeConflicts.slice(0, 4).map(s => (
                 <button key={s.id} onClick={() => setSelectedSlot(s)}
-                  className="w-full flex items-center justify-between text-left px-3 py-2 rounded-lg hover:bg-red-500/10 transition-colors group">
+                  className="w-full flex items-center justify-between text-left px-3 py-2 rounded-lg hover:bg-clash/10 transition-colors group">
                   <div className="flex items-center gap-2 min-w-0">
-                    <span className="text-xs font-bold text-red-300 flex-shrink-0">{s.courseCode}</span>
+                    <span className="text-xs font-bold text-clash flex-shrink-0">{s.courseCode}</span>
                     <span className="text-xs text-white/40 truncate">{s.day} {s.startTime} · {s.conflictReason?.slice(0, 55)}…</span>
                   </div>
                   <div className="flex items-center gap-2 flex-shrink-0 ml-2">
-                    <span className="text-[10px] text-amber-400 hidden sm:block">Click to resolve</span>
-                    <ChevronRight className="w-3.5 h-3.5 text-red-400/60" />
+                    <span className="text-[10px] text-accent-gold hidden sm:block">Click to resolve</span>
+                    <ChevronRight className="w-3.5 h-3.5 text-clash/60" />
                   </div>
                 </button>
               ))}
@@ -772,7 +776,7 @@ export default function TimetableOfficerPage() {
             <select value={deptFilter} onChange={e => setDeptFilter(e.target.value)}
               className="appearance-none bg-white/5 border border-white/10 rounded-xl pl-3 pr-8 py-2 text-sm text-white/70 focus:outline-none focus:border-white/30 cursor-pointer">
               {DEPT_OPTIONS.map(o => (
-                <option key={o.value} value={o.value} className="bg-[#13131f]">{o.label}</option>
+                <option key={o.value} value={o.value} className="bg-muted">{o.label}</option>
               ))}
             </select>
             <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white/30 pointer-events-none" />
@@ -798,7 +802,7 @@ export default function TimetableOfficerPage() {
           {/* Conflicts toggle */}
           <button onClick={() => setConflictsOnly(!conflictsOnly)}
             className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-medium transition-colors ${
-              conflictsOnly ? "bg-red-500/15 border-red-400/30 text-red-300" : "bg-white/5 border-white/10 text-white/40 hover:text-white/70"
+              conflictsOnly ? "bg-clash/15 border-clash/30 text-clash" : "bg-white/5 border-white/10 text-white/40 hover:text-white/70"
             }`}>
             <AlertTriangle className="w-3.5 h-3.5" />
             Conflicts Only
@@ -824,13 +828,13 @@ export default function TimetableOfficerPage() {
               <span className={`text-xs font-semibold ${colors.text}`}>{level}L</span>
             </button>
           ))}
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border bg-red-100/10 border-red-300/20">
-            <AlertTriangle className="w-3 h-3 text-red-400" />
-            <span className="text-xs font-semibold text-red-300">Conflict</span>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border bg-clash/10 border-clash/20">
+            <AlertTriangle className="w-3 h-3 text-clash" />
+            <span className="text-xs font-semibold text-clash">Conflict</span>
           </div>
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border bg-emerald-500/10 border-emerald-400/20">
-            <CheckCircle2 className="w-3 h-3 text-emerald-400" />
-            <span className="text-xs font-semibold text-emerald-300">Overridden</span>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg border bg-success/10 border-success/20">
+            <CheckCircle2 className="w-3 h-3 text-success" />
+            <span className="text-xs font-semibold text-success">Overridden</span>
           </div>
         </div>
 
@@ -840,7 +844,7 @@ export default function TimetableOfficerPage() {
             <Filter className="w-8 h-8 text-white/15 mx-auto" />
             <div className="text-white/30 text-sm">No slots match the current filter.</div>
             <button onClick={() => { setDeptFilter("ALL"); setLevelFilter("ALL"); setConflictsOnly(false); setSearch(""); }}
-              className="text-xs text-violet-400 hover:text-violet-300 underline">
+              className="text-xs text-primary hover:text-primary underline">
               Reset all filters
             </button>
           </div>
@@ -850,21 +854,21 @@ export default function TimetableOfficerPage() {
 
         {/* ── Admin powers summary ─────────────── */}
         {resolvedCount > 0 && (
-          <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/5 p-5 space-y-3">
+          <div className="rounded-2xl border border-success/20 bg-success/5 p-5 space-y-3">
             <div className="flex items-center gap-2">
-              <Gavel className="w-4 h-4 text-emerald-400" />
-              <span className="text-sm font-semibold text-emerald-300">Admin Actions Applied — {resolvedCount} slot{resolvedCount > 1 ? "s" : ""}</span>
+              <Gavel className="w-4 h-4 text-success" />
+              <span className="text-sm font-semibold text-success">Admin Actions Applied — {resolvedCount} slot{resolvedCount > 1 ? "s" : ""}</span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {(["override", "enforce", "waive", "reschedule", "cancel"] as AdminAction[]).map(action => {
                 const count = Object.values(overrides).filter(a => a === action).length;
                 if (count === 0) return null;
                 const config = {
-                  override:   { label: "Overridden",   color: "text-amber-300",   bg: "bg-amber-500/10 border-amber-400/20" },
-                  enforce:    { label: "Enforced",      color: "text-emerald-300", bg: "bg-emerald-500/10 border-emerald-400/20" },
-                  waive:      { label: "Waived",        color: "text-sky-300",     bg: "bg-sky-500/10 border-sky-400/20" },
-                  reschedule: { label: "Rescheduled",   color: "text-violet-300",  bg: "bg-violet-500/10 border-violet-400/20" },
-                  cancel:     { label: "Cancelled",     color: "text-red-300",     bg: "bg-red-500/10 border-red-400/20" },
+                  override:   { label: "Overridden",   color: "text-accent-gold",   bg: "bg-accent-gold/10 border-accent-gold/20" },
+                  enforce:    { label: "Enforced",      color: "text-success", bg: "bg-success/10 border-success/20" },
+                  waive:      { label: "Waived",        color: "text-secondary",     bg: "bg-secondary/10 border-secondary/20" },
+                  reschedule: { label: "Rescheduled",   color: "text-primary",  bg: "bg-primary/10 border-primary/20" },
+                  cancel:     { label: "Cancelled",     color: "text-clash",     bg: "bg-clash/10 border-clash/20" },
                 };
                 const c = config[action];
                 return (

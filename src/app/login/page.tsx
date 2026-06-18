@@ -53,98 +53,98 @@ function LoginForm() {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 text-white flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-muted via-muted to-muted text-white flex items-center justify-center p-4">
       {/* Animated background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple-500/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute top-1/2 -left-40 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl animate-pulse delay-1000" />
-        <div className="absolute -bottom-40 right-1/3 w-80 h-80 bg-cyan-500/20 rounded-full blur-3xl animate-pulse delay-500" />
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/20 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute top-1/2 -left-40 w-80 h-80 bg-secondary/20 rounded-full blur-3xl animate-pulse delay-1000" />
+        <div className="absolute -bottom-40 right-1/3 w-80 h-80 bg-secondary/20 rounded-full blur-3xl animate-pulse delay-500" />
       </div>
 
       <div className="w-full max-w-md relative z-10">
         {/* Back to home */}
-        <Link href="/" className="inline-flex items-center gap-2 text-slate-400 hover:text-white transition-colors mb-6">
+        <Link href="/" className="inline-flex items-center gap-2 text-muted hover:text-white transition-colors mb-6">
           <ArrowLeft className="w-4 h-4" />
           Back to home
         </Link>
 
         {/* Logo */}
         <div className="flex items-center gap-3 mb-8">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center font-bold text-xl">
+          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary to-secondary flex items-center justify-center font-bold text-xl">
             CF
           </div>
           <div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+            <h1 className="text-2xl font-bold bg-gradient-to-r from-secondary to-secondary bg-clip-text text-transparent">
               ClashFree
             </h1>
-            <p className="text-xs text-slate-400">Academic Scheduling Platform</p>
+            <p className="text-xs text-muted">Academic Scheduling Platform</p>
           </div>
         </div>
 
         <Card className="bg-white/5 border-white/10 backdrop-blur-xl">
           <CardHeader className="space-y-1 pb-4">
             <CardTitle className="text-2xl font-bold">Sign In</CardTitle>
-            <CardDescription className="text-slate-400">
+            <CardDescription className="text-muted">
               Enter your credentials to access your dashboard
             </CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               {error && (
-                <Alert className="bg-red-500/10 border-red-500/20 text-red-400">
+                <Alert className="bg-clash/10 border-clash/20 text-clash">
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-slate-300">
+                <Label htmlFor="email" className="text-muted">
                   Email
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="admin@clashfree.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-slate-500 focus:border-cyan-500 focus:ring-cyan-500/20"
+                    className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-muted focus:border-secondary focus:ring-secondary/20"
                     required
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-slate-300">
+                <Label htmlFor="password" className="text-muted">
                   Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
                   <Input
                     id="password"
                     type="password"
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-slate-500 focus:border-cyan-500 focus:ring-cyan-500/20"
+                    className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-muted focus:border-secondary focus:ring-secondary/20"
                     required
                   />
                 </div>
               </div>
 
               <div className="flex items-center justify-between text-sm">
-                <label className="flex items-center gap-2 text-slate-400">
+                <label className="flex items-center gap-2 text-muted">
                   <input type="checkbox" className="rounded border-white/20 bg-white/5" />
                   Remember me
                 </label>
-                <a href="#" className="text-cyan-400 hover:text-cyan-300 transition-colors">
+                <a href="#" className="text-secondary hover:text-secondary transition-colors">
                   Forgot password?
                 </a>
               </div>
 
               <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white border-0 h-11"
+                className="w-full bg-gradient-to-r from-secondary to-secondary hover:from-secondary hover:to-secondary text-white border-0 h-11"
                 disabled={loading}
               >
                 {loading ? (
@@ -161,9 +161,9 @@ function LoginForm() {
           </CardContent>
         </Card>
 
-        <p className="text-center text-sm text-slate-400 mt-6">
+        <p className="text-center text-sm text-muted mt-6">
           Institution not on ClashFree?{' '}
-          <Link href="/signup" className="text-cyan-400 hover:text-cyan-300 transition-colors">
+          <Link href="/signup" className="text-secondary hover:text-secondary transition-colors">
             Register your institution
           </Link>
         </p>

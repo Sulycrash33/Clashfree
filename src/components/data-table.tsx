@@ -59,12 +59,12 @@ export function DataTable<TData, TValue>({
     <div className="space-y-4">
       {searchKey && (
         <div className="relative max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-500" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
           <Input
             placeholder={searchPlaceholder}
             value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ''}
             onChange={(e) => table.getColumn(searchKey)?.setFilterValue(e.target.value)}
-            className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-slate-500 focus:border-cyan-500"
+            className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-muted focus:border-secondary"
           />
         </div>
       )}
@@ -75,7 +75,7 @@ export function DataTable<TData, TValue>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="border-white/10 hover:bg-white/5">
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className="text-slate-400 font-medium">
+                  <TableHead key={header.id} className="text-muted font-medium">
                     {header.isPlaceholder
                       ? null
                       : flexRender(header.column.columnDef.header, header.getContext())}
@@ -100,7 +100,7 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center text-slate-400">
+                <TableCell colSpan={columns.length} className="h-24 text-center text-muted">
                   No results found.
                 </TableCell>
               </TableRow>
@@ -110,7 +110,7 @@ export function DataTable<TData, TValue>({
       </div>
 
       <div className="flex items-center justify-between">
-        <div className="text-sm text-slate-400">
+        <div className="text-sm text-muted">
           Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
         </div>
         <div className="flex items-center gap-2">
@@ -119,7 +119,7 @@ export function DataTable<TData, TValue>({
             size="sm"
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
-            className="border-white/10 text-slate-400 hover:text-white hover:bg-white/5"
+            className="border-white/10 text-muted hover:text-white hover:bg-white/5"
           >
             <ChevronsLeft className="w-4 h-4" />
           </Button>
@@ -128,7 +128,7 @@ export function DataTable<TData, TValue>({
             size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
-            className="border-white/10 text-slate-400 hover:text-white hover:bg-white/5"
+            className="border-white/10 text-muted hover:text-white hover:bg-white/5"
           >
             <ChevronLeft className="w-4 h-4" />
           </Button>
@@ -137,7 +137,7 @@ export function DataTable<TData, TValue>({
             size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
-            className="border-white/10 text-slate-400 hover:text-white hover:bg-white/5"
+            className="border-white/10 text-muted hover:text-white hover:bg-white/5"
           >
             <ChevronRight className="w-4 h-4" />
           </Button>
@@ -146,7 +146,7 @@ export function DataTable<TData, TValue>({
             size="sm"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
-            className="border-white/10 text-slate-400 hover:text-white hover:bg-white/5"
+            className="border-white/10 text-muted hover:text-white hover:bg-white/5"
           >
             <ChevronsRight className="w-4 h-4" />
           </Button>

@@ -147,7 +147,7 @@ function DepartmentsPageInner() {
       accessorKey: 'code',
       header: 'Code',
       cell: ({ row }) => (
-        <Badge variant="outline" className="border-green-500/20 text-green-400">
+        <Badge variant="outline" className="border-success/20 text-success">
           {row.getValue('code')}
         </Badge>
       ),
@@ -157,12 +157,12 @@ function DepartmentsPageInner() {
       header: 'Department Name',
       cell: ({ row }) => (
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center">
-            <Building2 className="w-5 h-5 text-green-400" />
+          <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-success/20 to-success/20 flex items-center justify-center">
+            <Building2 className="w-5 h-5 text-success" />
           </div>
           <div>
             <div className="font-medium text-white">{row.getValue('name')}</div>
-            {row.original.hodName && <div className="text-xs text-slate-400">HOD: {row.original.hodName}</div>}
+            {row.original.hodName && <div className="text-xs text-muted">HOD: {row.original.hodName}</div>}
           </div>
         </div>
       ),
@@ -171,7 +171,7 @@ function DepartmentsPageInner() {
       accessorKey: 'faculty',
       header: 'Faculty',
       cell: ({ row }) => (
-        <Badge variant="secondary" className="bg-white/10 text-slate-300">
+        <Badge variant="secondary" className="bg-white/10 text-muted">
           {row.original.faculty?.code || 'N/A'}
         </Badge>
       ),
@@ -180,7 +180,7 @@ function DepartmentsPageInner() {
       id: 'stats',
       header: 'Stats',
       cell: ({ row }) => (
-        <div className="flex items-center gap-4 text-sm text-slate-400">
+        <div className="flex items-center gap-4 text-sm text-muted">
           <span>{row.original._count?.students || 0} students</span>
           <span>{row.original._count?.lecturers || 0} lecturers</span>
           <span>{row.original._count?.courses || 0} courses</span>
@@ -191,7 +191,7 @@ function DepartmentsPageInner() {
       accessorKey: 'isActive',
       header: 'Status',
       cell: ({ row }) => (
-        <Badge className={row.getValue('isActive') ? 'bg-green-500/10 text-green-400' : 'bg-red-500/10 text-red-400'}>
+        <Badge className={row.getValue('isActive') ? 'bg-success/10 text-success' : 'bg-clash/10 text-clash'}>
           {row.getValue('isActive') ? 'Active' : 'Inactive'}
         </Badge>
       ),
@@ -201,15 +201,15 @@ function DepartmentsPageInner() {
       cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-slate-400">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted">
               <MoreHorizontal className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-slate-900 border-white/10">
-            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-slate-300">
+          <DropdownMenuContent align="end" className="bg-muted border-white/10">
+            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted">
               <Pencil className="w-4 h-4 mr-2" /> Edit
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-red-400">
+            <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-clash">
               <Trash2 className="w-4 h-4 mr-2" /> Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -220,8 +220,8 @@ function DepartmentsPageInner() {
 
   if (!['SA', 'IA', 'TO'].includes(session?.user?.role || '')) {
     return (
-      <Alert className="bg-red-500/10 border-red-500/20">
-        <AlertDescription className="text-red-400">Access denied.</AlertDescription>
+      <Alert className="bg-clash/10 border-clash/20">
+        <AlertDescription className="text-clash">Access denied.</AlertDescription>
       </Alert>
     )
   }
@@ -241,17 +241,17 @@ function DepartmentsPageInner() {
         <CardContent className="pt-6">
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-green-500" />
+              <Loader2 className="w-8 h-8 animate-spin text-success" />
             </div>
           ) : (
             <>
               <div className="flex items-center gap-3 mb-4">
-                <span className="text-xs text-slate-400">Filter by Faculty:</span>
+                <span className="text-xs text-muted">Filter by Faculty:</span>
                 <Select value={filterFacultyId} onValueChange={setFilterFacultyId}>
                   <SelectTrigger className="w-56 bg-white/5 border-white/10 text-white text-sm">
                     <SelectValue placeholder="All Faculties" />
                   </SelectTrigger>
-                  <SelectContent className="bg-slate-900 border-white/10">
+                  <SelectContent className="bg-muted border-white/10">
                     <SelectItem value="all" className="text-white">All Faculties</SelectItem>
                     {faculties.map(f => (
                       <SelectItem key={f.id} value={f.id} className="text-white">{f.code} – {f.name}</SelectItem>
@@ -259,7 +259,7 @@ function DepartmentsPageInner() {
                   </SelectContent>
                 </Select>
                 {filterFacultyId !== 'all' && (
-                  <Badge variant="outline" className="text-cyan-400 border-cyan-500/30">
+                  <Badge variant="outline" className="text-secondary border-secondary/30">
                     {faculties.find(f => f.id === filterFacultyId)?.code} — {departments.filter(d => d.facultyId === filterFacultyId).length} dept(s)
                   </Badge>
                 )}
@@ -276,10 +276,10 @@ function DepartmentsPageInner() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-slate-900 border-white/10 text-white">
+        <DialogContent className="bg-muted border-white/10 text-white">
           <DialogHeader>
             <DialogTitle>{editingDepartment ? 'Edit Department' : 'Add New Department'}</DialogTitle>
-            <DialogDescription className="text-slate-400">
+            <DialogDescription className="text-muted">
               {editingDepartment ? 'Update department details' : 'Create a new department'}
             </DialogDescription>
           </DialogHeader>
@@ -287,7 +287,7 @@ function DepartmentsPageInner() {
           <div className="space-y-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-slate-300">Department Name</Label>
+                <Label className="text-muted">Department Name</Label>
                 <Input
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -296,7 +296,7 @@ function DepartmentsPageInner() {
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-slate-300">Code</Label>
+                <Label className="text-muted">Code</Label>
                 <Input
                   value={formData.code}
                   onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
@@ -307,12 +307,12 @@ function DepartmentsPageInner() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-300">Faculty</Label>
+              <Label className="text-muted">Faculty</Label>
               <Select value={formData.facultyId} onValueChange={(v) => setFormData({ ...formData, facultyId: v })}>
                 <SelectTrigger className="bg-white/5 border-white/10 text-white">
                   <SelectValue placeholder="Select faculty" />
                 </SelectTrigger>
-                <SelectContent className="bg-slate-900 border-white/10">
+                <SelectContent className="bg-muted border-white/10">
                   {faculties.map((f) => (
                     <SelectItem key={f.id} value={f.id} className="text-white">{f.name} ({f.code})</SelectItem>
                   ))}
@@ -320,7 +320,7 @@ function DepartmentsPageInner() {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label className="text-slate-300">HOD Name</Label>
+              <Label className="text-muted">HOD Name</Label>
               <Input
                 value={formData.hodName}
                 onChange={(e) => setFormData({ ...formData, hodName: e.target.value })}
@@ -331,10 +331,10 @@ function DepartmentsPageInner() {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-white/10 text-slate-300">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-white/10 text-muted">
               Cancel
             </Button>
-            <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-green-500 to-emerald-600">
+            <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-success to-success">
               {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
               {editingDepartment ? 'Update' : 'Create'}
             </Button>
@@ -350,7 +350,7 @@ import { Loader2 as SuspenseLoader } from 'lucide-react'
 
 export default function DepartmentsPage() {
   return (
-    <Suspense fallback={<div className="flex items-center justify-center py-12"><SuspenseLoader className="w-8 h-8 animate-spin text-cyan-500" /></div>}>
+    <Suspense fallback={<div className="flex items-center justify-center py-12"><SuspenseLoader className="w-8 h-8 animate-spin text-secondary" /></div>}>
       <DepartmentsPageInner />
     </Suspense>
   )

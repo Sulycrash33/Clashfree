@@ -24,20 +24,20 @@ export function DemoBanner() {
         className="
           group flex items-center justify-between gap-3 w-full
           px-4 py-3.5 rounded-2xl
-          border border-dashed border-violet-400/30
-          bg-violet-500/5 hover:bg-violet-500/10
+          border border-dashed border-primary/30
+          bg-primary/5 hover:bg-primary/10
           transition-all duration-200
         "
       >
         <div className="flex items-center gap-3">
           {/* Animated sparkle */}
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-600/40 to-blue-600/40 border border-violet-400/20 flex items-center justify-center flex-shrink-0">
-            <Sparkles className="w-4 h-4 text-violet-300 group-hover:animate-pulse" />
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary/40 to-secondary/40 border border-primary/20 flex items-center justify-center flex-shrink-0">
+            <Sparkles className="w-4 h-4 text-primary group-hover:animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-semibold text-violet-200">FEDKO Live Demo</span>
-              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-violet-500/20 border border-violet-400/20 text-violet-300">
+              <span className="text-sm font-semibold text-primary">FEDKO Live Demo</span>
+              <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-primary/20 border border-primary/20 text-primary">
                 PREVIEW
               </span>
             </div>
@@ -47,7 +47,7 @@ export function DemoBanner() {
             </div>
           </div>
         </div>
-        <ChevronRight className="w-4 h-4 text-violet-400/50 group-hover:text-violet-400 group-hover:translate-x-0.5 transition-all flex-shrink-0" />
+        <ChevronRight className="w-4 h-4 text-primary/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all flex-shrink-0" />
       </Link>
     </div>
   );
