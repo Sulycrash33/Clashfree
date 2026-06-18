@@ -396,7 +396,7 @@ export default function ExamTimetablePage() {
       />
 
       {/* ── Wizard Progress Bar ── */}
-      <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
+      <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
         <CardContent className="pt-5 pb-4">
           <div className="flex items-center justify-between">
             {STEPS.map((s, idx) => {
@@ -418,7 +418,7 @@ export default function ExamTimetablePage() {
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center border-2 transition-all ${
                       isActive ? 'bg-secondary border-secondary shadow-lg shadow-cyan-500/30'
                       : isDone ? 'bg-success/20 border-success'
-                      : 'bg-white/5 border-white/10'
+                      : 'bg-foreground/5 border-foreground/10'
                     }`}>
                       {isDone
                         ? <CheckCircle2 className="w-5 h-5 text-success" />
@@ -430,7 +430,7 @@ export default function ExamTimetablePage() {
                     </span>
                   </button>
                   {idx < STEPS.length - 1 && (
-                    <div className={`flex-1 h-0.5 mx-2 transition-all ${idx < stepIndex ? 'bg-success/40' : 'bg-white/10'}`} />
+                    <div className={`flex-1 h-0.5 mx-2 transition-all ${idx < stepIndex ? 'bg-success/40' : 'bg-foreground/10'}`} />
                   )}
                 </div>
               )
@@ -444,7 +444,7 @@ export default function ExamTimetablePage() {
       ══════════════════════════════════════════════════════════════ */}
       {step === 'setup' && (
         <div className="space-y-4">
-          <Card className="bg-white/5 border-white/10">
+          <Card className="bg-foreground/5 border-foreground/10">
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-secondary" />
@@ -465,7 +465,7 @@ export default function ExamTimetablePage() {
                         className={`p-4 rounded-lg border text-left transition-all ${
                           selectedPeriod === p.id
                             ? 'border-secondary bg-secondary/10'
-                            : 'border-white/10 bg-white/5 hover:border-white/20'
+                            : 'border-foreground/10 bg-foreground/5 hover:border-foreground/20'
                         }`}
                       >
                         <div className="flex items-center justify-between mb-1">
@@ -494,7 +494,7 @@ export default function ExamTimetablePage() {
                 <Button
                   variant="outline"
                   onClick={() => setShowNewPeriod(!showNewPeriod)}
-                  className="border-white/10 text-muted hover:text-white"
+                  className="border-foreground/10 text-muted hover:text-white"
                 >
                   <Plus className="w-4 h-4 mr-2" />
                   {showNewPeriod ? 'Cancel' : 'Create New Exam Period'}
@@ -502,7 +502,7 @@ export default function ExamTimetablePage() {
               </div>
 
               {showNewPeriod && (
-                <Card className="bg-white/5 border-white/10">
+                <Card className="bg-foreground/5 border-foreground/10">
                   <CardContent className="pt-5 space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
@@ -511,7 +511,7 @@ export default function ExamTimetablePage() {
                           value={newPeriod.name}
                           onChange={e => setNewPeriod(p => ({ ...p, name: e.target.value }))}
                           placeholder="e.g. First Semester Exams 2025/2026"
-                          className="bg-white/5 border-white/10 text-white mt-1"
+                          className="bg-foreground/5 border-foreground/10 text-white mt-1"
                         />
                       </div>
                       <div>
@@ -520,7 +520,7 @@ export default function ExamTimetablePage() {
                           value={newPeriod.session}
                           onChange={e => setNewPeriod(p => ({ ...p, session: e.target.value }))}
                           placeholder="2025/2026"
-                          className="bg-white/5 border-white/10 text-white mt-1"
+                          className="bg-foreground/5 border-foreground/10 text-white mt-1"
                         />
                       </div>
                       <div>
@@ -529,7 +529,7 @@ export default function ExamTimetablePage() {
                           type="date"
                           value={newPeriod.startDate}
                           onChange={e => setNewPeriod(p => ({ ...p, startDate: e.target.value }))}
-                          className="bg-white/5 border-white/10 text-white mt-1"
+                          className="bg-foreground/5 border-foreground/10 text-white mt-1"
                         />
                       </div>
                       <div>
@@ -538,7 +538,7 @@ export default function ExamTimetablePage() {
                           type="date"
                           value={newPeriod.endDate}
                           onChange={e => setNewPeriod(p => ({ ...p, endDate: e.target.value }))}
-                          className="bg-white/5 border-white/10 text-white mt-1"
+                          className="bg-foreground/5 border-foreground/10 text-white mt-1"
                         />
                       </div>
                       <div>
@@ -547,10 +547,10 @@ export default function ExamTimetablePage() {
                           value={newPeriod.semester.toString()}
                           onValueChange={v => setNewPeriod(p => ({ ...p, semester: parseInt(v) }))}
                         >
-                          <SelectTrigger className="bg-white/5 border-white/10 text-white mt-1">
+                          <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white mt-1">
                             <SelectValue />
                           </SelectTrigger>
-                          <SelectContent className="bg-muted border-white/10">
+                          <SelectContent className="bg-muted border-foreground/10">
                             <SelectItem value="1" className="text-white">1st Semester</SelectItem>
                             <SelectItem value="2" className="text-white">2nd Semester</SelectItem>
                           </SelectContent>
@@ -559,7 +559,7 @@ export default function ExamTimetablePage() {
                     </div>
 
                     {/* Slot times */}
-                    <div className="border-t border-white/10 pt-4">
+                    <div className="border-t border-foreground/10 pt-4">
                       <Label className="text-muted mb-3 block">Slot Times</Label>
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                         {[
@@ -567,21 +567,21 @@ export default function ExamTimetablePage() {
                           { label: 'Afternoon', startKey: 'afternoonStart', endKey: 'afternoonEnd' },
                           { label: 'Evening', startKey: 'eveningStart', endKey: 'eveningEnd' },
                         ].map(slot => (
-                          <div key={slot.label} className="p-3 bg-white/5 rounded-lg border border-white/10">
+                          <div key={slot.label} className="p-3 bg-foreground/5 rounded-lg border border-foreground/10">
                             <div className="text-xs text-muted mb-2">{slot.label}</div>
                             <div className="flex items-center gap-2">
                               <Input
                                 type="time"
                                 value={(newPeriod as any)[slot.startKey]}
                                 onChange={e => setNewPeriod(p => ({ ...p, [slot.startKey]: e.target.value }))}
-                                className="bg-white/5 border-white/10 text-white text-xs p-1 h-8"
+                                className="bg-foreground/5 border-foreground/10 text-white text-xs p-1 h-8"
                               />
                               <span className="text-muted text-xs">to</span>
                               <Input
                                 type="time"
                                 value={(newPeriod as any)[slot.endKey]}
                                 onChange={e => setNewPeriod(p => ({ ...p, [slot.endKey]: e.target.value }))}
-                                className="bg-white/5 border-white/10 text-white text-xs p-1 h-8"
+                                className="bg-foreground/5 border-foreground/10 text-white text-xs p-1 h-8"
                               />
                             </div>
                           </div>
@@ -646,7 +646,7 @@ export default function ExamTimetablePage() {
       ══════════════════════════════════════════════════════════════ */}
       {step === 'configure' && selectedPeriodData && (
         <div className="space-y-4">
-          <Card className="bg-white/5 border-white/10">
+          <Card className="bg-foreground/5 border-foreground/10">
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
                 <Settings className="w-5 h-5 text-secondary" />
@@ -663,7 +663,7 @@ export default function ExamTimetablePage() {
                   { label: 'Start', value: new Date(selectedPeriodData.startDate).toLocaleDateString() },
                   { label: 'End', value: new Date(selectedPeriodData.endDate).toLocaleDateString() },
                 ].map(item => (
-                  <div key={item.label} className="p-3 bg-white/5 rounded-lg border border-white/10">
+                  <div key={item.label} className="p-3 bg-foreground/5 rounded-lg border border-foreground/10">
                     <div className="text-xs text-muted">{item.label}</div>
                     <div className="text-white font-medium mt-1">{item.value}</div>
                   </div>
@@ -676,7 +676,7 @@ export default function ExamTimetablePage() {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                   {[1, 2, 3].map(n => (
                     <div key={n} className={`p-3 rounded-lg bg-gradient-to-br ${slotColors[n - 1]} border`}>
-                      <div className="text-xs text-white/60 mb-1">Slot {n}</div>
+                      <div className="text-xs text-foreground/60 mb-1">Slot {n}</div>
                       <div className="text-white font-medium text-sm">{getSlotTime(n)}</div>
                     </div>
                   ))}
@@ -685,23 +685,23 @@ export default function ExamTimetablePage() {
 
               {/* Jumu'ah / Saturday flags */}
               <div className="flex flex-wrap gap-3">
-                <Badge variant="outline" className={selectedPeriodData.excludeFridays ? 'text-success border-success/30' : 'text-muted border-white/10'}>
+                <Badge variant="outline" className={selectedPeriodData.excludeFridays ? 'text-success border-success/30' : 'text-muted border-foreground/10'}>
                   🕌 Jumu'ah: {selectedPeriodData.excludeFridays ? 'Fridays Excluded ✓' : 'Fridays Included'}
                 </Badge>
-                <Badge variant="outline" className={selectedPeriodData.includeSaturday ? 'text-secondary border-secondary/30' : 'text-muted border-white/10'}>
+                <Badge variant="outline" className={selectedPeriodData.includeSaturday ? 'text-secondary border-secondary/30' : 'text-muted border-foreground/10'}>
                   📅 Saturday: {selectedPeriodData.includeSaturday ? 'Included' : 'Excluded'}
                 </Badge>
               </div>
 
               {/* Faculty/venue scope */}
-              <div className="border-t border-white/10 pt-4">
+              <div className="border-t border-foreground/10 pt-4">
                 <Label className="text-muted mb-2 block">Faculty Scope for Venue Assignment</Label>
                 <p className="text-xs text-muted mb-3">Select a faculty to assign only rooms within that faculty. Leave as "All" to use all institution rooms.</p>
                 <Select value={selectedFaculty} onValueChange={setSelectedFaculty}>
-                  <SelectTrigger className="w-72 bg-white/5 border-white/10 text-white">
+                  <SelectTrigger className="w-72 bg-foreground/5 border-foreground/10 text-white">
                     <SelectValue placeholder="Select faculty scope" />
                   </SelectTrigger>
-                  <SelectContent className="bg-muted border-white/10">
+                  <SelectContent className="bg-muted border-foreground/10">
                     <SelectItem value="all" className="text-white">All Faculties (Global)</SelectItem>
                     {faculties.map(f => (
                       <SelectItem key={f.id} value={f.id} className="text-white">{f.code} – {f.name}</SelectItem>
@@ -713,11 +713,11 @@ export default function ExamTimetablePage() {
                   <div className="mt-3 flex flex-wrap gap-2">
                     <span className="text-xs text-muted">{rooms.length} venue(s) in scope:</span>
                     {rooms.slice(0, 8).map(r => (
-                      <Badge key={r.id} variant="outline" className="text-xs text-muted border-white/10">
+                      <Badge key={r.id} variant="outline" className="text-xs text-muted border-foreground/10">
                         {r.code} ({r.capacity})
                       </Badge>
                     ))}
-                    {rooms.length > 8 && <Badge variant="outline" className="text-xs text-muted border-white/10">+{rooms.length - 8} more</Badge>}
+                    {rooms.length > 8 && <Badge variant="outline" className="text-xs text-muted border-foreground/10">+{rooms.length - 8} more</Badge>}
                   </div>
                 )}
               </div>
@@ -728,7 +728,7 @@ export default function ExamTimetablePage() {
                   <Label className="text-muted mb-2 block">Departments in Scope ({departments.length})</Label>
                   <div className="flex flex-wrap gap-2">
                     {departments.map(d => (
-                      <Badge key={d.id} variant="outline" className="text-xs text-muted border-white/10">{d.code}</Badge>
+                      <Badge key={d.id} variant="outline" className="text-xs text-muted border-foreground/10">{d.code}</Badge>
                     ))}
                   </div>
                 </div>
@@ -737,7 +737,7 @@ export default function ExamTimetablePage() {
           </Card>
 
           <div className="flex justify-between">
-            <Button variant="outline" onClick={() => setStep('setup')} className="border-white/10 text-muted">
+            <Button variant="outline" onClick={() => setStep('setup')} className="border-foreground/10 text-muted">
               <ChevronLeft className="w-4 h-4 mr-2" /> Back
             </Button>
             <Button onClick={() => setStep('generate')} className="bg-gradient-to-r from-secondary to-secondary text-white border-0">
@@ -752,7 +752,7 @@ export default function ExamTimetablePage() {
       ══════════════════════════════════════════════════════════════ */}
       {step === 'generate' && (
         <div className="space-y-4">
-          <Card className="bg-white/5 border-white/10">
+          <Card className="bg-foreground/5 border-foreground/10">
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
                 <Sparkles className="w-5 h-5 text-secondary" />
@@ -764,7 +764,7 @@ export default function ExamTimetablePage() {
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Summary before generate */}
-              <div className="p-4 bg-white/5 rounded-lg border border-white/10 space-y-2">
+              <div className="p-4 bg-foreground/5 rounded-lg border border-foreground/10 space-y-2">
                 <div className="text-sm text-muted font-medium mb-2">Ready to Generate</div>
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <div className="flex items-center gap-2 text-muted">
@@ -820,10 +820,10 @@ export default function ExamTimetablePage() {
                     </span>
                     <span className="text-secondary font-medium">{progress}%</span>
                   </div>
-                  <Progress value={progress} className="h-3 bg-white/10" />
+                  <Progress value={progress} className="h-3 bg-foreground/10" />
                   <div className="grid grid-cols-7 gap-1 mt-2">
                     {[10, 25, 40, 55, 70, 85, 100].map(p => (
-                      <div key={p} className={`h-1 rounded-full transition-all ${progress >= p ? 'bg-secondary' : 'bg-white/10'}`} />
+                      <div key={p} className={`h-1 rounded-full transition-all ${progress >= p ? 'bg-secondary' : 'bg-foreground/10'}`} />
                     ))}
                   </div>
                 </div>
@@ -832,7 +832,7 @@ export default function ExamTimetablePage() {
           </Card>
 
           <div className="flex justify-between">
-            <Button variant="outline" onClick={() => setStep('configure')} className="border-white/10 text-muted" disabled={generating}>
+            <Button variant="outline" onClick={() => setStep('configure')} className="border-foreground/10 text-muted" disabled={generating}>
               <ChevronLeft className="w-4 h-4 mr-2" /> Back
             </Button>
             {examSlots.length > 0 && (
@@ -857,7 +857,7 @@ export default function ExamTimetablePage() {
               { label: 'Students', value: stats.totalStudents.toLocaleString(), icon: Users, color: 'from-accent-gold/20 to-accent-gold/20', iconColor: 'text-accent-gold' },
               { label: 'Venues Used', value: stats.roomsUsed, icon: MapPin, color: 'from-primary/20 to-clash/20', iconColor: 'text-primary' },
             ].map(s => (
-              <Card key={s.label} className="bg-white/5 border-white/10">
+              <Card key={s.label} className="bg-foreground/5 border-foreground/10">
                 <CardContent className="pt-4">
                   <div className="flex items-center gap-3">
                     <div className={`w-10 h-10 rounded-lg bg-gradient-to-br ${s.color} flex items-center justify-center`}>
@@ -888,7 +888,7 @@ export default function ExamTimetablePage() {
           )}
 
           {/* Controls bar */}
-          <Card className="bg-white/5 border-white/10">
+          <Card className="bg-foreground/5 border-foreground/10">
             <CardContent className="pt-4">
               <div className="flex flex-wrap items-center gap-4 justify-between">
                 <div className="flex flex-wrap items-center gap-3">
@@ -897,10 +897,10 @@ export default function ExamTimetablePage() {
                     <span className="text-sm text-muted">Filter:</span>
                   </div>
                   <Select value={filterLevel} onValueChange={setFilterLevel}>
-                    <SelectTrigger className="w-32 bg-white/5 border-white/10 text-white text-sm">
+                    <SelectTrigger className="w-32 bg-foreground/5 border-foreground/10 text-white text-sm">
                       <SelectValue placeholder="Level" />
                     </SelectTrigger>
-                    <SelectContent className="bg-muted border-white/10">
+                    <SelectContent className="bg-muted border-foreground/10">
                       <SelectItem value="all" className="text-white">All Levels</SelectItem>
                       {[100, 200, 300, 400, 500].map(l => (
                         <SelectItem key={l} value={l.toString()} className="text-white">{l}L</SelectItem>
@@ -908,10 +908,10 @@ export default function ExamTimetablePage() {
                     </SelectContent>
                   </Select>
                   <Select value={filterDept} onValueChange={setFilterDept}>
-                    <SelectTrigger className="w-48 bg-white/5 border-white/10 text-white text-sm">
+                    <SelectTrigger className="w-48 bg-foreground/5 border-foreground/10 text-white text-sm">
                       <SelectValue placeholder="Department" />
                     </SelectTrigger>
-                    <SelectContent className="bg-muted border-white/10">
+                    <SelectContent className="bg-muted border-foreground/10">
                       <SelectItem value="all" className="text-white">All Departments</SelectItem>
                       {slotDepts.map(([code, name]) => (
                         <SelectItem key={code} value={code} className="text-white">{code} – {name}</SelectItem>
@@ -921,7 +921,7 @@ export default function ExamTimetablePage() {
                 </div>
 
                 <div className="flex items-center gap-2 flex-wrap">
-                  <div className="flex bg-white/5 rounded-lg p-1">
+                  <div className="flex bg-foreground/5 rounded-lg p-1">
                     {(['calendar', 'list'] as const).map(v => (
                       <Button
                         key={v}
@@ -940,7 +940,7 @@ export default function ExamTimetablePage() {
                     variant="outline"
                     onClick={() => runAutoAssign(false)}
                     disabled={assigningInvig || examSlots.length === 0}
-                    className={`border-white/10 text-muted hover:text-white ${invigResult ? 'border-success/30 text-success' : ''}`}
+                    className={`border-foreground/10 text-muted hover:text-white ${invigResult ? 'border-success/30 text-success' : ''}`}
                   >
                     {assigningInvig
                       ? <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -961,7 +961,7 @@ export default function ExamTimetablePage() {
           </Card>
 
           {/* Calendar/List Canvas */}
-          <Card className="bg-white/5 border-white/10">
+          <Card className="bg-foreground/5 border-foreground/10">
             <CardHeader>
               <CardTitle className="text-white flex items-center gap-2">
                 <Calendar className="w-5 h-5 text-secondary" />
@@ -983,7 +983,7 @@ export default function ExamTimetablePage() {
                 <div className="overflow-x-auto">
                   <div className="min-w-[800px]">
                     <div className="grid grid-cols-4 gap-2 mb-3">
-                      <div className="p-3 bg-white/5 rounded-lg">
+                      <div className="p-3 bg-foreground/5 rounded-lg">
                         <span className="text-muted text-sm font-medium">Date</span>
                       </div>
                       {[1, 2, 3].map(n => (
@@ -994,7 +994,7 @@ export default function ExamTimetablePage() {
                     </div>
                     {sortedDates.map(date => (
                       <div key={date} className="grid grid-cols-4 gap-2 mb-2">
-                        <div className="p-3 bg-white/5 rounded-lg flex items-center">
+                        <div className="p-3 bg-foreground/5 rounded-lg flex items-center">
                           <span className="text-white font-medium text-sm">{date}</span>
                         </div>
                         {[1, 2, 3].map(n => {
@@ -1009,7 +1009,7 @@ export default function ExamTimetablePage() {
                                         <Badge variant="outline" className={`${slot.course.isShared ? 'text-clash border-clash/20' : 'text-secondary border-secondary/20'} text-xs font-mono`}>
                                           {slot.course.code}{slot.course.isShared ? ' ★' : ''}
                                         </Badge>
-                                        <Badge variant="secondary" className={`${levelColors[slot.course.level] || 'bg-white/10 text-muted'} text-xs`}>
+                                        <Badge variant="secondary" className={`${levelColors[slot.course.level] || 'bg-foreground/10 text-muted'} text-xs`}>
                                           {slot.course.level}L
                                         </Badge>
                                       </div>
@@ -1046,17 +1046,17 @@ export default function ExamTimetablePage() {
                         const slots = groupedSlots[date]?.[n] || []
                         if (!slots.length) return null
                         return (
-                          <div key={n} className="pl-4 border-l-2 border-white/10">
+                          <div key={n} className="pl-4 border-l-2 border-foreground/10">
                             <div className="flex items-center gap-2 mb-2">
                               <Clock className="w-4 h-4 text-muted" />
                               <span className="text-sm text-muted">{getSlotTime(n)}</span>
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                               {slots.map(slot => (
-                                <div key={slot.id} className="p-3 bg-white/5 rounded-lg border border-white/10 hover:border-secondary/30 transition-colors">
+                                <div key={slot.id} className="p-3 bg-foreground/5 rounded-lg border border-foreground/10 hover:border-secondary/30 transition-colors">
                                   <div className="flex items-center justify-between mb-2">
                                     <Badge variant="outline" className="text-secondary text-xs font-mono">{slot.course.code}</Badge>
-                                    <Badge variant="secondary" className={`${levelColors[slot.course.level] || 'bg-white/10 text-muted'} text-xs`}>{slot.course.level}L</Badge>
+                                    <Badge variant="secondary" className={`${levelColors[slot.course.level] || 'bg-foreground/10 text-muted'} text-xs`}>{slot.course.level}L</Badge>
                                   </div>
                                   <p className="text-sm text-white mb-2">{slot.course.name}</p>
                                   <div className="flex items-center justify-between text-xs text-muted">
@@ -1077,7 +1077,7 @@ export default function ExamTimetablePage() {
           </Card>
 
           {/* Legend */}
-          <Card className="bg-white/5 border-white/10">
+          <Card className="bg-foreground/5 border-foreground/10">
             <CardContent className="pt-4">
               <div className="flex flex-wrap items-center gap-6">
                 <span className="text-sm text-muted">Legend:</span>
@@ -1096,10 +1096,10 @@ export default function ExamTimetablePage() {
           </Card>
 
           <div className="flex justify-between">
-            <Button variant="outline" onClick={() => setStep('generate')} className="border-white/10 text-muted">
+            <Button variant="outline" onClick={() => setStep('generate')} className="border-foreground/10 text-muted">
               <ChevronLeft className="w-4 h-4 mr-2" /> Back to Generate
             </Button>
-            <Button variant="outline" onClick={() => setStep('setup')} className="border-white/10 text-muted">
+            <Button variant="outline" onClick={() => setStep('setup')} className="border-foreground/10 text-muted">
               New Period <Plus className="w-4 h-4 ml-2" />
             </Button>
           </div>

@@ -37,7 +37,7 @@ export function PageHeader({
             size="sm"
             onClick={onRefresh}
             disabled={loading}
-            className="border-white/10 text-muted hover:text-white hover:bg-white/5"
+            className="border-foreground/10 text-muted hover:text-white hover:bg-foreground/5"
           >
             <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
             Refresh

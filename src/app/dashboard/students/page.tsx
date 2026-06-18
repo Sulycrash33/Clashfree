@@ -300,7 +300,7 @@ export default function StudentsPage() {
               <MoreHorizontal className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-muted border-white/10">
+          <DropdownMenuContent align="end" className="bg-muted border-foreground/10">
             <DropdownMenuItem onClick={() => handleOpenDetail(row.original)} className="text-muted">
               <Eye className="w-4 h-4 mr-2" /> View Courses
             </DropdownMenuItem>
@@ -336,13 +336,13 @@ export default function StudentsPage() {
           <Button onClick={() => handleOpenDialog()} className="bg-gradient-to-r from-secondary to-secondary">
             Add Student
           </Button>
-          <Button variant="outline" onClick={fetchData} disabled={loading} className="border-white/10 text-muted">
+          <Button variant="outline" onClick={fetchData} disabled={loading} className="border-foreground/10 text-muted">
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
           </Button>
         </div>
       </div>
 
-      <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
+      <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
         <CardContent className="pt-6">
           {loading ? (
             <div className="flex items-center justify-center py-12">
@@ -355,7 +355,7 @@ export default function StudentsPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-muted border-white/10 text-white max-w-xl">
+        <DialogContent className="bg-muted border-foreground/10 text-white max-w-xl">
           <DialogHeader>
             <DialogTitle>{editingStudent ? 'Edit Student' : 'Add New Student'}</DialogTitle>
             <DialogDescription className="text-muted">
@@ -370,17 +370,17 @@ export default function StudentsPage() {
                 <Input
                   value={formData.regNumber}
                   onChange={(e) => setFormData({ ...formData, regNumber: e.target.value.toUpperCase() })}
-                  className="bg-white/5 border-white/10 text-white font-mono"
+                  className="bg-foreground/5 border-foreground/10 text-white font-mono"
                   placeholder="e.g., NSUK/2021/CSC/001"
                 />
               </div>
               <div className="space-y-2">
                 <Label className="text-muted">Admission Year</Label>
                 <Select value={formData.admissionYear} onValueChange={(v) => setFormData({ ...formData, admissionYear: v })}>
-                  <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-muted border-white/10">
+                  <SelectContent className="bg-muted border-foreground/10">
                     {years.map((y) => (
                       <SelectItem key={y} value={y.toString()} className="text-white">{y}</SelectItem>
                     ))}
@@ -393,7 +393,7 @@ export default function StudentsPage() {
               <Input
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="bg-white/5 border-white/10 text-white"
+                className="bg-foreground/5 border-foreground/10 text-white"
                 placeholder="e.g., John Doe"
               />
             </div>
@@ -404,7 +404,7 @@ export default function StudentsPage() {
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="bg-white/5 border-white/10 text-white"
+                  className="bg-foreground/5 border-foreground/10 text-white"
                   placeholder="e.g., john@university.edu"
                 />
               </div>
@@ -413,7 +413,7 @@ export default function StudentsPage() {
                 <Input
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="bg-white/5 border-white/10 text-white"
+                  className="bg-foreground/5 border-foreground/10 text-white"
                   placeholder="e.g., 08012345678"
                 />
               </div>
@@ -422,10 +422,10 @@ export default function StudentsPage() {
               <div className="space-y-2">
                 <Label className="text-muted">Department</Label>
                 <Select value={formData.departmentId} onValueChange={(v) => setFormData({ ...formData, departmentId: v })}>
-                  <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white">
                     <SelectValue placeholder="Select department" />
                   </SelectTrigger>
-                  <SelectContent className="bg-muted border-white/10">
+                  <SelectContent className="bg-muted border-foreground/10">
                     {departments.map((d) => (
                       <SelectItem key={d.id} value={d.id} className="text-white">{d.name} ({d.code})</SelectItem>
                     ))}
@@ -435,10 +435,10 @@ export default function StudentsPage() {
               <div className="space-y-2">
                 <Label className="text-muted">Level</Label>
                 <Select value={formData.level} onValueChange={(v) => setFormData({ ...formData, level: v })}>
-                  <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-muted border-white/10">
+                  <SelectContent className="bg-muted border-foreground/10">
                     {levels.map((l) => (
                       <SelectItem key={l} value={l.toString()} className="text-white">{l} Level</SelectItem>
                     ))}
@@ -449,7 +449,7 @@ export default function StudentsPage() {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-white/10 text-muted">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-foreground/10 text-muted">
               Cancel
             </Button>
             <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-secondary to-secondary">
@@ -461,7 +461,7 @@ export default function StudentsPage() {
       </Dialog>
       {/* Student Detail Sheet */}
       <Sheet open={detailOpen} onOpenChange={setDetailOpen}>
-        <SheetContent className="bg-muted border-white/10 text-white w-full sm:max-w-2xl overflow-y-auto">
+        <SheetContent className="bg-muted border-foreground/10 text-white w-full sm:max-w-2xl overflow-y-auto">
           <SheetHeader className="mb-4">
             <SheetTitle className="text-white flex items-center gap-2">
               <BookOpen className="w-5 h-5 text-secondary" />
@@ -476,7 +476,7 @@ export default function StudentsPage() {
           {courseSummary && (
             <div className="flex flex-wrap gap-2 mb-4">
               <Badge variant="outline" className="text-secondary border-secondary/30">{courseSummary.total} Courses</Badge>
-              <Badge variant="outline" className="text-muted border-white/10">{courseSummary.totalCreditUnits} CU</Badge>
+              <Badge variant="outline" className="text-muted border-foreground/10">{courseSummary.totalCreditUnits} CU</Badge>
               {courseSummary.carryOver > 0 && <Badge className="bg-accent-gold/20 text-accent-gold">{courseSummary.carryOver} CO</Badge>}
               {courseSummary.spillover > 0 && <Badge className="bg-clash/20 text-clash">{courseSummary.spillover} Spillover</Badge>}
               {courseSummary.fyp > 0 && <Badge className="bg-primary/20 text-primary">{courseSummary.fyp} FYP</Badge>}
@@ -488,10 +488,10 @@ export default function StudentsPage() {
           {(session?.user?.role === 'TO' || session?.user?.role === 'IA' || session?.user?.role === 'SA') && (
             <div className="flex gap-2 mb-4">
               <Select value={addCourseId} onValueChange={setAddCourseId}>
-                <SelectTrigger className="flex-1 bg-white/5 border-white/10 text-white text-sm">
+                <SelectTrigger className="flex-1 bg-foreground/5 border-foreground/10 text-white text-sm">
                   <SelectValue placeholder="Add a course..." />
                 </SelectTrigger>
-                <SelectContent className="bg-muted border-white/10 max-h-48">
+                <SelectContent className="bg-muted border-foreground/10 max-h-48">
                   {allCourses
                     .filter(c => !studentCourses.some(sc => sc.course.id === c.id))
                     .map(c => (
@@ -524,7 +524,7 @@ export default function StudentsPage() {
                     reg.isCO ? 'border-accent-gold/30 bg-accent-gold/5'
                     : reg.isSpillover ? 'border-clash/30 bg-clash/5'
                     : reg.isFYP ? 'border-primary/30 bg-primary/5'
-                    : 'border-white/10 bg-white/5'
+                    : 'border-foreground/10 bg-foreground/5'
                   }`}
                 >
                   <div className="flex items-center justify-between">

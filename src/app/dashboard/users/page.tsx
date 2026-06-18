@@ -245,7 +245,7 @@ export default function UsersPage() {
               <MoreHorizontal className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-muted border-white/10">
+          <DropdownMenuContent align="end" className="bg-muted border-foreground/10">
             <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted">
               <Pencil className="w-4 h-4 mr-2" /> Edit
             </DropdownMenuItem>
@@ -277,7 +277,7 @@ export default function UsersPage() {
         loading={loading}
       />
 
-      <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
+      <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
         <CardContent className="pt-6">
           {loading ? (
             <div className="flex items-center justify-center py-12">
@@ -290,7 +290,7 @@ export default function UsersPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-muted border-white/10 text-white max-w-md">
+        <DialogContent className="bg-muted border-foreground/10 text-white max-w-md">
           <DialogHeader>
             <DialogTitle>{editingUser ? 'Edit User' : 'Add New User'}</DialogTitle>
             <DialogDescription className="text-muted">
@@ -304,7 +304,7 @@ export default function UsersPage() {
               <Input
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="bg-white/5 border-white/10 text-white"
+                className="bg-foreground/5 border-foreground/10 text-white"
               />
             </div>
             <div className="space-y-2">
@@ -313,7 +313,7 @@ export default function UsersPage() {
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="bg-white/5 border-white/10 text-white"
+                className="bg-foreground/5 border-foreground/10 text-white"
               />
             </div>
             {!editingUser && (
@@ -323,17 +323,17 @@ export default function UsersPage() {
                   type="password"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="bg-white/5 border-white/10 text-white"
+                  className="bg-foreground/5 border-foreground/10 text-white"
                 />
               </div>
             )}
             <div className="space-y-2">
               <Label className="text-muted">Role</Label>
               <Select value={formData.role} onValueChange={(v) => setFormData({ ...formData, role: v })}>
-                <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-muted border-white/10">
+                <SelectContent className="bg-muted border-foreground/10">
                   {Object.entries(roleLabels).map(([key, { label }]) => (
                     <SelectItem key={key} value={key} className="text-white">{label}</SelectItem>
                   ))}
@@ -344,10 +344,10 @@ export default function UsersPage() {
               <div className="space-y-2">
                 <Label className="text-muted">Institution</Label>
                 <Select value={formData.institutionId} onValueChange={(v) => setFormData({ ...formData, institutionId: v })}>
-                  <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white">
                     <SelectValue placeholder="Select institution" />
                   </SelectTrigger>
-                  <SelectContent className="bg-muted border-white/10">
+                  <SelectContent className="bg-muted border-foreground/10">
                     {institutions.map((i) => (
                       <SelectItem key={i.id} value={i.id} className="text-white">{i.name} ({i.shortName})</SelectItem>
                     ))}
@@ -358,7 +358,7 @@ export default function UsersPage() {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-white/10 text-muted">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-foreground/10 text-muted">
               Cancel
             </Button>
             <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-clash to-accent-gold">

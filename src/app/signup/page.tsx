@@ -131,7 +131,7 @@ export default function SignupPage() {
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Institution Info */}
-          <Card className="bg-white/5 border-white/10">
+          <Card className="bg-foreground/5 border-foreground/10">
             <CardHeader className="pb-4">
               <CardTitle className="text-lg text-white flex items-center gap-2">
                 <Building2 className="w-5 h-5 text-secondary" /> Institution Details
@@ -145,7 +145,7 @@ export default function SignupPage() {
                     value={form.institutionName}
                     onChange={e => set('institutionName', e.target.value)}
                     placeholder="e.g. Federal University of Technology Minna"
-                    className="bg-white/5 border-white/10 text-white placeholder:text-muted focus:border-secondary"
+                    className="bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary"
                     required
                   />
                 </div>
@@ -156,19 +156,19 @@ export default function SignupPage() {
                     onChange={e => set('shortName', e.target.value.toUpperCase())}
                     placeholder="e.g. FUTMINNA"
                     maxLength={20}
-                    className="bg-white/5 border-white/10 text-white placeholder:text-muted focus:border-secondary uppercase"
+                    className="bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary uppercase"
                     required
                   />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-muted">Institution Type *</Label>
                   <Select value={form.type} onValueChange={v => set('type', v)} required>
-                    <SelectTrigger className="bg-white/5 border-white/10 text-white focus:border-secondary">
+                    <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white focus:border-secondary">
                       <SelectValue placeholder="Select type..." />
                     </SelectTrigger>
-                    <SelectContent className="bg-muted border-white/10">
+                    <SelectContent className="bg-muted border-foreground/10">
                       {INST_TYPES.map(t => (
-                        <SelectItem key={t.value} value={t.value} className="text-white focus:bg-white/10">
+                        <SelectItem key={t.value} value={t.value} className="text-white focus:bg-foreground/10">
                           {t.label}
                         </SelectItem>
                       ))}
@@ -181,19 +181,19 @@ export default function SignupPage() {
                     value={form.city}
                     onChange={e => set('city', e.target.value)}
                     placeholder="e.g. Minna"
-                    className="bg-white/5 border-white/10 text-white placeholder:text-muted focus:border-secondary"
+                    className="bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary"
                     required
                   />
                 </div>
                 <div className="space-y-2">
                   <Label className="text-muted">State *</Label>
                   <Select value={form.state} onValueChange={v => set('state', v)} required>
-                    <SelectTrigger className="bg-white/5 border-white/10 text-white focus:border-secondary">
+                    <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white focus:border-secondary">
                       <SelectValue placeholder="Select state..." />
                     </SelectTrigger>
-                    <SelectContent className="bg-muted border-white/10 max-h-60 overflow-y-auto">
+                    <SelectContent className="bg-muted border-foreground/10 max-h-60 overflow-y-auto">
                       {NIGERIAN_STATES.map(s => (
-                        <SelectItem key={s} value={s} className="text-white focus:bg-white/10">{s}</SelectItem>
+                        <SelectItem key={s} value={s} className="text-white focus:bg-foreground/10">{s}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -211,7 +211,7 @@ export default function SignupPage() {
                     onChange={e => set('website', e.target.value)}
                     placeholder="https://yourschool.edu.ng"
                     type="url"
-                    className="bg-white/5 border-white/10 text-white placeholder:text-muted focus:border-secondary"
+                    className="bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary"
                   />
                 </div>
                 <div className="space-y-2">
@@ -222,7 +222,7 @@ export default function SignupPage() {
                     value={form.emailDomain}
                     onChange={e => set('emailDomain', e.target.value)}
                     placeholder="e.g. futminna.edu.ng"
-                    className="bg-white/5 border-white/10 text-white placeholder:text-muted focus:border-secondary"
+                    className="bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary"
                   />
                 </div>
               </div>
@@ -230,7 +230,7 @@ export default function SignupPage() {
           </Card>
 
           {/* Contact Info */}
-          <Card className="bg-white/5 border-white/10">
+          <Card className="bg-foreground/5 border-foreground/10">
             <CardHeader className="pb-4">
               <CardTitle className="text-lg text-white flex items-center gap-2">
                 <Mail className="w-5 h-5 text-secondary" /> Contact Person
@@ -247,7 +247,7 @@ export default function SignupPage() {
                     value={form.contactName}
                     onChange={e => set('contactName', e.target.value)}
                     placeholder="e.g. Dr. Amina Bello"
-                    className="bg-white/5 border-white/10 text-white placeholder:text-muted focus:border-secondary"
+                    className="bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary"
                     required
                   />
                 </div>
@@ -260,7 +260,7 @@ export default function SignupPage() {
                       onChange={e => set('contactEmail', e.target.value)}
                       type="email"
                       placeholder="admin@yourschool.edu.ng"
-                      className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-muted focus:border-secondary"
+                      className="pl-10 bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary"
                       required
                     />
                   </div>
@@ -275,7 +275,7 @@ export default function SignupPage() {
                     onChange={e => set('contactPhone', e.target.value)}
                     placeholder="+234 803 000 0000"
                     type="tel"
-                    className="bg-white/5 border-white/10 text-white placeholder:text-muted focus:border-secondary"
+                    className="bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary"
                   />
                 </div>
               </div>
@@ -290,7 +290,7 @@ export default function SignupPage() {
                   placeholder="Tell us about your current scheduling challenges..."
                   rows={3}
                   maxLength={1000}
-                  className="bg-white/5 border-white/10 text-white placeholder:text-muted focus:border-secondary resize-none"
+                  className="bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary resize-none"
                 />
                 <p className="text-muted text-xs text-right">{form.message.length}/1000</p>
               </div>

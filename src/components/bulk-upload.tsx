@@ -196,17 +196,17 @@ function EntityCard({
       className={`w-full text-left flex items-center gap-3 px-4 py-3.5 rounded-xl border transition-all duration-150 group ${
         selected
           ? `${cfg.bg} ${cfg.border} ring-1 ring-white/10`
-          : 'bg-white/[0.02] border-white/[0.06] hover:bg-white/[0.05] hover:border-white/10'
+          : 'bg-foreground/[0.03] border-white/[0.06] hover:bg-foreground/5 hover:border-foreground/10'
       }`}
     >
-      <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${selected ? cfg.bg : 'bg-white/5'} border ${selected ? cfg.border : 'border-white/10'}`}>
-        <Icon className={`w-4 h-4 ${selected ? cfg.color : 'text-white/30 group-hover:text-white/50'}`} />
+      <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${selected ? cfg.bg : 'bg-foreground/5'} border ${selected ? cfg.border : 'border-foreground/10'}`}>
+        <Icon className={`w-4 h-4 ${selected ? cfg.color : 'text-foreground/30 group-hover:text-foreground/50'}`} />
       </div>
       <div className="flex-1 min-w-0">
-        <div className={`text-sm font-semibold ${selected ? cfg.color : 'text-white/60 group-hover:text-white/80'}`}>
+        <div className={`text-sm font-semibold ${selected ? cfg.color : 'text-foreground/60 group-hover:text-foreground/80'}`}>
           {cfg.label}
         </div>
-        <div className="text-[10px] text-white/25 leading-tight mt-0.5 truncate">{cfg.description}</div>
+        <div className="text-[10px] text-foreground/25 leading-tight mt-0.5 truncate">{cfg.description}</div>
       </div>
       {selected && <ChevronRight className={`w-3.5 h-3.5 flex-shrink-0 ${cfg.color}`} />}
     </button>
@@ -243,8 +243,8 @@ function DropZone({
         file
           ? `${cfg.bg} ${cfg.border} cursor-default`
           : dragActive
-          ? `border-white/30 bg-white/5 cursor-copy`
-          : 'border-white/10 hover:border-white/20 hover:bg-white/[0.02] cursor-pointer'
+          ? `border-foreground/30 bg-foreground/5 cursor-copy`
+          : 'border-foreground/10 hover:border-foreground/20 hover:bg-foreground/[0.03] cursor-pointer'
       }`}
     >
       <input
@@ -263,7 +263,7 @@ function DropZone({
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-sm font-semibold text-white truncate">{file.name}</div>
-              <div className="text-xs text-white/35 mt-0.5">
+              <div className="text-xs text-foreground/35 mt-0.5">
                 {file.size < 1024
                   ? `${file.size} B`
                   : file.size < 1024 * 1024
@@ -275,21 +275,21 @@ function DropZone({
             </div>
             <button
               onClick={(e) => { e.stopPropagation(); onClear() }}
-              className="w-8 h-8 rounded-lg bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-white/40 hover:text-white transition-colors flex-shrink-0"
+              className="w-8 h-8 rounded-lg bg-foreground/5 hover:bg-foreground/10 border border-foreground/10 flex items-center justify-center text-foreground/40 hover:text-white transition-colors flex-shrink-0"
             >
               <X className="w-3.5 h-3.5" />
             </button>
           </div>
         ) : (
           <div className="text-center space-y-3">
-            <div className="w-14 h-14 rounded-2xl bg-white/[0.03] border border-white/10 flex items-center justify-center mx-auto">
-              <Upload className="w-7 h-7 text-white/20" />
+            <div className="w-14 h-14 rounded-2xl bg-foreground/[0.03] border border-foreground/10 flex items-center justify-center mx-auto">
+              <Upload className="w-7 h-7 text-foreground/20" />
             </div>
             <div>
-              <div className="text-sm font-medium text-white/60">
+              <div className="text-sm font-medium text-foreground/60">
                 {dragActive ? 'Drop it here' : 'Drag & drop your file'}
               </div>
-              <div className="text-xs text-white/25 mt-1">or click to browse · CSV, XLS, XLSX</div>
+              <div className="text-xs text-foreground/25 mt-1">or click to browse · CSV, XLS, XLSX</div>
             </div>
           </div>
         )}
@@ -308,8 +308,8 @@ function FieldPills({ fields, required }: { fields: string[]; required: string[]
             key={f}
             className={`inline-flex items-center gap-1 text-[10px] font-mono px-2 py-0.5 rounded-md border ${
               isReq
-                ? 'bg-white/8 border-white/15 text-white/70'
-                : 'bg-white/[0.03] border-white/8 text-white/30'
+                ? 'bg-foreground/8 border-foreground/15 text-foreground/70'
+                : 'bg-foreground/[0.03] border-foreground/8 text-foreground/30'
             }`}
           >
             {f}
@@ -334,7 +334,7 @@ function ResultPanel({ result, cfg }: { result: UploadResult; cfg: EntityConfig 
           <div className={`text-sm font-semibold ${allOk ? 'text-success' : 'text-accent-gold'}`}>
             {allOk ? 'All records imported successfully' : 'Import completed with warnings'}
           </div>
-          <div className="text-xs text-white/35 mt-0.5">
+          <div className="text-xs text-foreground/35 mt-0.5">
             {result.success} of {result.total} {cfg.label.toLowerCase()} added
           </div>
         </div>
@@ -344,11 +344,11 @@ function ResultPanel({ result, cfg }: { result: UploadResult; cfg: EntityConfig 
         {[
           { label: 'Total',   value: result.total,   color: 'text-white' },
           { label: 'Imported', value: result.success, color: 'text-success' },
-          { label: 'Failed',  value: result.failed,  color: result.failed > 0 ? 'text-clash' : 'text-white/30' },
+          { label: 'Failed',  value: result.failed,  color: result.failed > 0 ? 'text-clash' : 'text-foreground/30' },
         ].map((s) => (
-          <div key={s.label} className="rounded-xl bg-white/5 border border-white/10 py-3 text-center">
+          <div key={s.label} className="rounded-xl bg-foreground/5 border border-foreground/10 py-3 text-center">
             <div className={`text-xl font-bold ${s.color}`}>{s.value}</div>
-            <div className="text-[10px] text-white/30 mt-0.5 uppercase tracking-wide">{s.label}</div>
+            <div className="text-[10px] text-foreground/30 mt-0.5 uppercase tracking-wide">{s.label}</div>
           </div>
         ))}
       </div>
@@ -362,7 +362,7 @@ function ResultPanel({ result, cfg }: { result: UploadResult; cfg: EntityConfig 
             </div>
           ))}
           {result.errors.length >= 10 && (
-            <div className="text-[10px] text-white/25 text-center pt-1">Showing first 10 errors only</div>
+            <div className="text-[10px] text-foreground/25 text-center pt-1">Showing first 10 errors only</div>
           )}
         </div>
       )}
@@ -504,8 +504,8 @@ export function BulkUpload({
     <div className="flex flex-col sm:flex-row gap-0 h-full min-h-[520px]">
 
       {/* ── Left sidebar: entity selector */}
-      <div className="sm:w-52 flex-shrink-0 border-b sm:border-b-0 sm:border-r border-white/8 p-4 space-y-1.5 bg-white/[0.01]">
-        <div className="text-[10px] font-semibold text-white/25 uppercase tracking-widest px-1 pb-1">
+      <div className="sm:w-52 flex-shrink-0 border-b sm:border-b-0 sm:border-r border-foreground/8 p-4 space-y-1.5 bg-foreground/[0.03]">
+        <div className="text-[10px] font-semibold text-foreground/25 uppercase tracking-widest px-1 pb-1">
           What to upload
         </div>
         {visibleTypes.map((t) => (
@@ -522,12 +522,12 @@ export function BulkUpload({
       <div className="flex-1 flex flex-col overflow-y-auto">
 
         {/* Entity header */}
-        <div className={`px-6 py-4 border-b border-white/8 flex items-center justify-between gap-3 ${cfg.bg}`}>
+        <div className={`px-6 py-4 border-b border-foreground/8 flex items-center justify-between gap-3 ${cfg.bg}`}>
           <div className="flex items-center gap-3">
             <cfg.icon className={`w-5 h-5 ${cfg.color}`} />
             <div>
               <div className={`text-sm font-bold ${cfg.color}`}>{cfg.label}</div>
-              <div className="text-[11px] text-white/35 mt-0.5">{cfg.description}</div>
+              <div className="text-[11px] text-foreground/35 mt-0.5">{cfg.description}</div>
             </div>
           </div>
           <button
@@ -544,12 +544,12 @@ export function BulkUpload({
           {/* Field reference */}
           <div className="space-y-2">
             <div className="flex items-center justify-between">
-              <div className="text-[10px] font-semibold text-white/30 uppercase tracking-widest">
+              <div className="text-[10px] font-semibold text-foreground/30 uppercase tracking-widest">
                 Required columns
               </div>
               <button
                 onClick={() => setShowExample(!showExample)}
-                className="flex items-center gap-1 text-[10px] text-white/30 hover:text-white/60 transition-colors"
+                className="flex items-center gap-1 text-[10px] text-foreground/30 hover:text-foreground/60 transition-colors"
               >
                 <TableProperties className="w-3 h-3" />
                 {showExample ? 'Hide' : 'Preview'} example
@@ -560,12 +560,12 @@ export function BulkUpload({
 
           {/* Example preview */}
           {showExample && (
-            <div className="rounded-xl bg-black/30 border border-white/8 overflow-hidden">
-              <div className="px-3 py-2 border-b border-white/8 flex items-center gap-2">
-                <FileSpreadsheet className="w-3.5 h-3.5 text-white/30" />
-                <span className="text-[10px] text-white/30 font-mono">example.csv</span>
+            <div className="rounded-xl bg-black/30 border border-foreground/8 overflow-hidden">
+              <div className="px-3 py-2 border-b border-foreground/8 flex items-center gap-2">
+                <FileSpreadsheet className="w-3.5 h-3.5 text-foreground/30" />
+                <span className="text-[10px] text-foreground/30 font-mono">example.csv</span>
               </div>
-              <pre className="px-4 py-3 text-[10px] text-white/50 font-mono overflow-x-auto leading-relaxed whitespace-pre">
+              <pre className="px-4 py-3 text-[10px] text-foreground/50 font-mono overflow-x-auto leading-relaxed whitespace-pre">
                 {cfg.example}
               </pre>
             </div>
@@ -574,7 +574,7 @@ export function BulkUpload({
           {/* Tip */}
           <div className={`flex items-start gap-2.5 px-3 py-2.5 rounded-xl border ${cfg.bg} ${cfg.border}`}>
             <Info className={`w-3.5 h-3.5 ${cfg.color} flex-shrink-0 mt-0.5`} />
-            <p className="text-[11px] text-white/45 leading-relaxed">{cfg.tip}</p>
+            <p className="text-[11px] text-foreground/45 leading-relaxed">{cfg.tip}</p>
           </div>
 
           {/* Drop zone */}
@@ -592,13 +592,13 @@ export function BulkUpload({
           {status === 'uploading' && (
             <div className="space-y-2">
               <div className="flex items-center justify-between text-xs">
-                <span className="text-white/40 flex items-center gap-1.5">
+                <span className="text-foreground/40 flex items-center gap-1.5">
                   <Loader2 className="w-3 h-3 animate-spin" />
                   Uploading {cfg.label.toLowerCase()}…
                 </span>
                 <span className={cfg.color}>{progress}%</span>
               </div>
-              <Progress value={progress} className="h-1.5 bg-white/8" />
+              <Progress value={progress} className="h-1.5 bg-foreground/8" />
             </div>
           )}
 
@@ -621,15 +621,15 @@ export function BulkUpload({
         </div>
 
         {/* Footer actions */}
-        <div className="px-6 py-4 border-t border-white/8 bg-white/[0.01] flex items-center justify-between gap-3">
-          <div className="text-[10px] text-white/20">
+        <div className="px-6 py-4 border-t border-foreground/8 bg-foreground/[0.03] flex items-center justify-between gap-3">
+          <div className="text-[10px] text-foreground/20">
             {file ? `${file.name} ready` : 'No file selected'}
           </div>
           <div className="flex items-center gap-2">
             {(status === 'success' || status === 'error') && (
               <button
                 onClick={resetUpload}
-                className="flex items-center gap-1.5 text-xs text-white/40 hover:text-white/70 px-3 py-2 rounded-lg hover:bg-white/5 transition-colors"
+                className="flex items-center gap-1.5 text-xs text-foreground/40 hover:text-foreground/70 px-3 py-2 rounded-lg hover:bg-foreground/5 transition-colors"
               >
                 <ArrowLeft className="w-3 h-3" />
                 Upload another
@@ -652,7 +652,7 @@ export function BulkUpload({
 
   if (variant === 'inline') {
     return (
-      <div className="rounded-2xl border border-white/10 bg-card overflow-hidden">
+      <div className="rounded-2xl border border-foreground/10 bg-card overflow-hidden">
         <Panel />
       </div>
     )
@@ -669,14 +669,14 @@ export function BulkUpload({
       </button>
 
       <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) resetUpload() }}>
-        <DialogContent className="bg-card border-white/10 text-white p-0 max-w-3xl w-full max-h-[90vh] overflow-hidden rounded-2xl">
-          <DialogHeader className="px-6 py-4 border-b border-white/8">
+        <DialogContent className="bg-card border-foreground/10 text-white p-0 max-w-3xl w-full max-h-[90vh] overflow-hidden rounded-2xl">
+          <DialogHeader className="px-6 py-4 border-b border-foreground/8">
             <DialogTitle className="flex items-center gap-2.5 text-base">
               <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-secondary/20 to-secondary/20 border border-secondary/20 flex items-center justify-center">
                 <Upload className="w-3.5 h-3.5 text-secondary" />
               </div>
               Bulk Upload
-              <span className="text-white/25 font-normal text-sm ml-1">— Import data via CSV or Excel</span>
+              <span className="text-foreground/25 font-normal text-sm ml-1">— Import data via CSV or Excel</span>
             </DialogTitle>
           </DialogHeader>
           <div className="overflow-y-auto max-h-[calc(90vh-60px)]">
@@ -740,7 +740,7 @@ export function QuickUploadButton({
         disabled={uploading}
         className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-medium transition-all ${
           uploading
-            ? 'bg-white/5 border-white/8 text-white/30 cursor-not-allowed'
+            ? 'bg-foreground/5 border-foreground/8 text-foreground/30 cursor-not-allowed'
             : `${cfg.bg} ${cfg.border} ${cfg.color} hover:brightness-110`
         }`}
       >

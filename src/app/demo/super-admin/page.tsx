@@ -21,14 +21,14 @@ function StatCard({
   icon: React.ElementType; color: string;
 }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 space-y-3">
+    <div className="rounded-2xl border border-foreground/10 bg-foreground/[0.03] p-5 space-y-3">
       <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${color}`}>
         <Icon className="w-4 h-4 text-white" />
       </div>
       <div>
         <div className="text-2xl font-bold text-white">{value}</div>
-        <div className="text-sm text-white/50 mt-0.5">{label}</div>
-        {sub && <div className="text-xs text-white/30 mt-1">{sub}</div>}
+        <div className="text-sm text-foreground/50 mt-0.5">{label}</div>
+        {sub && <div className="text-xs text-foreground/30 mt-1">{sub}</div>}
       </div>
     </div>
   );
@@ -42,37 +42,37 @@ function OtherFacultyRow({
 }) {
   const [open, setOpen] = useState(false);
   return (
-    <div className="rounded-xl border border-white/10 overflow-hidden">
+    <div className="rounded-xl border border-foreground/10 overflow-hidden">
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between px-5 py-4 hover:bg-white/5 transition-colors text-left"
+        className="w-full flex items-center justify-between px-5 py-4 hover:bg-foreground/5 transition-colors text-left"
       >
         <div className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center">
-            <Building2 className="w-4 h-4 text-white/40" />
+          <div className="w-8 h-8 rounded-lg bg-foreground/5 border border-foreground/10 flex items-center justify-center">
+            <Building2 className="w-4 h-4 text-foreground/40" />
           </div>
           <div>
-            <div className="font-medium text-white/80 text-sm">{faculty.name}</div>
-            <div className="text-xs text-white/35 mt-0.5">{faculty.departments.length} departments</div>
+            <div className="font-medium text-foreground/80 text-sm">{faculty.name}</div>
+            <div className="text-xs text-foreground/35 mt-0.5">{faculty.departments.length} departments</div>
           </div>
         </div>
         {open ? (
-          <ChevronDown className="w-4 h-4 text-white/30 flex-shrink-0" />
+          <ChevronDown className="w-4 h-4 text-foreground/30 flex-shrink-0" />
         ) : (
-          <ChevronRight className="w-4 h-4 text-white/30 flex-shrink-0" />
+          <ChevronRight className="w-4 h-4 text-foreground/30 flex-shrink-0" />
         )}
       </button>
       {open && (
-        <div className="border-t border-white/10 px-5 py-3 bg-white/[0.02]">
+        <div className="border-t border-foreground/10 px-5 py-3 bg-foreground/[0.03]">
           <ul className="space-y-1.5">
             {faculty.departments.map((d) => (
-              <li key={d} className="flex items-center gap-2 text-sm text-white/45">
-                <span className="w-1 h-1 rounded-full bg-white/20" />
+              <li key={d} className="flex items-center gap-2 text-sm text-foreground/45">
+                <span className="w-1 h-1 rounded-full bg-foreground/20" />
                 {d}
               </li>
             ))}
           </ul>
-          <p className="text-xs text-white/20 mt-3 italic">
+          <p className="text-xs text-foreground/20 mt-3 italic">
             Presentation view only — full data available for Faculty of Physical &amp; Applied Sciences.
           </p>
         </div>
@@ -92,10 +92,10 @@ function SCIDeptCard({ dept }: { dept: (typeof DEPARTMENTS)[number] }) {
   const popRows = POPULATION_SUMMARY.filter(p => p.dept === dept.code);
 
   return (
-    <div className="rounded-2xl border border-white/10 overflow-hidden bg-white/[0.02]">
+    <div className="rounded-2xl border border-foreground/10 overflow-hidden bg-foreground/[0.03]">
       <button
         onClick={() => setOpen(!open)}
-        className="w-full flex items-center justify-between px-5 py-4 hover:bg-white/5 transition-colors text-left"
+        className="w-full flex items-center justify-between px-5 py-4 hover:bg-foreground/5 transition-colors text-left"
       >
         <div className="flex items-center gap-3">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-primary/30 to-secondary/30 border border-primary/20 flex items-center justify-center">
@@ -103,7 +103,7 @@ function SCIDeptCard({ dept }: { dept: (typeof DEPARTMENTS)[number] }) {
           </div>
           <div>
             <div className="font-semibold text-white text-sm">{dept.name}</div>
-            <div className="text-xs text-white/40 mt-0.5">
+            <div className="text-xs text-foreground/40 mt-0.5">
               {dept.code} · {dept.hodTitle}
             </div>
           </div>
@@ -111,42 +111,42 @@ function SCIDeptCard({ dept }: { dept: (typeof DEPARTMENTS)[number] }) {
         <div className="flex items-center gap-4">
           <div className="hidden sm:flex flex-col items-end">
             <span className="text-sm font-semibold text-white">{totalStudents}</span>
-            <span className="text-xs text-white/35">students</span>
+            <span className="text-xs text-foreground/35">students</span>
           </div>
           <div className="hidden sm:flex flex-col items-end">
             <span className="text-sm font-semibold text-white">{dept.totalLecturers}</span>
-            <span className="text-xs text-white/35">lecturers</span>
+            <span className="text-xs text-foreground/35">lecturers</span>
           </div>
           <div className="hidden md:flex flex-col items-end">
             <span className={`text-sm font-semibold ${
               parseInt(lecturerRatio) <= 7 ? "text-success" : "text-accent-gold"
             }`}>{lecturerRatio}</span>
-            <span className="text-xs text-white/35">ratio</span>
+            <span className="text-xs text-foreground/35">ratio</span>
           </div>
           {open ? (
-            <ChevronDown className="w-4 h-4 text-white/30" />
+            <ChevronDown className="w-4 h-4 text-foreground/30" />
           ) : (
-            <ChevronRight className="w-4 h-4 text-white/30" />
+            <ChevronRight className="w-4 h-4 text-foreground/30" />
           )}
         </div>
       </button>
 
       {open && (
-        <div className="border-t border-white/10 px-5 py-5 bg-white/[0.01] space-y-5">
+        <div className="border-t border-foreground/10 px-5 py-5 bg-foreground/[0.03] space-y-5">
           {/* HOD */}
-          <div className="flex items-center gap-3 p-3 rounded-xl bg-white/5 border border-white/10">
+          <div className="flex items-center gap-3 p-3 rounded-xl bg-foreground/5 border border-foreground/10">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-accent-gold to-accent-gold flex items-center justify-center text-xs font-bold text-white">
               {dept.hod.split(" ").slice(-1)[0][0]}
             </div>
             <div>
               <div className="text-sm font-medium text-white">{dept.hod}</div>
-              <div className="text-xs text-white/40">Head of Department · {dept.code}</div>
+              <div className="text-xs text-foreground/40">Head of Department · {dept.code}</div>
             </div>
           </div>
 
           {/* Student distribution by level */}
           <div>
-            <p className="text-xs font-semibold text-white/40 uppercase tracking-widest mb-3">Student Distribution</p>
+            <p className="text-xs font-semibold text-foreground/40 uppercase tracking-widest mb-3">Student Distribution</p>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {Object.entries(distribution).map(([level, count]) => {
                 const colors: Record<string, string> = {
@@ -161,7 +161,7 @@ function SCIDeptCard({ dept }: { dept: (typeof DEPARTMENTS)[number] }) {
                 return (
                   <div key={level} className={`rounded-xl bg-gradient-to-br border p-3 ${colors[level]}`}>
                     <div className="text-lg font-bold text-white">{count}</div>
-                    <div className="text-xs text-white/50">{level}</div>
+                    <div className="text-xs text-foreground/50">{level}</div>
                     {conflicts > 0 && (
                       <div className="mt-1.5 flex items-center gap-1 text-accent-gold text-[10px]">
                         <AlertTriangle className="w-3 h-3" />
@@ -176,15 +176,15 @@ function SCIDeptCard({ dept }: { dept: (typeof DEPARTMENTS)[number] }) {
 
           {/* Courses + Degree */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="rounded-xl bg-white/5 border border-white/10 p-3 space-y-1">
-              <div className="text-xs text-white/40">Courses Offered</div>
+            <div className="rounded-xl bg-foreground/5 border border-foreground/10 p-3 space-y-1">
+              <div className="text-xs text-foreground/40">Courses Offered</div>
               <div className="text-xl font-bold text-white">64</div>
-              <div className="text-xs text-white/30">8 per sem × 2 × 4 yrs</div>
+              <div className="text-xs text-foreground/30">8 per sem × 2 × 4 yrs</div>
             </div>
-            <div className="rounded-xl bg-white/5 border border-white/10 p-3 space-y-1">
-              <div className="text-xs text-white/40">Degree Awarded</div>
+            <div className="rounded-xl bg-foreground/5 border border-foreground/10 p-3 space-y-1">
+              <div className="text-xs text-foreground/40">Degree Awarded</div>
               <div className="text-sm font-semibold text-white">{dept.degreeAwarded}</div>
-              <div className="text-xs text-white/30">4-year programme</div>
+              <div className="text-xs text-foreground/30">4-year programme</div>
             </div>
           </div>
         </div>
@@ -225,7 +225,7 @@ export default function SuperAdminPage() {
               <span className="text-xs font-semibold text-primary uppercase tracking-widest">Super Admin</span>
             </div>
             <h1 className="text-2xl font-bold text-white">Institutional Overview</h1>
-            <p className="text-white/40 text-sm mt-1">Federal University of Konoha · 2024/2025 Session</p>
+            <p className="text-foreground/40 text-sm mt-1">Federal University of Konoha · 2024/2025 Session</p>
           </div>
           <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 border border-primary/20">
             <ShieldCheck className="w-4 h-4 text-primary" />
@@ -234,15 +234,15 @@ export default function SuperAdminPage() {
         </div>
 
         {/* ── Tabs ─────────────────────────────── */}
-        <div className="flex gap-1 bg-white/5 border border-white/10 rounded-xl p-1 w-fit flex-wrap">
+        <div className="flex gap-1 bg-foreground/5 border border-foreground/10 rounded-xl p-1 w-fit flex-wrap">
           {TABS.map(t => (
             <button
               key={t.id}
               onClick={() => setActiveTab(t.id)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 activeTab === t.id
-                  ? "bg-white/10 text-white shadow"
-                  : "text-white/40 hover:text-white/70"
+                  ? "bg-foreground/10 text-white shadow"
+                  : "text-foreground/40 hover:text-foreground/70"
               }`}
             >
               {t.label}
@@ -268,7 +268,7 @@ export default function SuperAdminPage() {
               <CheckCircle2 className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
               <div>
                 <div className="font-semibold text-success text-sm">Student–Lecturer Ratio: 7:1 Enforced</div>
-                <p className="text-sm text-white/50 mt-1">
+                <p className="text-sm text-foreground/50 mt-1">
                   All 12 departments in Faculty of Physical &amp; Applied Sciences maintain the NUC-mandated 7:1
                   student-to-lecturer ratio. ScheduleFlex monitors this in real time and alerts Institution Admin
                   when any department breaches the threshold.
@@ -278,7 +278,7 @@ export default function SuperAdminPage() {
 
             {/* Faculty grid (all 9) */}
             <div>
-              <h2 className="text-sm font-semibold text-white/40 uppercase tracking-widest mb-4">All Faculties — Quick View</h2>
+              <h2 className="text-sm font-semibold text-foreground/40 uppercase tracking-widest mb-4">All Faculties — Quick View</h2>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                 {/* Focus faculty card */}
                 <button
@@ -290,18 +290,18 @@ export default function SuperAdminPage() {
                     <ChevronRight className="w-4 h-4 text-primary group-hover:translate-x-0.5 transition-transform" />
                   </div>
                   <div className="font-semibold text-white text-sm">{FOCUS_FACULTY.name}</div>
-                  <div className="text-xs text-white/40 mt-1">12 departments · Full data available</div>
+                  <div className="text-xs text-foreground/40 mt-1">12 departments · Full data available</div>
                   <div className="mt-3 flex gap-2">
-                    <span className="text-xs px-2 py-0.5 rounded-md bg-white/10 text-white/50">{totalStudents} students</span>
-                    <span className="text-xs px-2 py-0.5 rounded-md bg-white/10 text-white/50">{FOCUS_FACULTY.totalLecturers} lecturers</span>
+                    <span className="text-xs px-2 py-0.5 rounded-md bg-foreground/10 text-foreground/50">{totalStudents} students</span>
+                    <span className="text-xs px-2 py-0.5 rounded-md bg-foreground/10 text-foreground/50">{FOCUS_FACULTY.totalLecturers} lecturers</span>
                   </div>
                 </button>
 
                 {OTHER_FACULTIES.map(f => (
-                  <div key={f.id} className="rounded-2xl border border-white/10 bg-white/[0.02] p-4">
-                    <div className="font-semibold text-white/70 text-sm">{f.name}</div>
-                    <div className="text-xs text-white/30 mt-1">{f.departments.length} departments</div>
-                    <div className="mt-2 text-[10px] text-white/20 italic">Click "All Faculties" tab to expand</div>
+                  <div key={f.id} className="rounded-2xl border border-foreground/10 bg-foreground/[0.03] p-4">
+                    <div className="font-semibold text-foreground/70 text-sm">{f.name}</div>
+                    <div className="text-xs text-foreground/30 mt-1">{f.departments.length} departments</div>
+                    <div className="mt-2 text-[10px] text-foreground/20 italic">Click "All Faculties" tab to expand</div>
                   </div>
                 ))}
               </div>
@@ -317,7 +317,7 @@ export default function SuperAdminPage() {
               <div className="flex items-start justify-between gap-4 flex-wrap">
                 <div>
                   <h2 className="text-lg font-bold text-white">{FOCUS_FACULTY.name}</h2>
-                  <p className="text-sm text-white/40 mt-1">Dean: {FOCUS_FACULTY.deanName} · Est. {FOCUS_FACULTY.established}</p>
+                  <p className="text-sm text-foreground/40 mt-1">Dean: {FOCUS_FACULTY.deanName} · Est. {FOCUS_FACULTY.established}</p>
                 </div>
                 <div className="grid grid-cols-3 gap-3">
                   {[
@@ -325,9 +325,9 @@ export default function SuperAdminPage() {
                     { label: "Students", v: totalStudents.toLocaleString() },
                     { label: "Lecturers", v: FOCUS_FACULTY.totalLecturers },
                   ].map(s => (
-                    <div key={s.label} className="rounded-xl bg-white/5 border border-white/10 p-3 text-center">
+                    <div key={s.label} className="rounded-xl bg-foreground/5 border border-foreground/10 p-3 text-center">
                       <div className="text-lg font-bold text-white">{s.v}</div>
-                      <div className="text-xs text-white/35">{s.label}</div>
+                      <div className="text-xs text-foreground/35">{s.label}</div>
                     </div>
                   ))}
                 </div>
@@ -336,7 +336,7 @@ export default function SuperAdminPage() {
 
             {/* Dept cards */}
             <div className="space-y-3">
-              <p className="text-xs font-semibold text-white/30 uppercase tracking-widest">
+              <p className="text-xs font-semibold text-foreground/30 uppercase tracking-widest">
                 12 Departments — Click to expand
               </p>
               {DEPARTMENTS.map(d => (
@@ -362,14 +362,14 @@ export default function SuperAdminPage() {
             </div>
 
             {/* Facility list */}
-            <div className="rounded-2xl border border-white/10 overflow-hidden">
-              <div className="px-5 py-3 border-b border-white/10 bg-white/[0.02]">
-                <p className="text-sm font-semibold text-white/60">All Facilities — Faculty of Physical &amp; Applied Sciences</p>
-                <p className="text-xs text-white/30 mt-0.5">Shared faculty pool. Not assigned at department level.</p>
+            <div className="rounded-2xl border border-foreground/10 overflow-hidden">
+              <div className="px-5 py-3 border-b border-foreground/10 bg-foreground/[0.03]">
+                <p className="text-sm font-semibold text-foreground/60">All Facilities — Faculty of Physical &amp; Applied Sciences</p>
+                <p className="text-xs text-foreground/30 mt-0.5">Shared faculty pool. Not assigned at department level.</p>
               </div>
               <div className="divide-y divide-white/5">
                 {LECTURE_FACILITIES.map(f => (
-                  <div key={f.id} className="flex items-center justify-between px-5 py-3 hover:bg-white/[0.02] transition-colors">
+                  <div key={f.id} className="flex items-center justify-between px-5 py-3 hover:bg-foreground/[0.03] transition-colors">
                     <div className="flex items-center gap-3">
                       <div className={`w-2 h-2 rounded-full ${
                         f.type === "Lecture Hall" ? "bg-secondary" :
@@ -377,18 +377,18 @@ export default function SuperAdminPage() {
                         f.type === "Computer Lab" ? "bg-primary" : "bg-accent-gold"
                       }`} />
                       <div>
-                        <div className="text-sm font-medium text-white/80">{f.name}</div>
-                        <div className="text-xs text-white/35">{f.type} · {f.floor} Floor</div>
+                        <div className="text-sm font-medium text-foreground/80">{f.name}</div>
+                        <div className="text-xs text-foreground/35">{f.type} · {f.floor} Floor</div>
                       </div>
                     </div>
                     <div className="flex items-center gap-3">
                       {f.dept && (
-                        <span className="text-[10px] px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-white/40">
+                        <span className="text-[10px] px-2 py-0.5 rounded-md bg-foreground/5 border border-foreground/10 text-foreground/40">
                           {f.dept}
                         </span>
                       )}
-                      <span className="text-sm font-semibold text-white/60">{f.capacity}</span>
-                      <span className="text-xs text-white/30">seats</span>
+                      <span className="text-sm font-semibold text-foreground/60">{f.capacity}</span>
+                      <span className="text-xs text-foreground/30">seats</span>
                     </div>
                   </div>
                 ))}
@@ -400,7 +400,7 @@ export default function SuperAdminPage() {
         {/* ══ ALL FACULTIES TAB ═════════════════ */}
         {activeTab === "allFaculties" && (
           <div className="space-y-3">
-            <p className="text-xs font-semibold text-white/30 uppercase tracking-widest">
+            <p className="text-xs font-semibold text-foreground/30 uppercase tracking-widest">
               All 9 Faculties — Department Lists
             </p>
             {/* Focus faculty */}
@@ -408,7 +408,7 @@ export default function SuperAdminPage() {
               <div className="flex items-center gap-2">
                 <Building2 className="w-4 h-4 text-primary" />
                 <span className="font-semibold text-primary text-sm">{FOCUS_FACULTY.name}</span>
-                <span className="text-xs text-white/30">(Full data — see Science tab)</span>
+                <span className="text-xs text-foreground/30">(Full data — see Science tab)</span>
               </div>
               <div className="mt-2 flex flex-wrap gap-1.5">
                 {DEPARTMENTS.map(d => (

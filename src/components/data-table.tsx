@@ -64,16 +64,16 @@ export function DataTable<TData, TValue>({
             placeholder={searchPlaceholder}
             value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ''}
             onChange={(e) => table.getColumn(searchKey)?.setFilterValue(e.target.value)}
-            className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-muted focus:border-secondary"
+            className="pl-10 bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary"
           />
         </div>
       )}
 
-      <div className="rounded-lg border border-white/10 overflow-hidden">
+      <div className="rounded-lg border border-foreground/10 overflow-hidden">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id} className="border-white/10 hover:bg-white/5">
+              <TableRow key={headerGroup.id} className="border-foreground/10 hover:bg-foreground/5">
                 {headerGroup.headers.map((header) => (
                   <TableHead key={header.id} className="text-muted font-medium">
                     {header.isPlaceholder
@@ -89,7 +89,7 @@ export function DataTable<TData, TValue>({
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
-                  className="border-white/10 hover:bg-white/5 data-[state=selected]:bg-white/10"
+                  className="border-foreground/10 hover:bg-foreground/5 data-[state=selected]:bg-foreground/10"
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id} className="text-white">
@@ -119,7 +119,7 @@ export function DataTable<TData, TValue>({
             size="sm"
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
-            className="border-white/10 text-muted hover:text-white hover:bg-white/5"
+            className="border-foreground/10 text-muted hover:text-white hover:bg-foreground/5"
           >
             <ChevronsLeft className="w-4 h-4" />
           </Button>
@@ -128,7 +128,7 @@ export function DataTable<TData, TValue>({
             size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
-            className="border-white/10 text-muted hover:text-white hover:bg-white/5"
+            className="border-foreground/10 text-muted hover:text-white hover:bg-foreground/5"
           >
             <ChevronLeft className="w-4 h-4" />
           </Button>
@@ -137,7 +137,7 @@ export function DataTable<TData, TValue>({
             size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
-            className="border-white/10 text-muted hover:text-white hover:bg-white/5"
+            className="border-foreground/10 text-muted hover:text-white hover:bg-foreground/5"
           >
             <ChevronRight className="w-4 h-4" />
           </Button>
@@ -146,7 +146,7 @@ export function DataTable<TData, TValue>({
             size="sm"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
-            className="border-white/10 text-muted hover:text-white hover:bg-white/5"
+            className="border-foreground/10 text-muted hover:text-white hover:bg-foreground/5"
           >
             <ChevronsRight className="w-4 h-4" />
           </Button>

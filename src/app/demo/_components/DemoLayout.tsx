@@ -42,7 +42,7 @@ function DemoLayoutInner({ children, activeRole, roleName, roleSubtitle, conflic
   const navInactiveText = darkMode ? "text-[#9089B8]" : "text-[#6B6190]";
 
   return (
-    <div className={`min-h-screen ${bg} ${text} flex`}>
+    <div className={`min-h-screen ${bg} ${text} flex ${darkMode ? "dark" : ""}`}>
       {sidebarOpen && (
         <div className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm md:hidden"
           onClick={() => setSidebarOpen(false)} />

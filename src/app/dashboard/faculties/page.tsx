@@ -178,7 +178,7 @@ export default function FacultiesPage() {
               <MoreHorizontal className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-muted border-white/10">
+          <DropdownMenuContent align="end" className="bg-muted border-foreground/10">
             <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted focus:text-white">
               <Pencil className="w-4 h-4 mr-2" />
               Edit
@@ -212,7 +212,7 @@ export default function FacultiesPage() {
         loading={loading}
       />
 
-      <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
+      <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
         <CardContent className="pt-6">
           {loading ? (
             <div className="flex items-center justify-center py-12">
@@ -225,7 +225,7 @@ export default function FacultiesPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-muted border-white/10 text-white">
+        <DialogContent className="bg-muted border-foreground/10 text-white">
           <DialogHeader>
             <DialogTitle>{editingFaculty ? 'Edit Faculty' : 'Add New Faculty'}</DialogTitle>
             <DialogDescription className="text-muted">
@@ -240,7 +240,7 @@ export default function FacultiesPage() {
                 <Input
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="bg-white/5 border-white/10 text-white"
+                  className="bg-foreground/5 border-foreground/10 text-white"
                   placeholder="e.g., Faculty of Applied Sciences"
                 />
               </div>
@@ -249,7 +249,7 @@ export default function FacultiesPage() {
                 <Input
                   value={formData.code}
                   onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
-                  className="bg-white/5 border-white/10 text-white"
+                  className="bg-foreground/5 border-foreground/10 text-white"
                   placeholder="e.g., FAS"
                   maxLength={10}
                 />
@@ -260,7 +260,7 @@ export default function FacultiesPage() {
               <Input
                 value={formData.deanName}
                 onChange={(e) => setFormData({ ...formData, deanName: e.target.value })}
-                className="bg-white/5 border-white/10 text-white"
+                className="bg-foreground/5 border-foreground/10 text-white"
                 placeholder="e.g., Prof. John Doe"
               />
             </div>
@@ -269,14 +269,14 @@ export default function FacultiesPage() {
               <Input
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="bg-white/5 border-white/10 text-white"
+                className="bg-foreground/5 border-foreground/10 text-white"
                 placeholder="Optional description"
               />
             </div>
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-white/10 text-muted">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-foreground/10 text-muted">
               Cancel
             </Button>
             <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-primary to-clash">

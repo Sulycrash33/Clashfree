@@ -191,7 +191,7 @@ export default function CoursesPage() {
       accessorKey: 'level',
       header: 'Level',
       cell: ({ row }) => (
-        <Badge variant="secondary" className="bg-white/10 text-muted">
+        <Badge variant="secondary" className="bg-foreground/10 text-muted">
           {row.getValue('level')} Level
         </Badge>
       ),
@@ -233,7 +233,7 @@ export default function CoursesPage() {
               <MoreHorizontal className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-muted border-white/10">
+          <DropdownMenuContent align="end" className="bg-muted border-foreground/10">
             <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted">
               <Pencil className="w-4 h-4 mr-2" /> Edit
             </DropdownMenuItem>
@@ -265,7 +265,7 @@ export default function CoursesPage() {
         loading={loading}
       />
 
-      <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
+      <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
         <CardContent className="pt-6">
           {loading ? (
             <div className="flex items-center justify-center py-12">
@@ -278,7 +278,7 @@ export default function CoursesPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-muted border-white/10 text-white max-w-xl">
+        <DialogContent className="bg-muted border-foreground/10 text-white max-w-xl">
           <DialogHeader>
             <DialogTitle>{editingCourse ? 'Edit Course' : 'Add New Course'}</DialogTitle>
             <DialogDescription className="text-muted">
@@ -293,17 +293,17 @@ export default function CoursesPage() {
                 <Input
                   value={formData.code}
                   onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
-                  className="bg-white/5 border-white/10 text-white font-mono"
+                  className="bg-foreground/5 border-foreground/10 text-white font-mono"
                   placeholder="e.g., CSC 201"
                 />
               </div>
               <div className="space-y-2">
                 <Label className="text-muted">Credit Units</Label>
                 <Select value={formData.creditUnits} onValueChange={(v) => setFormData({ ...formData, creditUnits: v })}>
-                  <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-muted border-white/10">
+                  <SelectContent className="bg-muted border-foreground/10">
                     {[1, 2, 3, 4, 5, 6].map((n) => (
                       <SelectItem key={n} value={n.toString()} className="text-white">{n} CU</SelectItem>
                     ))}
@@ -316,7 +316,7 @@ export default function CoursesPage() {
               <Input
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="bg-white/5 border-white/10 text-white"
+                className="bg-foreground/5 border-foreground/10 text-white"
                 placeholder="e.g., Data Structures and Algorithms"
               />
             </div>
@@ -324,10 +324,10 @@ export default function CoursesPage() {
               <div className="space-y-2">
                 <Label className="text-muted">Department</Label>
                 <Select value={formData.departmentId} onValueChange={(v) => setFormData({ ...formData, departmentId: v })}>
-                  <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white">
                     <SelectValue placeholder="Select department" />
                   </SelectTrigger>
-                  <SelectContent className="bg-muted border-white/10">
+                  <SelectContent className="bg-muted border-foreground/10">
                     {departments.map((d) => (
                       <SelectItem key={d.id} value={d.id} className="text-white">{d.name} ({d.code})</SelectItem>
                     ))}
@@ -337,10 +337,10 @@ export default function CoursesPage() {
               <div className="space-y-2">
                 <Label className="text-muted">Level</Label>
                 <Select value={formData.level} onValueChange={(v) => setFormData({ ...formData, level: v })}>
-                  <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-muted border-white/10">
+                  <SelectContent className="bg-muted border-foreground/10">
                     {levels.map((l) => (
                       <SelectItem key={l} value={l.toString()} className="text-white">{l} Level</SelectItem>
                     ))}
@@ -352,10 +352,10 @@ export default function CoursesPage() {
               <div className="space-y-2">
                 <Label className="text-muted">Semester</Label>
                 <Select value={formData.semester} onValueChange={(v) => setFormData({ ...formData, semester: v })}>
-                  <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-muted border-white/10">
+                  <SelectContent className="bg-muted border-foreground/10">
                     <SelectItem value="1" className="text-white">First Semester</SelectItem>
                     <SelectItem value="2" className="text-white">Second Semester</SelectItem>
                   </SelectContent>
@@ -375,7 +375,7 @@ export default function CoursesPage() {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-white/10 text-muted">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-foreground/10 text-muted">
               Cancel
             </Button>
             <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-accent-gold to-accent-gold">

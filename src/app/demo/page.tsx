@@ -120,15 +120,15 @@ export default function DemoLandingPage() {
   return (
     <div className="min-h-screen bg-background text-white">
       {/* ── Header ─────────────────────────────── */}
-      <header className="border-b border-white/10 bg-card/80 backdrop-blur-md sticky top-0 z-50">
+      <header className="border-b border-foreground/10 bg-card/80 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
               <CalendarClock className="w-4 h-4 text-white" />
             </div>
             <span className="font-semibold text-white tracking-tight">ScheduleFlex</span>
-            <span className="text-white/30 text-sm">·</span>
-            <span className="text-white/50 text-sm">Live Demo</span>
+            <span className="text-foreground/30 text-sm">·</span>
+            <span className="text-foreground/50 text-sm">Live Demo</span>
           </div>
           <div className="flex items-center gap-2">
             <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-success/15 border border-success/30 text-success text-xs font-medium">
@@ -144,7 +144,7 @@ export default function DemoLandingPage() {
         {/* ── Hero ───────────────────────────────── */}
         <section className="text-center space-y-6 pt-4">
           {/* University badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 text-sm text-white/70">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-foreground/5 border border-foreground/10 text-sm text-foreground/70">
             <Building2 className="w-4 h-4 text-primary" />
             Federal University of Konoha (FEDKO) — Demo Institution
           </div>
@@ -156,7 +156,7 @@ export default function DemoLandingPage() {
             </span>
           </h1>
 
-          <p className="max-w-2xl mx-auto text-lg text-white/60 leading-relaxed">
+          <p className="max-w-2xl mx-auto text-lg text-foreground/60 leading-relaxed">
             A fully populated Nigerian university demo — 9 faculties, 12 science departments,
             real CCMAS courses, live conflict detection. Pick a role below to explore.
           </p>
@@ -172,10 +172,10 @@ export default function DemoLandingPage() {
             ].map((s) => (
               <div
                 key={s.label}
-                className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-center"
+                className="px-4 py-2 rounded-xl bg-foreground/5 border border-foreground/10 text-center"
               >
                 <div className="text-xl font-bold text-white">{s.value}</div>
-                <div className="text-xs text-white/40 mt-0.5">{s.label}</div>
+                <div className="text-xs text-foreground/40 mt-0.5">{s.label}</div>
               </div>
             ))}
           </div>
@@ -183,7 +183,7 @@ export default function DemoLandingPage() {
 
         {/* ── Role Cards ─────────────────────────── */}
         <section className="space-y-4">
-          <h2 className="text-sm font-semibold text-white/40 uppercase tracking-widest text-center">
+          <h2 className="text-sm font-semibold text-foreground/40 uppercase tracking-widest text-center">
             Select Access Role
           </h2>
 
@@ -200,7 +200,7 @@ export default function DemoLandingPage() {
                   onMouseLeave={() => setHoveredRole(null)}
                   className={`
                     relative group text-left rounded-2xl border p-6 transition-all duration-300 cursor-pointer
-                    bg-white/[0.03] hover:bg-white/[0.07]
+                    bg-foreground/[0.03] hover:bg-foreground/7
                     ${role.border}
                     ${isHovered ? "shadow-2xl scale-[1.02]" : ""}
                   `}
@@ -230,18 +230,18 @@ export default function DemoLandingPage() {
                     {/* Label */}
                     <div>
                       <div className="font-semibold text-white text-base">{role.label}</div>
-                      <div className="text-xs text-white/40 mt-0.5">{role.sublabel}</div>
+                      <div className="text-xs text-foreground/40 mt-0.5">{role.sublabel}</div>
                     </div>
 
                     {/* Description */}
-                    <p className="text-sm text-white/55 leading-relaxed">{role.description}</p>
+                    <p className="text-sm text-foreground/55 leading-relaxed">{role.description}</p>
 
                     {/* Stats */}
                     <div className="flex flex-wrap gap-1.5">
                       {role.stats.map((s) => (
                         <span
                           key={s}
-                          className="text-xs px-2 py-0.5 rounded-md bg-white/5 border border-white/10 text-white/50"
+                          className="text-xs px-2 py-0.5 rounded-md bg-foreground/5 border border-foreground/10 text-foreground/50"
                         >
                           {s}
                         </span>
@@ -249,7 +249,7 @@ export default function DemoLandingPage() {
                     </div>
 
                     {/* CTA */}
-                    <div className="flex items-center gap-1 text-sm font-medium text-white/60 group-hover:text-white transition-colors">
+                    <div className="flex items-center gap-1 text-sm font-medium text-foreground/60 group-hover:text-white transition-colors">
                       <span>Enter as {role.label}</span>
                       <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </div>
@@ -261,10 +261,10 @@ export default function DemoLandingPage() {
         </section>
 
         {/* ── Capabilities ───────────────────────── */}
-        <section className="rounded-2xl border border-white/10 bg-white/[0.02] p-8 space-y-6">
+        <section className="rounded-2xl border border-foreground/10 bg-foreground/[0.03] p-8 space-y-6">
           <div className="text-center space-y-1">
             <h3 className="font-semibold text-white">What this demo showcases</h3>
-            <p className="text-sm text-white/40">Every feature is powered by real FEDKO data</p>
+            <p className="text-sm text-foreground/40">Every feature is powered by real FEDKO data</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {CAPABILITIES.map((cap) => {
@@ -272,7 +272,7 @@ export default function DemoLandingPage() {
               return (
                 <div key={cap.text} className="flex items-start gap-3">
                   <Icon className={`w-4 h-4 mt-0.5 flex-shrink-0 ${cap.color}`} />
-                  <span className="text-sm text-white/65">{cap.text}</span>
+                  <span className="text-sm text-foreground/65">{cap.text}</span>
                 </div>
               );
             })}
@@ -280,7 +280,7 @@ export default function DemoLandingPage() {
         </section>
 
         {/* ── Disclaimer ─────────────────────────── */}
-        <p className="text-center text-xs text-white/25 pb-4">
+        <p className="text-center text-xs text-foreground/25 pb-4">
           FEDKO is a fictional demo institution. All data is hardcoded for presentation purposes only.
           This section is isolated from production and will be removed after investor/stakeholder demonstrations.
         </p>

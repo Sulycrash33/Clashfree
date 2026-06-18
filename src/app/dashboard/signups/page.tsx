@@ -109,16 +109,16 @@ export default function SignupsPage() {
         </div>
         <div className="flex gap-2">
           <Select value={filter} onValueChange={setFilter}>
-            <SelectTrigger className="bg-white/5 border-white/10 text-white w-40">
+            <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white w-40">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="bg-muted border-white/10">
-              <SelectItem value="PENDING" className="text-white focus:bg-white/10">Pending</SelectItem>
-              <SelectItem value="APPROVED" className="text-white focus:bg-white/10">Approved</SelectItem>
-              <SelectItem value="REJECTED" className="text-white focus:bg-white/10">Rejected</SelectItem>
+            <SelectContent className="bg-muted border-foreground/10">
+              <SelectItem value="PENDING" className="text-white focus:bg-foreground/10">Pending</SelectItem>
+              <SelectItem value="APPROVED" className="text-white focus:bg-foreground/10">Approved</SelectItem>
+              <SelectItem value="REJECTED" className="text-white focus:bg-foreground/10">Rejected</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" onClick={load} className="border-white/20 text-white hover:bg-white/10 gap-2">
+          <Button variant="outline" onClick={load} className="border-foreground/20 text-white hover:bg-foreground/10 gap-2">
             <RefreshCw className="w-4 h-4" /> Refresh
           </Button>
         </div>
@@ -135,7 +135,7 @@ export default function SignupsPage() {
           <Loader2 className="w-8 h-8 text-secondary animate-spin" />
         </div>
       ) : signups.length === 0 ? (
-        <Card className="bg-white/5 border-white/10">
+        <Card className="bg-foreground/5 border-foreground/10">
           <CardContent className="py-16 text-center">
             <Building2 className="w-10 h-10 text-muted mx-auto mb-3" />
             <p className="text-muted">No {filter.toLowerCase()} applications</p>
@@ -146,7 +146,7 @@ export default function SignupsPage() {
           {signups.map(s => {
             const sc = STATUS_CONFIG[s.status]
             return (
-              <Card key={s.id} className="bg-white/5 border-white/10 hover:border-white/20 transition-colors">
+              <Card key={s.id} className="bg-foreground/5 border-foreground/10 hover:border-foreground/20 transition-colors">
                 <CardHeader className="pb-3">
                   <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
                     <div>
@@ -189,7 +189,7 @@ export default function SignupsPage() {
                   </div>
 
                   {s.message && (
-                    <div className="bg-muted/50 border border-white/5 rounded-lg px-3 py-2 text-sm text-muted italic">
+                    <div className="bg-muted/50 border border-foreground/5 rounded-lg px-3 py-2 text-sm text-muted italic">
                       "{s.message}"
                     </div>
                   )}
@@ -236,7 +236,7 @@ export default function SignupsPage() {
 
       {/* Reject Modal */}
       <Dialog open={!!rejectModal} onOpenChange={() => { setRejectModal(null); setRejectReason('') }}>
-        <DialogContent className="bg-muted border-white/10 text-white">
+        <DialogContent className="bg-muted border-foreground/10 text-white">
           <DialogHeader>
             <DialogTitle>Reject Application</DialogTitle>
           </DialogHeader>
@@ -249,12 +249,12 @@ export default function SignupsPage() {
                 onChange={e => setRejectReason(e.target.value)}
                 placeholder="e.g. Incomplete information provided. Please reapply with full institution details."
                 rows={3}
-                className="bg-white/5 border-white/10 text-white placeholder:text-muted resize-none"
+                className="bg-foreground/5 border-foreground/10 text-white placeholder:text-muted resize-none"
               />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setRejectModal(null)} className="border-white/20 text-white hover:bg-white/10">Cancel</Button>
+            <Button variant="outline" onClick={() => setRejectModal(null)} className="border-foreground/20 text-white hover:bg-foreground/10">Cancel</Button>
             <Button onClick={handleReject} className="bg-clash/20 hover:bg-clash/30 text-clash border border-clash/20" disabled={!!processing}>
               {processing ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
               Confirm Reject

@@ -165,7 +165,7 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
           'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
           isActive
             ? 'bg-secondary/10 text-secondary border border-secondary/20'
-            : 'text-muted hover:text-white hover:bg-white/5'
+            : 'text-muted hover:text-white hover:bg-foreground/5'
         )}
         onClick={onClick}
       >
@@ -178,9 +178,9 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
   return (
     <>
       {/* ── Desktop Sidebar ─────────────────────────────────── */}
-      <aside className="hidden lg:flex fixed left-0 top-0 z-40 h-screen w-64 bg-muted border-r border-white/10 flex-col">
+      <aside className="hidden lg:flex fixed left-0 top-0 z-40 h-screen w-64 bg-muted border-r border-foreground/10 flex-col">
         {/* Logo */}
-        <div className="p-4 border-b border-white/10">
+        <div className="p-4 border-b border-foreground/10">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-secondary flex items-center justify-center font-bold text-white">
               CF
@@ -198,7 +198,7 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
         </nav>
 
         {/* User */}
-        <div className="p-4 border-t border-white/10">
+        <div className="p-4 border-t border-foreground/10">
           <div className="flex items-center gap-3 mb-3">
             <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-clash flex items-center justify-center text-sm font-bold text-white shrink-0">
               {(session.user as { name?: string }).name?.charAt(0) || 'U'}
@@ -211,7 +211,7 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
           <Button
             variant="ghost"
             size="sm"
-            className="w-full justify-start text-muted hover:text-white hover:bg-white/5 h-9"
+            className="w-full justify-start text-muted hover:text-white hover:bg-foreground/5 h-9"
             onClick={handleSignOut}
           >
             <LogOut className="w-4 h-4 mr-2" /> Sign Out
@@ -220,9 +220,9 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
       </aside>
 
       {/* ── Mobile Top Bar ──────────────────────────────────── */}
-      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 h-14 bg-muted/95 backdrop-blur-sm border-b border-white/10 flex items-center px-4 gap-3">
+      <div className="lg:hidden fixed top-0 left-0 right-0 z-40 h-14 bg-muted/95 backdrop-blur-sm border-b border-foreground/10 flex items-center px-4 gap-3">
         <button
-          className="p-2 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
+          className="p-2 rounded-lg bg-foreground/5 hover:bg-foreground/10 transition-colors"
           onClick={() => setMobileOpen(true)}
           aria-label="Open menu"
         >
@@ -248,13 +248,13 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
       {/* ── Mobile Drawer ───────────────────────────────────── */}
       <aside
         className={cn(
-          'lg:hidden fixed left-0 top-0 z-50 h-screen w-72 bg-muted border-r border-white/10 flex flex-col',
+          'lg:hidden fixed left-0 top-0 z-50 h-screen w-72 bg-muted border-r border-foreground/10 flex flex-col',
           'transition-transform duration-300 ease-out',
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         )}
       >
         {/* Drawer header */}
-        <div className="p-4 border-b border-white/10 flex items-center justify-between">
+        <div className="p-4 border-b border-foreground/10 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-secondary to-secondary flex items-center justify-center font-bold text-white text-sm">CF</div>
             <div>
@@ -263,7 +263,7 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
             </div>
           </div>
           <button
-            className="p-1.5 rounded-lg hover:bg-white/10 text-muted hover:text-white transition-colors"
+            className="p-1.5 rounded-lg hover:bg-foreground/10 text-muted hover:text-white transition-colors"
             onClick={() => setMobileOpen(false)}
           >
             <X className="w-5 h-5" />
@@ -271,7 +271,7 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
         </div>
 
         {/* User card */}
-        <div className="px-4 py-3 border-b border-white/10 bg-white/3">
+        <div className="px-4 py-3 border-b border-foreground/10 bg-foreground/3">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-clash flex items-center justify-center text-sm font-bold text-white shrink-0">
               {(session.user as { name?: string }).name?.charAt(0) || 'U'}
@@ -291,10 +291,10 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
         </nav>
 
         {/* Sign out */}
-        <div className="p-4 border-t border-white/10">
+        <div className="p-4 border-t border-foreground/10">
           <Button
             variant="ghost"
-            className="w-full justify-start text-muted hover:text-white hover:bg-white/5"
+            className="w-full justify-start text-muted hover:text-white hover:bg-foreground/5"
             onClick={handleSignOut}
           >
             <LogOut className="w-4 h-4 mr-2" /> Sign Out
@@ -303,7 +303,7 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
       </aside>
 
       {/* ── Mobile Bottom Nav ───────────────────────────────── */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 h-16 bg-muted/95 backdrop-blur-sm border-t border-white/10 flex items-center justify-around px-2">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-40 h-16 bg-muted/95 backdrop-blur-sm border-t border-foreground/10 flex items-center justify-around px-2">
         {bottomItems.map(item => {
           const isActive = pathname === item.href
           return (

@@ -91,7 +91,7 @@ function AcceptInviteForm() {
           <h2 className="text-2xl font-bold">Invalid or Expired Link</h2>
           <p className="text-muted">{info?.error || 'This invite link is no longer valid. Contact your administrator for a new invite.'}</p>
           <Link href="/login">
-            <Button variant="outline" className="border-white/20 text-white hover:bg-white/10">Go to Login</Button>
+            <Button variant="outline" className="border-foreground/20 text-white hover:bg-foreground/10">Go to Login</Button>
           </Link>
         </div>
       </div>
@@ -128,7 +128,7 @@ function AcceptInviteForm() {
           </div>
         </div>
 
-        <Card className="bg-white/5 border-white/10 backdrop-blur-xl">
+        <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-xl">
           <CardHeader className="space-y-3 pb-4">
             <CardTitle className="text-2xl font-bold">Accept Invitation</CardTitle>
             <CardDescription className="text-muted">
@@ -166,7 +166,7 @@ function AcceptInviteForm() {
                     value={form.name}
                     onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
                     placeholder="Dr. Amina Bello"
-                    className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-muted focus:border-secondary"
+                    className="pl-10 bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary"
                     required
                   />
                 </div>
@@ -181,7 +181,7 @@ function AcceptInviteForm() {
                     onChange={e => setForm(p => ({ ...p, password: e.target.value }))}
                     type="password"
                     placeholder="Min 8 characters"
-                    className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-muted focus:border-secondary"
+                    className="pl-10 bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary"
                     required minLength={8}
                   />
                 </div>
@@ -196,7 +196,7 @@ function AcceptInviteForm() {
                     onChange={e => setForm(p => ({ ...p, confirmPassword: e.target.value }))}
                     type="password"
                     placeholder="Repeat password"
-                    className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-muted focus:border-secondary"
+                    className="pl-10 bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary"
                     required
                   />
                 </div>

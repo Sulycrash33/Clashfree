@@ -230,17 +230,17 @@ export default function ConflictsPage() {
       />
 
       {/* Control Panel */}
-      <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
+      <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
         <CardContent className="pt-6">
           <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <div className="space-y-1">
                 <label className="text-sm text-muted">Exam Period</label>
                 <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
-                  <SelectTrigger className="w-64 bg-white/5 border-white/10 text-white">
+                  <SelectTrigger className="w-64 bg-foreground/5 border-foreground/10 text-white">
                     <SelectValue placeholder="Select exam period" />
                   </SelectTrigger>
-                  <SelectContent className="bg-muted border-white/10">
+                  <SelectContent className="bg-muted border-foreground/10">
                     {examPeriods.map((p) => (
                       <SelectItem key={p.id} value={p.id} className="text-white">
                         {p.name} - {p.session} Sem {p.semester}
@@ -276,7 +276,7 @@ export default function ConflictsPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card className="bg-white/5 border-white/10">
+        <Card className="bg-foreground/5 border-foreground/10">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-clash/20 to-accent-gold/20 flex items-center justify-center">
@@ -289,7 +289,7 @@ export default function ConflictsPage() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white/5 border-white/10">
+        <Card className="bg-foreground/5 border-foreground/10">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-clash/20 flex items-center justify-center">
@@ -302,7 +302,7 @@ export default function ConflictsPage() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white/5 border-white/10">
+        <Card className="bg-foreground/5 border-foreground/10">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-accent-gold/20 flex items-center justify-center">
@@ -315,7 +315,7 @@ export default function ConflictsPage() {
             </div>
           </CardContent>
         </Card>
-        <Card className="bg-white/5 border-white/10">
+        <Card className="bg-foreground/5 border-foreground/10">
           <CardContent className="pt-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-success/20 flex items-center justify-center">
@@ -332,7 +332,7 @@ export default function ConflictsPage() {
 
       {/* CO Statistics */}
       {coStats && (
-        <Card className="bg-white/5 border-white/10">
+        <Card className="bg-foreground/5 border-foreground/10">
           <CardHeader>
             <CardTitle className="text-white flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-secondary" />
@@ -342,15 +342,15 @@ export default function ConflictsPage() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="text-center p-4 bg-white/5 rounded-lg">
+              <div className="text-center p-4 bg-foreground/5 rounded-lg">
                 <div className="text-3xl font-bold text-white">{coStats.studentsWithCOs}</div>
                 <div className="text-sm text-muted">Students with COs</div>
               </div>
-              <div className="text-center p-4 bg-white/5 rounded-lg">
+              <div className="text-center p-4 bg-foreground/5 rounded-lg">
                 <div className="text-3xl font-bold text-white">{coStats.studentsWithSpillover}</div>
                 <div className="text-sm text-muted">Students with Spillovers</div>
               </div>
-              <div className="text-center p-4 bg-white/5 rounded-lg">
+              <div className="text-center p-4 bg-foreground/5 rounded-lg">
                 <div className="text-3xl font-bold text-white">{coStats.totalStudents}</div>
                 <div className="text-sm text-muted">Total Students</div>
               </div>
@@ -360,7 +360,7 @@ export default function ConflictsPage() {
                 <h4 className="text-sm font-medium text-muted mb-3">Top CO Courses</h4>
                 <div className="flex flex-wrap gap-2">
                   {coStats.coCoursesBreakdown.slice(0, 8).map(({ courseCode, count }) => (
-                    <Badge key={courseCode} variant="outline" className="border-white/10 text-muted">
+                    <Badge key={courseCode} variant="outline" className="border-foreground/10 text-muted">
                       {courseCode}: {count} students
                     </Badge>
                   ))}
@@ -372,7 +372,7 @@ export default function ConflictsPage() {
       )}
 
       {/* Filters */}
-      <Card className="bg-white/5 border-white/10">
+      <Card className="bg-foreground/5 border-foreground/10">
         <CardContent className="pt-4">
           <div className="flex items-center gap-2">
             <span className="text-sm text-muted">Filter:</span>
@@ -384,7 +384,7 @@ export default function ConflictsPage() {
                 onClick={() => setFilter(f as any)}
                 className={filter === f
                   ? 'bg-secondary text-white'
-                  : 'border-white/10 text-muted hover:text-white'
+                  : 'border-foreground/10 text-muted hover:text-white'
                 }
               >
                 {f === 'all' ? 'All' : f.charAt(0) + f.slice(1).toLowerCase()}
@@ -401,7 +401,7 @@ export default function ConflictsPage() {
             <Loader2 className="w-8 h-8 animate-spin text-secondary" />
           </div>
         ) : filteredConflicts.length === 0 ? (
-          <Card className="bg-white/5 border-white/10">
+          <Card className="bg-foreground/5 border-foreground/10">
             <CardContent className="py-12 text-center">
               <CheckCircle2 className="w-12 h-12 mx-auto text-success mb-4" />
               <p className="text-white font-medium">No conflicts detected</p>
@@ -413,7 +413,7 @@ export default function ConflictsPage() {
             const typeInfo = conflictTypes[conflict.type] || { label: conflict.type, color: 'text-muted', icon: AlertCircle }
             const IconComponent = typeInfo.icon
             return (
-              <Card key={conflict.id} className="bg-white/5 border-white/10">
+              <Card key={conflict.id} className="bg-foreground/5 border-foreground/10">
                 <CardContent className="pt-4">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
@@ -423,7 +423,7 @@ export default function ConflictsPage() {
                         <Badge className={severityColors[conflict.severity]}>
                           {conflict.severity}
                         </Badge>
-                        <Badge variant="outline" className={`border-white/10 ${
+                        <Badge variant="outline" className={`border-foreground/10 ${
                           conflict.status === 'RESOLVED' ? 'text-success' :
                           conflict.status === 'IGNORED' ? 'text-muted' :
                           conflict.status === 'ACKNOWLEDGED' ? 'text-accent-gold' : 'text-clash'
@@ -444,7 +444,7 @@ export default function ConflictsPage() {
                         </div>
                       )}
                       {conflict.details && (
-                        <div className="mt-3 p-3 bg-white/5 rounded-lg">
+                        <div className="mt-3 p-3 bg-foreground/5 rounded-lg">
                           <div className="grid grid-cols-2 gap-4 text-sm">
                             <div>
                               <span className="text-muted">Course A:</span>
@@ -465,7 +465,7 @@ export default function ConflictsPage() {
                         size="sm"
                         variant="outline"
                         onClick={() => { setDetailConflict(conflict); setOverrideNote(''); setDetailOpen(true) }}
-                        className="border-white/10 text-muted hover:text-white"
+                        className="border-foreground/10 text-muted hover:text-white"
                       >
                         <Eye className="w-3 h-3 mr-1" /> Detail
                       </Button>
@@ -482,7 +482,7 @@ export default function ConflictsPage() {
                             size="sm"
                             variant="outline"
                             onClick={() => handleIgnore(conflict.id)}
-                            className="border-white/10 text-muted hover:text-white"
+                            className="border-foreground/10 text-muted hover:text-white"
                           >
                             Ignore
                           </Button>
@@ -517,7 +517,7 @@ export default function ConflictsPage() {
       </div>
       {/* Override Detail Sheet */}
       <Sheet open={detailOpen} onOpenChange={setDetailOpen}>
-        <SheetContent className="bg-muted border-white/10 text-white w-full sm:max-w-xl overflow-y-auto">
+        <SheetContent className="bg-muted border-foreground/10 text-white w-full sm:max-w-xl overflow-y-auto">
           {detailConflict && (
             <>
               <SheetHeader className="mb-5">
@@ -535,13 +535,13 @@ export default function ConflictsPage() {
                 <Badge className={severityColors[detailConflict.severity]}>{detailConflict.severity}</Badge>
                 <Badge variant="outline" className={
                   detailConflict.status === 'RESOLVED' ? 'text-success border-success/30'
-                  : detailConflict.status === 'IGNORED' ? 'text-muted border-white/10'
+                  : detailConflict.status === 'IGNORED' ? 'text-muted border-foreground/10'
                   : 'text-clash border-clash/30'
                 }>{detailConflict.status}</Badge>
               </div>
 
               {/* Description */}
-              <div className="p-3 bg-white/5 rounded-lg border border-white/10 mb-4">
+              <div className="p-3 bg-foreground/5 rounded-lg border border-foreground/10 mb-4">
                 <p className="text-sm text-white">{detailConflict.description}</p>
                 <p className="text-xs text-muted mt-2">Affected: {detailConflict.affectedName}</p>
                 <p className="text-xs text-muted">Detected: {new Date(detailConflict.createdAt).toLocaleString()}</p>
@@ -583,7 +583,7 @@ export default function ConflictsPage() {
 
               {/* Override panel — IA/SA only */}
               {['IA', 'SA'].includes(session?.user?.role || '') && detailConflict.status === 'DETECTED' && (
-                <div className="space-y-3 border-t border-white/10 pt-4">
+                <div className="space-y-3 border-t border-foreground/10 pt-4">
                   <p className="text-sm text-white font-medium flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4 text-accent-gold" /> Override Conflict
                   </p>
@@ -592,7 +592,7 @@ export default function ConflictsPage() {
                     value={overrideNote}
                     onChange={e => setOverrideNote(e.target.value)}
                     placeholder="Enter override justification (e.g. Special arrangement approved by Dean)..."
-                    className="bg-white/5 border-white/10 text-white text-sm min-h-[80px]"
+                    className="bg-foreground/5 border-foreground/10 text-white text-sm min-h-[80px]"
                   />
                   <div className="flex gap-2">
                     <Button
@@ -613,7 +613,7 @@ export default function ConflictsPage() {
                     <Button
                       variant="outline"
                       onClick={() => handleIgnore(detailConflict.id)}
-                      className="border-white/10 text-muted"
+                      className="border-foreground/10 text-muted"
                     >
                       Ignore
                     </Button>
@@ -623,7 +623,7 @@ export default function ConflictsPage() {
 
               {/* Reopen panel */}
               {['IA', 'SA'].includes(session?.user?.role || '') && ['RESOLVED', 'IGNORED'].includes(detailConflict.status) && (
-                <div className="border-t border-white/10 pt-4">
+                <div className="border-t border-foreground/10 pt-4">
                   <Button
                     variant="outline"
                     onClick={() => handleReopen(detailConflict.id)}

@@ -14,9 +14,9 @@ export function DemoBanner() {
     <div className="w-full mt-6">
       {/* Divider */}
       <div className="flex items-center gap-3 mb-4">
-        <div className="flex-1 h-px bg-white/10" />
-        <span className="text-xs text-white/25 font-medium">or explore the demo</span>
-        <div className="flex-1 h-px bg-white/10" />
+        <div className="flex-1 h-px bg-foreground/10" />
+        <span className="text-xs text-foreground/25 font-medium">or explore the demo</span>
+        <div className="flex-1 h-px bg-foreground/10" />
       </div>
 
       <Link
@@ -42,8 +42,8 @@ export function DemoBanner() {
               </span>
             </div>
             <div className="flex items-center gap-1.5 mt-0.5">
-              <Building2 className="w-3 h-3 text-white/30" />
-              <span className="text-xs text-white/40">Federal University of Konoha · Full populated demo</span>
+              <Building2 className="w-3 h-3 text-foreground/30" />
+              <span className="text-xs text-foreground/40">Federal University of Konoha · Full populated demo</span>
             </div>
           </div>
         </div>

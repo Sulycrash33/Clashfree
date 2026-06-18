@@ -154,7 +154,7 @@ export default function MyTimetablePage() {
           <Loader2 className="w-8 h-8 animate-spin text-secondary" />
         </div>
       ) : !studentInfo ? (
-        <Card className="bg-white/5 border-white/10">
+        <Card className="bg-foreground/5 border-foreground/10">
           <CardContent className="py-12 text-center">
             <User className="w-12 h-12 mx-auto text-muted mb-4" />
             <p className="text-white font-medium">No student profile found</p>
@@ -164,7 +164,7 @@ export default function MyTimetablePage() {
       ) : (
         <>
           {/* Student Info Card */}
-          <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
+          <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
             <CardContent className="pt-6">
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
@@ -175,7 +175,7 @@ export default function MyTimetablePage() {
                     <h2 className="text-xl font-bold text-white">{studentInfo.name}</h2>
                     <p className="text-muted">{studentInfo.regNumber}</p>
                     <div className="flex items-center gap-2 mt-1">
-                      <Badge variant="outline" className="border-white/10 text-secondary">
+                      <Badge variant="outline" className="border-foreground/10 text-secondary">
                         {studentInfo.department?.code} - {studentInfo.level} Level
                       </Badge>
                       {coCourses.length > 0 && (
@@ -189,10 +189,10 @@ export default function MyTimetablePage() {
 
                 <div className="flex items-center gap-2">
                   <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
-                    <SelectTrigger className="w-64 bg-white/5 border-white/10 text-white">
+                    <SelectTrigger className="w-64 bg-foreground/5 border-foreground/10 text-white">
                       <SelectValue placeholder="Select exam period" />
                     </SelectTrigger>
-                    <SelectContent className="bg-muted border-white/10">
+                    <SelectContent className="bg-muted border-foreground/10">
                       {examPeriods.map((p) => (
                         <SelectItem key={p.id} value={p.id} className="text-white">
                           {p.name} - {p.session} Sem {p.semester}
@@ -202,7 +202,7 @@ export default function MyTimetablePage() {
                   </Select>
                   <Button
                     variant="outline"
-                    className="border-white/10 text-muted hover:text-white"
+                    className="border-foreground/10 text-muted hover:text-white"
                   >
                     <Download className="w-4 h-4 mr-2" />
                     Download
@@ -225,7 +225,7 @@ export default function MyTimetablePage() {
 
           {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <Card className="bg-white/5 border-white/10">
+            <Card className="bg-foreground/5 border-foreground/10">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-secondary/20 to-secondary/20 flex items-center justify-center">
@@ -238,7 +238,7 @@ export default function MyTimetablePage() {
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-white/5 border-white/10">
+            <Card className="bg-foreground/5 border-foreground/10">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-success/20 to-success/20 flex items-center justify-center">
@@ -251,7 +251,7 @@ export default function MyTimetablePage() {
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-white/5 border-white/10">
+            <Card className="bg-foreground/5 border-foreground/10">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-accent-gold/20 to-accent-gold/20 flex items-center justify-center">
@@ -264,7 +264,7 @@ export default function MyTimetablePage() {
                 </div>
               </CardContent>
             </Card>
-            <Card className="bg-white/5 border-white/10">
+            <Card className="bg-foreground/5 border-foreground/10">
               <CardContent className="pt-4">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-primary/20 to-clash/20 flex items-center justify-center">
@@ -281,7 +281,7 @@ export default function MyTimetablePage() {
 
           {/* Timetable */}
           {examSlots.length === 0 ? (
-            <Card className="bg-white/5 border-white/10">
+            <Card className="bg-foreground/5 border-foreground/10">
               <CardContent className="py-12 text-center">
                 <Calendar className="w-12 h-12 mx-auto text-muted mb-4" />
                 <p className="text-white font-medium">No exams scheduled yet</p>
@@ -291,7 +291,7 @@ export default function MyTimetablePage() {
           ) : (
             <div className="space-y-4">
               {sortedDates.map((date) => (
-                <Card key={date} className="bg-white/5 border-white/10">
+                <Card key={date} className="bg-foreground/5 border-foreground/10">
                   <CardHeader className="pb-2">
                     <CardTitle className="text-lg text-white flex items-center gap-2">
                       <Calendar className="w-5 h-5 text-secondary" />
@@ -314,10 +314,10 @@ export default function MyTimetablePage() {
                               <div className="flex items-start justify-between">
                                 <div>
                                   <div className="flex items-center gap-2 mb-1">
-                                    <Badge variant="outline" className="border-white/20 text-secondary font-mono">
+                                    <Badge variant="outline" className="border-foreground/20 text-secondary font-mono">
                                       {slot.course.code}
                                     </Badge>
-                                    <Badge variant="secondary" className="bg-white/10 text-muted">
+                                    <Badge variant="secondary" className="bg-foreground/10 text-muted">
                                       {slotLabels[slot.slotNumber - 1]}
                                     </Badge>
                                     {isCO && (

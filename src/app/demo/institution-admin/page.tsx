@@ -273,21 +273,21 @@ function OverrideModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="w-full max-w-lg rounded-2xl border border-white/15 bg-muted shadow-2xl overflow-hidden">
+      <div className="w-full max-w-lg rounded-2xl border border-foreground/15 bg-muted shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-foreground/10">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
+            <div className="w-9 h-9 rounded-xl bg-foreground/5 border border-foreground/10 flex items-center justify-center">
               <Icon className={`w-4 h-4 ${override.color}`} />
             </div>
             <div>
               <div className="font-semibold text-white text-sm">{override.label}</div>
-              <div className="text-xs text-white/40">IA Override Control</div>
+              <div className="text-xs text-foreground/40">IA Override Control</div>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-white/30 hover:text-white transition-colors p-1"
+            className="text-foreground/30 hover:text-white transition-colors p-1"
           >
             <X className="w-4 h-4" />
           </button>
@@ -309,14 +309,14 @@ function OverrideModal({
           <div className="space-y-3">
             {override.details.fields.map((f) => (
               <div key={f.label} className="space-y-1">
-                <label className="text-xs font-medium text-white/50">{f.label}</label>
+                <label className="text-xs font-medium text-foreground/50">{f.label}</label>
                 {f.editable ? (
                   <input
                     defaultValue={f.value}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:outline-none focus:border-white/30 transition-colors"
+                    className="w-full bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:outline-none focus:border-foreground/30 transition-colors"
                   />
                 ) : (
-                  <div className="w-full bg-white/[0.02] border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-white/50">
+                  <div className="w-full bg-foreground/[0.03] border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-foreground/50">
                     {f.value}
                   </div>
                 )}
@@ -325,27 +325,27 @@ function OverrideModal({
           </div>
 
           {/* Meta */}
-          <div className="rounded-xl bg-white/[0.02] border border-white/10 p-3 space-y-2">
+          <div className="rounded-xl bg-foreground/[0.03] border border-foreground/10 p-3 space-y-2">
             <div className="flex items-center justify-between text-xs">
-              <span className="text-white/35">Approved By</span>
-              <span className="text-white/60">{override.details.approvedBy}</span>
+              <span className="text-foreground/35">Approved By</span>
+              <span className="text-foreground/60">{override.details.approvedBy}</span>
             </div>
             <div className="flex items-center justify-between text-xs">
-              <span className="text-white/35">Affected Entity</span>
-              <span className="text-white/60 text-right max-w-[60%]">{override.details.affectedEntity}</span>
+              <span className="text-foreground/35">Affected Entity</span>
+              <span className="text-foreground/60 text-right max-w-[60%]">{override.details.affectedEntity}</span>
             </div>
             <div className="flex items-center justify-between text-xs">
-              <span className="text-white/35">Effective Date</span>
-              <span className="text-white/60">{override.details.effectiveDate}</span>
+              <span className="text-foreground/35">Effective Date</span>
+              <span className="text-foreground/60">{override.details.effectiveDate}</span>
             </div>
           </div>
         </div>
 
         {/* Footer */}
-        <div className="flex items-center gap-3 px-6 py-4 border-t border-white/10">
+        <div className="flex items-center gap-3 px-6 py-4 border-t border-foreground/10">
           <button
             onClick={onClose}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl border border-white/10 text-sm text-white/50 hover:text-white hover:bg-white/5 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl border border-foreground/10 text-sm text-foreground/50 hover:text-white hover:bg-foreground/5 transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             Cancel
@@ -436,9 +436,9 @@ function AddRemoveModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
-      <div className="w-full max-w-md rounded-2xl border border-white/15 bg-muted shadow-2xl overflow-hidden">
+      <div className="w-full max-w-md rounded-2xl border border-foreground/15 bg-muted shadow-2xl overflow-hidden">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-white/10">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-foreground/10">
           <div className="flex items-center gap-3">
             <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${isRemove ? "bg-clash/20" : "bg-success/20"}`}>
               {isRemove
@@ -450,7 +450,7 @@ function AddRemoveModal({
               {isRemove ? "Remove" : "Add"} {config.singular}
             </span>
           </div>
-          <button onClick={onClose} className="text-white/30 hover:text-white p-1">
+          <button onClick={onClose} className="text-foreground/30 hover:text-white p-1">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -460,14 +460,14 @@ function AddRemoveModal({
             <div className="space-y-3">
               <div className="rounded-xl bg-clash/10 border border-clash/20 p-3 flex items-start gap-2">
                 <AlertTriangle className="w-4 h-4 text-clash flex-shrink-0 mt-0.5" />
-                <p className="text-sm text-white/60">
+                <p className="text-sm text-foreground/60">
                   Removing a {config.singular.toLowerCase()} is irreversible in this demo.
                   All associated data will be unlinked.
                 </p>
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-medium text-white/50">Select {config.singular} to Remove</label>
-                <select className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-white/30">
+                <label className="text-xs font-medium text-foreground/50">Select {config.singular} to Remove</label>
+                <select className="w-full bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-foreground/30">
                   <option value="">— Choose {config.singular} —</option>
                   {type === "department" && DEPARTMENTS.map(d => (
                     <option key={d.code} value={d.code}>{d.name}</option>
@@ -490,11 +490,11 @@ function AddRemoveModal({
                 </select>
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-medium text-white/50">Reason for Removal</label>
+                <label className="text-xs font-medium text-foreground/50">Reason for Removal</label>
                 <textarea
                   rows={3}
                   placeholder="Enter reason..."
-                  className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:outline-none focus:border-white/30 resize-none"
+                  className="w-full bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:outline-none focus:border-foreground/30 resize-none"
                 />
               </div>
             </div>
@@ -502,10 +502,10 @@ function AddRemoveModal({
             <div className="space-y-3">
               {config.fields.map(f => (
                 <div key={f.label} className="space-y-1">
-                  <label className="text-xs font-medium text-white/50">{f.label}</label>
+                  <label className="text-xs font-medium text-foreground/50">{f.label}</label>
                   <input
                     placeholder={f.placeholder}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:outline-none focus:border-white/30 transition-colors"
+                    className="w-full bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:outline-none focus:border-foreground/30 transition-colors"
                   />
                 </div>
               ))}
@@ -513,8 +513,8 @@ function AddRemoveModal({
           )}
         </div>
 
-        <div className="flex gap-3 px-6 py-4 border-t border-white/10">
-          <button onClick={onClose} className="px-4 py-2 rounded-xl border border-white/10 text-sm text-white/50 hover:text-white hover:bg-white/5 transition-colors">
+        <div className="flex gap-3 px-6 py-4 border-t border-foreground/10">
+          <button onClick={onClose} className="px-4 py-2 rounded-xl border border-foreground/10 text-sm text-foreground/50 hover:text-white hover:bg-foreground/5 transition-colors">
             Cancel
           </button>
           <button
@@ -587,7 +587,7 @@ export default function InstitutionAdminPage() {
 
       {/* Pause toast */}
       {pauseToast && (
-        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-muted border border-white/15 shadow-2xl">
+        <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-muted border border-foreground/15 shadow-2xl">
           <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0" />
           <span className="text-sm font-semibold text-white">{pauseToast}</span>
         </div>
@@ -622,7 +622,7 @@ export default function InstitutionAdminPage() {
               <span className="text-xs font-semibold text-secondary uppercase tracking-widest">Institution Admin</span>
             </div>
             <h1 className="text-2xl font-bold text-white">Faculty Control Panel</h1>
-            <p className="text-white/40 text-sm mt-1">Faculty of Physical and Applied Sciences · 2024/2025 S1</p>
+            <p className="text-foreground/40 text-sm mt-1">Faculty of Physical and Applied Sciences · 2024/2025 S1</p>
           </div>
           {activeOverrides.length > 0 && (
             <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent-gold/10 border border-accent-gold/20">
@@ -635,7 +635,7 @@ export default function InstitutionAdminPage() {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-1 bg-white/5 border border-white/10 rounded-xl p-1 w-fit">
+        <div className="flex gap-1 bg-foreground/5 border border-foreground/10 rounded-xl p-1 w-fit">
           {TABS.map(t => {
             const Icon = t.icon;
             return (
@@ -644,8 +644,8 @@ export default function InstitutionAdminPage() {
                 onClick={() => setActiveTab(t.id)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                   activeTab === t.id
-                    ? "bg-white/10 text-white shadow"
-                    : "text-white/40 hover:text-white/70"
+                    ? "bg-foreground/10 text-white shadow"
+                    : "text-foreground/40 hover:text-foreground/70"
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />
@@ -658,7 +658,7 @@ export default function InstitutionAdminPage() {
         {/* ══ OVERRIDES TAB ═══════════════════════ */}
         {activeTab === "overrides" && (
           <div className="space-y-4">
-            <p className="text-sm text-white/40">
+            <p className="text-sm text-foreground/40">
               Click any override control to view its specific details and apply changes.
               Active overrides are highlighted.
             </p>
@@ -677,7 +677,7 @@ export default function InstitutionAdminPage() {
                       onClick={() => setSelectedOverride(o)}
                       className="w-full flex items-center justify-between text-left px-3 py-2 rounded-lg hover:bg-accent-gold/10 transition-colors group"
                     >
-                      <span className="text-sm text-white/70 group-hover:text-white transition-colors">
+                      <span className="text-sm text-foreground/70 group-hover:text-white transition-colors">
                         {o.label} — {o.details.proposedAction}
                       </span>
                       <ChevronRight className="w-3.5 h-3.5 text-accent-gold/60" />
@@ -699,13 +699,13 @@ export default function InstitutionAdminPage() {
                       group rounded-2xl border p-5 text-left transition-all duration-200 hover:scale-[1.01] hover:shadow-xl
                       ${o.active
                         ? "border-accent-gold/30 bg-accent-gold/5 hover:bg-accent-gold/10"
-                        : "border-white/10 bg-white/[0.02] hover:bg-white/[0.05]"
+                        : "border-foreground/10 bg-foreground/[0.03] hover:bg-foreground/5"
                       }
                     `}
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-center gap-3">
-                        <div className={`w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center`}>
+                        <div className={`w-9 h-9 rounded-xl bg-foreground/5 border border-foreground/10 flex items-center justify-center`}>
                           <Icon className={`w-4 h-4 ${o.color}`} />
                         </div>
                         <div>
@@ -718,9 +718,9 @@ export default function InstitutionAdminPage() {
                           )}
                         </div>
                       </div>
-                      <ChevronRight className="w-4 h-4 text-white/20 group-hover:text-white/50 group-hover:translate-x-0.5 transition-all flex-shrink-0 mt-1" />
+                      <ChevronRight className="w-4 h-4 text-foreground/20 group-hover:text-foreground/50 group-hover:translate-x-0.5 transition-all flex-shrink-0 mt-1" />
                     </div>
-                    <p className="text-xs text-white/45 mt-3 leading-relaxed">{o.description}</p>
+                    <p className="text-xs text-foreground/45 mt-3 leading-relaxed">{o.description}</p>
                     {o.active && (
                       <div className="mt-3 text-xs text-accent-gold/70 bg-accent-gold/10 rounded-lg px-2 py-1.5 leading-relaxed">
                         {o.details.proposedAction}
@@ -736,7 +736,7 @@ export default function InstitutionAdminPage() {
         {/* ══ MANAGE TAB ══════════════════════════ */}
         {activeTab === "manage" && (
           <div className="space-y-6">
-            <p className="text-sm text-white/40">
+            <p className="text-sm text-foreground/40">
               Add or remove faculties, departments, administrators, and lecturers.
               All actions are logged and trigger ScheduleFlex notifications.
             </p>
@@ -786,20 +786,20 @@ export default function InstitutionAdminPage() {
                     <Icon className={`w-5 h-5 ${item.color}`} />
                     <div>
                       <div className="font-semibold text-white text-sm">{item.label}</div>
-                      <div className="text-xs text-white/40 mt-0.5">{item.description}</div>
+                      <div className="text-xs text-foreground/40 mt-0.5">{item.description}</div>
                     </div>
                   </div>
                   <div className="flex gap-3">
                     <button
                       onClick={() => setAddRemoveModal({ type: item.type, action: "add" })}
-                      className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-white/70 hover:bg-white/10 hover:text-white transition-colors"
+                      className="flex items-center gap-2 px-4 py-2 rounded-xl bg-foreground/5 border border-foreground/10 text-sm text-foreground/70 hover:bg-foreground/10 hover:text-white transition-colors"
                     >
                       <PlusCircle className="w-4 h-4 text-success" />
                       Add {item.label}
                     </button>
                     <button
                       onClick={() => setAddRemoveModal({ type: item.type, action: "remove" })}
-                      className="flex items-center gap-2 px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-sm text-white/70 hover:bg-clash/10 hover:text-clash transition-colors"
+                      className="flex items-center gap-2 px-4 py-2 rounded-xl bg-foreground/5 border border-foreground/10 text-sm text-foreground/70 hover:bg-clash/10 hover:text-clash transition-colors"
                     >
                       <MinusCircle className="w-4 h-4 text-clash" />
                       Remove {item.label}
@@ -824,21 +824,21 @@ export default function InstitutionAdminPage() {
               ].map(s => {
                 const Icon = s.icon;
                 return (
-                  <div key={s.label} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 space-y-2">
+                  <div key={s.label} className="rounded-2xl border border-foreground/10 bg-foreground/[0.03] p-4 space-y-2">
                     <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${s.color}`}>
                       <Icon className="w-4 h-4 text-white" />
                     </div>
                     <div className="text-xl font-bold text-white">{s.value}</div>
-                    <div className="text-xs text-white/40">{s.label}</div>
+                    <div className="text-xs text-foreground/40">{s.label}</div>
                   </div>
                 );
               })}
             </div>
 
             {/* Per-dept lecturer table */}
-            <div className="rounded-2xl border border-white/10 overflow-hidden">
-              <div className="px-5 py-3 border-b border-white/10 bg-white/[0.02]">
-                <p className="text-sm font-semibold text-white/60">Department Staffing — Ratio Check</p>
+            <div className="rounded-2xl border border-foreground/10 overflow-hidden">
+              <div className="px-5 py-3 border-b border-foreground/10 bg-foreground/[0.03]">
+                <p className="text-sm font-semibold text-foreground/60">Department Staffing — Ratio Check</p>
               </div>
               <div className="divide-y divide-white/5">
                 {DEPARTMENTS.map(d => {
@@ -846,19 +846,19 @@ export default function InstitutionAdminPage() {
                   const ratio = Math.round(students / d.totalLecturers);
                   const ok = ratio <= 7;
                   return (
-                    <div key={d.code} className="flex items-center justify-between px-5 py-3 hover:bg-white/[0.02] transition-colors">
+                    <div key={d.code} className="flex items-center justify-between px-5 py-3 hover:bg-foreground/[0.03] transition-colors">
                       <div>
-                        <div className="text-sm font-medium text-white/80">{d.name}</div>
-                        <div className="text-xs text-white/35 mt-0.5">{d.hod}</div>
+                        <div className="text-sm font-medium text-foreground/80">{d.name}</div>
+                        <div className="text-xs text-foreground/35 mt-0.5">{d.hod}</div>
                       </div>
                       <div className="flex items-center gap-4">
                         <div className="text-right hidden sm:block">
-                          <div className="text-sm text-white/60">{students}</div>
-                          <div className="text-xs text-white/30">students</div>
+                          <div className="text-sm text-foreground/60">{students}</div>
+                          <div className="text-xs text-foreground/30">students</div>
                         </div>
                         <div className="text-right hidden sm:block">
-                          <div className="text-sm text-white/60">{d.totalLecturers}</div>
-                          <div className="text-xs text-white/30">lecturers</div>
+                          <div className="text-sm text-foreground/60">{d.totalLecturers}</div>
+                          <div className="text-xs text-foreground/30">lecturers</div>
                         </div>
                         <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full border text-xs font-semibold ${
                           ok
@@ -881,7 +881,7 @@ export default function InstitutionAdminPage() {
         {/* ══ TIMETABLE CONTROL TAB ══════════════════ */}
         {activeTab === "control" && (
           <div className="space-y-6">
-            <p className="text-sm text-white/40">
+            <p className="text-sm text-foreground/40">
               Pause or resume the timetable system for this institution. Use this during strikes, emergencies, or semester breaks.
               All students and lecturers are notified automatically via WhatsApp when status changes.
             </p>
@@ -912,7 +912,7 @@ export default function InstitutionAdminPage() {
                     }`}>
                       Timetable {timetableStatus === "active" ? "Active" : timetableStatus === "paused" ? "Paused" : "Suspended"}
                     </div>
-                    <div className="text-sm text-white/40 mt-0.5">
+                    <div className="text-sm text-foreground/40 mt-0.5">
                       {timetableStatus === "active"
                         ? "All lectures running as scheduled — Semester 1, 2024/2025"
                         : timetableStatus === "paused"
@@ -936,12 +936,12 @@ export default function InstitutionAdminPage() {
 
               {/* Pause reason input */}
               {timetableStatus !== "active" && (
-                <div className="rounded-xl bg-white/5 border border-white/10 p-4 space-y-2">
-                  <label className="text-xs text-white/50 font-medium">Pause Reason (displayed to all users)</label>
+                <div className="rounded-xl bg-foreground/5 border border-foreground/10 p-4 space-y-2">
+                  <label className="text-xs text-foreground/50 font-medium">Pause Reason (displayed to all users)</label>
                   <input
                     value={pauseReason}
                     onChange={e => setPauseReason(e.target.value)}
-                    className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-white/30"
+                    className="w-full bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-foreground/30"
                     placeholder="e.g. ASUU strike action, public holiday, maintenance..."
                   />
                 </div>
@@ -1026,7 +1026,7 @@ export default function InstitutionAdminPage() {
                       <Icon className={`w-4 h-4 ${c.color}`} />
                       <span className={`text-sm font-semibold ${c.color}`}>{c.title}</span>
                     </div>
-                    <p className="text-xs text-white/45 leading-relaxed">{c.desc}</p>
+                    <p className="text-xs text-foreground/45 leading-relaxed">{c.desc}</p>
                   </div>
                 );
               })}
@@ -1041,7 +1041,7 @@ export default function InstitutionAdminPage() {
               <Crown className="w-5 h-5 text-accent-gold flex-shrink-0 mt-0.5" />
               <div>
                 <div className="text-sm font-semibold text-accent-gold">Institution Admin — Elevated System Powers</div>
-                <p className="text-xs text-white/40 mt-1 leading-relaxed">
+                <p className="text-xs text-foreground/40 mt-1 leading-relaxed">
                   These powers were previously restricted to Super Admin. They are now available to Institution Admins
                   for operational efficiency. Super Admin retains platform-level oversight and audit logs.
                 </p>
@@ -1094,8 +1094,8 @@ export default function InstitutionAdminPage() {
                   label: "Audit Log",
                   desc: "View full log of all admin actions, overrides, and system changes for this institution.",
                   icon: ClipboardList,
-                  color: "text-white/50",
-                  bg: "bg-white/5 border-white/10",
+                  color: "text-foreground/50",
+                  bg: "bg-foreground/5 border-foreground/10",
                   action: "View Audit Log",
                 },
                 {
@@ -1131,7 +1131,7 @@ export default function InstitutionAdminPage() {
                       </div>
                       <Zap className={`w-3.5 h-3.5 ${item.color} opacity-0 group-hover:opacity-100 transition-opacity`} />
                     </div>
-                    <p className="text-xs text-white/40 leading-relaxed">{item.desc}</p>
+                    <p className="text-xs text-foreground/40 leading-relaxed">{item.desc}</p>
                     <div className={`text-xs font-semibold ${item.color} flex items-center gap-1.5`}>
                       <span>{item.action}</span>
                       <ChevronRight className="w-3 h-3" />
@@ -1141,11 +1141,11 @@ export default function InstitutionAdminPage() {
               })}
             </div>
 
-            <div className="rounded-xl bg-white/[0.02] border border-white/10 p-4 flex items-start gap-3">
-              <Monitor className="w-4 h-4 text-white/30 flex-shrink-0 mt-0.5" />
+            <div className="rounded-xl bg-foreground/[0.03] border border-foreground/10 p-4 flex items-start gap-3">
+              <Monitor className="w-4 h-4 text-foreground/30 flex-shrink-0 mt-0.5" />
               <div>
-                <div className="text-xs font-semibold text-white/40">Super Admin Oversight</div>
-                <p className="text-xs text-white/25 mt-1 leading-relaxed">
+                <div className="text-xs font-semibold text-foreground/40">Super Admin Oversight</div>
+                <p className="text-xs text-foreground/25 mt-1 leading-relaxed">
                   All system-level actions are logged and visible to the Super Admin in the platform audit trail.
                   Super Admin can reverse any Institution Admin action within 72 hours.
                   Platform health, billing, and multi-institution management remain Super Admin exclusive.

@@ -112,9 +112,9 @@ export function NotificationBadge({ count = 0, maxDisplay = 5 }: NotificationBad
       </PopoverTrigger>
       <PopoverContent 
         align="end" 
-        className="w-80 bg-muted border-white/10 text-white p-0"
+        className="w-80 bg-muted border-foreground/10 text-white p-0"
       >
-        <div className="flex items-center justify-between p-4 border-b border-white/10">
+        <div className="flex items-center justify-between p-4 border-b border-foreground/10">
           <h3 className="font-semibold">Notifications</h3>
           {unreadCount > 0 && (
             <button
@@ -145,8 +145,8 @@ export function NotificationBadge({ count = 0, maxDisplay = 5 }: NotificationBad
                 return (
                   <div
                     key={notification.id}
-                    className={`p-3 hover:bg-white/5 cursor-pointer transition-colors ${
-                      !notification.isRead ? 'bg-white/[0.02]' : ''
+                    className={`p-3 hover:bg-foreground/5 cursor-pointer transition-colors ${
+                      !notification.isRead ? 'bg-foreground/[0.03]' : ''
                     }`}
                     onClick={() => !notification.isRead && markAsRead(notification.id)}
                   >
@@ -179,7 +179,7 @@ export function NotificationBadge({ count = 0, maxDisplay = 5 }: NotificationBad
         </div>
 
         {notifications.length > maxDisplay && (
-          <div className="p-3 border-t border-white/10">
+          <div className="p-3 border-t border-foreground/10">
             <button className="w-full text-center text-sm text-secondary hover:text-secondary">
               View all notifications
             </button>

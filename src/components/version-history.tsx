@@ -69,13 +69,13 @@ export function VersionHistory({ examPeriodId, currentVersion = 0 }: VersionHist
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="border-white/10 text-muted hover:text-white"
+          className="border-foreground/10 text-muted hover:text-white"
         >
           <History className="w-4 h-4 mr-2" />
           v{currentVersion || '0'}
         </Button>
       </DialogTrigger>
-      <DialogContent className="bg-muted border-white/10 text-white max-w-lg">
+      <DialogContent className="bg-muted border-foreground/10 text-white max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <GitBranch className="w-5 h-5 text-secondary" />
@@ -103,7 +103,7 @@ export function VersionHistory({ examPeriodId, currentVersion = 0 }: VersionHist
                 <div
                   key={version.id}
                   className={`relative pl-6 pb-4 ${
-                    index < versions.length - 1 ? 'border-l-2 border-white/10' : ''
+                    index < versions.length - 1 ? 'border-l-2 border-foreground/10' : ''
                   }`}
                 >
                   {/* Version node */}
@@ -116,7 +116,7 @@ export function VersionHistory({ examPeriodId, currentVersion = 0 }: VersionHist
                   <div className={`p-3 rounded-lg ${
                     version.isCurrent 
                       ? 'bg-success/10 border border-success/20' 
-                      : 'bg-white/5 border border-white/10'
+                      : 'bg-foreground/5 border border-foreground/10'
                   }`}>
                     <div className="flex items-center justify-between mb-2">
                       <div className="flex items-center gap-2">
@@ -146,7 +146,7 @@ export function VersionHistory({ examPeriodId, currentVersion = 0 }: VersionHist
 
                     {/* Publisher info */}
                     {version.publishedBy && (
-                      <div className="flex items-center gap-2 mt-3 pt-2 border-t border-white/5 text-xs text-muted">
+                      <div className="flex items-center gap-2 mt-3 pt-2 border-t border-foreground/5 text-xs text-muted">
                         <User className="w-3 h-3" />
                         <span>Published by {version.publishedBy}</span>
                         {version.publishedAt && (
@@ -164,7 +164,7 @@ export function VersionHistory({ examPeriodId, currentVersion = 0 }: VersionHist
           )}
         </div>
 
-        <div className="mt-4 pt-4 border-t border-white/10 flex justify-between items-center">
+        <div className="mt-4 pt-4 border-t border-foreground/10 flex justify-between items-center">
           <span className="text-xs text-muted">
             {versions.length} version(s) total
           </span>
@@ -172,7 +172,7 @@ export function VersionHistory({ examPeriodId, currentVersion = 0 }: VersionHist
             variant="outline"
             size="sm"
             onClick={() => setOpen(false)}
-            className="border-white/10 text-muted"
+            className="border-foreground/10 text-muted"
           >
             Close
           </Button>
@@ -196,7 +196,7 @@ export function VersionBadge({ version, isCurrent = false, onClick }: VersionBad
       className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-xs font-medium transition-colors ${
         isCurrent
           ? 'bg-success/20 text-success hover:bg-success/30'
-          : 'bg-white/5 text-muted hover:bg-white/10'
+          : 'bg-foreground/5 text-muted hover:bg-foreground/10'
       } ${onClick ? 'cursor-pointer' : 'cursor-default'}`}
     >
       <GitBranch className="w-3 h-3" />

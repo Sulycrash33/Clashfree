@@ -64,7 +64,7 @@ export default function LandingPage() {
       </div>
 
       {/* Header */}
-      <header className="relative z-10 border-b border-white/10 backdrop-blur-xl">
+      <header className="relative z-10 border-b border-foreground/10 backdrop-blur-xl">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-secondary to-secondary flex items-center justify-center font-bold text-lg">
@@ -81,7 +81,7 @@ export default function LandingPage() {
           </nav>
           <div className="flex items-center gap-3">
             <Link href="/login">
-              <Button variant="ghost" className="text-muted hover:text-white hover:bg-white/10">
+              <Button variant="ghost" className="text-muted hover:text-white hover:bg-foreground/10">
                 Sign In
               </Button>
             </Link>
@@ -131,7 +131,7 @@ export default function LandingPage() {
             { value: '0', label: 'Clash Guarantee' },
             { value: '100%', label: 'Automation' },
           ].map((stat, i) => (
-            <div key={i} className="bg-white/5 backdrop-blur-sm rounded-xl p-4 border border-white/10">
+            <div key={i} className="bg-foreground/5 backdrop-blur-sm rounded-xl p-4 border border-foreground/10">
               <div className="text-2xl md:text-3xl font-bold text-white">{stat.value}</div>
               <div className="text-sm text-muted">{stat.label}</div>
             </div>
@@ -143,7 +143,7 @@ export default function LandingPage() {
       <section id="features" className="relative z-10 container mx-auto px-4 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {features.map((feature, i) => (
-            <Card key={i} className="bg-white/5 border-white/10 backdrop-blur-sm hover:bg-white/10 transition-colors">
+            <Card key={i} className="bg-foreground/5 border-foreground/10 backdrop-blur-sm hover:bg-foreground/10 transition-colors">
               <CardContent className="pt-6">
                 <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary/20 to-secondary/20 flex items-center justify-center mb-4">
                   <feature.icon className="w-6 h-6 text-secondary" />
@@ -170,7 +170,7 @@ export default function LandingPage() {
             <Badge
               key={i}
               variant="outline"
-              className="px-4 py-2 text-sm border-white/20 text-muted hover:bg-white/10 transition-colors"
+              className="px-4 py-2 text-sm border-foreground/20 text-muted hover:bg-foreground/10 transition-colors"
             >
               {inst}
             </Badge>
@@ -180,7 +180,7 @@ export default function LandingPage() {
 
       {/* CTA Section */}
       <section className="relative z-10 container mx-auto px-4 py-20">
-        <div className="bg-gradient-to-r from-secondary/10 via-secondary/10 to-primary/10 rounded-3xl p-8 md:p-16 text-center border border-white/10 backdrop-blur-sm">
+        <div className="bg-gradient-to-r from-secondary/10 via-secondary/10 to-primary/10 rounded-3xl p-8 md:p-16 text-center border border-foreground/10 backdrop-blur-sm">
           <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
             All Parameters Met → Guaranteed Conflict-Free Output
           </h2>
@@ -199,7 +199,7 @@ export default function LandingPage() {
       </section>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-white/10 py-8">
+      <footer className="relative z-10 border-t border-foreground/10 py-8">
         <div className="container mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-secondary to-secondary flex items-center justify-center font-bold text-sm">

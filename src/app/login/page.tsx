@@ -81,7 +81,7 @@ function LoginForm() {
           </div>
         </div>
 
-        <Card className="bg-white/5 border-white/10 backdrop-blur-xl">
+        <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-xl">
           <CardHeader className="space-y-1 pb-4">
             <CardTitle className="text-2xl font-bold">Sign In</CardTitle>
             <CardDescription className="text-muted">
@@ -108,7 +108,7 @@ function LoginForm() {
                     placeholder="admin@clashfree.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-muted focus:border-secondary focus:ring-secondary/20"
+                    className="pl-10 bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary focus:ring-secondary/20"
                     required
                   />
                 </div>
@@ -126,7 +126,7 @@ function LoginForm() {
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-muted focus:border-secondary focus:ring-secondary/20"
+                    className="pl-10 bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary focus:ring-secondary/20"
                     required
                   />
                 </div>
@@ -134,7 +134,7 @@ function LoginForm() {
 
               <div className="flex items-center justify-between text-sm">
                 <label className="flex items-center gap-2 text-muted">
-                  <input type="checkbox" className="rounded border-white/20 bg-white/5" />
+                  <input type="checkbox" className="rounded border-foreground/20 bg-foreground/5" />
                   Remember me
                 </label>
                 <a href="#" className="text-secondary hover:text-secondary transition-colors">

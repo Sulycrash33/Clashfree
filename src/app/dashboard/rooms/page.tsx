@@ -209,7 +209,7 @@ export default function RoomsPage() {
       accessorKey: 'type',
       header: 'Type',
       cell: ({ row }) => (
-        <Badge variant="secondary" className="bg-white/10 text-muted">
+        <Badge variant="secondary" className="bg-foreground/10 text-muted">
           {roomTypes[row.getValue('type') as string] || row.getValue('type')}
         </Badge>
       ),
@@ -263,7 +263,7 @@ export default function RoomsPage() {
               <MoreHorizontal className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-muted border-white/10">
+          <DropdownMenuContent align="end" className="bg-muted border-foreground/10">
             <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted">
               <Pencil className="w-4 h-4 mr-2" /> Edit
             </DropdownMenuItem>
@@ -295,7 +295,7 @@ export default function RoomsPage() {
         loading={loading}
       />
 
-      <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
+      <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
         <CardContent className="pt-6">
           {loading ? (
             <div className="flex items-center justify-center py-12">
@@ -308,7 +308,7 @@ export default function RoomsPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-muted border-white/10 text-white max-w-xl">
+        <DialogContent className="bg-muted border-foreground/10 text-white max-w-xl">
           <DialogHeader>
             <DialogTitle>{editingRoom ? 'Edit Room' : 'Add New Room'}</DialogTitle>
             <DialogDescription className="text-muted">
@@ -323,17 +323,17 @@ export default function RoomsPage() {
                 <Input
                   value={formData.code}
                   onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
-                  className="bg-white/5 border-white/10 text-white font-mono"
+                  className="bg-foreground/5 border-foreground/10 text-white font-mono"
                   placeholder="e.g., MPH, LT1"
                 />
               </div>
               <div className="space-y-2">
                 <Label className="text-muted">Room Type</Label>
                 <Select value={formData.type} onValueChange={(v) => setFormData({ ...formData, type: v })}>
-                  <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-muted border-white/10">
+                  <SelectContent className="bg-muted border-foreground/10">
                     {Object.entries(roomTypes).map(([key, label]) => (
                       <SelectItem key={key} value={key} className="text-white">{label}</SelectItem>
                     ))}
@@ -346,7 +346,7 @@ export default function RoomsPage() {
               <Input
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="bg-white/5 border-white/10 text-white"
+                className="bg-foreground/5 border-foreground/10 text-white"
                 placeholder="e.g., Multi-Purpose Hall"
               />
             </div>
@@ -356,7 +356,7 @@ export default function RoomsPage() {
                 <Input
                   value={formData.building}
                   onChange={(e) => setFormData({ ...formData, building: e.target.value })}
-                  className="bg-white/5 border-white/10 text-white"
+                  className="bg-foreground/5 border-foreground/10 text-white"
                   placeholder="e.g., Block A"
                 />
               </div>
@@ -366,7 +366,7 @@ export default function RoomsPage() {
                   type="number"
                   value={formData.capacity}
                   onChange={(e) => setFormData({ ...formData, capacity: e.target.value })}
-                  className="bg-white/5 border-white/10 text-white"
+                  className="bg-foreground/5 border-foreground/10 text-white"
                   placeholder="e.g., 500"
                 />
               </div>
@@ -374,10 +374,10 @@ export default function RoomsPage() {
             <div className="space-y-2">
               <Label className="text-muted">Faculty (Optional - leave empty for central)</Label>
               <Select value={formData.facultyId} onValueChange={(v) => setFormData({ ...formData, facultyId: v })}>
-                <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white">
                   <SelectValue placeholder="Central / All Faculties" />
                 </SelectTrigger>
-                <SelectContent className="bg-muted border-white/10">
+                <SelectContent className="bg-muted border-foreground/10">
                   <SelectItem value="" className="text-white">Central / All Faculties</SelectItem>
                   {faculties.map((f) => (
                     <SelectItem key={f.id} value={f.id} className="text-white">{f.name} ({f.code})</SelectItem>
@@ -386,19 +386,19 @@ export default function RoomsPage() {
               </Select>
             </div>
             <div className="grid grid-cols-4 gap-4 pt-2">
-              <div className="flex items-center justify-between p-3 rounded-lg bg-white/5">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-foreground/5">
                 <Label className="text-xs text-muted">Projector</Label>
                 <Switch checked={formData.hasProjector} onCheckedChange={(v) => setFormData({ ...formData, hasProjector: v })} />
               </div>
-              <div className="flex items-center justify-between p-3 rounded-lg bg-white/5">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-foreground/5">
                 <Label className="text-xs text-muted">AC</Label>
                 <Switch checked={formData.hasAC} onCheckedChange={(v) => setFormData({ ...formData, hasAC: v })} />
               </div>
-              <div className="flex items-center justify-between p-3 rounded-lg bg-white/5">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-foreground/5">
                 <Label className="text-xs text-muted">Computers</Label>
                 <Switch checked={formData.hasComputers} onCheckedChange={(v) => setFormData({ ...formData, hasComputers: v })} />
               </div>
-              <div className="flex items-center justify-between p-3 rounded-lg bg-white/5">
+              <div className="flex items-center justify-between p-3 rounded-lg bg-foreground/5">
                 <Label className="text-xs text-muted">Accessible</Label>
                 <Switch checked={formData.isAccessible} onCheckedChange={(v) => setFormData({ ...formData, isAccessible: v })} />
               </div>
@@ -406,7 +406,7 @@ export default function RoomsPage() {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-white/10 text-muted">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-foreground/10 text-muted">
               Cancel
             </Button>
             <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-clash to-clash">

@@ -206,7 +206,7 @@ export default function InstitutionsPage() {
       accessorKey: 'type',
       header: 'Type',
       cell: ({ row }) => (
-        <Badge variant="secondary" className="bg-white/10 text-muted">
+        <Badge variant="secondary" className="bg-foreground/10 text-muted">
           {institutionTypes[row.getValue('type') as string] || row.getValue('type')}
         </Badge>
       ),
@@ -228,7 +228,7 @@ export default function InstitutionsPage() {
         <div className="flex items-center gap-2">
           <Calendar className="w-4 h-4 text-muted" />
           <span className="text-white">{row.getValue('currentSession')}</span>
-          <Badge variant="outline" className="border-white/10 text-muted">
+          <Badge variant="outline" className="border-foreground/10 text-muted">
             Sem {row.original.currentSemester}
           </Badge>
         </div>
@@ -252,8 +252,8 @@ export default function InstitutionsPage() {
               <MoreHorizontal className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-muted border-white/10">
-            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted focus:text-white focus:bg-white/5">
+          <DropdownMenuContent align="end" className="bg-muted border-foreground/10">
+            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted focus:text-white focus:bg-foreground/5">
               <Pencil className="w-4 h-4 mr-2" />
               Edit
             </DropdownMenuItem>
@@ -286,7 +286,7 @@ export default function InstitutionsPage() {
         loading={loading}
       />
 
-      <Card className="bg-white/5 border-white/10 backdrop-blur-sm">
+      <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
         <CardContent className="pt-6">
           {loading ? (
             <div className="flex items-center justify-center py-12">
@@ -304,7 +304,7 @@ export default function InstitutionsPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-muted border-white/10 text-white max-w-2xl">
+        <DialogContent className="bg-muted border-foreground/10 text-white max-w-2xl">
           <DialogHeader>
             <DialogTitle>{editingInstitution ? 'Edit Institution' : 'Add New Institution'}</DialogTitle>
             <DialogDescription className="text-muted">
@@ -318,7 +318,7 @@ export default function InstitutionsPage() {
               <Input
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="bg-white/5 border-white/10 text-white"
+                className="bg-foreground/5 border-foreground/10 text-white"
                 placeholder="e.g., Nasarawa State University, Keffi"
               />
             </div>
@@ -327,7 +327,7 @@ export default function InstitutionsPage() {
               <Input
                 value={formData.shortName}
                 onChange={(e) => setFormData({ ...formData, shortName: e.target.value.toUpperCase() })}
-                className="bg-white/5 border-white/10 text-white"
+                className="bg-foreground/5 border-foreground/10 text-white"
                 placeholder="e.g., NSUK"
                 maxLength={10}
               />
@@ -335,12 +335,12 @@ export default function InstitutionsPage() {
             <div className="space-y-2">
               <Label className="text-muted">Institution Type</Label>
               <Select value={formData.type} onValueChange={(v) => setFormData({ ...formData, type: v })}>
-                <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-muted border-white/10">
+                <SelectContent className="bg-muted border-foreground/10">
                   {Object.entries(institutionTypes).map(([key, label]) => (
-                    <SelectItem key={key} value={key} className="text-white focus:bg-white/5">{label}</SelectItem>
+                    <SelectItem key={key} value={key} className="text-white focus:bg-foreground/5">{label}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -350,7 +350,7 @@ export default function InstitutionsPage() {
               <Input
                 value={formData.currentSession}
                 onChange={(e) => setFormData({ ...formData, currentSession: e.target.value })}
-                className="bg-white/5 border-white/10 text-white"
+                className="bg-foreground/5 border-foreground/10 text-white"
                 placeholder="e.g., 2025/2026"
               />
             </div>
@@ -359,7 +359,7 @@ export default function InstitutionsPage() {
               <Input
                 value={formData.city}
                 onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                className="bg-white/5 border-white/10 text-white"
+                className="bg-foreground/5 border-foreground/10 text-white"
                 placeholder="e.g., Keffi"
               />
             </div>
@@ -368,7 +368,7 @@ export default function InstitutionsPage() {
               <Input
                 value={formData.state}
                 onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                className="bg-white/5 border-white/10 text-white"
+                className="bg-foreground/5 border-foreground/10 text-white"
                 placeholder="e.g., Nasarawa"
               />
             </div>
@@ -377,25 +377,25 @@ export default function InstitutionsPage() {
               <Input
                 value={formData.country}
                 onChange={(e) => setFormData({ ...formData, country: e.target.value })}
-                className="bg-white/5 border-white/10 text-white"
+                className="bg-foreground/5 border-foreground/10 text-white"
               />
             </div>
             <div className="space-y-2">
               <Label className="text-muted">Current Semester</Label>
               <Select value={formData.currentSemester} onValueChange={(v) => setFormData({ ...formData, currentSemester: v })}>
-                <SelectTrigger className="bg-white/5 border-white/10 text-white">
+                <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent className="bg-muted border-white/10">
-                  <SelectItem value="1" className="text-white focus:bg-white/5">First Semester</SelectItem>
-                  <SelectItem value="2" className="text-white focus:bg-white/5">Second Semester</SelectItem>
+                <SelectContent className="bg-muted border-foreground/10">
+                  <SelectItem value="1" className="text-white focus:bg-foreground/5">First Semester</SelectItem>
+                  <SelectItem value="2" className="text-white focus:bg-foreground/5">Second Semester</SelectItem>
                 </SelectContent>
               </Select>
             </div>
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-white/10 text-muted">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-foreground/10 text-muted">
               Cancel
             </Button>
             <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-secondary to-secondary">
