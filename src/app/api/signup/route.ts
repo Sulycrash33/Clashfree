@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server'
+import { getServerSession } from 'next-auth'
+import { authOptions } from '@/lib/auth'
 import { db as prisma } from '@/lib/db'
 import { sendSignupConfirmation } from '@/lib/email'
 import { z } from 'zod'
@@ -73,6 +75,11 @@ export async function POST(req: Request) {
 // GET /api/signup — SA only, list all signups
 export async function GET(req: Request) {
   try {
+    const session = await getServerSession(authOptions)
+    if (!session?.user || (session.user as { role?: string }).role !== 'SA') {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
+
     const { searchParams } = new URL(req.url)
     const status = searchParams.get('status') || undefined
 

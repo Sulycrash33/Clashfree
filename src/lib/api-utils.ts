@@ -56,9 +56,6 @@ export function apiError(message: string, status: number = 400) {
 
 export function handleApiError(error: unknown) {
   console.error('API Error:', error)
-  if (error instanceof Error) {
-    return apiError(error.message, 500)
-  }
   return apiError('Internal server error', 500)
 }
 
