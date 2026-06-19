@@ -13,11 +13,13 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { DataTable } from '@/components/data-table'
 import { PageHeader } from '@/components/page-header'
 import { ColumnDef } from '@tanstack/react-table'
-import { MapPin, MoreHorizontal, Pencil, Trash2, Loader2, Users, Monitor, Snowflake } from 'lucide-react'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { useToast } from '@/hooks/use-toast'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import { MapPin, Loader2, Users, Monitor, Snowflake } from 'lucide-react'
 import { Switch } from '@/components/ui/switch'
+import { useCrud } from '@/hooks/use-crud'
+import { StatusBadge } from '@/components/status-badge'
+import { createActionsColumn } from '@/components/actions-column'
+import { AccessDenied } from '@/components/access-denied'
+import { LoadingSpinner } from '@/components/loading-spinner'
 
 interface Room {
   id: string
@@ -56,12 +58,7 @@ const roomTypes: Record<string, string> = {
 export default function RoomsPage() {
   const { data: session } = useSession()
   const router = useRouter()
-  const { toast } = useToast()
-  const [rooms, setRooms] = useState<Room[]>([])
-  const [faculties, setFaculties] = useState<Faculty[]>([])
-  const [loading, setLoading] = useState(true)
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [editingRoom, setEditingRoom] = useState<Room | null>(null)
+
   const [formData, setFormData] = useState({
     code: '',
     name: '',
@@ -74,50 +71,22 @@ export default function RoomsPage() {
     isAccessible: true,
     facultyId: '',
   })
-  const [saving, setSaving] = useState(false)
 
-  const fetchData = useCallback(async () => {
-    setLoading(true)
-    try {
-      const [roomRes, facRes] = await Promise.all([
-        fetch('/api/rooms'),
-        fetch('/api/faculties'),
-      ])
-      if (roomRes.ok) setRooms(await roomRes.json())
-      if (facRes.ok) setFaculties(await facRes.json())
-    } catch (error) {
-      toast({ title: 'Error', description: 'Failed to fetch data', variant: 'destructive' })
-    } finally {
-      setLoading(false)
-    }
-  }, [toast])
-
-  useEffect(() => {
-    if (!session?.user) return
-    if (session.user.role === 'ST') {
-      router.push('/dashboard')
-      return
-    }
-    fetchData()
-  }, [session, router, fetchData])
-
-  const handleOpenDialog = (room?: Room) => {
-    if (room) {
-      setEditingRoom(room)
+  const handleDialogOpen = useCallback((item: Room | null) => {
+    if (item) {
       setFormData({
-        code: room.code,
-        name: room.name,
-        building: room.building || '',
-        capacity: room.capacity.toString(),
-        type: room.type,
-        hasProjector: room.hasProjector,
-        hasAC: room.hasAC,
-        hasComputers: room.hasComputers,
-        isAccessible: room.isAccessible,
-        facultyId: room.facultyId || '',
+        code: item.code,
+        name: item.name,
+        building: item.building || '',
+        capacity: item.capacity.toString(),
+        type: item.type,
+        hasProjector: item.hasProjector,
+        hasAC: item.hasAC,
+        hasComputers: item.hasComputers,
+        isAccessible: item.isAccessible,
+        facultyId: item.facultyId || '',
       })
     } else {
-      setEditingRoom(null)
       setFormData({
         code: '',
         name: '',
@@ -131,52 +100,46 @@ export default function RoomsPage() {
         facultyId: '',
       })
     }
-    setDialogOpen(true)
-  }
+  }, [])
 
-  const handleSave = async () => {
-    setSaving(true)
-    try {
-      const url = editingRoom ? `/api/rooms/${editingRoom.id}` : '/api/rooms'
-      const method = editingRoom ? 'PUT' : 'POST'
+  const {
+    data,
+    loading,
+    saving,
+    dialogOpen,
+    setDialogOpen,
+    editingItem,
+    fetchData,
+    handleSave,
+    handleDelete,
+    openCreateDialog,
+    openEditDialog,
+  } = useCrud<Room>({
+    endpoints: [
+      { url: '/api/rooms', key: 'rooms' },
+      { url: '/api/faculties', key: 'faculties' },
+    ],
+    resourceName: 'Room',
+    apiBasePath: '/api/rooms',
+    onDialogOpen: handleDialogOpen,
+    transformPayload: (fd) => ({
+      ...fd,
+      capacity: parseInt(fd.capacity as string),
+      facultyId: (fd.facultyId as string) || null,
+    }),
+  })
 
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          capacity: parseInt(formData.capacity),
-          facultyId: formData.facultyId || null,
-        }),
-      })
+  const rooms = (data.rooms || []) as Room[]
+  const faculties = (data.faculties || []) as unknown as Faculty[]
 
-      if (res.ok) {
-        toast({ title: 'Success', description: `Room ${editingRoom ? 'updated' : 'created'} successfully` })
-        setDialogOpen(false)
-        fetchData()
-      } else {
-        const error = await res.json()
-        toast({ title: 'Error', description: error.error || 'Failed to save', variant: 'destructive' })
-      }
-    } catch (error) {
-      toast({ title: 'Error', description: 'An error occurred', variant: 'destructive' })
-    } finally {
-      setSaving(false)
+  useEffect(() => {
+    if (!session?.user) return
+    if (session.user.role === 'ST') {
+      router.push('/dashboard')
+      return
     }
-  }
-
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this room?')) return
-    try {
-      const res = await fetch(`/api/rooms/${id}`, { method: 'DELETE' })
-      if (res.ok) {
-        toast({ title: 'Success', description: 'Room deleted' })
-        fetchData()
-      }
-    } catch (error) {
-      toast({ title: 'Error', description: 'Failed to delete', variant: 'destructive' })
-    }
-  }
+    fetchData()
+  }, [session, router, fetchData])
 
   const columns: ColumnDef<Room>[] = [
     {
@@ -248,40 +211,16 @@ export default function RoomsPage() {
     {
       accessorKey: 'isActive',
       header: 'Status',
-      cell: ({ row }) => (
-        <Badge className={row.getValue('isActive') ? 'bg-success/10 text-success' : 'bg-clash/10 text-clash'}>
-          {row.getValue('isActive') ? 'Active' : 'Inactive'}
-        </Badge>
-      ),
+      cell: ({ row }) => <StatusBadge isActive={row.getValue('isActive')} />,
     },
-    {
-      id: 'actions',
-      cell: ({ row }) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground">
-              <MoreHorizontal className="w-4 h-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-muted border-foreground/10">
-            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted-foreground">
-              <Pencil className="w-4 h-4 mr-2" /> Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-clash">
-              <Trash2 className="w-4 h-4 mr-2" /> Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ),
-    },
+    createActionsColumn<Room>({
+      onEdit: openEditDialog,
+      onDelete: (item) => handleDelete(item.id),
+    }),
   ]
 
   if (!['SA', 'IA', 'TO', 'LC'].includes(session?.user?.role || '')) {
-    return (
-      <Alert className="bg-clash/10 border-clash/20">
-        <AlertDescription className="text-clash">Access denied.</AlertDescription>
-      </Alert>
-    )
+    return <AccessDenied />
   }
 
   return (
@@ -290,7 +229,7 @@ export default function RoomsPage() {
         title="Rooms & Venues"
         description="Manage lecture halls, labs, and exam venues"
         actionLabel="Add Room"
-        onAction={() => handleOpenDialog()}
+        onAction={openCreateDialog}
         onRefresh={fetchData}
         loading={loading}
       />
@@ -298,9 +237,7 @@ export default function RoomsPage() {
       <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
         <CardContent className="pt-6">
           {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-clash" />
-            </div>
+            <LoadingSpinner className="text-clash" />
           ) : (
             <DataTable columns={columns} data={rooms} searchKey="name" searchPlaceholder="Search rooms..." />
           )}
@@ -310,9 +247,9 @@ export default function RoomsPage() {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="bg-muted border-foreground/10 text-foreground max-w-xl">
           <DialogHeader>
-            <DialogTitle>{editingRoom ? 'Edit Room' : 'Add New Room'}</DialogTitle>
+            <DialogTitle>{editingItem ? 'Edit Room' : 'Add New Room'}</DialogTitle>
             <DialogDescription className="text-muted-foreground">
-              {editingRoom ? 'Update room details' : 'Add a new venue'}
+              {editingItem ? 'Update room details' : 'Add a new venue'}
             </DialogDescription>
           </DialogHeader>
 
@@ -409,9 +346,9 @@ export default function RoomsPage() {
             <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-foreground/10 text-muted-foreground">
               Cancel
             </Button>
-            <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-clash to-clash">
+            <Button onClick={() => handleSave(formData as unknown as Record<string, unknown>, editingItem?.id)} disabled={saving} className="bg-gradient-to-r from-clash to-clash">
               {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-              {editingRoom ? 'Update' : 'Create'}
+              {editingItem ? 'Update' : 'Create'}
             </Button>
           </DialogFooter>
         </DialogContent>
