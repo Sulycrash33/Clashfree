@@ -49,7 +49,7 @@ export async function PATCH(
         name: signup.contactName,
         institutionName: signup.institutionName,
         reason: rejectionReason || 'Application did not meet requirements.',
-      }).catch(console.error)
+      }).catch(err => console.error(`[signup PATCH] Failed to send rejection email to ${signup.contactEmail}:`, err))
 
       return NextResponse.json({ message: 'Application rejected.' })
     }
@@ -103,7 +103,7 @@ export async function PATCH(
       institutionName: signup.institutionName,
       tempPassword,
       loginEmail: signup.contactEmail,
-    }).catch(console.error)
+    }).catch(err => console.error(`[signup PATCH] Failed to send approval email to ${signup.contactEmail}:`, err))
 
     return NextResponse.json({
       message: 'Approved. Institution and IA account created.',

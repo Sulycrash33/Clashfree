@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { Download, FileSpreadsheet, FileText, Printer, Loader2 } from 'lucide-react'
 import { exportToCSV, exportToExcel, exportToPrint, type TimetableExportData, type ExamSlotExport } from '@/lib/export-utils'
+import { useToast } from '@/hooks/use-toast'
 
 interface ExportButtonsProps {
   data: TimetableExportData
@@ -20,6 +21,7 @@ interface ExportButtonsProps {
 
 export function ExportButtons({ data, disabled = false }: ExportButtonsProps) {
   const [exporting, setExporting] = useState<string | null>(null)
+  const { toast } = useToast()
 
   const handleExport = async (type: 'csv' | 'excel' | 'print') => {
     setExporting(type)
@@ -41,6 +43,11 @@ export function ExportButtons({ data, disabled = false }: ExportButtonsProps) {
       }
     } catch (error) {
       console.error('Export failed:', error)
+      toast({
+        title: 'Export Failed',
+        description: error instanceof Error ? error.message : 'Could not export timetable. Please try again.',
+        variant: 'destructive',
+      })
     } finally {
       setExporting(null)
     }

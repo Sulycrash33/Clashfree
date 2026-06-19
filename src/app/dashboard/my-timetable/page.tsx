@@ -98,7 +98,10 @@ export default function MyTimetablePage() {
     if (selectedPeriod && studentInfo) {
       // Fetch exam slots for student's courses
       fetch(`/api/exam-slots?examPeriodId=${selectedPeriod}`)
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) throw new Error(`Failed to load exam slots (${res.status})`)
+          return res.json()
+        })
         .then(data => {
           // Filter slots for student's courses
           const studentCourseIds = studentInfo.courses.map(c => c.courseId)
@@ -107,9 +110,12 @@ export default function MyTimetablePage() {
           )
           setExamSlots(filteredSlots)
         })
-        .catch(console.error)
+        .catch(err => {
+          console.error('Failed to load exam slots:', err)
+          toast({ title: 'Error', description: 'Failed to load exam slots', variant: 'destructive' })
+        })
     }
-  }, [selectedPeriod, studentInfo])
+  }, [selectedPeriod, studentInfo, toast])
 
   // Group slots by date
   const groupedSlots = examSlots.reduce((acc, slot) => {

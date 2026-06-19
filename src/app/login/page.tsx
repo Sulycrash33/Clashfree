@@ -46,7 +46,12 @@ function LoginForm() {
       router.push('/dashboard')
       router.refresh()
     } catch (err) {
-      setError('An error occurred. Please try again.')
+      console.error('Login error:', err)
+      setError(
+        err instanceof Error && err.message !== 'fetch failed'
+          ? err.message
+          : 'A network error occurred. Please check your connection and try again.'
+      )
       setLoading(false)
     }
   }

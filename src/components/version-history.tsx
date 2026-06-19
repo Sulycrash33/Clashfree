@@ -32,6 +32,7 @@ interface VersionHistoryProps {
 export function VersionHistory({ examPeriodId, currentVersion = 0 }: VersionHistoryProps) {
   const [versions, setVersions] = useState<Version[]>([])
   const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
@@ -42,14 +43,19 @@ export function VersionHistory({ examPeriodId, currentVersion = 0 }: VersionHist
 
   const fetchVersions = async () => {
     setLoading(true)
+    setError(null)
     try {
       const res = await fetch(`/api/timetable-versions?examPeriodId=${examPeriodId}`)
-      if (res.ok) {
-        const data = await res.json()
-        setVersions(data)
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error(data.error || `Failed to load versions (${res.status})`)
       }
-    } catch (error) {
-      console.error('Failed to fetch versions:', error)
+      const data = await res.json()
+      setVersions(data.versions || data)
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to fetch versions'
+      setError(message)
+      console.error('Failed to fetch versions:', err)
     } finally {
       setLoading(false)
     }
@@ -90,6 +96,13 @@ export function VersionHistory({ examPeriodId, currentVersion = 0 }: VersionHist
           {loading ? (
             <div className="flex items-center justify-center py-8">
               <Loader2 className="w-6 h-6 animate-spin text-secondary" />
+            </div>
+          ) : error ? (
+            <div className="text-center py-8 text-clash">
+              <p className="text-sm">{error}</p>
+              <button onClick={fetchVersions} className="text-xs text-secondary hover:underline mt-2">
+                Retry
+              </button>
             </div>
           ) : versions.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">

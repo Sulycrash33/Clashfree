@@ -53,12 +53,12 @@ export async function POST(req: Request) {
       },
     })
 
-    // Fire confirmation email — non-blocking
+    // Fire confirmation email — non-blocking, but log failures with context
     sendSignupConfirmation({
       to: data.contactEmail,
       name: data.contactName,
       institutionName: data.institutionName,
-    }).catch(console.error)
+    }).catch(err => console.error(`[signup] Failed to send confirmation email to ${data.contactEmail}:`, err))
 
     return NextResponse.json({ id: signup.id, message: 'Application submitted successfully.' }, { status: 201 })
   } catch (err) {
