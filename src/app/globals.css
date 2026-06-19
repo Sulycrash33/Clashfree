@@ -85,6 +85,50 @@
   --sidebar-ring: #2A1F5E;
 }
 
+/* Forces light-mode token values on a subtree regardless of an ancestor's
+   .dark class. Needed because <html> always carries .dark permanently —
+   simply omitting .dark on a descendant does NOT reset CSS custom
+   properties back to light; they keep inheriting the dark values from
+   the nearest ancestor that declared them (html). FEDKO's light-mode
+   toggle uses this class explicitly for that reason. */
+.light-override {
+  --radius: 0.5rem;
+  --background: #FAF8FF;
+  --foreground: #1C1638;
+  --card: #FFFFFF;
+  --card-foreground: #1C1638;
+  --popover: #FFFFFF;
+  --popover-foreground: #1C1638;
+  --primary: #2A1F5E;
+  --primary-foreground: #F5F3FA;
+  --secondary: #BD5B2C;
+  --secondary-foreground: #F5F3FA;
+  --muted: #F0EDFB;
+  --muted-foreground: #6B6190;
+  --accent: #D7A33B;
+  --accent-foreground: #1C1638;
+  --accent-gold: #D7A33B;
+  --success: #4F7A4B;
+  --clash: #9C3B30;
+  --destructive: #9C3B30;
+  --border: #E4DEF5;
+  --input: #E4DEF5;
+  --ring: #2A1F5E;
+  --chart-1: #2A1F5E;
+  --chart-2: #BD5B2C;
+  --chart-3: #D7A33B;
+  --chart-4: #4F7A4B;
+  --chart-5: #9C3B30;
+  --sidebar: #FFFFFF;
+  --sidebar-foreground: #1C1638;
+  --sidebar-primary: #2A1F5E;
+  --sidebar-primary-foreground: #F5F3FA;
+  --sidebar-accent: #F0EDFB;
+  --sidebar-accent-foreground: #1C1638;
+  --sidebar-border: #E4DEF5;
+  --sidebar-ring: #2A1F5E;
+}
+
 .dark {
   --background: #110B27;
   --foreground: #F5F3FA;
