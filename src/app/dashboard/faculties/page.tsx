@@ -144,8 +144,8 @@ export default function FacultiesPage() {
             <Building2 className="w-5 h-5 text-primary" />
           </div>
           <div>
-            <div className="font-medium text-white">{row.getValue('name')}</div>
-            {row.original.deanName && <div className="text-xs text-muted">Dean: {row.original.deanName}</div>}
+            <div className="font-medium text-foreground">{row.getValue('name')}</div>
+            {row.original.deanName && <div className="text-xs text-muted-foreground">Dean: {row.original.deanName}</div>}
           </div>
         </div>
       ),
@@ -154,7 +154,7 @@ export default function FacultiesPage() {
       accessorKey: '_count.departments',
       header: 'Departments',
       cell: ({ row }) => (
-        <div className="flex items-center gap-2 text-muted">
+        <div className="flex items-center gap-2 text-muted-foreground">
           <Users className="w-4 h-4" />
           <span>{row.original._count?.departments || 0} departments</span>
         </div>
@@ -174,12 +174,12 @@ export default function FacultiesPage() {
       cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground">
               <MoreHorizontal className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-muted border-foreground/10">
-            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted focus:text-white">
+            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted-foreground focus:text-foreground">
               <Pencil className="w-4 h-4 mr-2" />
               Edit
             </DropdownMenuItem>
@@ -225,10 +225,10 @@ export default function FacultiesPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-muted border-foreground/10 text-white">
+        <DialogContent className="bg-muted border-foreground/10 text-foreground">
           <DialogHeader>
             <DialogTitle>{editingFaculty ? 'Edit Faculty' : 'Add New Faculty'}</DialogTitle>
-            <DialogDescription className="text-muted">
+            <DialogDescription className="text-muted-foreground">
               {editingFaculty ? 'Update faculty details' : 'Create a new faculty'}
             </DialogDescription>
           </DialogHeader>
@@ -236,47 +236,47 @@ export default function FacultiesPage() {
           <div className="space-y-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-muted">Faculty Name</Label>
+                <Label className="text-muted-foreground">Faculty Name</Label>
                 <Input
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="bg-foreground/5 border-foreground/10 text-white"
+                  className="bg-foreground/5 border-foreground/10 text-foreground"
                   placeholder="e.g., Faculty of Applied Sciences"
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-muted">Code</Label>
+                <Label className="text-muted-foreground">Code</Label>
                 <Input
                   value={formData.code}
                   onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
-                  className="bg-foreground/5 border-foreground/10 text-white"
+                  className="bg-foreground/5 border-foreground/10 text-foreground"
                   placeholder="e.g., FAS"
                   maxLength={10}
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-muted">Dean's Name</Label>
+              <Label className="text-muted-foreground">Dean's Name</Label>
               <Input
                 value={formData.deanName}
                 onChange={(e) => setFormData({ ...formData, deanName: e.target.value })}
-                className="bg-foreground/5 border-foreground/10 text-white"
+                className="bg-foreground/5 border-foreground/10 text-foreground"
                 placeholder="e.g., Prof. John Doe"
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-muted">Description</Label>
+              <Label className="text-muted-foreground">Description</Label>
               <Input
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                className="bg-foreground/5 border-foreground/10 text-white"
+                className="bg-foreground/5 border-foreground/10 text-foreground"
                 placeholder="Optional description"
               />
             </div>
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-foreground/10 text-muted">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-foreground/10 text-muted-foreground">
               Cancel
             </Button>
             <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-primary to-clash">

@@ -100,7 +100,7 @@ export function NotificationBadge({ count = 0, maxDisplay = 5 }: NotificationBad
         <Button
           variant="ghost"
           size="icon"
-          className="relative text-muted hover:text-white"
+          className="relative text-muted-foreground hover:text-foreground"
         >
           <Bell className="w-5 h-5" />
           {unreadCount > 0 && (
@@ -112,7 +112,7 @@ export function NotificationBadge({ count = 0, maxDisplay = 5 }: NotificationBad
       </PopoverTrigger>
       <PopoverContent 
         align="end" 
-        className="w-80 bg-muted border-foreground/10 text-white p-0"
+        className="w-80 bg-muted border-foreground/10 text-foreground p-0"
       >
         <div className="flex items-center justify-between p-4 border-b border-foreground/10">
           <h3 className="font-semibold">Notifications</h3>
@@ -132,7 +132,7 @@ export function NotificationBadge({ count = 0, maxDisplay = 5 }: NotificationBad
               <Loader2 className="w-6 h-6 animate-spin text-secondary" />
             </div>
           ) : notifications.length === 0 ? (
-            <div className="py-8 text-center text-muted">
+            <div className="py-8 text-center text-muted-foreground">
               <Bell className="w-8 h-8 mx-auto mb-2 opacity-50" />
               <p className="text-sm">No notifications</p>
             </div>
@@ -156,17 +156,17 @@ export function NotificationBadge({ count = 0, maxDisplay = 5 }: NotificationBad
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between gap-2">
-                          <p className={`text-sm font-medium ${!notification.isRead ? 'text-white' : 'text-muted'}`}>
+                          <p className={`text-sm font-medium ${!notification.isRead ? 'text-foreground' : 'text-muted-foreground'}`}>
                             {notification.title}
                           </p>
                           {!notification.isRead && (
                             <span className="w-2 h-2 rounded-full bg-secondary flex-shrink-0 mt-1.5" />
                           )}
                         </div>
-                        <p className="text-xs text-muted mt-0.5 line-clamp-2">
+                        <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
                           {notification.message}
                         </p>
-                        <p className="text-xs text-muted mt-1">
+                        <p className="text-xs text-muted-foreground mt-1">
                           {formatTime(notification.createdAt)}
                         </p>
                       </div>

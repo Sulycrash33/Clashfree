@@ -52,7 +52,7 @@ function DemoLayoutInner({ children, activeRole, roleName, roleSubtitle, conflic
         <div className={`h-16 flex items-center px-4 border-b ${border} flex-shrink-0`}>
           <Link href="/demo" className="flex items-center gap-2.5 min-w-0">
             <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#4A3D8F] to-[#BD5B2C] flex items-center justify-center flex-shrink-0">
-              <CalendarClock className="w-3.5 h-3.5 text-white" />
+              <CalendarClock className="w-3.5 h-3.5 text-foreground" />
             </div>
             {!sidebarCollapsed && (
               <div className="min-w-0">

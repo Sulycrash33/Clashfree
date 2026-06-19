@@ -33,7 +33,7 @@ export function ThemeToggle() {
           className={`flex items-center gap-2 cursor-pointer ${
             theme === 'light'
               ? 'bg-secondary/10 text-secondary dark:text-secondary'
-              : 'text-muted dark:text-muted'
+              : 'text-muted-foreground dark:text-muted-foreground'
           }`}
         >
           <Sun className="w-4 h-4" />
@@ -44,7 +44,7 @@ export function ThemeToggle() {
           className={`flex items-center gap-2 cursor-pointer ${
             theme === 'dark'
               ? 'bg-secondary/10 text-secondary dark:text-secondary'
-              : 'text-muted dark:text-muted'
+              : 'text-muted-foreground dark:text-muted-foreground'
           }`}
         >
           <Moon className="w-4 h-4" />
@@ -55,7 +55,7 @@ export function ThemeToggle() {
           className={`flex items-center gap-2 cursor-pointer ${
             theme === 'system'
               ? 'bg-secondary/10 text-secondary dark:text-secondary'
-              : 'text-muted dark:text-muted'
+              : 'text-muted-foreground dark:text-muted-foreground'
           }`}
         >
           <Monitor className="w-4 h-4" />
@@ -80,7 +80,7 @@ export function ThemeToggleSimple() {
       {resolvedTheme === 'dark' ? (
         <Sun className="h-4 w-4 text-accent-gold" />
       ) : (
-        <Moon className="h-4 w-4 text-muted" />
+        <Moon className="h-4 w-4 text-muted-foreground" />
       )}
       <span className="sr-only">Toggle theme</span>
     </Button>

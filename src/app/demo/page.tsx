@@ -118,15 +118,15 @@ export default function DemoLandingPage() {
   const [hoveredRole, setHoveredRole] = useState<string | null>(null);
 
   return (
-    <div className="min-h-screen bg-background text-white">
+    <div className="min-h-screen bg-background text-foreground">
       {/* ── Header ─────────────────────────────── */}
       <header className="border-b border-foreground/10 bg-card/80 backdrop-blur-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-              <CalendarClock className="w-4 h-4 text-white" />
+              <CalendarClock className="w-4 h-4 text-foreground" />
             </div>
-            <span className="font-semibold text-white tracking-tight">ScheduleFlex</span>
+            <span className="font-semibold text-foreground tracking-tight">ScheduleFlex</span>
             <span className="text-foreground/30 text-sm">·</span>
             <span className="text-foreground/50 text-sm">Live Demo</span>
           </div>
@@ -174,7 +174,7 @@ export default function DemoLandingPage() {
                 key={s.label}
                 className="px-4 py-2 rounded-xl bg-foreground/5 border border-foreground/10 text-center"
               >
-                <div className="text-xl font-bold text-white">{s.value}</div>
+                <div className="text-xl font-bold text-foreground">{s.value}</div>
                 <div className="text-xs text-foreground/40 mt-0.5">{s.label}</div>
               </div>
             ))}
@@ -220,7 +220,7 @@ export default function DemoLandingPage() {
                       <div
                         className={`w-11 h-11 rounded-xl bg-gradient-to-br ${role.gradient} flex items-center justify-center shadow-lg`}
                       >
-                        <Icon className="w-5 h-5 text-white" />
+                        <Icon className="w-5 h-5 text-foreground" />
                       </div>
                       <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${role.badge}`}>
                         {role.badgeText}
@@ -229,7 +229,7 @@ export default function DemoLandingPage() {
 
                     {/* Label */}
                     <div>
-                      <div className="font-semibold text-white text-base">{role.label}</div>
+                      <div className="font-semibold text-foreground text-base">{role.label}</div>
                       <div className="text-xs text-foreground/40 mt-0.5">{role.sublabel}</div>
                     </div>
 
@@ -249,7 +249,7 @@ export default function DemoLandingPage() {
                     </div>
 
                     {/* CTA */}
-                    <div className="flex items-center gap-1 text-sm font-medium text-foreground/60 group-hover:text-white transition-colors">
+                    <div className="flex items-center gap-1 text-sm font-medium text-foreground/60 group-hover:text-foreground transition-colors">
                       <span>Enter as {role.label}</span>
                       <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                     </div>
@@ -263,7 +263,7 @@ export default function DemoLandingPage() {
         {/* ── Capabilities ───────────────────────── */}
         <section className="rounded-2xl border border-foreground/10 bg-foreground/[0.03] p-8 space-y-6">
           <div className="text-center space-y-1">
-            <h3 className="font-semibold text-white">What this demo showcases</h3>
+            <h3 className="font-semibold text-foreground">What this demo showcases</h3>
             <p className="text-sm text-foreground/40">Every feature is powered by real FEDKO data</p>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

@@ -179,8 +179,8 @@ export default function CoursesPage() {
             <BookOpen className="w-5 h-5 text-accent-gold" />
           </div>
           <div>
-            <div className="font-medium text-white">{row.getValue('name')}</div>
-            <div className="text-xs text-muted">
+            <div className="font-medium text-foreground">{row.getValue('name')}</div>
+            <div className="text-xs text-muted-foreground">
               {row.original.department?.code} • {row.original.creditUnits} CU
             </div>
           </div>
@@ -191,7 +191,7 @@ export default function CoursesPage() {
       accessorKey: 'level',
       header: 'Level',
       cell: ({ row }) => (
-        <Badge variant="secondary" className="bg-foreground/10 text-muted">
+        <Badge variant="secondary" className="bg-foreground/10 text-muted-foreground">
           {row.getValue('level')} Level
         </Badge>
       ),
@@ -200,7 +200,7 @@ export default function CoursesPage() {
       accessorKey: 'isShared',
       header: 'Type',
       cell: ({ row }) => (
-        <Badge className={row.getValue('isShared') ? 'bg-primary/10 text-primary' : 'bg-muted/10 text-muted'}>
+        <Badge className={row.getValue('isShared') ? 'bg-primary/10 text-primary' : 'bg-muted/10 text-muted-foreground'}>
           {row.getValue('isShared') ? 'GST/Shared' : 'Core'}
         </Badge>
       ),
@@ -209,7 +209,7 @@ export default function CoursesPage() {
       accessorKey: '_count.studentCourses',
       header: 'Enrolled',
       cell: ({ row }) => (
-        <div className="flex items-center gap-2 text-muted">
+        <div className="flex items-center gap-2 text-muted-foreground">
           <Users className="w-4 h-4" />
           {row.original._count?.studentCourses || 0}
         </div>
@@ -229,12 +229,12 @@ export default function CoursesPage() {
       cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground">
               <MoreHorizontal className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-muted border-foreground/10">
-            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted">
+            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted-foreground">
               <Pencil className="w-4 h-4 mr-2" /> Edit
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-clash">
@@ -278,10 +278,10 @@ export default function CoursesPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-muted border-foreground/10 text-white max-w-xl">
+        <DialogContent className="bg-muted border-foreground/10 text-foreground max-w-xl">
           <DialogHeader>
             <DialogTitle>{editingCourse ? 'Edit Course' : 'Add New Course'}</DialogTitle>
-            <DialogDescription className="text-muted">
+            <DialogDescription className="text-muted-foreground">
               {editingCourse ? 'Update course details' : 'Create a new course'}
             </DialogDescription>
           </DialogHeader>
@@ -289,60 +289,60 @@ export default function CoursesPage() {
           <div className="space-y-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-muted">Course Code</Label>
+                <Label className="text-muted-foreground">Course Code</Label>
                 <Input
                   value={formData.code}
                   onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
-                  className="bg-foreground/5 border-foreground/10 text-white font-mono"
+                  className="bg-foreground/5 border-foreground/10 text-foreground font-mono"
                   placeholder="e.g., CSC 201"
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-muted">Credit Units</Label>
+                <Label className="text-muted-foreground">Credit Units</Label>
                 <Select value={formData.creditUnits} onValueChange={(v) => setFormData({ ...formData, creditUnits: v })}>
-                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white">
+                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-foreground">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-muted border-foreground/10">
                     {[1, 2, 3, 4, 5, 6].map((n) => (
-                      <SelectItem key={n} value={n.toString()} className="text-white">{n} CU</SelectItem>
+                      <SelectItem key={n} value={n.toString()} className="text-foreground">{n} CU</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-muted">Course Name</Label>
+              <Label className="text-muted-foreground">Course Name</Label>
               <Input
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="bg-foreground/5 border-foreground/10 text-white"
+                className="bg-foreground/5 border-foreground/10 text-foreground"
                 placeholder="e.g., Data Structures and Algorithms"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-muted">Department</Label>
+                <Label className="text-muted-foreground">Department</Label>
                 <Select value={formData.departmentId} onValueChange={(v) => setFormData({ ...formData, departmentId: v })}>
-                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white">
+                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-foreground">
                     <SelectValue placeholder="Select department" />
                   </SelectTrigger>
                   <SelectContent className="bg-muted border-foreground/10">
                     {departments.map((d) => (
-                      <SelectItem key={d.id} value={d.id} className="text-white">{d.name} ({d.code})</SelectItem>
+                      <SelectItem key={d.id} value={d.id} className="text-foreground">{d.name} ({d.code})</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label className="text-muted">Level</Label>
+                <Label className="text-muted-foreground">Level</Label>
                 <Select value={formData.level} onValueChange={(v) => setFormData({ ...formData, level: v })}>
-                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white">
+                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-foreground">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-muted border-foreground/10">
                     {levels.map((l) => (
-                      <SelectItem key={l} value={l.toString()} className="text-white">{l} Level</SelectItem>
+                      <SelectItem key={l} value={l.toString()} className="text-foreground">{l} Level</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -350,32 +350,32 @@ export default function CoursesPage() {
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-muted">Semester</Label>
+                <Label className="text-muted-foreground">Semester</Label>
                 <Select value={formData.semester} onValueChange={(v) => setFormData({ ...formData, semester: v })}>
-                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white">
+                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-foreground">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent className="bg-muted border-foreground/10">
-                    <SelectItem value="1" className="text-white">First Semester</SelectItem>
-                    <SelectItem value="2" className="text-white">Second Semester</SelectItem>
+                    <SelectItem value="1" className="text-foreground">First Semester</SelectItem>
+                    <SelectItem value="2" className="text-foreground">Second Semester</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2 pt-6">
                 <div className="flex items-center justify-between">
-                  <Label className="text-muted">GST/Shared Course</Label>
+                  <Label className="text-muted-foreground">GST/Shared Course</Label>
                   <Switch
                     checked={formData.isShared}
                     onCheckedChange={(v) => setFormData({ ...formData, isShared: v })}
                   />
                 </div>
-                <p className="text-xs text-muted">Enable for GST or cross-department courses</p>
+                <p className="text-xs text-muted-foreground">Enable for GST or cross-department courses</p>
               </div>
             </div>
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-foreground/10 text-muted">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-foreground/10 text-muted-foreground">
               Cancel
             </Button>
             <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-accent-gold to-accent-gold">

@@ -301,20 +301,20 @@ export default function LectureTimetablePage() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div className="flex items-end gap-3 flex-wrap">
           <div className="space-y-1">
-            <label className="text-xs text-muted">Lecture Timetable</label>
+            <label className="text-xs text-muted-foreground">Lecture Timetable</label>
             <Select value={selectedTimetable} onValueChange={setSelectedTimetable}>
-              <SelectTrigger className="w-72 bg-foreground/5 border-foreground/10 text-white text-sm">
+              <SelectTrigger className="w-72 bg-foreground/5 border-foreground/10 text-foreground text-sm">
                 <SelectValue placeholder={loading ? 'Loading...' : timetables.length === 0 ? 'No timetables yet' : 'Select timetable'} />
               </SelectTrigger>
               <SelectContent className="bg-muted border-foreground/10">
                 {timetables.map(t => (
-                  <SelectItem key={t.id} value={t.id} className="text-white">
+                  <SelectItem key={t.id} value={t.id} className="text-foreground">
                     <span className="font-medium">{t.name}</span>
-                    <span className="text-muted ml-2 text-xs">· {t._count?.slots ?? 0} slots</span>
+                    <span className="text-muted-foreground ml-2 text-xs">· {t._count?.slots ?? 0} slots</span>
                   </SelectItem>
                 ))}
                 {timetables.length === 0 && !loading && (
-                  <SelectItem value="__none" disabled className="text-muted italic">No timetables yet</SelectItem>
+                  <SelectItem value="__none" disabled className="text-muted-foreground italic">No timetables yet</SelectItem>
                 )}
               </SelectContent>
             </Select>
@@ -323,7 +323,7 @@ export default function LectureTimetablePage() {
             <Badge variant="outline" className={
               selectedTTData.status === 'PUBLISHED' ? 'text-success border-success/30 bg-success/10' :
               selectedTTData.status === 'DRAFT' ? 'text-accent-gold border-accent-gold/30 bg-accent-gold/10' :
-              'text-muted border-muted/30'
+              'text-muted-foreground border-muted/30'
             }>{selectedTTData.status}</Badge>
           )}
         </div>
@@ -334,7 +334,7 @@ export default function LectureTimetablePage() {
                 <Button
                   size="sm"
                   variant="outline"
-                  className={`border-foreground/10 text-muted hover:text-white ${clashResult && !clashResult.summary.clean ? 'border-clash/40 text-clash hover:text-clash' : clashResult?.summary.clean ? 'border-success/40 text-success' : ''}`}
+                  className={`border-foreground/10 text-muted-foreground hover:text-foreground ${clashResult && !clashResult.summary.clean ? 'border-clash/40 text-clash hover:text-clash' : clashResult?.summary.clean ? 'border-success/40 text-success' : ''}`}
                   onClick={runClashDetect}
                   disabled={clashRunning}
                 >
@@ -354,7 +354,7 @@ export default function LectureTimetablePage() {
                 </Button>
               </>
             )}
-            <Button size="sm" variant="outline" className="border-foreground/10 text-muted hover:text-white" onClick={() => setCreateTTOpen(true)}>
+            <Button size="sm" variant="outline" className="border-foreground/10 text-muted-foreground hover:text-foreground" onClick={() => setCreateTTOpen(true)}>
               <Calendar className="w-4 h-4 mr-2" /> New Timetable
             </Button>
           </div>
@@ -365,9 +365,9 @@ export default function LectureTimetablePage() {
       {!loading && timetables.length === 0 && (
         <Card className="bg-foreground/5 border-foreground/10 border-dashed">
           <CardContent className="py-20 text-center">
-            <Calendar className="w-16 h-16 mx-auto text-muted mb-4" />
-            <p className="text-white font-semibold text-lg mb-2">No Lecture Timetable Yet</p>
-            <p className="text-sm text-muted mb-6 max-w-sm mx-auto">
+            <Calendar className="w-16 h-16 mx-auto text-muted-foreground mb-4" />
+            <p className="text-foreground font-semibold text-lg mb-2">No Lecture Timetable Yet</p>
+            <p className="text-sm text-muted-foreground mb-6 max-w-sm mx-auto">
               Create a lecture timetable for the current semester, then add weekly recurring slots for each course.
             </p>
             {canManage && (
@@ -385,53 +385,53 @@ export default function LectureTimetablePage() {
           <CardContent className="pt-4 pb-4">
             <div className="flex flex-wrap items-end gap-3">
               <div className="space-y-1">
-                <label className="text-xs text-muted">Faculty</label>
+                <label className="text-xs text-muted-foreground">Faculty</label>
                 <Select value={selectedFaculty} onValueChange={setSelectedFaculty}>
-                  <SelectTrigger className="w-44 bg-foreground/5 border-foreground/10 text-white text-sm">
+                  <SelectTrigger className="w-44 bg-foreground/5 border-foreground/10 text-foreground text-sm">
                     <SelectValue placeholder="All Faculties" />
                   </SelectTrigger>
                   <SelectContent className="bg-muted border-foreground/10">
-                    <SelectItem value="all" className="text-white">All Faculties</SelectItem>
-                    {faculties.map(f => <SelectItem key={f.id} value={f.id} className="text-white">{f.code} - {f.name}</SelectItem>)}
+                    <SelectItem value="all" className="text-foreground">All Faculties</SelectItem>
+                    {faculties.map(f => <SelectItem key={f.id} value={f.id} className="text-foreground">{f.code} - {f.name}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-1">
-                <label className="text-xs text-muted">Department</label>
+                <label className="text-xs text-muted-foreground">Department</label>
                 <Select value={selectedDept} onValueChange={setSelectedDept}>
-                  <SelectTrigger className="w-40 bg-foreground/5 border-foreground/10 text-white text-sm">
+                  <SelectTrigger className="w-40 bg-foreground/5 border-foreground/10 text-foreground text-sm">
                     <SelectValue placeholder="All Depts" />
                   </SelectTrigger>
                   <SelectContent className="bg-muted border-foreground/10">
-                    <SelectItem value="all" className="text-white">All Departments</SelectItem>
-                    {departments.map(d => <SelectItem key={d.id} value={d.id} className="text-white">{d.code}</SelectItem>)}
+                    <SelectItem value="all" className="text-foreground">All Departments</SelectItem>
+                    {departments.map(d => <SelectItem key={d.id} value={d.id} className="text-foreground">{d.code}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-1">
-                <label className="text-xs text-muted">Level</label>
+                <label className="text-xs text-muted-foreground">Level</label>
                 <Select value={selectedLevel} onValueChange={setSelectedLevel}>
-                  <SelectTrigger className="w-24 bg-foreground/5 border-foreground/10 text-white text-sm">
+                  <SelectTrigger className="w-24 bg-foreground/5 border-foreground/10 text-foreground text-sm">
                     <SelectValue placeholder="All" />
                   </SelectTrigger>
                   <SelectContent className="bg-muted border-foreground/10">
-                    <SelectItem value="all" className="text-white">All</SelectItem>
-                    {[100,200,300,400,500].map(l => <SelectItem key={l} value={String(l)} className="text-white">{l}L</SelectItem>)}
+                    <SelectItem value="all" className="text-foreground">All</SelectItem>
+                    {[100,200,300,400,500].map(l => <SelectItem key={l} value={String(l)} className="text-foreground">{l}L</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
               <div className="flex items-center gap-2 ml-auto flex-wrap">
                 <Button size="sm" variant={deptView ? 'default' : 'outline'} onClick={() => setDeptView(v => !v)}
-                  className={deptView ? 'bg-primary text-white border-0' : 'border-foreground/10 text-muted'}>
+                  className={deptView ? 'bg-primary text-white border-0' : 'border-foreground/10 text-muted-foreground'}>
                   <Building2 className="w-4 h-4 mr-1" /> Dept View
                 </Button>
                 <Button size="sm" variant={showJumuah ? 'default' : 'outline'} onClick={() => setShowJumuah(v => !v)}
-                  className={showJumuah ? 'bg-success text-white border-0' : 'border-foreground/10 text-muted'}>
+                  className={showJumuah ? 'bg-success text-white border-0' : 'border-foreground/10 text-muted-foreground'}>
                   <Moon className="w-4 h-4 mr-1" /> Jumuah
                 </Button>
                 <Button size="sm" variant={showSaturday ? 'default' : 'outline'} onClick={() => setShowSaturday(v => !v)}
-                  className={showSaturday ? 'bg-primary text-white border-0' : 'border-foreground/10 text-muted'}>Sat</Button>
-                <Button size="sm" variant="outline" onClick={fetchSlots} disabled={slotsLoading} className="border-foreground/10 text-muted">
+                  className={showSaturday ? 'bg-primary text-white border-0' : 'border-foreground/10 text-muted-foreground'}>Sat</Button>
+                <Button size="sm" variant="outline" onClick={fetchSlots} disabled={slotsLoading} className="border-foreground/10 text-muted-foreground">
                   {slotsLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
                 </Button>
               </div>
@@ -456,8 +456,8 @@ export default function LectureTimetablePage() {
                     <s.icon className={`w-5 h-5 ${s.ic}`} />
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-white">{s.value}</div>
-                    <div className="text-xs text-muted">{s.label}</div>
+                    <div className="text-2xl font-bold text-foreground">{s.value}</div>
+                    <div className="text-xs text-muted-foreground">{s.label}</div>
                   </div>
                 </div>
               </CardContent>
@@ -470,9 +470,9 @@ export default function LectureTimetablePage() {
       {timetables.length > 0 && !slotsLoading && slots.length === 0 && (
         <Card className="bg-foreground/5 border-foreground/10 border-dashed">
           <CardContent className="py-14 text-center">
-            <Clock className="w-12 h-12 mx-auto text-muted mb-3" />
-            <p className="text-white font-medium mb-1">No lecture slots yet</p>
-            <p className="text-sm text-muted mb-5">
+            <Clock className="w-12 h-12 mx-auto text-muted-foreground mb-3" />
+            <p className="text-foreground font-medium mb-1">No lecture slots yet</p>
+            <p className="text-sm text-muted-foreground mb-5">
               {canManage ? 'Click Add Slot or tap any empty grid cell to schedule a lecture.' : 'No slots match your filters.'}
             </p>
             {canManage && selectedTimetable && (
@@ -488,7 +488,7 @@ export default function LectureTimetablePage() {
       {deptView && slots.length > 0 && (
         <Card className="bg-foreground/5 border-foreground/10">
           <CardHeader>
-            <CardTitle className="text-white flex items-center gap-2">
+            <CardTitle className="text-foreground flex items-center gap-2">
               <Building2 className="w-5 h-5 text-primary" /> Department View
             </CardTitle>
             <CardDescription>{deptGroups.length} dept(s) - {slots.length} total slots</CardDescription>
@@ -500,9 +500,9 @@ export default function LectureTimetablePage() {
                   <div className="px-4 py-3 bg-foreground/5 flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <Badge variant="outline" className="text-primary border-primary/30 font-mono">{deptCode}</Badge>
-                      <span className="text-white font-medium">{deptName}</span>
+                      <span className="text-foreground font-medium">{deptName}</span>
                     </div>
-                    <Badge variant="outline" className="text-muted border-foreground/10">{ds.length} slots/week</Badge>
+                    <Badge variant="outline" className="text-muted-foreground border-foreground/10">{ds.length} slots/week</Badge>
                   </div>
                   <div className="p-3 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                     {ds.map(slot => {
@@ -513,7 +513,7 @@ export default function LectureTimetablePage() {
                           <div className="flex items-center justify-between mb-1">
                             <Badge variant="outline" className="text-secondary border-secondary/20 text-xs font-mono">{slot.course.code}</Badge>
                             <div className="flex items-center gap-1">
-                              <Badge className={`${LEVEL_COLORS[slot.course.level] || 'bg-foreground/10 text-muted'} text-xs`}>{slot.course.level}L</Badge>
+                              <Badge className={`${LEVEL_COLORS[slot.course.level] || 'bg-foreground/10 text-muted-foreground'} text-xs`}>{slot.course.level}L</Badge>
                               {canManage && (
                                 <button onClick={() => handleDeleteSlot(slot.id)} disabled={deletingId === slot.id}
                                   className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-clash/20 text-clash transition-all ml-1">
@@ -522,8 +522,8 @@ export default function LectureTimetablePage() {
                               )}
                             </div>
                           </div>
-                          <p className="text-xs text-white truncate mb-1">{slot.course.name}</p>
-                          <div className="flex items-center justify-between text-xs text-muted">
+                          <p className="text-xs text-foreground truncate mb-1">{slot.course.name}</p>
+                          <div className="flex items-center justify-between text-xs text-muted-foreground">
                             <span>{day?.short} {slot.startTime}-{slot.endTime}</span>
                             <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{slot.room.code}</span>
                           </div>
@@ -542,10 +542,10 @@ export default function LectureTimetablePage() {
       {slots.length > 0 && (
         <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
           <CardHeader>
-            <CardTitle className="text-white flex items-center gap-2">
+            <CardTitle className="text-foreground flex items-center gap-2">
               <Clock className="w-5 h-5 text-primary" /> Weekly Schedule Grid
               {selectedTTData && (
-                <Badge variant="outline" className="text-muted border-foreground/10 ml-2 text-xs">
+                <Badge variant="outline" className="text-muted-foreground border-foreground/10 ml-2 text-xs">
                   {selectedTTData.session} - Sem {selectedTTData.semester}
                 </Badge>
               )}
@@ -565,18 +565,18 @@ export default function LectureTimetablePage() {
                 <div style={{ minWidth: `${activeDays.length * 160 + 100}px` }}>
                   <div className="grid gap-2 mb-2" style={{ gridTemplateColumns: `100px repeat(${activeDays.length}, 1fr)` }}>
                     <div className="p-3 bg-foreground/5 rounded-lg flex items-center justify-center">
-                      <span className="text-muted text-xs font-medium">Time</span>
+                      <span className="text-muted-foreground text-xs font-medium">Time</span>
                     </div>
                     {activeDays.map((d, i) => (
                       <div key={d.idx} className={`p-3 rounded-lg bg-gradient-to-br ${DAY_COLORS[i % DAY_COLORS.length]} border`}>
-                        <span className="text-white text-sm font-medium">{d.label}</span>
+                        <span className="text-foreground text-sm font-medium">{d.label}</span>
                       </div>
                     ))}
                   </div>
                   {TIME_SLOTS.map(ts => (
                     <div key={ts.start} className="grid gap-2 mb-2" style={{ gridTemplateColumns: `100px repeat(${activeDays.length}, 1fr)` }}>
                       <div className="p-3 bg-foreground/5 rounded-lg flex items-center justify-center">
-                        <span className="text-muted text-xs text-center leading-tight">{ts.label}</span>
+                        <span className="text-muted-foreground text-xs text-center leading-tight">{ts.label}</span>
                       </div>
                       {activeDays.map((d, dIdx) => {
                         const jum = showJumuah && isJumuah(d.idx, ts.start)
@@ -606,7 +606,7 @@ export default function LectureTimetablePage() {
                                         {slot.course.code}
                                       </Badge>
                                       <div className="flex items-center gap-1">
-                                        <Badge className={`${LEVEL_COLORS[slot.course.level] || 'bg-foreground/10 text-muted'} text-xs`}>{slot.course.level}L</Badge>
+                                        <Badge className={`${LEVEL_COLORS[slot.course.level] || 'bg-foreground/10 text-muted-foreground'} text-xs`}>{slot.course.level}L</Badge>
                                         {canManage && (
                                           <button onClick={e => { e.stopPropagation(); handleDeleteSlot(slot.id) }} disabled={deletingId === slot.id}
                                             className="opacity-0 group-hover/slot:opacity-100 p-0.5 rounded hover:bg-clash/20 text-clash transition-all">
@@ -615,10 +615,10 @@ export default function LectureTimetablePage() {
                                         )}
                                       </div>
                                     </div>
-                                    <p className="text-xs text-white mt-1 truncate">{slot.course.name}</p>
+                                    <p className="text-xs text-foreground mt-1 truncate">{slot.course.name}</p>
                                     <div className="flex items-center justify-between mt-1">
-                                      <span className="text-xs text-muted">{slot.course.department?.code}</span>
-                                      <span className="text-xs text-muted flex items-center gap-1"><MapPin className="w-3 h-3" />{slot.room.code}</span>
+                                      <span className="text-xs text-muted-foreground">{slot.course.department?.code}</span>
+                                      <span className="text-xs text-muted-foreground flex items-center gap-1"><MapPin className="w-3 h-3" />{slot.room.code}</span>
                                     </div>
                                   </div>
                                 ))}
@@ -626,8 +626,8 @@ export default function LectureTimetablePage() {
                             ) : (
                               <div className="h-full flex items-center justify-center text-xs py-4">
                                 {canManage
-                                  ? <span className="flex items-center gap-1 text-muted opacity-50 hover:opacity-90 transition-opacity"><Plus className="w-3 h-3" /> Add</span>
-                                  : <span className="text-muted">Free</span>}
+                                  ? <span className="flex items-center gap-1 text-muted-foreground opacity-50 hover:opacity-90 transition-opacity"><Plus className="w-3 h-3" /> Add</span>
+                                  : <span className="text-muted-foreground">Free</span>}
                               </div>
                             )}
                           </div>
@@ -647,16 +647,16 @@ export default function LectureTimetablePage() {
         <div className="flex flex-wrap items-center gap-5 px-1 text-sm">
           <div className="flex items-center gap-2">
             <div className="w-4 h-4 rounded bg-success/20 border border-success/30" />
-            <span className="text-muted">Jumuah Prayer Block (Fri 12-2 PM)</span>
+            <span className="text-muted-foreground">Jumuah Prayer Block (Fri 12-2 PM)</span>
           </div>
           <div className="flex items-center gap-2">
             <Badge variant="outline" className="text-clash border-clash/20 text-xs">GST</Badge>
-            <span className="text-muted">Shared/General Course</span>
+            <span className="text-muted-foreground">Shared/General Course</span>
           </div>
           {[100,200,300,400].map(l => (
             <div key={l} className="flex items-center gap-1.5">
               <div className={`w-2.5 h-2.5 rounded-full ${LEVEL_COLORS[l]?.split(' ')[0]}`} />
-              <span className="text-muted text-xs">{l}L</span>
+              <span className="text-muted-foreground text-xs">{l}L</span>
             </div>
           ))}
         </div>
@@ -664,54 +664,54 @@ export default function LectureTimetablePage() {
 
       {/* DIALOG: Create Timetable */}
       <Dialog open={createTTOpen} onOpenChange={setCreateTTOpen}>
-        <DialogContent className="bg-muted border-foreground/10 text-white max-w-md">
+        <DialogContent className="bg-muted border-foreground/10 text-foreground max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Calendar className="w-5 h-5 text-secondary" /> New Lecture Timetable
             </DialogTitle>
-            <DialogDescription className="text-muted">
+            <DialogDescription className="text-muted-foreground">
               One timetable per session/semester. Add slots after creating.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 pt-1">
             <div className="space-y-1.5">
-              <Label className="text-muted">Name <span className="text-clash">*</span></Label>
+              <Label className="text-muted-foreground">Name <span className="text-clash">*</span></Label>
               <Input placeholder="e.g. 2025/2026 First Semester"
-                className="bg-foreground/5 border-foreground/10 text-white placeholder:text-muted"
+                className="bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground"
                 value={ttForm.name} onChange={e => setTTForm(f => ({ ...f, name: e.target.value }))} />
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label className="text-muted">Academic Session <span className="text-clash">*</span></Label>
+                <Label className="text-muted-foreground">Academic Session <span className="text-clash">*</span></Label>
                 <Input placeholder="2025/2026"
-                  className="bg-foreground/5 border-foreground/10 text-white placeholder:text-muted"
+                  className="bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground"
                   value={ttForm.session} onChange={e => setTTForm(f => ({ ...f, session: e.target.value }))} />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-muted">Semester <span className="text-clash">*</span></Label>
+                <Label className="text-muted-foreground">Semester <span className="text-clash">*</span></Label>
                 <Select value={ttForm.semester} onValueChange={v => setTTForm(f => ({ ...f, semester: v }))}>
-                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-foreground"><SelectValue /></SelectTrigger>
                   <SelectContent className="bg-muted border-foreground/10">
-                    <SelectItem value="1" className="text-white">First (1st)</SelectItem>
-                    <SelectItem value="2" className="text-white">Second (2nd)</SelectItem>
+                    <SelectItem value="1" className="text-foreground">First (1st)</SelectItem>
+                    <SelectItem value="2" className="text-foreground">Second (2nd)</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-1.5">
-                <Label className="text-muted">Start Date <span className="text-clash">*</span></Label>
-                <Input type="date" className="bg-foreground/5 border-foreground/10 text-white"
+                <Label className="text-muted-foreground">Start Date <span className="text-clash">*</span></Label>
+                <Input type="date" className="bg-foreground/5 border-foreground/10 text-foreground"
                   value={ttForm.startDate} onChange={e => setTTForm(f => ({ ...f, startDate: e.target.value }))} />
               </div>
               <div className="space-y-1.5">
-                <Label className="text-muted">End Date <span className="text-clash">*</span></Label>
-                <Input type="date" className="bg-foreground/5 border-foreground/10 text-white"
+                <Label className="text-muted-foreground">End Date <span className="text-clash">*</span></Label>
+                <Input type="date" className="bg-foreground/5 border-foreground/10 text-foreground"
                   value={ttForm.endDate} onChange={e => setTTForm(f => ({ ...f, endDate: e.target.value }))} />
               </div>
             </div>
             <div className="flex gap-3 pt-2">
-              <Button variant="outline" className="flex-1 border-foreground/10 text-muted"
+              <Button variant="outline" className="flex-1 border-foreground/10 text-muted-foreground"
                 onClick={() => setCreateTTOpen(false)} disabled={saving}>Cancel</Button>
               <Button className="flex-1 bg-secondary hover:bg-secondary text-white"
                 onClick={handleCreateTimetable} disabled={saving}>
@@ -724,39 +724,39 @@ export default function LectureTimetablePage() {
 
       {/* DIALOG: Add Slot */}
       <Dialog open={addSlotOpen} onOpenChange={setAddSlotOpen}>
-        <DialogContent className="bg-muted border-foreground/10 text-white max-w-md">
+        <DialogContent className="bg-muted border-foreground/10 text-foreground max-w-md">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               <Plus className="w-5 h-5 text-secondary" /> Add Lecture Slot
             </DialogTitle>
-            <DialogDescription className="text-muted">Schedule a weekly recurring lecture for a course.</DialogDescription>
+            <DialogDescription className="text-muted-foreground">Schedule a weekly recurring lecture for a course.</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 pt-1">
             <div className="grid grid-cols-3 gap-3">
               <div className="space-y-1.5">
-                <Label className="text-muted">Day <span className="text-clash">*</span></Label>
+                <Label className="text-muted-foreground">Day <span className="text-clash">*</span></Label>
                 <Select value={slotForm.dayOfWeek} onValueChange={v => setSlotForm(f => ({ ...f, dayOfWeek: v }))}>
-                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white text-sm"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-foreground text-sm"><SelectValue /></SelectTrigger>
                   <SelectContent className="bg-muted border-foreground/10">
-                    {DAYS.map(d => <SelectItem key={d.idx} value={String(d.idx)} className="text-white">{d.label}</SelectItem>)}
+                    {DAYS.map(d => <SelectItem key={d.idx} value={String(d.idx)} className="text-foreground">{d.label}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-1.5">
-                <Label className="text-muted">Start <span className="text-clash">*</span></Label>
+                <Label className="text-muted-foreground">Start <span className="text-clash">*</span></Label>
                 <Select value={slotForm.startTime} onValueChange={v => setSlotForm(f => ({ ...f, startTime: v, endTime: TIME_SLOTS.find(t => t.start === v)?.end || f.endTime }))}>
-                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white text-sm"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-foreground text-sm"><SelectValue /></SelectTrigger>
                   <SelectContent className="bg-muted border-foreground/10">
-                    {TIME_SLOTS.map(t => <SelectItem key={t.start} value={t.start} className="text-white">{t.start}</SelectItem>)}
+                    {TIME_SLOTS.map(t => <SelectItem key={t.start} value={t.start} className="text-foreground">{t.start}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-1.5">
-                <Label className="text-muted">End <span className="text-clash">*</span></Label>
+                <Label className="text-muted-foreground">End <span className="text-clash">*</span></Label>
                 <Select value={slotForm.endTime} onValueChange={v => setSlotForm(f => ({ ...f, endTime: v }))}>
-                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white text-sm"><SelectValue /></SelectTrigger>
+                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-foreground text-sm"><SelectValue /></SelectTrigger>
                   <SelectContent className="bg-muted border-foreground/10">
-                    {TIME_SLOTS.map(t => <SelectItem key={t.end} value={t.end} className="text-white">{t.end}</SelectItem>)}
+                    {TIME_SLOTS.map(t => <SelectItem key={t.end} value={t.end} className="text-foreground">{t.end}</SelectItem>)}
                   </SelectContent>
                 </Select>
               </div>
@@ -768,49 +768,49 @@ export default function LectureTimetablePage() {
               </div>
             )}
             <div className="space-y-1.5">
-              <Label className="text-muted">Course <span className="text-clash">*</span></Label>
+              <Label className="text-muted-foreground">Course <span className="text-clash">*</span></Label>
               <Select value={slotForm.courseId} onValueChange={v => setSlotForm(f => ({ ...f, courseId: v }))}>
-                <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white text-sm">
+                <SelectTrigger className="bg-foreground/5 border-foreground/10 text-foreground text-sm">
                   <SelectValue placeholder="Select course..." />
                 </SelectTrigger>
                 <SelectContent className="bg-muted border-foreground/10 max-h-52 overflow-y-auto">
-                  {courses.length === 0 && <SelectItem value="__loading" disabled className="text-muted italic">Loading courses...</SelectItem>}
+                  {courses.length === 0 && <SelectItem value="__loading" disabled className="text-muted-foreground italic">Loading courses...</SelectItem>}
                   {courses.map(c => (
-                    <SelectItem key={c.id} value={c.id} className="text-white">
+                    <SelectItem key={c.id} value={c.id} className="text-foreground">
                       <span className="font-mono text-secondary text-xs mr-2">{c.code}</span>
                       <span>{c.name}</span>
-                      <span className="text-muted text-xs ml-1">({c.level}L)</span>
+                      <span className="text-muted-foreground text-xs ml-1">({c.level}L)</span>
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-1.5">
-              <Label className="text-muted">Room / Venue <span className="text-clash">*</span></Label>
+              <Label className="text-muted-foreground">Room / Venue <span className="text-clash">*</span></Label>
               <Select value={slotForm.roomId} onValueChange={v => setSlotForm(f => ({ ...f, roomId: v }))}>
-                <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white text-sm">
+                <SelectTrigger className="bg-foreground/5 border-foreground/10 text-foreground text-sm">
                   <SelectValue placeholder="Select room..." />
                 </SelectTrigger>
                 <SelectContent className="bg-muted border-foreground/10 max-h-52 overflow-y-auto">
-                  {rooms.length === 0 && <SelectItem value="__loading" disabled className="text-muted italic">Loading rooms...</SelectItem>}
+                  {rooms.length === 0 && <SelectItem value="__loading" disabled className="text-muted-foreground italic">Loading rooms...</SelectItem>}
                   {rooms.map(r => (
-                    <SelectItem key={r.id} value={r.id} className="text-white">
+                    <SelectItem key={r.id} value={r.id} className="text-foreground">
                       <span className="font-mono text-accent-gold text-xs mr-2">{r.code}</span>
                       <span>{r.name}</span>
-                      <span className="text-muted text-xs ml-1">(cap {r.capacity})</span>
+                      <span className="text-muted-foreground text-xs ml-1">(cap {r.capacity})</span>
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-1.5">
-              <Label className="text-muted">Notes <span className="text-muted font-normal">(optional)</span></Label>
+              <Label className="text-muted-foreground">Notes <span className="text-muted-foreground font-normal">(optional)</span></Label>
               <Textarea placeholder="e.g. Lab session, Group A only, Combined class..."
-                className="bg-foreground/5 border-foreground/10 text-white resize-none text-sm placeholder:text-muted"
+                className="bg-foreground/5 border-foreground/10 text-foreground resize-none text-sm placeholder:text-muted-foreground"
                 rows={2} value={slotForm.notes} onChange={e => setSlotForm(f => ({ ...f, notes: e.target.value }))} />
             </div>
             <div className="flex gap-3 pt-1">
-              <Button variant="outline" className="flex-1 border-foreground/10 text-muted"
+              <Button variant="outline" className="flex-1 border-foreground/10 text-muted-foreground"
                 onClick={() => setAddSlotOpen(false)} disabled={saving}>Cancel</Button>
               <Button className="flex-1 bg-secondary hover:bg-secondary text-white" onClick={handleAddSlot} disabled={saving}>
                 {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Plus className="w-4 h-4 mr-2" />} Add Slot
@@ -822,7 +822,7 @@ export default function LectureTimetablePage() {
 
       {/* Clash Detection Results Dialog */}
       <Dialog open={clashOpen} onOpenChange={setClashOpen}>
-        <DialogContent className="bg-muted border-foreground/10 text-white max-w-2xl max-h-[80vh] overflow-y-auto">
+        <DialogContent className="bg-muted border-foreground/10 text-foreground max-w-2xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2">
               {clashResult?.summary.clean
@@ -830,7 +830,7 @@ export default function LectureTimetablePage() {
                 : <AlertTriangle className="w-5 h-5 text-clash" />}
               Clash Detection — {clashResult?.timetableName}
             </DialogTitle>
-            <DialogDescription className="text-muted">{clashResult?.message}</DialogDescription>
+            <DialogDescription className="text-muted-foreground">{clashResult?.message}</DialogDescription>
           </DialogHeader>
 
           {clashResult && (
@@ -862,16 +862,16 @@ export default function LectureTimetablePage() {
                         <span className={`font-semibold text-xs mt-0.5 ${clash.severity === 'ERROR' ? 'text-clash' : 'text-accent-gold'}`}>
                           [{clash.type}]
                         </span>
-                        <span className="text-muted">{clash.description}</span>
+                        <span className="text-muted-foreground">{clash.description}</span>
                       </div>
-                      <div className="text-muted text-xs mt-1 ml-10">{clash.day} · {clash.time}</div>
+                      <div className="text-muted-foreground text-xs mt-1 ml-10">{clash.day} · {clash.time}</div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="text-center py-8 text-muted">
+                <div className="text-center py-8 text-muted-foreground">
                   <CheckCircle2 className="w-12 h-12 text-success mx-auto mb-3" />
-                  <p className="font-medium text-white">Timetable is clean</p>
+                  <p className="font-medium text-foreground">Timetable is clean</p>
                   <p className="text-sm">No room, lecturer, student or Jumu'ah clashes detected.</p>
                 </div>
               )}

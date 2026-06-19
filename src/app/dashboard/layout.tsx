@@ -9,7 +9,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession()
   if (status === 'loading') {
     return (
-      <div className="min-h-screen bg-muted flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-secondary" />
       </div>
     )
@@ -20,7 +20,7 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="min-h-screen bg-muted text-white">
+    <div className="min-h-screen bg-background text-foreground">
       <Sidebar />
       <main
         className={[

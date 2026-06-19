@@ -31,10 +31,10 @@ export interface TimetableSlot {
 
 // Level colour mapping
 export const LEVEL_COLORS: Record<Level, { bg: string; text: string; border: string; badge: string }> = {
-  100: { bg: "bg-blue-100", text: "text-blue-800", border: "border-blue-300", badge: "bg-blue-600" },
-  200: { bg: "bg-green-100", text: "text-green-800", border: "border-green-300", badge: "bg-green-600" },
-  300: { bg: "bg-amber-100", text: "text-amber-800", border: "border-amber-300", badge: "bg-amber-600" },
-  400: { bg: "bg-red-100", text: "text-red-800", border: "border-red-300", badge: "bg-red-600" },
+  100: { bg: "bg-[#2A1F5E]/10 dark:bg-[#7B6FD0]/15", text: "text-[#2A1F5E] dark:text-[#C7BFEE]", border: "border-[#2A1F5E]/30 dark:border-[#7B6FD0]/40", badge: "bg-[#2A1F5E] dark:bg-[#7B6FD0]" },
+  200: { bg: "bg-[#4F7A4B]/10 dark:bg-[#4F7A4B]/20", text: "text-[#3D5E3A] dark:text-[#9CC797]", border: "border-[#4F7A4B]/30 dark:border-[#4F7A4B]/40", badge: "bg-[#4F7A4B]" },
+  300: { bg: "bg-[#D7A33B]/10 dark:bg-[#D7A33B]/20", text: "text-[#8A6618] dark:text-[#EFD394]", border: "border-[#D7A33B]/30 dark:border-[#D7A33B]/40", badge: "bg-[#D7A33B]" },
+  400: { bg: "bg-[#BD5B2C]/10 dark:bg-[#BD5B2C]/20", text: "text-[#8A431F] dark:text-[#E8B594]", border: "border-[#BD5B2C]/30 dark:border-[#BD5B2C]/40", badge: "bg-[#BD5B2C]" },
 };
 
 // Time slots available (each = 2 hrs lecture or 1 hr break)

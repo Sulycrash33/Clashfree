@@ -71,9 +71,9 @@ function LecturerPassport({ lecturer, size = "lg" }: { lecturer: Lecturer; size?
   const iconSz = size === "lg" ? "w-5 h-5" : "w-3 h-3";
   return (
     <div className={`${dim} rounded-2xl ${lecturer.colorClass} relative flex items-center justify-center overflow-hidden border-2 border-foreground/20 flex-shrink-0 group`}>
-      <span className={`font-bold text-white ${text}`}>{lecturer.imageInitials}</span>
+      <span className={`font-bold text-foreground ${text}`}>{lecturer.imageInitials}</span>
       <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-        <Camera className={`${iconSz} text-white`} />
+        <Camera className={`${iconSz} text-foreground`} />
         {size === "lg" && <span className="text-[9px] text-foreground/80 mt-1 font-medium">Photo</span>}
       </div>
       <div className="absolute top-1 right-1 w-2 h-2 border-t-2 border-r-2 border-foreground/40" />
@@ -103,7 +103,7 @@ function SlotActionModal({ slot, currentAction, onApply, onClose }: {
             <div className={`font-bold text-sm ${lc.text}`}>{slot.courseCode}</div>
             <div className="text-xs text-foreground/40">{slot.day} · {slot.startTime}–{slot.endTime} · {slot.venue}</div>
           </div>
-          <button onClick={onClose} className="text-foreground/30 hover:text-white p-1"><X className="w-4 h-4" /></button>
+          <button onClick={onClose} className="text-foreground/30 hover:text-foreground p-1"><X className="w-4 h-4" /></button>
         </div>
         <div className="px-5 py-4 space-y-2">
           <p className="text-xs text-foreground/40 mb-3">Select action for this lecture slot:</p>
@@ -129,7 +129,7 @@ function SlotActionModal({ slot, currentAction, onApply, onClose }: {
           })}
         </div>
         <div className="flex gap-3 px-5 py-4 border-t border-foreground/10">
-          <button onClick={onClose} className="px-4 py-2 rounded-xl border border-foreground/10 text-sm text-foreground/50 hover:text-white hover:bg-foreground/5 transition-colors">Cancel</button>
+          <button onClick={onClose} className="px-4 py-2 rounded-xl border border-foreground/10 text-sm text-foreground/50 hover:text-foreground hover:bg-foreground/5 transition-colors">Cancel</button>
           <button onClick={handleApply}
             className={`flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold transition-all ${done ? "bg-success text-white" : "bg-white text-black hover:bg-white/90"}`}>
             {done ? <><CheckCircle2 className="w-4 h-4" /> Applied</> : "Apply"}
@@ -289,7 +289,7 @@ function ExamInvigilationPanel({ lecturerId }: { lecturerId: string }) {
 
       <div className="grid grid-cols-3 gap-3">
         {[
-          { label: "Total Duties",      value: duties.length,                                                             color: "text-white" },
+          { label: "Total Duties",      value: duties.length,                                                             color: "text-foreground" },
           { label: "Chief Invigilator", value: duties.filter((d: InvigilationDuty) => d.role === "Chief Invigilator").length, color: "text-accent-gold" },
           { label: "Invigilator",       value: duties.filter((d: InvigilationDuty) => d.role === "Invigilator").length,       color: "text-secondary" },
         ].map(s => (
@@ -317,7 +317,7 @@ function ExamInvigilationPanel({ lecturerId }: { lecturerId: string }) {
             {duties.map((d: InvigilationDuty) => (
               <div key={d.id} className="px-5 py-4 grid grid-cols-[1fr_90px_90px_100px_120px] gap-3 items-center hover:bg-foreground/[0.03] transition-colors">
                 <div>
-                  <div className="font-bold text-white text-sm">{d.courseCode}</div>
+                  <div className="font-bold text-foreground text-sm">{d.courseCode}</div>
                   <div className="text-xs text-foreground/40 mt-0.5 truncate">{d.courseTitle}</div>
                 </div>
                 <div className="text-xs text-foreground/50 flex items-center gap-1">
@@ -352,7 +352,7 @@ function ProfileSelector({ selected, onSelect }: { selected: Lecturer; onSelect:
         className="flex items-center gap-3 px-4 py-2.5 rounded-xl border border-foreground/15 bg-foreground/5 hover:bg-foreground/10 transition-colors w-full sm:w-auto text-left">
         <LecturerPassport lecturer={selected} size="sm" />
         <div className="min-w-0">
-          <div className="text-sm font-semibold text-white truncate">{selected.name}</div>
+          <div className="text-sm font-semibold text-foreground truncate">{selected.name}</div>
           <div className="text-xs text-foreground/40 truncate">{selected.dept} · {selected.rank}</div>
         </div>
         <ChevronDown className={`w-4 h-4 text-foreground/30 flex-shrink-0 transition-transform ${open ? "rotate-180" : ""}`} />
@@ -368,7 +368,7 @@ function ProfileSelector({ selected, onSelect }: { selected: Lecturer; onSelect:
                 className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-foreground/5 transition-colors text-left ${l.id === selected.id ? "bg-foreground/[0.03]" : ""}`}>
                 <LecturerPassport lecturer={l} size="sm" />
                 <div className="min-w-0 flex-1">
-                  <div className="text-sm font-semibold text-white truncate">{l.name}</div>
+                  <div className="text-sm font-semibold text-foreground truncate">{l.name}</div>
                   <div className="text-xs text-foreground/40 truncate">{l.dept} · {l.rank}</div>
                 </div>
                 {l.id === selected.id && <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0" />}
@@ -390,16 +390,16 @@ function LecturerSettings({ onClose }: { onClose: () => void }) {
         <div className="flex items-center justify-between px-5 py-4 border-b border-foreground/10">
           <div className="flex items-center gap-2">
             <Settings className="w-4 h-4 text-foreground/40" />
-            <span className="font-semibold text-white text-sm">Lecturer Settings</span>
+            <span className="font-semibold text-foreground text-sm">Lecturer Settings</span>
           </div>
-          <button onClick={onClose} className="text-foreground/30 hover:text-white"><X className="w-4 h-4" /></button>
+          <button onClick={onClose} className="text-foreground/30 hover:text-foreground"><X className="w-4 h-4" /></button>
         </div>
         <div className="p-5 space-y-3">
           <div className="flex items-center justify-between p-3 rounded-xl bg-foreground/5 border border-foreground/10">
             <div className="flex items-center gap-3">
               {darkMode ? <Moon className="w-4 h-4 text-primary" /> : <Sun className="w-4 h-4 text-accent-gold" />}
               <div>
-                <div className="text-sm font-medium text-white">{darkMode ? "Dark" : "Light"} Mode</div>
+                <div className="text-sm font-medium text-foreground">{darkMode ? "Dark" : "Light"} Mode</div>
                 <div className="text-xs text-foreground/35">Interface appearance</div>
               </div>
             </div>
@@ -412,7 +412,7 @@ function LecturerSettings({ onClose }: { onClose: () => void }) {
             <div className="flex items-center gap-3">
               <Bell className="w-4 h-4 text-secondary" />
               <div>
-                <div className="text-sm font-medium text-white">WhatsApp Alerts</div>
+                <div className="text-sm font-medium text-foreground">WhatsApp Alerts</div>
                 <div className="text-xs text-foreground/35">Slot changes and exam notices</div>
               </div>
             </div>
@@ -422,7 +422,7 @@ function LecturerSettings({ onClose }: { onClose: () => void }) {
             </button>
           </div>
           <div className="p-3 rounded-xl bg-foreground/5 border border-foreground/10 space-y-2">
-            <div className="text-sm font-medium text-white">Default Landing Tab</div>
+            <div className="text-sm font-medium text-foreground">Default Landing Tab</div>
             <div className="grid grid-cols-3 gap-1.5">
               {["Timetable", "Profile", "Exam"].map(tab => (
                 <button key={tab}
@@ -499,7 +499,7 @@ export default function LecturerPage() {
                     <GraduationCap className="w-3.5 h-3.5 text-success" />
                     <span className="text-[10px] font-semibold text-success uppercase tracking-widest">Lecturer Portal</span>
                   </div>
-                  <h1 className="text-2xl font-bold text-white">{lecturer.name}</h1>
+                  <h1 className="text-2xl font-bold text-foreground">{lecturer.name}</h1>
                   <div className="flex items-center gap-2 mt-1 flex-wrap">
                     <RankBadge rank={lecturer.rank} />
                     <span className="text-foreground/30 text-xs">·</span>
@@ -528,7 +528,7 @@ export default function LecturerPage() {
                   { label: "Modified", value: Object.values(slotActions).filter(a => a !== "none").length },
                 ].map(s => (
                   <div key={s.label} className="rounded-lg bg-foreground/5 border border-foreground/10 p-2 text-center">
-                    <div className="text-sm font-bold text-white">{s.value}</div>
+                    <div className="text-sm font-bold text-foreground">{s.value}</div>
                     <div className="text-[9px] text-foreground/30">{s.label}</div>
                   </div>
                 ))}
@@ -566,7 +566,7 @@ export default function LecturerPage() {
             const Icon = t.icon;
             return (
               <button key={t.id} onClick={() => setActiveTab(t.id)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === t.id ? "bg-foreground/10 text-white shadow" : "text-foreground/40 hover:text-foreground/70"}`}>
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${activeTab === t.id ? "bg-foreground/10 text-foreground shadow" : "text-foreground/40 hover:text-foreground/70"}`}>
                 <Icon className="w-3.5 h-3.5" />
                 {t.label}
               </button>
@@ -592,7 +592,7 @@ export default function LecturerPage() {
                         {code.split(" ").map((part, i) => <span key={i}>{part}</span>)}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="font-bold text-white text-sm">{code}</div>
+                        <div className="font-bold text-foreground text-sm">{code}</div>
                         <div className="text-xs text-foreground/35 mt-0.5">{courseSlots.length} slot{courseSlots.length !== 1 ? "s" : ""} · {hrs}hrs/week</div>
                         <div className="flex flex-wrap gap-1 mt-1.5">
                           {courseSlots.map(s => (
@@ -608,7 +608,7 @@ export default function LecturerPage() {
                         </div>
                       </div>
                       <div className="text-right flex-shrink-0">
-                        <div className="text-lg font-black text-white">{hrs}</div>
+                        <div className="text-lg font-black text-foreground">{hrs}</div>
                         <div className="text-[9px] text-foreground/30">hrs/wk</div>
                       </div>
                     </div>
@@ -655,7 +655,7 @@ export default function LecturerPage() {
                 <LecturerPassport lecturer={lecturer} size="lg" />
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start gap-2 flex-wrap">
-                    <h2 className="text-xl font-bold text-white">{lecturer.name}</h2>
+                    <h2 className="text-xl font-bold text-foreground">{lecturer.name}</h2>
                     <RankBadge rank={lecturer.rank} />
                   </div>
                   <p className="text-foreground/50 text-sm mt-1">{lecturer.title} · {lecturer.deptName}</p>
@@ -678,7 +678,7 @@ export default function LecturerPage() {
                 return (
                   <div key={s.label} className="rounded-xl bg-foreground/5 border border-foreground/10 p-4 space-y-2">
                     <Icon className={`w-4 h-4 ${s.color}`} />
-                    <div className="text-xl font-bold text-white">{s.value}</div>
+                    <div className="text-xl font-bold text-foreground">{s.value}</div>
                     <div className="text-xs text-foreground/35">{s.label}</div>
                   </div>
                 );
@@ -725,10 +725,10 @@ export default function LecturerPage() {
         <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-muted border border-foreground/15 shadow-2xl">
           <CheckCircle2 className="w-5 h-5 text-success flex-shrink-0" />
           <div>
-            <div className="text-sm font-semibold text-white capitalize">{downloadToast} ready</div>
+            <div className="text-sm font-semibold text-foreground capitalize">{downloadToast} ready</div>
             <div className="text-xs text-foreground/40">Demo: file would download to your device</div>
           </div>
-          <button onClick={() => setDownloadToast(null)} className="ml-2 text-foreground/30 hover:text-white"><X className="w-4 h-4" /></button>
+          <button onClick={() => setDownloadToast(null)} className="ml-2 text-foreground/30 hover:text-foreground"><X className="w-4 h-4" /></button>
         </div>
       )}
     </DemoLayout>

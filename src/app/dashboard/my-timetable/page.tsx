@@ -156,9 +156,9 @@ export default function MyTimetablePage() {
       ) : !studentInfo ? (
         <Card className="bg-foreground/5 border-foreground/10">
           <CardContent className="py-12 text-center">
-            <User className="w-12 h-12 mx-auto text-muted mb-4" />
-            <p className="text-white font-medium">No student profile found</p>
-            <p className="text-sm text-muted">Please contact your department if you cannot see your timetable</p>
+            <User className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+            <p className="text-foreground font-medium">No student profile found</p>
+            <p className="text-sm text-muted-foreground">Please contact your department if you cannot see your timetable</p>
           </CardContent>
         </Card>
       ) : (
@@ -172,8 +172,8 @@ export default function MyTimetablePage() {
                     {studentInfo.name.charAt(0)}
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold text-white">{studentInfo.name}</h2>
-                    <p className="text-muted">{studentInfo.regNumber}</p>
+                    <h2 className="text-xl font-bold text-foreground">{studentInfo.name}</h2>
+                    <p className="text-muted-foreground">{studentInfo.regNumber}</p>
                     <div className="flex items-center gap-2 mt-1">
                       <Badge variant="outline" className="border-foreground/10 text-secondary">
                         {studentInfo.department?.code} - {studentInfo.level} Level
@@ -189,12 +189,12 @@ export default function MyTimetablePage() {
 
                 <div className="flex items-center gap-2">
                   <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
-                    <SelectTrigger className="w-64 bg-foreground/5 border-foreground/10 text-white">
+                    <SelectTrigger className="w-64 bg-foreground/5 border-foreground/10 text-foreground">
                       <SelectValue placeholder="Select exam period" />
                     </SelectTrigger>
                     <SelectContent className="bg-muted border-foreground/10">
                       {examPeriods.map((p) => (
-                        <SelectItem key={p.id} value={p.id} className="text-white">
+                        <SelectItem key={p.id} value={p.id} className="text-foreground">
                           {p.name} - {p.session} Sem {p.semester}
                         </SelectItem>
                       ))}
@@ -202,7 +202,7 @@ export default function MyTimetablePage() {
                   </Select>
                   <Button
                     variant="outline"
-                    className="border-foreground/10 text-muted hover:text-white"
+                    className="border-foreground/10 text-muted-foreground hover:text-foreground"
                   >
                     <Download className="w-4 h-4 mr-2" />
                     Download
@@ -232,8 +232,8 @@ export default function MyTimetablePage() {
                     <BookOpen className="w-5 h-5 text-secondary" />
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-white">{studentInfo.courses.length}</div>
-                    <div className="text-xs text-muted">Registered Courses</div>
+                    <div className="text-2xl font-bold text-foreground">{studentInfo.courses.length}</div>
+                    <div className="text-xs text-muted-foreground">Registered Courses</div>
                   </div>
                 </div>
               </CardContent>
@@ -245,8 +245,8 @@ export default function MyTimetablePage() {
                     <Calendar className="w-5 h-5 text-success" />
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-white">{sortedDates.length}</div>
-                    <div className="text-xs text-muted">Exam Days</div>
+                    <div className="text-2xl font-bold text-foreground">{sortedDates.length}</div>
+                    <div className="text-xs text-muted-foreground">Exam Days</div>
                   </div>
                 </div>
               </CardContent>
@@ -258,8 +258,8 @@ export default function MyTimetablePage() {
                     <AlertTriangle className="w-5 h-5 text-accent-gold" />
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-white">{coCourses.length}</div>
-                    <div className="text-xs text-muted">Carry-overs</div>
+                    <div className="text-2xl font-bold text-foreground">{coCourses.length}</div>
+                    <div className="text-xs text-muted-foreground">Carry-overs</div>
                   </div>
                 </div>
               </CardContent>
@@ -271,8 +271,8 @@ export default function MyTimetablePage() {
                     <CheckCircle2 className="w-5 h-5 text-primary" />
                   </div>
                   <div>
-                    <div className="text-2xl font-bold text-white">{examSlots.length}</div>
-                    <div className="text-xs text-muted">Exams Scheduled</div>
+                    <div className="text-2xl font-bold text-foreground">{examSlots.length}</div>
+                    <div className="text-xs text-muted-foreground">Exams Scheduled</div>
                   </div>
                 </div>
               </CardContent>
@@ -283,9 +283,9 @@ export default function MyTimetablePage() {
           {examSlots.length === 0 ? (
             <Card className="bg-foreground/5 border-foreground/10">
               <CardContent className="py-12 text-center">
-                <Calendar className="w-12 h-12 mx-auto text-muted mb-4" />
-                <p className="text-white font-medium">No exams scheduled yet</p>
-                <p className="text-sm text-muted">Your timetable will appear here once exams are scheduled</p>
+                <Calendar className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+                <p className="text-foreground font-medium">No exams scheduled yet</p>
+                <p className="text-sm text-muted-foreground">Your timetable will appear here once exams are scheduled</p>
               </CardContent>
             </Card>
           ) : (
@@ -293,7 +293,7 @@ export default function MyTimetablePage() {
               {sortedDates.map((date) => (
                 <Card key={date} className="bg-foreground/5 border-foreground/10">
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-lg text-white flex items-center gap-2">
+                    <CardTitle className="text-lg text-foreground flex items-center gap-2">
                       <Calendar className="w-5 h-5 text-secondary" />
                       {date}
                     </CardTitle>
@@ -317,7 +317,7 @@ export default function MyTimetablePage() {
                                     <Badge variant="outline" className="border-foreground/20 text-secondary font-mono">
                                       {slot.course.code}
                                     </Badge>
-                                    <Badge variant="secondary" className="bg-foreground/10 text-muted">
+                                    <Badge variant="secondary" className="bg-foreground/10 text-muted-foreground">
                                       {slotLabels[slot.slotNumber - 1]}
                                     </Badge>
                                     {isCO && (
@@ -326,8 +326,8 @@ export default function MyTimetablePage() {
                                       </Badge>
                                     )}
                                   </div>
-                                  <p className="text-white font-medium">{slot.course.name}</p>
-                                  <div className="flex items-center gap-4 mt-2 text-sm text-muted">
+                                  <p className="text-foreground font-medium">{slot.course.name}</p>
+                                  <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
                                     <span className="flex items-center gap-1">
                                       <Clock className="w-4 h-4" />
                                       {slot.startTime} - {slot.endTime}

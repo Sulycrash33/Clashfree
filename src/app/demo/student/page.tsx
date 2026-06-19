@@ -54,9 +54,9 @@ function StudentPassport({ student, size = "lg" }: { student: Student; size?: "s
   const iconSz = size === "lg" ? "w-5 h-5" : "w-3 h-3";
   return (
     <div className={`${dim} rounded-2xl ${student.colorClass} relative flex items-center justify-center overflow-hidden border-2 border-foreground/20 flex-shrink-0 group`}>
-      <span className={`font-bold text-white ${text}`}>{student.imageInitials}</span>
+      <span className={`font-bold text-foreground ${text}`}>{student.imageInitials}</span>
       <div className="absolute inset-0 bg-black/40 flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer">
-        <Camera className={`${iconSz} text-white`} />
+        <Camera className={`${iconSz} text-foreground`} />
         {size === "lg" && <span className="text-[9px] text-foreground/80 mt-1 font-medium">Photo</span>}
       </div>
       <div className="absolute top-1 right-1 w-2 h-2 border-t-2 border-r-2 border-foreground/40" />
@@ -90,7 +90,7 @@ function ProfileSelector({ selected, onSelect }: { selected: Student; onSelect: 
         className="flex items-center gap-3 px-4 py-2.5 rounded-xl border border-foreground/15 bg-foreground/5 hover:bg-foreground/10 transition-colors text-left w-full sm:w-auto">
         <StudentPassport student={selected} size="sm" />
         <div className="min-w-0">
-          <div className="text-sm font-semibold text-white truncate">{selected.name}</div>
+          <div className="text-sm font-semibold text-foreground truncate">{selected.name}</div>
           <div className="text-xs text-foreground/40 truncate">{selected.dept} · {selected.level}L</div>
         </div>
         {selected.conflicts.length > 0 && (
@@ -114,7 +114,7 @@ function ProfileSelector({ selected, onSelect }: { selected: Student; onSelect: 
                   className={`w-full flex items-center gap-3 px-4 py-3 hover:bg-foreground/5 transition-colors text-left ${s.id === selected.id ? "bg-foreground/[0.03]" : ""}`}>
                   <StudentPassport student={s} size="sm" />
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-semibold text-white truncate">{s.name}</div>
+                    <div className="text-sm font-semibold text-foreground truncate">{s.name}</div>
                     <div className="text-xs text-foreground/40 truncate">{s.dept} · {s.level}L · CGPA {s.cgpa}</div>
                   </div>
                   <div className="flex items-center gap-1 flex-shrink-0">
@@ -151,7 +151,7 @@ function ConflictCard({ conflict }: { conflict: StudentConflict }) {
                 {conflict.severity.toUpperCase()}
               </span>
             </div>
-            <div className="text-sm font-semibold text-white mt-1">{conflict.title}</div>
+            <div className="text-sm font-semibold text-foreground mt-1">{conflict.title}</div>
           </div>
         </div>
         <ChevronDown className={`w-4 h-4 text-foreground/30 flex-shrink-0 mt-1 transition-transform ${expanded ? "rotate-180" : ""}`} />
@@ -212,7 +212,7 @@ function CourseTable({ student }: { student: Student }) {
               className={`px-5 py-3.5 flex items-center gap-4 ${hasClash ? "bg-clash/5 border-l-2 border-clash" : isCarryover ? "bg-accent-gold/5 border-l-2 border-accent-gold" : "hover:bg-foreground/[0.03]"} transition-colors`}>
               <div className="w-5 text-center text-xs text-foreground/20 flex-shrink-0">{i + 1}</div>
               <div className="w-28 flex-shrink-0">
-                <div className="font-bold text-white text-sm">{course.code}</div>
+                <div className="font-bold text-foreground text-sm">{course.code}</div>
                 <div className="flex items-center gap-1 mt-0.5">
                   <div className={`w-1.5 h-1.5 rounded-full ${tc.dot}`} />
                   <span className="text-[10px] text-foreground/30">{tc.label}</span>
@@ -230,7 +230,7 @@ function CourseTable({ student }: { student: Student }) {
                 </div>
               </div>
               <div className="flex-shrink-0 text-right">
-                <div className="text-sm font-bold text-white">{course.creditUnit}</div>
+                <div className="text-sm font-bold text-foreground">{course.creditUnit}</div>
                 <div className="text-[10px] text-foreground/30">CU</div>
               </div>
             </div>
@@ -489,7 +489,7 @@ function DownloadPanel({ student, onDownload }: { student: Student; onDownload: 
                 <Icon className={`w-4 h-4 ${item.color}`} />
               </div>
               <div className="min-w-0">
-                <div className={`text-sm font-semibold ${item.disabled ? "text-foreground/30" : "text-white"}`}>{item.label}</div>
+                <div className={`text-sm font-semibold ${item.disabled ? "text-foreground/30" : "text-foreground"}`}>{item.label}</div>
                 <div className="text-xs text-foreground/35 mt-0.5">{item.desc}</div>
               </div>
               {!item.disabled && <Download className={`w-3.5 h-3.5 ${item.color} ml-auto flex-shrink-0 mt-0.5`} />}
@@ -510,16 +510,16 @@ function StudentSettings({ onClose }: { onClose: () => void }) {
         <div className="flex items-center justify-between px-5 py-4 border-b border-foreground/10">
           <div className="flex items-center gap-2">
             <Settings className="w-4 h-4 text-foreground/40" />
-            <span className="font-semibold text-white text-sm">Student Settings</span>
+            <span className="font-semibold text-foreground text-sm">Student Settings</span>
           </div>
-          <button onClick={onClose} className="text-foreground/30 hover:text-white"><X className="w-4 h-4" /></button>
+          <button onClick={onClose} className="text-foreground/30 hover:text-foreground"><X className="w-4 h-4" /></button>
         </div>
         <div className="p-5 space-y-4">
           <div className="flex items-center justify-between p-3 rounded-xl bg-foreground/5 border border-foreground/10">
             <div className="flex items-center gap-3">
               {darkMode ? <Moon className="w-4 h-4 text-primary" /> : <Sun className="w-4 h-4 text-accent-gold" />}
               <div>
-                <div className="text-sm font-medium text-white">{darkMode ? "Dark" : "Light"} Mode</div>
+                <div className="text-sm font-medium text-foreground">{darkMode ? "Dark" : "Light"} Mode</div>
                 <div className="text-xs text-foreground/35">Toggle appearance</div>
               </div>
             </div>
@@ -532,7 +532,7 @@ function StudentSettings({ onClose }: { onClose: () => void }) {
             <div className="flex items-center gap-3">
               <Bell className="w-4 h-4 text-secondary" />
               <div>
-                <div className="text-sm font-medium text-white">WhatsApp Notifications</div>
+                <div className="text-sm font-medium text-foreground">WhatsApp Notifications</div>
                 <div className="text-xs text-foreground/35">Clash alerts and exam notices</div>
               </div>
             </div>
@@ -542,7 +542,7 @@ function StudentSettings({ onClose }: { onClose: () => void }) {
             </button>
           </div>
           <div className="p-3 rounded-xl bg-foreground/5 border border-foreground/10 space-y-2">
-            <div className="text-sm font-medium text-white">Default Landing Tab</div>
+            <div className="text-sm font-medium text-foreground">Default Landing Tab</div>
             <div className="grid grid-cols-2 gap-1.5">
               {["Courses", "Timetable", "Conflicts", "Profile"].map(tab => (
                 <button key={tab}
@@ -605,7 +605,7 @@ export default function StudentPage() {
                     <BookOpen className="w-3.5 h-3.5 text-clash" />
                     <span className="text-[10px] font-semibold text-clash uppercase tracking-widest">Student Portal</span>
                   </div>
-                  <h1 className="text-2xl font-bold text-white">{student.name}</h1>
+                  <h1 className="text-2xl font-bold text-foreground">{student.name}</h1>
                   <p className="text-foreground/40 text-sm mt-0.5">{student.matric}</p>
                   <p className="text-foreground/30 text-xs mt-0.5">{student.deptName} · {student.level} Level · Semester {student.semester}</p>
                 </div>
@@ -623,11 +623,11 @@ export default function StudentPage() {
               <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 mt-4">
                 {[
                   { label: "CGPA",      value: student.cgpa, className: cgpaColor(student.cgpa) },
-                  { label: "Credit CU", value: student.totalCreditUnits, className: "text-white" },
-                  { label: "Courses",   value: student.registeredCourses.length, className: "text-white" },
+                  { label: "Credit CU", value: student.totalCreditUnits, className: "text-foreground" },
+                  { label: "Courses",   value: student.registeredCourses.length, className: "text-foreground" },
                   { label: "Conflicts", value: student.conflicts.length, className: student.conflicts.length === 0 ? "text-success" : criticalCount > 0 ? "text-clash" : "text-accent-gold" },
                   { label: "Level",     value: `${student.level}L`, className: lc.badge.replace("bg-", "text-").replace("-600", "-400") },
-                  { label: "Semester",  value: `S${student.semester}`, className: "text-white" },
+                  { label: "Semester",  value: `S${student.semester}`, className: "text-foreground" },
                 ].map(s => (
                   <div key={s.label} className="rounded-lg bg-foreground/5 border border-foreground/10 p-2 text-center">
                     <div className={`text-base font-bold ${s.className}`}>{s.value}</div>
@@ -660,7 +660,7 @@ export default function StudentPage() {
                 <button key={i} onClick={() => setActiveTab("conflicts")}
                   className="w-full flex items-center gap-2 px-3 py-2 rounded-lg hover:bg-clash/10 transition-colors text-left group">
                   <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${cfg.color}`} />
-                  <span className="text-xs text-foreground/60 group-hover:text-white flex-1 truncate">{c.title}</span>
+                  <span className="text-xs text-foreground/60 group-hover:text-foreground flex-1 truncate">{c.title}</span>
                   <ChevronRight className="w-3 h-3 text-foreground/20 flex-shrink-0" />
                 </button>
               );
@@ -679,7 +679,7 @@ export default function StudentPage() {
                   activeTab === t.id
                     ? isConflictTab && student.conflicts.length > 0
                       ? "bg-clash/20 text-clash shadow"
-                      : "bg-foreground/10 text-white shadow"
+                      : "bg-foreground/10 text-foreground shadow"
                     : "text-foreground/40 hover:text-foreground/70"
                 }`}>
                 <Icon className="w-3.5 h-3.5" />
@@ -711,7 +711,7 @@ export default function StudentPage() {
                         <div className={`w-2 h-2 rounded-full ${t.color}`} />
                         <span className="text-xs text-foreground/40">{t.label}</span>
                       </div>
-                      <div className="text-xl font-bold text-white">{cu} CU</div>
+                      <div className="text-xl font-bold text-foreground">{cu} CU</div>
                       <div className="h-1 bg-foreground/10 rounded-full overflow-hidden">
                         <div className={`h-full rounded-full ${t.color}`} style={{ width: `${Math.min(100, (cu / (student.totalCreditUnits || 1)) * 100)}%` }} />
                       </div>
@@ -789,7 +789,7 @@ export default function StudentPage() {
               <div className="flex items-start gap-4">
                 <StudentPassport student={student} size="lg" />
                 <div className="flex-1 min-w-0">
-                  <h2 className="text-xl font-bold text-white">{student.name}</h2>
+                  <h2 className="text-xl font-bold text-foreground">{student.name}</h2>
                   <p className="text-foreground/50 text-sm mt-1">{student.deptName}</p>
                   {student.profileNote && <p className="text-xs text-foreground/30 mt-2 leading-relaxed italic">{student.profileNote}</p>}
                 </div>
@@ -818,11 +818,11 @@ export default function StudentPage() {
               <div className="grid grid-cols-2 gap-3 pt-1">
                 <div className="rounded-xl bg-foreground/5 border border-foreground/10 p-3">
                   <div className="text-xs text-foreground/30">Registered CU</div>
-                  <div className={`text-xl font-bold mt-1 ${student.totalCreditUnits > 24 ? "text-clash" : "text-white"}`}>{student.totalCreditUnits}</div>
+                  <div className={`text-xl font-bold mt-1 ${student.totalCreditUnits > 24 ? "text-clash" : "text-foreground"}`}>{student.totalCreditUnits}</div>
                 </div>
                 <div className="rounded-xl bg-foreground/5 border border-foreground/10 p-3">
                   <div className="text-xs text-foreground/30">Courses</div>
-                  <div className="text-xl font-bold text-white mt-1">{student.registeredCourses.length}</div>
+                  <div className="text-xl font-bold text-foreground mt-1">{student.registeredCourses.length}</div>
                 </div>
               </div>
             </div>
@@ -836,10 +836,10 @@ export default function StudentPage() {
         <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-muted border border-foreground/15 shadow-2xl">
           <CheckCircle2 className="w-5 h-5 text-success flex-shrink-0" />
           <div>
-            <div className="text-sm font-semibold text-white capitalize">{downloadToast} ready</div>
+            <div className="text-sm font-semibold text-foreground capitalize">{downloadToast} ready</div>
             <div className="text-xs text-foreground/40">Demo: file would download to your device</div>
           </div>
-          <button onClick={() => setDownloadToast(null)} className="ml-2 text-foreground/30 hover:text-white"><X className="w-4 h-4" /></button>
+          <button onClick={() => setDownloadToast(null)} className="ml-2 text-foreground/30 hover:text-foreground"><X className="w-4 h-4" /></button>
         </div>
       )}
 

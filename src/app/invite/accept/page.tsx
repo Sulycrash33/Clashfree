@@ -75,7 +75,7 @@ function AcceptInviteForm() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-muted via-muted to-muted flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-card flex items-center justify-center">
         <Loader2 className="w-8 h-8 text-secondary animate-spin" />
       </div>
     )
@@ -83,15 +83,15 @@ function AcceptInviteForm() {
 
   if (!token || !info?.valid) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-muted via-muted to-muted text-white flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-card text-foreground flex items-center justify-center p-4">
         <div className="max-w-md w-full text-center space-y-4">
           <div className="w-16 h-16 rounded-full bg-clash/20 flex items-center justify-center mx-auto">
             <AlertTriangle className="w-8 h-8 text-clash" />
           </div>
           <h2 className="text-2xl font-bold">Invalid or Expired Link</h2>
-          <p className="text-muted">{info?.error || 'This invite link is no longer valid. Contact your administrator for a new invite.'}</p>
+          <p className="text-muted-foreground">{info?.error || 'This invite link is no longer valid. Contact your administrator for a new invite.'}</p>
           <Link href="/login">
-            <Button variant="outline" className="border-foreground/20 text-white hover:bg-foreground/10">Go to Login</Button>
+            <Button variant="outline" className="border-foreground/20 text-foreground hover:bg-foreground/10">Go to Login</Button>
           </Link>
         </div>
       </div>
@@ -100,20 +100,20 @@ function AcceptInviteForm() {
 
   if (done) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-muted via-muted to-muted text-white flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-card text-foreground flex items-center justify-center p-4">
         <div className="max-w-md w-full text-center space-y-4">
           <div className="w-16 h-16 rounded-full bg-secondary/20 flex items-center justify-center mx-auto">
             <CheckCircle2 className="w-8 h-8 text-secondary" />
           </div>
           <h2 className="text-2xl font-bold">Account Created!</h2>
-          <p className="text-muted">Redirecting you to login...</p>
+          <p className="text-muted-foreground">Redirecting you to login...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-muted via-muted to-muted text-white flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-card text-foreground flex items-center justify-center p-4">
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-secondary/10 rounded-full blur-3xl animate-pulse" />
         <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary/10 rounded-full blur-3xl animate-pulse delay-1000" />
@@ -124,30 +124,30 @@ function AcceptInviteForm() {
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary to-secondary flex items-center justify-center font-bold text-xl">CF</div>
           <div>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-secondary to-secondary bg-clip-text text-transparent">ClashFree</h1>
-            <p className="text-xs text-muted">Academic Scheduling Platform</p>
+            <p className="text-xs text-muted-foreground">Academic Scheduling Platform</p>
           </div>
         </div>
 
         <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-xl">
           <CardHeader className="space-y-3 pb-4">
             <CardTitle className="text-2xl font-bold">Accept Invitation</CardTitle>
-            <CardDescription className="text-muted">
+            <CardDescription className="text-muted-foreground">
               Set up your account to join ClashFree.
             </CardDescription>
             {info.institutionName && (
               <div className="flex items-center gap-2 bg-secondary/10 border border-secondary/20 rounded-lg px-3 py-2">
                 <Building2 className="w-4 h-4 text-secondary shrink-0" />
                 <div>
-                  <p className="text-xs text-muted">Institution</p>
-                  <p className="text-sm text-white font-medium">{info.institutionName}</p>
+                  <p className="text-xs text-muted-foreground">Institution</p>
+                  <p className="text-sm text-foreground font-medium">{info.institutionName}</p>
                 </div>
                 <Badge className="ml-auto bg-secondary/20 text-secondary border-secondary/20 text-xs">
                   {ROLE_LABELS[info.role!] || info.role}
                 </Badge>
               </div>
             )}
-            <div className="text-sm text-muted">
-              Email: <span className="text-white font-medium">{info.email}</span>
+            <div className="text-sm text-muted-foreground">
+              Email: <span className="text-foreground font-medium">{info.email}</span>
             </div>
           </CardHeader>
           <CardContent>
@@ -159,44 +159,44 @@ function AcceptInviteForm() {
               )}
 
               <div className="space-y-2">
-                <Label className="text-muted">Your Full Name *</Label>
+                <Label className="text-muted-foreground">Your Full Name *</Label>
                 <div className="relative">
-                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
+                  <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
                     value={form.name}
                     onChange={e => setForm(p => ({ ...p, name: e.target.value }))}
                     placeholder="Dr. Amina Bello"
-                    className="pl-10 bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary"
+                    className="pl-10 bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground focus:border-secondary"
                     required
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label className="text-muted">Password *</Label>
+                <Label className="text-muted-foreground">Password *</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
                     value={form.password}
                     onChange={e => setForm(p => ({ ...p, password: e.target.value }))}
                     type="password"
                     placeholder="Min 8 characters"
-                    className="pl-10 bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary"
+                    className="pl-10 bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground focus:border-secondary"
                     required minLength={8}
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label className="text-muted">Confirm Password *</Label>
+                <Label className="text-muted-foreground">Confirm Password *</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
                     value={form.confirmPassword}
                     onChange={e => setForm(p => ({ ...p, confirmPassword: e.target.value }))}
                     type="password"
                     placeholder="Repeat password"
-                    className="pl-10 bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary"
+                    className="pl-10 bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground focus:border-secondary"
                     required
                   />
                 </div>
@@ -218,5 +218,5 @@ function AcceptInviteForm() {
 }
 
 export default function AcceptInvitePage() {
-  return <Suspense fallback={<div className="min-h-screen bg-muted flex items-center justify-center"><Loader2 className="w-8 h-8 text-secondary animate-spin" /></div>}><AcceptInviteForm /></Suspense>
+  return <Suspense fallback={<div className="min-h-screen bg-background flex items-center justify-center"><Loader2 className="w-8 h-8 text-secondary animate-spin" /></div>}><AcceptInviteForm /></Suspense>
 }

@@ -27,8 +27,8 @@ export function PageHeader({
   return (
     <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">{title}</h1>
-        <p className="text-muted">{description}</p>
+        <h1 className="text-2xl font-bold text-foreground">{title}</h1>
+        <p className="text-muted-foreground">{description}</p>
       </div>
       <div className="flex items-center gap-2">
         {onRefresh && (
@@ -37,7 +37,7 @@ export function PageHeader({
             size="sm"
             onClick={onRefresh}
             disabled={loading}
-            className="border-foreground/10 text-muted hover:text-white hover:bg-foreground/5"
+            className="border-foreground/10 text-muted-foreground hover:text-foreground hover:bg-foreground/5"
           >
             <RefreshCw className={`w-4 h-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
             Refresh

@@ -74,7 +74,7 @@ export const STUDENT_ADAEZE: Student = {
   isFeatured: true,
   profileNote: "Best Student, 300 Level CSC. Zero detected conflicts. Model registration used in demo onboarding.",
   imageInitials: "AO",
-  colorClass: "bg-emerald-600",
+  colorClass: "bg-[#2A1F5E]",
   registeredCourses: [
     { code: "CSC 311", title: "Algorithm Analysis and Design", creditUnit: 3, semester: 1, dept: "CSC", type: "core" },
     { code: "CSC 313", title: "Software Engineering I", creditUnit: 3, semester: 1, dept: "CSC", type: "core" },
@@ -107,7 +107,7 @@ export const STUDENT_IBRAHIM: Student = {
   isFeatured: true,
   profileNote: "Registered CHM 211 and CHM 213 which both occupy Monday 10:00–12:00. ClashFree flags direct lecture time overlap.",
   imageInitials: "IA",
-  colorClass: "bg-orange-600",
+  colorClass: "bg-[#BD5B2C]",
   registeredCourses: [
     { code: "CHM 211", title: "Organic Chemistry I", creditUnit: 3, semester: 1, dept: "CHM", type: "core", clashWith: "CHM 213" },
     { code: "CHM 213", title: "Inorganic Chemistry I", creditUnit: 3, semester: 1, dept: "CHM", type: "core", clashWith: "CHM 211" },
@@ -150,7 +150,7 @@ export const STUDENT_FATIMA: Student = {
   isFeatured: true,
   profileNote: "Attempted to register 9 courses totalling 26 CU. NUC CCMAS cap is 24 CU/semester. ClashFree blocks submission and highlights the 2 excess CU.",
   imageInitials: "FA",
-  colorClass: "bg-violet-600",
+  colorClass: "bg-[#4F7A4B]",
   registeredCourses: [
     { code: "PHY 311", title: "Quantum Mechanics I", creditUnit: 3, semester: 1, dept: "PHY", type: "core" },
     { code: "PHY 313", title: "Solid State Physics I", creditUnit: 3, semester: 1, dept: "PHY", type: "core" },
@@ -196,7 +196,7 @@ export const STUDENT_EMEKA: Student = {
   isFeatured: true,
   profileNote: "Student failed BCH 211 (Physical Biochemistry) in 200L. He is retaking it as carryover AND has registered BCH 311 which has BCH 211 as a prerequisite. ClashFree flags prerequisite violation.",
   imageInitials: "EO",
-  colorClass: "bg-red-600",
+  colorClass: "bg-[#6B5298]",
   registeredCourses: [
     // Carryover from 200L
     { code: "BCH 211", title: "Physical Biochemistry (CARRYOVER)", creditUnit: 3, semester: 1, dept: "BCH", type: "core", isCarryover: true },
@@ -250,7 +250,7 @@ export const STUDENT_ZAINAB: Student = {
   isFeatured: true,
   profileNote: "Final year student with spillover from 300L (CSC 316 & CSC 318 not passed), plus 400L courses, plus venue overcapacity flag. Most complex profile in demo — showcases full power of ClashFree.",
   imageInitials: "ZL",
-  colorClass: "bg-fuchsia-600",
+  colorClass: "bg-[#B8862A]",
   registeredCourses: [
     // Spillover carryovers from 300L
     { code: "CSC 316", title: "Computer Networks II (SPILLOVER)", creditUnit: 3, semester: 1, dept: "CSC", type: "core", isCarryover: true },

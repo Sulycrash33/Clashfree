@@ -185,11 +185,11 @@ export default function UsersPage() {
         return (
           <div className="flex items-center gap-3">
             <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${role.color} flex items-center justify-center`}>
-              <role.icon className="w-5 h-5 text-white" />
+              <role.icon className="w-5 h-5 text-foreground" />
             </div>
             <div>
-              <div className="font-medium text-white">{row.getValue('name')}</div>
-              <div className="text-xs text-muted">{row.original.email}</div>
+              <div className="font-medium text-foreground">{row.getValue('name')}</div>
+              <div className="text-xs text-muted-foreground">{row.original.email}</div>
             </div>
           </div>
         )
@@ -211,7 +211,7 @@ export default function UsersPage() {
       accessorKey: 'institution',
       header: 'Institution',
       cell: ({ row }) => (
-        <span className="text-muted">
+        <span className="text-muted-foreground">
           {row.original.institution?.shortName || 'Platform'}
         </span>
       ),
@@ -220,7 +220,7 @@ export default function UsersPage() {
       accessorKey: 'lastLoginAt',
       header: 'Last Login',
       cell: ({ row }) => (
-        <span className="text-muted text-sm">
+        <span className="text-muted-foreground text-sm">
           {row.original.lastLoginAt
             ? new Date(row.original.lastLoginAt).toLocaleDateString()
             : 'Never'}
@@ -241,12 +241,12 @@ export default function UsersPage() {
       cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground">
               <MoreHorizontal className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-muted border-foreground/10">
-            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted">
+            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted-foreground">
               <Pencil className="w-4 h-4 mr-2" /> Edit
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-clash">
@@ -290,66 +290,66 @@ export default function UsersPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-muted border-foreground/10 text-white max-w-md">
+        <DialogContent className="bg-muted border-foreground/10 text-foreground max-w-md">
           <DialogHeader>
             <DialogTitle>{editingUser ? 'Edit User' : 'Add New User'}</DialogTitle>
-            <DialogDescription className="text-muted">
+            <DialogDescription className="text-muted-foreground">
               {editingUser ? 'Update user details' : 'Create a new user account'}
             </DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <Label className="text-muted">Full Name</Label>
+              <Label className="text-muted-foreground">Full Name</Label>
               <Input
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="bg-foreground/5 border-foreground/10 text-white"
+                className="bg-foreground/5 border-foreground/10 text-foreground"
               />
             </div>
             <div className="space-y-2">
-              <Label className="text-muted">Email</Label>
+              <Label className="text-muted-foreground">Email</Label>
               <Input
                 type="email"
                 value={formData.email}
                 onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                className="bg-foreground/5 border-foreground/10 text-white"
+                className="bg-foreground/5 border-foreground/10 text-foreground"
               />
             </div>
             {!editingUser && (
               <div className="space-y-2">
-                <Label className="text-muted">Password</Label>
+                <Label className="text-muted-foreground">Password</Label>
                 <Input
                   type="password"
                   value={formData.password}
                   onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="bg-foreground/5 border-foreground/10 text-white"
+                  className="bg-foreground/5 border-foreground/10 text-foreground"
                 />
               </div>
             )}
             <div className="space-y-2">
-              <Label className="text-muted">Role</Label>
+              <Label className="text-muted-foreground">Role</Label>
               <Select value={formData.role} onValueChange={(v) => setFormData({ ...formData, role: v })}>
-                <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white">
+                <SelectTrigger className="bg-foreground/5 border-foreground/10 text-foreground">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="bg-muted border-foreground/10">
                   {Object.entries(roleLabels).map(([key, { label }]) => (
-                    <SelectItem key={key} value={key} className="text-white">{label}</SelectItem>
+                    <SelectItem key={key} value={key} className="text-foreground">{label}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             {formData.role !== 'SA' && (
               <div className="space-y-2">
-                <Label className="text-muted">Institution</Label>
+                <Label className="text-muted-foreground">Institution</Label>
                 <Select value={formData.institutionId} onValueChange={(v) => setFormData({ ...formData, institutionId: v })}>
-                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white">
+                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-foreground">
                     <SelectValue placeholder="Select institution" />
                   </SelectTrigger>
                   <SelectContent className="bg-muted border-foreground/10">
                     {institutions.map((i) => (
-                      <SelectItem key={i.id} value={i.id} className="text-white">{i.name} ({i.shortName})</SelectItem>
+                      <SelectItem key={i.id} value={i.id} className="text-foreground">{i.name} ({i.shortName})</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -358,7 +358,7 @@ export default function UsersPage() {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-foreground/10 text-muted">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-foreground/10 text-muted-foreground">
               Cancel
             </Button>
             <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-clash to-accent-gold">

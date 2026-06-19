@@ -59,12 +59,12 @@ export function DataTable<TData, TValue>({
     <div className="space-y-4">
       {searchKey && (
         <div className="relative max-w-sm">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
           <Input
             placeholder={searchPlaceholder}
             value={(table.getColumn(searchKey)?.getFilterValue() as string) ?? ''}
             onChange={(e) => table.getColumn(searchKey)?.setFilterValue(e.target.value)}
-            className="pl-10 bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary"
+            className="pl-10 bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground focus:border-secondary"
           />
         </div>
       )}
@@ -75,7 +75,7 @@ export function DataTable<TData, TValue>({
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id} className="border-foreground/10 hover:bg-foreground/5">
                 {headerGroup.headers.map((header) => (
-                  <TableHead key={header.id} className="text-muted font-medium">
+                  <TableHead key={header.id} className="text-muted-foreground font-medium">
                     {header.isPlaceholder
                       ? null
                       : flexRender(header.column.columnDef.header, header.getContext())}
@@ -92,7 +92,7 @@ export function DataTable<TData, TValue>({
                   className="border-foreground/10 hover:bg-foreground/5 data-[state=selected]:bg-foreground/10"
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="text-white">
+                    <TableCell key={cell.id} className="text-foreground">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
@@ -100,7 +100,7 @@ export function DataTable<TData, TValue>({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center text-muted">
+                <TableCell colSpan={columns.length} className="h-24 text-center text-muted-foreground">
                   No results found.
                 </TableCell>
               </TableRow>
@@ -110,7 +110,7 @@ export function DataTable<TData, TValue>({
       </div>
 
       <div className="flex items-center justify-between">
-        <div className="text-sm text-muted">
+        <div className="text-sm text-muted-foreground">
           Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
         </div>
         <div className="flex items-center gap-2">
@@ -119,7 +119,7 @@ export function DataTable<TData, TValue>({
             size="sm"
             onClick={() => table.setPageIndex(0)}
             disabled={!table.getCanPreviousPage()}
-            className="border-foreground/10 text-muted hover:text-white hover:bg-foreground/5"
+            className="border-foreground/10 text-muted-foreground hover:text-foreground hover:bg-foreground/5"
           >
             <ChevronsLeft className="w-4 h-4" />
           </Button>
@@ -128,7 +128,7 @@ export function DataTable<TData, TValue>({
             size="sm"
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
-            className="border-foreground/10 text-muted hover:text-white hover:bg-foreground/5"
+            className="border-foreground/10 text-muted-foreground hover:text-foreground hover:bg-foreground/5"
           >
             <ChevronLeft className="w-4 h-4" />
           </Button>
@@ -137,7 +137,7 @@ export function DataTable<TData, TValue>({
             size="sm"
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
-            className="border-foreground/10 text-muted hover:text-white hover:bg-foreground/5"
+            className="border-foreground/10 text-muted-foreground hover:text-foreground hover:bg-foreground/5"
           >
             <ChevronRight className="w-4 h-4" />
           </Button>
@@ -146,7 +146,7 @@ export function DataTable<TData, TValue>({
             size="sm"
             onClick={() => table.setPageIndex(table.getPageCount() - 1)}
             disabled={!table.getCanNextPage()}
-            className="border-foreground/10 text-muted hover:text-white hover:bg-foreground/5"
+            className="border-foreground/10 text-muted-foreground hover:text-foreground hover:bg-foreground/5"
           >
             <ChevronsRight className="w-4 h-4" />
           </Button>

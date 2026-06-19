@@ -65,15 +65,15 @@ export default function SignupPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-muted via-muted to-muted text-white flex items-center justify-center p-4">
+      <div className="min-h-screen bg-gradient-to-br from-background via-background to-card text-foreground flex items-center justify-center p-4">
         <div className="max-w-md w-full text-center space-y-6">
           <div className="w-20 h-20 rounded-full bg-secondary/20 flex items-center justify-center mx-auto">
             <CheckCircle2 className="w-10 h-10 text-secondary" />
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-white mb-2">Application Submitted!</h1>
-            <p className="text-muted">
-              We've received your application for <strong className="text-white">{form.institutionName}</strong>.
+            <h1 className="text-3xl font-bold text-foreground mb-2">Application Submitted!</h1>
+            <p className="text-muted-foreground">
+              We've received your application for <strong className="text-foreground">{form.institutionName}</strong>.
               Check <strong className="text-secondary">{form.contactEmail}</strong> for a confirmation email.
               We'll review and respond within 48 hours.
             </p>
@@ -89,7 +89,7 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-muted via-muted to-muted text-white">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-card text-foreground">
       {/* Animated blobs */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-secondary/10 rounded-full blur-3xl animate-pulse" />
@@ -98,7 +98,7 @@ export default function SignupPage() {
 
       <div className="relative z-10 max-w-2xl mx-auto px-4 py-12">
         {/* Nav */}
-        <Link href="/" className="inline-flex items-center gap-2 text-muted hover:text-white transition-colors mb-8">
+        <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-8">
           <ArrowLeft className="w-4 h-4" /> Back to home
         </Link>
 
@@ -109,17 +109,17 @@ export default function SignupPage() {
           </div>
           <div>
             <h1 className="text-2xl font-bold bg-gradient-to-r from-secondary to-secondary bg-clip-text text-transparent">ClashFree</h1>
-            <p className="text-xs text-muted">Academic Scheduling Platform</p>
+            <p className="text-xs text-muted-foreground">Academic Scheduling Platform</p>
           </div>
         </div>
 
         <div className="mb-8">
-          <h2 className="text-3xl font-bold text-white mb-2">Register Your Institution</h2>
-          <p className="text-muted">Fill in the details below. Our team will review and set up your account within 48 hours.</p>
+          <h2 className="text-3xl font-bold text-foreground mb-2">Register Your Institution</h2>
+          <p className="text-muted-foreground">Fill in the details below. Our team will review and set up your account within 48 hours.</p>
           <div className="flex gap-2 mt-3 flex-wrap">
             <Badge variant="outline" className="border-secondary/30 text-secondary text-xs">Free to apply</Badge>
-            <Badge variant="outline" className="border-muted/30 text-muted text-xs">48hr review</Badge>
-            <Badge variant="outline" className="border-muted/30 text-muted text-xs">Nigerian institutions only</Badge>
+            <Badge variant="outline" className="border-muted/30 text-muted-foreground text-xs">48hr review</Badge>
+            <Badge variant="outline" className="border-muted/30 text-muted-foreground text-xs">Nigerian institutions only</Badge>
           </div>
         </div>
 
@@ -133,42 +133,42 @@ export default function SignupPage() {
           {/* Institution Info */}
           <Card className="bg-foreground/5 border-foreground/10">
             <CardHeader className="pb-4">
-              <CardTitle className="text-lg text-white flex items-center gap-2">
+              <CardTitle className="text-lg text-foreground flex items-center gap-2">
                 <Building2 className="w-5 h-5 text-secondary" /> Institution Details
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="sm:col-span-2 space-y-2">
-                  <Label className="text-muted">Full Institution Name *</Label>
+                  <Label className="text-muted-foreground">Full Institution Name *</Label>
                   <Input
                     value={form.institutionName}
                     onChange={e => set('institutionName', e.target.value)}
                     placeholder="e.g. Federal University of Technology Minna"
-                    className="bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary"
+                    className="bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground focus:border-secondary"
                     required
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-muted">Short Code / Acronym *</Label>
+                  <Label className="text-muted-foreground">Short Code / Acronym *</Label>
                   <Input
                     value={form.shortName}
                     onChange={e => set('shortName', e.target.value.toUpperCase())}
                     placeholder="e.g. FUTMINNA"
                     maxLength={20}
-                    className="bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary uppercase"
+                    className="bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground focus:border-secondary uppercase"
                     required
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-muted">Institution Type *</Label>
+                  <Label className="text-muted-foreground">Institution Type *</Label>
                   <Select value={form.type} onValueChange={v => set('type', v)} required>
-                    <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white focus:border-secondary">
+                    <SelectTrigger className="bg-foreground/5 border-foreground/10 text-foreground focus:border-secondary">
                       <SelectValue placeholder="Select type..." />
                     </SelectTrigger>
                     <SelectContent className="bg-muted border-foreground/10">
                       {INST_TYPES.map(t => (
-                        <SelectItem key={t.value} value={t.value} className="text-white focus:bg-foreground/10">
+                        <SelectItem key={t.value} value={t.value} className="text-foreground focus:bg-foreground/10">
                           {t.label}
                         </SelectItem>
                       ))}
@@ -176,24 +176,24 @@ export default function SignupPage() {
                   </Select>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-muted">City *</Label>
+                  <Label className="text-muted-foreground">City *</Label>
                   <Input
                     value={form.city}
                     onChange={e => set('city', e.target.value)}
                     placeholder="e.g. Minna"
-                    className="bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary"
+                    className="bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground focus:border-secondary"
                     required
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-muted">State *</Label>
+                  <Label className="text-muted-foreground">State *</Label>
                   <Select value={form.state} onValueChange={v => set('state', v)} required>
-                    <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white focus:border-secondary">
+                    <SelectTrigger className="bg-foreground/5 border-foreground/10 text-foreground focus:border-secondary">
                       <SelectValue placeholder="Select state..." />
                     </SelectTrigger>
                     <SelectContent className="bg-muted border-foreground/10 max-h-60 overflow-y-auto">
                       {NIGERIAN_STATES.map(s => (
-                        <SelectItem key={s} value={s} className="text-white focus:bg-foreground/10">{s}</SelectItem>
+                        <SelectItem key={s} value={s} className="text-foreground focus:bg-foreground/10">{s}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -202,27 +202,27 @@ export default function SignupPage() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-muted flex items-center gap-1.5">
+                  <Label className="text-muted-foreground flex items-center gap-1.5">
                     <Globe className="w-3.5 h-3.5" /> Website
-                    <span className="text-muted text-xs">(optional)</span>
+                    <span className="text-muted-foreground text-xs">(optional)</span>
                   </Label>
                   <Input
                     value={form.website}
                     onChange={e => set('website', e.target.value)}
                     placeholder="https://yourschool.edu.ng"
                     type="url"
-                    className="bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary"
+                    className="bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground focus:border-secondary"
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-muted">
-                    Email Domain <span className="text-muted text-xs">(optional)</span>
+                  <Label className="text-muted-foreground">
+                    Email Domain <span className="text-muted-foreground text-xs">(optional)</span>
                   </Label>
                   <Input
                     value={form.emailDomain}
                     onChange={e => set('emailDomain', e.target.value)}
                     placeholder="e.g. futminna.edu.ng"
-                    className="bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary"
+                    className="bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground focus:border-secondary"
                   />
                 </div>
               </div>
@@ -232,57 +232,57 @@ export default function SignupPage() {
           {/* Contact Info */}
           <Card className="bg-foreground/5 border-foreground/10">
             <CardHeader className="pb-4">
-              <CardTitle className="text-lg text-white flex items-center gap-2">
+              <CardTitle className="text-lg text-foreground flex items-center gap-2">
                 <Mail className="w-5 h-5 text-secondary" /> Contact Person
               </CardTitle>
-              <CardDescription className="text-muted text-sm">
+              <CardDescription className="text-muted-foreground text-sm">
                 This person will become the Institution Admin (IA) on approval.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label className="text-muted">Full Name *</Label>
+                  <Label className="text-muted-foreground">Full Name *</Label>
                   <Input
                     value={form.contactName}
                     onChange={e => set('contactName', e.target.value)}
                     placeholder="e.g. Dr. Amina Bello"
-                    className="bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary"
+                    className="bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground focus:border-secondary"
                     required
                   />
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-muted">Email Address *</Label>
+                  <Label className="text-muted-foreground">Email Address *</Label>
                   <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
+                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                     <Input
                       value={form.contactEmail}
                       onChange={e => set('contactEmail', e.target.value)}
                       type="email"
                       placeholder="admin@yourschool.edu.ng"
-                      className="pl-10 bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary"
+                      className="pl-10 bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground focus:border-secondary"
                       required
                     />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label className="text-muted flex items-center gap-1.5">
+                  <Label className="text-muted-foreground flex items-center gap-1.5">
                     <Phone className="w-3.5 h-3.5" /> Phone
-                    <span className="text-muted text-xs">(optional)</span>
+                    <span className="text-muted-foreground text-xs">(optional)</span>
                   </Label>
                   <Input
                     value={form.contactPhone}
                     onChange={e => set('contactPhone', e.target.value)}
                     placeholder="+234 803 000 0000"
                     type="tel"
-                    className="bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary"
+                    className="bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground focus:border-secondary"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label className="text-muted">
-                  Why do you want ClashFree? <span className="text-muted text-xs">(optional)</span>
+                <Label className="text-muted-foreground">
+                  Why do you want ClashFree? <span className="text-muted-foreground text-xs">(optional)</span>
                 </Label>
                 <Textarea
                   value={form.message}
@@ -290,9 +290,9 @@ export default function SignupPage() {
                   placeholder="Tell us about your current scheduling challenges..."
                   rows={3}
                   maxLength={1000}
-                  className="bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary resize-none"
+                  className="bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground focus:border-secondary resize-none"
                 />
-                <p className="text-muted text-xs text-right">{form.message.length}/1000</p>
+                <p className="text-muted-foreground text-xs text-right">{form.message.length}/1000</p>
               </div>
             </CardContent>
           </Card>
@@ -309,7 +309,7 @@ export default function SignupPage() {
             )}
           </Button>
 
-          <p className="text-center text-sm text-muted">
+          <p className="text-center text-sm text-muted-foreground">
             Already have an account?{' '}
             <Link href="/login" className="text-secondary hover:text-secondary">Sign in</Link>
           </p>

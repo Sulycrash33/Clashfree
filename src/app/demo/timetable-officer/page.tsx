@@ -186,10 +186,10 @@ function SlotModal({
                   </span>
                 )}
               </div>
-              <div className="text-lg font-bold text-white mt-2">{slot.courseCode}</div>
+              <div className="text-lg font-bold text-foreground mt-2">{slot.courseCode}</div>
               <div className="text-sm text-foreground/60 mt-0.5">{slot.courseTitle}</div>
             </div>
-            <button onClick={onClose} className="text-foreground/30 hover:text-white p-1 flex-shrink-0">
+            <button onClick={onClose} className="text-foreground/30 hover:text-foreground p-1 flex-shrink-0">
               <X className="w-4 h-4" />
             </button>
           </div>
@@ -311,9 +311,9 @@ function GenerateWizard({ onClose }: { onClose: () => void }) {
         <div className="flex items-center justify-between px-6 py-4 border-b border-foreground/10">
           <div className="flex items-center gap-2">
             <Wand2 className="w-4 h-4 text-primary" />
-            <span className="font-semibold text-white text-sm">Generate Timetable</span>
+            <span className="font-semibold text-foreground text-sm">Generate Timetable</span>
           </div>
-          <button onClick={onClose} className="text-foreground/30 hover:text-white p-1"><X className="w-4 h-4" /></button>
+          <button onClick={onClose} className="text-foreground/30 hover:text-foreground p-1"><X className="w-4 h-4" /></button>
         </div>
 
         {/* Steps */}
@@ -325,7 +325,7 @@ function GenerateWizard({ onClose }: { onClose: () => void }) {
               }`}>
                 {step > s.n ? <CheckCircle2 className="w-3.5 h-3.5" /> : s.n}
               </div>
-              <span className={`text-xs hidden sm:block ${step === s.n ? "text-white" : "text-foreground/30"}`}>{s.label}</span>
+              <span className={`text-xs hidden sm:block ${step === s.n ? "text-foreground" : "text-foreground/30"}`}>{s.label}</span>
               {i < STEPS.length - 1 && <div className="flex-1 h-px bg-foreground/10 mx-1 hidden sm:block" />}
             </div>
           ))}
@@ -334,7 +334,7 @@ function GenerateWizard({ onClose }: { onClose: () => void }) {
         <div className="px-6 py-5 space-y-4 max-h-[55vh] overflow-y-auto">
           {step === 1 && (
             <div className="space-y-4">
-              <h3 className="text-sm font-semibold text-white">Time Frame and Session</h3>
+              <h3 className="text-sm font-semibold text-foreground">Time Frame and Session</h3>
               <div className="grid grid-cols-2 gap-3">
                 {[
                   { label: "Academic Session", key: "session",       options: ["2024/2025", "2025/2026"] },
@@ -348,7 +348,7 @@ function GenerateWizard({ onClose }: { onClose: () => void }) {
                     <select
                       value={(params as unknown as Record<string, string>)[f.key]}
                       onChange={e => setParams(p => ({ ...p, [f.key]: e.target.value }))}
-                      className="w-full bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none"
+                      className="w-full bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none"
                     >
                       {f.options.map(o => <option key={o} value={o} className="bg-muted">{o}</option>)}
                     </select>
@@ -370,7 +370,7 @@ function GenerateWizard({ onClose }: { onClose: () => void }) {
 
           {step === 2 && (
             <div className="space-y-4">
-              <h3 className="text-sm font-semibold text-white">Departments and Levels</h3>
+              <h3 className="text-sm font-semibold text-foreground">Departments and Levels</h3>
               <div className="grid grid-cols-2 gap-2 max-h-52 overflow-y-auto pr-1">
                 {[{ value: "ALL", label: "All Departments" }, ...DEPARTMENTS.map(d => ({ value: d.code, label: d.code }))].map(d => {
                   const sel = params.depts.includes(d.value);
@@ -405,7 +405,7 @@ function GenerateWizard({ onClose }: { onClose: () => void }) {
 
           {step === 3 && (
             <div className="space-y-3">
-              <h3 className="text-sm font-semibold text-white">Scheduling Rules</h3>
+              <h3 className="text-sm font-semibold text-foreground">Scheduling Rules</h3>
               {[
                 { key: "distribute3CU", label: "Distribute 3CU courses across non-consecutive days", sub: "Prevents back-to-back lectures for same course" },
                 { key: "prioritiseLabs", label: "Prioritise lab rooms for practical courses", sub: "Auto-assign practicals to available lab venues" },
@@ -432,7 +432,7 @@ function GenerateWizard({ onClose }: { onClose: () => void }) {
 
           {step === 4 && (
             <div className="space-y-4">
-              <h3 className="text-sm font-semibold text-white">Review and Generate</h3>
+              <h3 className="text-sm font-semibold text-foreground">Review and Generate</h3>
               <div className="rounded-xl bg-foreground/5 border border-foreground/10 p-4 space-y-2 text-sm">
                 {[
                   { label: "Session",       value: `${params.session} · Sem ${params.semester}` },
@@ -444,7 +444,7 @@ function GenerateWizard({ onClose }: { onClose: () => void }) {
                 ].map(row => (
                   <div key={row.label} className="flex justify-between">
                     <span className="text-foreground/40">{row.label}</span>
-                    <span className="text-white text-right">{row.value}</span>
+                    <span className="text-foreground text-right">{row.value}</span>
                   </div>
                 ))}
               </div>
@@ -471,7 +471,7 @@ function GenerateWizard({ onClose }: { onClose: () => void }) {
 
         <div className="flex items-center justify-between px-6 py-4 border-t border-foreground/10">
           <button onClick={() => step > 1 ? setStep(s => s - 1) : onClose()}
-            className="px-4 py-2 rounded-xl border border-foreground/10 text-sm text-foreground/50 hover:text-white hover:bg-foreground/5 transition-colors">
+            className="px-4 py-2 rounded-xl border border-foreground/10 text-sm text-foreground/50 hover:text-foreground hover:bg-foreground/5 transition-colors">
             {step === 1 ? "Cancel" : "← Back"}
           </button>
           {step < 4 ? (
@@ -682,7 +682,7 @@ export default function TimetableOfficerPage() {
               <CalendarClock className="w-4 h-4 text-accent-gold" />
               <span className="text-[10px] font-semibold text-accent-gold uppercase tracking-widest">Timetable Officer</span>
             </div>
-            <h1 className="text-2xl font-bold text-white">Faculty Master Timetable</h1>
+            <h1 className="text-2xl font-bold text-foreground">Faculty Master Timetable</h1>
             <p className="text-foreground/40 text-sm mt-1">
               Faculty of Physical &amp; Applied Sciences · Semester 1, 2024/2025 · Mon–Fri 08:00–18:00
             </p>
@@ -702,7 +702,7 @@ export default function TimetableOfficerPage() {
         {/* ── Stats row ────────────────────────── */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
           {[
-            { label: "Slots Showing",   value: totalSlots,     color: "text-white" },
+            { label: "Slots Showing",   value: totalSlots,     color: "text-foreground" },
             { label: "Active Conflicts", value: conflictCount,  color: conflictCount > 0 ? "text-clash" : "text-success" },
             { label: "Resolved",        value: resolvedCount,  color: "text-success" },
             { label: "Practical Slots", value: practicalCount, color: "text-primary" },
@@ -765,7 +765,7 @@ export default function TimetableOfficerPage() {
               className="pl-9 pr-4 py-2 bg-foreground/5 border border-foreground/10 rounded-xl text-sm text-foreground/70 placeholder:text-foreground/25 focus:outline-none focus:border-foreground/30 w-56"
             />
             {search && (
-              <button onClick={() => setSearch("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-foreground/30 hover:text-white">
+              <button onClick={() => setSearch("")} className="absolute right-2 top-1/2 -translate-y-1/2 text-foreground/30 hover:text-foreground">
                 <X className="w-3 h-3" />
               </button>
             )}

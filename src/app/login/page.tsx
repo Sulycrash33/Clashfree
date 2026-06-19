@@ -53,7 +53,7 @@ function LoginForm() {
 
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-muted via-muted to-muted text-white flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-background via-background to-card text-foreground flex items-center justify-center p-4">
       {/* Animated background */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/20 rounded-full blur-3xl animate-pulse" />
@@ -63,7 +63,7 @@ function LoginForm() {
 
       <div className="w-full max-w-md relative z-10">
         {/* Back to home */}
-        <Link href="/" className="inline-flex items-center gap-2 text-muted hover:text-white transition-colors mb-6">
+        <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-6">
           <ArrowLeft className="w-4 h-4" />
           Back to home
         </Link>
@@ -77,14 +77,14 @@ function LoginForm() {
             <h1 className="text-2xl font-bold bg-gradient-to-r from-secondary to-secondary bg-clip-text text-transparent">
               ClashFree
             </h1>
-            <p className="text-xs text-muted">Academic Scheduling Platform</p>
+            <p className="text-xs text-muted-foreground">Academic Scheduling Platform</p>
           </div>
         </div>
 
         <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-xl">
           <CardHeader className="space-y-1 pb-4">
             <CardTitle className="text-2xl font-bold">Sign In</CardTitle>
-            <CardDescription className="text-muted">
+            <CardDescription className="text-muted-foreground">
               Enter your credentials to access your dashboard
             </CardDescription>
           </CardHeader>
@@ -97,43 +97,43 @@ function LoginForm() {
               )}
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-muted">
+                <Label htmlFor="email" className="text-muted-foreground">
                   Email
                 </Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
+                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
                     id="email"
                     type="email"
                     placeholder="admin@clashfree.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary focus:ring-secondary/20"
+                    className="pl-10 bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground focus:border-secondary focus:ring-secondary/20"
                     required
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-muted">
+                <Label htmlFor="password" className="text-muted-foreground">
                   Password
                 </Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted" />
+                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <Input
                     id="password"
                     type="password"
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 bg-foreground/5 border-foreground/10 text-white placeholder:text-muted focus:border-secondary focus:ring-secondary/20"
+                    className="pl-10 bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground focus:border-secondary focus:ring-secondary/20"
                     required
                   />
                 </div>
               </div>
 
               <div className="flex items-center justify-between text-sm">
-                <label className="flex items-center gap-2 text-muted">
+                <label className="flex items-center gap-2 text-muted-foreground">
                   <input type="checkbox" className="rounded border-foreground/20 bg-foreground/5" />
                   Remember me
                 </label>
@@ -161,7 +161,7 @@ function LoginForm() {
           </CardContent>
         </Card>
 
-        <p className="text-center text-sm text-muted mt-6">
+        <p className="text-center text-sm text-muted-foreground mt-6">
           Institution not on ClashFree?{' '}
           <Link href="/signup" className="text-secondary hover:text-secondary transition-colors">
             Register your institution

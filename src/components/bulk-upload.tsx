@@ -262,7 +262,7 @@ function DropZone({
               <FileSpreadsheet className={`w-6 h-6 ${cfg.color}`} />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="text-sm font-semibold text-white truncate">{file.name}</div>
+              <div className="text-sm font-semibold text-foreground truncate">{file.name}</div>
               <div className="text-xs text-foreground/35 mt-0.5">
                 {file.size < 1024
                   ? `${file.size} B`
@@ -275,7 +275,7 @@ function DropZone({
             </div>
             <button
               onClick={(e) => { e.stopPropagation(); onClear() }}
-              className="w-8 h-8 rounded-lg bg-foreground/5 hover:bg-foreground/10 border border-foreground/10 flex items-center justify-center text-foreground/40 hover:text-white transition-colors flex-shrink-0"
+              className="w-8 h-8 rounded-lg bg-foreground/5 hover:bg-foreground/10 border border-foreground/10 flex items-center justify-center text-foreground/40 hover:text-foreground transition-colors flex-shrink-0"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -342,7 +342,7 @@ function ResultPanel({ result, cfg }: { result: UploadResult; cfg: EntityConfig 
 
       <div className="grid grid-cols-3 gap-3">
         {[
-          { label: 'Total',   value: result.total,   color: 'text-white' },
+          { label: 'Total',   value: result.total,   color: 'text-foreground' },
           { label: 'Imported', value: result.success, color: 'text-success' },
           { label: 'Failed',  value: result.failed,  color: result.failed > 0 ? 'text-clash' : 'text-foreground/30' },
         ].map((s) => (
@@ -669,7 +669,7 @@ export function BulkUpload({
       </button>
 
       <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) resetUpload() }}>
-        <DialogContent className="bg-card border-foreground/10 text-white p-0 max-w-3xl w-full max-h-[90vh] overflow-hidden rounded-2xl">
+        <DialogContent className="bg-card border-foreground/10 text-foreground p-0 max-w-3xl w-full max-h-[90vh] overflow-hidden rounded-2xl">
           <DialogHeader className="px-6 py-4 border-b border-foreground/8">
             <DialogTitle className="flex items-center gap-2.5 text-base">
               <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-secondary/20 to-secondary/20 border border-secondary/20 flex items-center justify-center">

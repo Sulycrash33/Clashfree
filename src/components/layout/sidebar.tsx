@@ -165,7 +165,7 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
           'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
           isActive
             ? 'bg-secondary/10 text-secondary border border-secondary/20'
-            : 'text-muted hover:text-white hover:bg-foreground/5'
+            : 'text-muted-foreground hover:text-foreground hover:bg-foreground/5'
         )}
         onClick={onClick}
       >
@@ -186,8 +186,8 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
               CF
             </div>
             <div>
-              <h1 className="font-bold text-white">ClashFree</h1>
-              <p className="text-xs text-muted">{roleLabels[userRole]}</p>
+              <h1 className="font-bold text-foreground">ClashFree</h1>
+              <p className="text-xs text-muted-foreground">{roleLabels[userRole]}</p>
             </div>
           </div>
         </div>
@@ -204,14 +204,14 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
               {(session.user as { name?: string }).name?.charAt(0) || 'U'}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">{(session.user as { name?: string }).name}</p>
-              <p className="text-xs text-muted truncate">{session.user.email}</p>
+              <p className="text-sm font-medium text-foreground truncate">{(session.user as { name?: string }).name}</p>
+              <p className="text-xs text-muted-foreground truncate">{session.user.email}</p>
             </div>
           </div>
           <Button
             variant="ghost"
             size="sm"
-            className="w-full justify-start text-muted hover:text-white hover:bg-foreground/5 h-9"
+            className="w-full justify-start text-muted-foreground hover:text-foreground hover:bg-foreground/5 h-9"
             onClick={handleSignOut}
           >
             <LogOut className="w-4 h-4 mr-2" /> Sign Out
@@ -226,11 +226,11 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
           onClick={() => setMobileOpen(true)}
           aria-label="Open menu"
         >
-          <Menu className="w-5 h-5 text-white" />
+          <Menu className="w-5 h-5 text-foreground" />
         </button>
         <div className="flex items-center gap-2 flex-1">
           <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-secondary to-secondary flex items-center justify-center font-bold text-xs text-white">CF</div>
-          <span className="font-bold text-white text-sm">ClashFree</span>
+          <span className="font-bold text-foreground text-sm">ClashFree</span>
         </div>
         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-clash flex items-center justify-center text-xs font-bold text-white">
           {(session.user as { name?: string }).name?.charAt(0) || 'U'}
@@ -258,12 +258,12 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-secondary to-secondary flex items-center justify-center font-bold text-white text-sm">CF</div>
             <div>
-              <h1 className="font-bold text-white text-sm">ClashFree</h1>
-              <p className="text-xs text-muted">{roleLabels[userRole]}</p>
+              <h1 className="font-bold text-foreground text-sm">ClashFree</h1>
+              <p className="text-xs text-muted-foreground">{roleLabels[userRole]}</p>
             </div>
           </div>
           <button
-            className="p-1.5 rounded-lg hover:bg-foreground/10 text-muted hover:text-white transition-colors"
+            className="p-1.5 rounded-lg hover:bg-foreground/10 text-muted-foreground hover:text-foreground transition-colors"
             onClick={() => setMobileOpen(false)}
           >
             <X className="w-5 h-5" />
@@ -277,8 +277,8 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
               {(session.user as { name?: string }).name?.charAt(0) || 'U'}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white truncate">{(session.user as { name?: string }).name}</p>
-              <p className="text-xs text-muted truncate">{session.user.email}</p>
+              <p className="text-sm font-medium text-foreground truncate">{(session.user as { name?: string }).name}</p>
+              <p className="text-xs text-muted-foreground truncate">{session.user.email}</p>
             </div>
           </div>
         </div>
@@ -294,7 +294,7 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
         <div className="p-4 border-t border-foreground/10">
           <Button
             variant="ghost"
-            className="w-full justify-start text-muted hover:text-white hover:bg-foreground/5"
+            className="w-full justify-start text-muted-foreground hover:text-foreground hover:bg-foreground/5"
             onClick={handleSignOut}
           >
             <LogOut className="w-4 h-4 mr-2" /> Sign Out
@@ -313,7 +313,7 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
               data-allow-nav="true"
               className={cn(
                 'flex flex-col items-center gap-1 px-3 py-1.5 rounded-xl min-w-0 flex-1 transition-colors',
-                isActive ? 'text-secondary' : 'text-muted hover:text-muted'
+                isActive ? 'text-secondary' : 'text-muted-foreground hover:text-muted-foreground'
               )}
             >
               <item.icon className={cn('w-5 h-5', isActive && 'drop-shadow-[0_0_6px_rgba(34,211,238,0.6)]')} />

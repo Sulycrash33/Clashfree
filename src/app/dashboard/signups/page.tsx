@@ -104,21 +104,21 @@ export default function SignupsPage() {
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white">Institution Signups</h1>
-          <p className="text-muted text-sm">Review and approve institution registration requests</p>
+          <h1 className="text-2xl font-bold text-foreground">Institution Signups</h1>
+          <p className="text-muted-foreground text-sm">Review and approve institution registration requests</p>
         </div>
         <div className="flex gap-2">
           <Select value={filter} onValueChange={setFilter}>
-            <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white w-40">
+            <SelectTrigger className="bg-foreground/5 border-foreground/10 text-foreground w-40">
               <SelectValue />
             </SelectTrigger>
             <SelectContent className="bg-muted border-foreground/10">
-              <SelectItem value="PENDING" className="text-white focus:bg-foreground/10">Pending</SelectItem>
-              <SelectItem value="APPROVED" className="text-white focus:bg-foreground/10">Approved</SelectItem>
-              <SelectItem value="REJECTED" className="text-white focus:bg-foreground/10">Rejected</SelectItem>
+              <SelectItem value="PENDING" className="text-foreground focus:bg-foreground/10">Pending</SelectItem>
+              <SelectItem value="APPROVED" className="text-foreground focus:bg-foreground/10">Approved</SelectItem>
+              <SelectItem value="REJECTED" className="text-foreground focus:bg-foreground/10">Rejected</SelectItem>
             </SelectContent>
           </Select>
-          <Button variant="outline" onClick={load} className="border-foreground/20 text-white hover:bg-foreground/10 gap-2">
+          <Button variant="outline" onClick={load} className="border-foreground/20 text-foreground hover:bg-foreground/10 gap-2">
             <RefreshCw className="w-4 h-4" /> Refresh
           </Button>
         </div>
@@ -137,8 +137,8 @@ export default function SignupsPage() {
       ) : signups.length === 0 ? (
         <Card className="bg-foreground/5 border-foreground/10">
           <CardContent className="py-16 text-center">
-            <Building2 className="w-10 h-10 text-muted mx-auto mb-3" />
-            <p className="text-muted">No {filter.toLowerCase()} applications</p>
+            <Building2 className="w-10 h-10 text-muted-foreground mx-auto mb-3" />
+            <p className="text-muted-foreground">No {filter.toLowerCase()} applications</p>
           </CardContent>
         </Card>
       ) : (
@@ -150,33 +150,33 @@ export default function SignupsPage() {
                 <CardHeader className="pb-3">
                   <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
                     <div>
-                      <CardTitle className="text-white text-lg flex items-center gap-2">
+                      <CardTitle className="text-foreground text-lg flex items-center gap-2">
                         {s.institutionName}
-                        <span className="text-muted font-mono text-sm">({s.shortName})</span>
+                        <span className="text-muted-foreground font-mono text-sm">({s.shortName})</span>
                       </CardTitle>
-                      <p className="text-muted text-sm mt-1">{TYPE_LABELS[s.type] || s.type}</p>
+                      <p className="text-muted-foreground text-sm mt-1">{TYPE_LABELS[s.type] || s.type}</p>
                     </div>
                     <Badge className={`${sc.color} shrink-0`}>{sc.label}</Badge>
                   </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
-                    <div className="flex items-center gap-1.5 text-muted">
+                    <div className="flex items-center gap-1.5 text-muted-foreground">
                       <MapPin className="w-3.5 h-3.5 shrink-0" />
                       <span>{s.city}, {s.state}</span>
                     </div>
-                    <div className="flex items-center gap-1.5 text-muted">
+                    <div className="flex items-center gap-1.5 text-muted-foreground">
                       <Mail className="w-3.5 h-3.5 shrink-0" />
                       <span className="truncate">{s.contactEmail}</span>
                     </div>
                     {s.contactPhone && (
-                      <div className="flex items-center gap-1.5 text-muted">
+                      <div className="flex items-center gap-1.5 text-muted-foreground">
                         <Phone className="w-3.5 h-3.5 shrink-0" />
                         <span>{s.contactPhone}</span>
                       </div>
                     )}
                     {s.website && (
-                      <div className="flex items-center gap-1.5 text-muted">
+                      <div className="flex items-center gap-1.5 text-muted-foreground">
                         <Globe className="w-3.5 h-3.5 shrink-0" />
                         <a href={s.website} target="_blank" rel="noreferrer" className="text-secondary hover:underline truncate">{s.website}</a>
                       </div>
@@ -184,12 +184,12 @@ export default function SignupsPage() {
                   </div>
 
                   <div className="bg-muted/50 rounded-lg px-3 py-2 text-sm">
-                    <span className="text-muted">Contact: </span>
-                    <span className="text-white">{s.contactName}</span>
+                    <span className="text-muted-foreground">Contact: </span>
+                    <span className="text-foreground">{s.contactName}</span>
                   </div>
 
                   {s.message && (
-                    <div className="bg-muted/50 border border-foreground/5 rounded-lg px-3 py-2 text-sm text-muted italic">
+                    <div className="bg-muted/50 border border-foreground/5 rounded-lg px-3 py-2 text-sm text-muted-foreground italic">
                       "{s.message}"
                     </div>
                   )}
@@ -201,7 +201,7 @@ export default function SignupsPage() {
                   )}
 
                   <div className="flex items-center justify-between">
-                    <span className="text-muted text-xs">
+                    <span className="text-muted-foreground text-xs">
                       Applied {new Date(s.createdAt).toLocaleDateString('en-NG', { day: 'numeric', month: 'short', year: 'numeric' })}
                     </span>
                     {s.status === 'PENDING' && (
@@ -236,25 +236,25 @@ export default function SignupsPage() {
 
       {/* Reject Modal */}
       <Dialog open={!!rejectModal} onOpenChange={() => { setRejectModal(null); setRejectReason('') }}>
-        <DialogContent className="bg-muted border-foreground/10 text-white">
+        <DialogContent className="bg-muted border-foreground/10 text-foreground">
           <DialogHeader>
             <DialogTitle>Reject Application</DialogTitle>
           </DialogHeader>
           <div className="space-y-3 py-2">
-            <p className="text-muted text-sm">Rejecting <strong className="text-white">{rejectModal?.name}</strong>. This will send a rejection email to the applicant.</p>
+            <p className="text-muted-foreground text-sm">Rejecting <strong className="text-foreground">{rejectModal?.name}</strong>. This will send a rejection email to the applicant.</p>
             <div className="space-y-2">
-              <Label className="text-muted">Reason (sent in email)</Label>
+              <Label className="text-muted-foreground">Reason (sent in email)</Label>
               <Textarea
                 value={rejectReason}
                 onChange={e => setRejectReason(e.target.value)}
                 placeholder="e.g. Incomplete information provided. Please reapply with full institution details."
                 rows={3}
-                className="bg-foreground/5 border-foreground/10 text-white placeholder:text-muted resize-none"
+                className="bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground resize-none"
               />
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setRejectModal(null)} className="border-foreground/20 text-white hover:bg-foreground/10">Cancel</Button>
+            <Button variant="outline" onClick={() => setRejectModal(null)} className="border-foreground/20 text-foreground hover:bg-foreground/10">Cancel</Button>
             <Button onClick={handleReject} className="bg-clash/20 hover:bg-clash/30 text-clash border border-clash/20" disabled={!!processing}>
               {processing ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
               Confirm Reject

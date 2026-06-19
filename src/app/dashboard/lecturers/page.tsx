@@ -180,8 +180,8 @@ export default function LecturersPage() {
             <Users className="w-5 h-5 text-success" />
           </div>
           <div>
-            <div className="font-medium text-white">{row.getValue('name')}</div>
-            <div className="text-xs text-muted">
+            <div className="font-medium text-foreground">{row.getValue('name')}</div>
+            <div className="text-xs text-muted-foreground">
               {row.original.rank || 'N/A'} • {row.original.department?.code}
             </div>
           </div>
@@ -193,12 +193,12 @@ export default function LecturersPage() {
       header: 'Contact',
       cell: ({ row }) => (
         <div className="space-y-1">
-          <div className="flex items-center gap-2 text-muted">
+          <div className="flex items-center gap-2 text-muted-foreground">
             <Mail className="w-3 h-3" />
             <span className="text-sm">{row.getValue('email')}</span>
           </div>
           {row.original.phone && (
-            <div className="flex items-center gap-2 text-muted">
+            <div className="flex items-center gap-2 text-muted-foreground">
               <Phone className="w-3 h-3" />
               <span className="text-xs">{row.original.phone}</span>
             </div>
@@ -210,14 +210,14 @@ export default function LecturersPage() {
       accessorKey: 'specialization',
       header: 'Specialization',
       cell: ({ row }) => (
-        <span className="text-muted">{row.getValue('specialization') || 'N/A'}</span>
+        <span className="text-muted-foreground">{row.getValue('specialization') || 'N/A'}</span>
       ),
     },
     {
       accessorKey: '_count.courses',
       header: 'Assignments',
       cell: ({ row }) => (
-        <div className="text-muted">
+        <div className="text-muted-foreground">
           {row.original._count?.courses || 0} courses • {row.original._count?.invigilations || 0} invigilations
         </div>
       ),
@@ -236,12 +236,12 @@ export default function LecturersPage() {
       cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground">
               <MoreHorizontal className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-muted border-foreground/10">
-            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted">
+            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted-foreground">
               <Pencil className="w-4 h-4 mr-2" /> Edit
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-clash">
@@ -285,10 +285,10 @@ export default function LecturersPage() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-muted border-foreground/10 text-white max-w-xl">
+        <DialogContent className="bg-muted border-foreground/10 text-foreground max-w-xl">
           <DialogHeader>
             <DialogTitle>{editingLecturer ? 'Edit Lecturer' : 'Add New Lecturer'}</DialogTitle>
-            <DialogDescription className="text-muted">
+            <DialogDescription className="text-muted-foreground">
               {editingLecturer ? 'Update lecturer details' : 'Register a new lecturer'}
             </DialogDescription>
           </DialogHeader>
@@ -296,78 +296,78 @@ export default function LecturersPage() {
           <div className="space-y-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-muted">Staff ID</Label>
+                <Label className="text-muted-foreground">Staff ID</Label>
                 <Input
                   value={formData.staffId}
                   onChange={(e) => setFormData({ ...formData, staffId: e.target.value.toUpperCase() })}
-                  className="bg-foreground/5 border-foreground/10 text-white font-mono"
+                  className="bg-foreground/5 border-foreground/10 text-foreground font-mono"
                   placeholder="e.g., NSUK/STF/001"
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-muted">Academic Rank</Label>
+                <Label className="text-muted-foreground">Academic Rank</Label>
                 <Select value={formData.rank} onValueChange={(v) => setFormData({ ...formData, rank: v })}>
-                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white">
+                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-foreground">
                     <SelectValue placeholder="Select rank" />
                   </SelectTrigger>
                   <SelectContent className="bg-muted border-foreground/10">
                     {academicRanks.map((r) => (
-                      <SelectItem key={r} value={r} className="text-white">{r}</SelectItem>
+                      <SelectItem key={r} value={r} className="text-foreground">{r}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-muted">Full Name</Label>
+              <Label className="text-muted-foreground">Full Name</Label>
               <Input
                 value={formData.name}
                 onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                className="bg-foreground/5 border-foreground/10 text-white"
+                className="bg-foreground/5 border-foreground/10 text-foreground"
                 placeholder="e.g., Prof. John Doe"
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-muted">Email</Label>
+                <Label className="text-muted-foreground">Email</Label>
                 <Input
                   type="email"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="bg-foreground/5 border-foreground/10 text-white"
+                  className="bg-foreground/5 border-foreground/10 text-foreground"
                   placeholder="e.g., john@university.edu"
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-muted">Phone</Label>
+                <Label className="text-muted-foreground">Phone</Label>
                 <Input
                   value={formData.phone}
                   onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  className="bg-foreground/5 border-foreground/10 text-white"
+                  className="bg-foreground/5 border-foreground/10 text-foreground"
                   placeholder="e.g., 08012345678"
                 />
               </div>
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-muted">Department</Label>
+                <Label className="text-muted-foreground">Department</Label>
                 <Select value={formData.departmentId} onValueChange={(v) => setFormData({ ...formData, departmentId: v })}>
-                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white">
+                  <SelectTrigger className="bg-foreground/5 border-foreground/10 text-foreground">
                     <SelectValue placeholder="Select department" />
                   </SelectTrigger>
                   <SelectContent className="bg-muted border-foreground/10">
                     {departments.map((d) => (
-                      <SelectItem key={d.id} value={d.id} className="text-white">{d.name} ({d.code})</SelectItem>
+                      <SelectItem key={d.id} value={d.id} className="text-foreground">{d.name} ({d.code})</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
               <div className="space-y-2">
-                <Label className="text-muted">Specialization</Label>
+                <Label className="text-muted-foreground">Specialization</Label>
                 <Input
                   value={formData.specialization}
                   onChange={(e) => setFormData({ ...formData, specialization: e.target.value })}
-                  className="bg-foreground/5 border-foreground/10 text-white"
+                  className="bg-foreground/5 border-foreground/10 text-foreground"
                   placeholder="e.g., Machine Learning"
                 />
               </div>
@@ -375,7 +375,7 @@ export default function LecturersPage() {
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-foreground/10 text-muted">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-foreground/10 text-muted-foreground">
               Cancel
             </Button>
             <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-success to-success">

@@ -161,8 +161,8 @@ function DepartmentsPageInner() {
             <Building2 className="w-5 h-5 text-success" />
           </div>
           <div>
-            <div className="font-medium text-white">{row.getValue('name')}</div>
-            {row.original.hodName && <div className="text-xs text-muted">HOD: {row.original.hodName}</div>}
+            <div className="font-medium text-foreground">{row.getValue('name')}</div>
+            {row.original.hodName && <div className="text-xs text-muted-foreground">HOD: {row.original.hodName}</div>}
           </div>
         </div>
       ),
@@ -171,7 +171,7 @@ function DepartmentsPageInner() {
       accessorKey: 'faculty',
       header: 'Faculty',
       cell: ({ row }) => (
-        <Badge variant="secondary" className="bg-foreground/10 text-muted">
+        <Badge variant="secondary" className="bg-foreground/10 text-muted-foreground">
           {row.original.faculty?.code || 'N/A'}
         </Badge>
       ),
@@ -180,7 +180,7 @@ function DepartmentsPageInner() {
       id: 'stats',
       header: 'Stats',
       cell: ({ row }) => (
-        <div className="flex items-center gap-4 text-sm text-muted">
+        <div className="flex items-center gap-4 text-sm text-muted-foreground">
           <span>{row.original._count?.students || 0} students</span>
           <span>{row.original._count?.lecturers || 0} lecturers</span>
           <span>{row.original._count?.courses || 0} courses</span>
@@ -201,12 +201,12 @@ function DepartmentsPageInner() {
       cell: ({ row }) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted">
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground">
               <MoreHorizontal className="w-4 h-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="bg-muted border-foreground/10">
-            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted">
+            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted-foreground">
               <Pencil className="w-4 h-4 mr-2" /> Edit
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-clash">
@@ -246,15 +246,15 @@ function DepartmentsPageInner() {
           ) : (
             <>
               <div className="flex items-center gap-3 mb-4">
-                <span className="text-xs text-muted">Filter by Faculty:</span>
+                <span className="text-xs text-muted-foreground">Filter by Faculty:</span>
                 <Select value={filterFacultyId} onValueChange={setFilterFacultyId}>
-                  <SelectTrigger className="w-56 bg-foreground/5 border-foreground/10 text-white text-sm">
+                  <SelectTrigger className="w-56 bg-foreground/5 border-foreground/10 text-foreground text-sm">
                     <SelectValue placeholder="All Faculties" />
                   </SelectTrigger>
                   <SelectContent className="bg-muted border-foreground/10">
-                    <SelectItem value="all" className="text-white">All Faculties</SelectItem>
+                    <SelectItem value="all" className="text-foreground">All Faculties</SelectItem>
                     {faculties.map(f => (
-                      <SelectItem key={f.id} value={f.id} className="text-white">{f.code} – {f.name}</SelectItem>
+                      <SelectItem key={f.id} value={f.id} className="text-foreground">{f.code} – {f.name}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
@@ -276,10 +276,10 @@ function DepartmentsPageInner() {
       </Card>
 
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <DialogContent className="bg-muted border-foreground/10 text-white">
+        <DialogContent className="bg-muted border-foreground/10 text-foreground">
           <DialogHeader>
             <DialogTitle>{editingDepartment ? 'Edit Department' : 'Add New Department'}</DialogTitle>
-            <DialogDescription className="text-muted">
+            <DialogDescription className="text-muted-foreground">
               {editingDepartment ? 'Update department details' : 'Create a new department'}
             </DialogDescription>
           </DialogHeader>
@@ -287,51 +287,51 @@ function DepartmentsPageInner() {
           <div className="space-y-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label className="text-muted">Department Name</Label>
+                <Label className="text-muted-foreground">Department Name</Label>
                 <Input
                   value={formData.name}
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="bg-foreground/5 border-foreground/10 text-white"
+                  className="bg-foreground/5 border-foreground/10 text-foreground"
                   placeholder="e.g., Computer Science"
                 />
               </div>
               <div className="space-y-2">
-                <Label className="text-muted">Code</Label>
+                <Label className="text-muted-foreground">Code</Label>
                 <Input
                   value={formData.code}
                   onChange={(e) => setFormData({ ...formData, code: e.target.value.toUpperCase() })}
-                  className="bg-foreground/5 border-foreground/10 text-white"
+                  className="bg-foreground/5 border-foreground/10 text-foreground"
                   placeholder="e.g., CSC"
                   maxLength={10}
                 />
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-muted">Faculty</Label>
+              <Label className="text-muted-foreground">Faculty</Label>
               <Select value={formData.facultyId} onValueChange={(v) => setFormData({ ...formData, facultyId: v })}>
-                <SelectTrigger className="bg-foreground/5 border-foreground/10 text-white">
+                <SelectTrigger className="bg-foreground/5 border-foreground/10 text-foreground">
                   <SelectValue placeholder="Select faculty" />
                 </SelectTrigger>
                 <SelectContent className="bg-muted border-foreground/10">
                   {faculties.map((f) => (
-                    <SelectItem key={f.id} value={f.id} className="text-white">{f.name} ({f.code})</SelectItem>
+                    <SelectItem key={f.id} value={f.id} className="text-foreground">{f.name} ({f.code})</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
             <div className="space-y-2">
-              <Label className="text-muted">HOD Name</Label>
+              <Label className="text-muted-foreground">HOD Name</Label>
               <Input
                 value={formData.hodName}
                 onChange={(e) => setFormData({ ...formData, hodName: e.target.value })}
-                className="bg-foreground/5 border-foreground/10 text-white"
+                className="bg-foreground/5 border-foreground/10 text-foreground"
                 placeholder="e.g., Dr. Jane Smith"
               />
             </div>
           </div>
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-foreground/10 text-muted">
+            <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-foreground/10 text-muted-foreground">
               Cancel
             </Button>
             <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-success to-success">

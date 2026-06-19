@@ -281,13 +281,13 @@ function OverrideModal({
               <Icon className={`w-4 h-4 ${override.color}`} />
             </div>
             <div>
-              <div className="font-semibold text-white text-sm">{override.label}</div>
+              <div className="font-semibold text-foreground text-sm">{override.label}</div>
               <div className="text-xs text-foreground/40">IA Override Control</div>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="text-foreground/30 hover:text-white transition-colors p-1"
+            className="text-foreground/30 hover:text-foreground transition-colors p-1"
           >
             <X className="w-4 h-4" />
           </button>
@@ -313,7 +313,7 @@ function OverrideModal({
                 {f.editable ? (
                   <input
                     defaultValue={f.value}
-                    className="w-full bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:outline-none focus:border-foreground/30 transition-colors"
+                    className="w-full bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-2 text-sm text-foreground placeholder-white/20 focus:outline-none focus:border-foreground/30 transition-colors"
                   />
                 ) : (
                   <div className="w-full bg-foreground/[0.03] border border-white/[0.06] rounded-lg px-3 py-2 text-sm text-foreground/50">
@@ -345,7 +345,7 @@ function OverrideModal({
         <div className="flex items-center gap-3 px-6 py-4 border-t border-foreground/10">
           <button
             onClick={onClose}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl border border-foreground/10 text-sm text-foreground/50 hover:text-white hover:bg-foreground/5 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl border border-foreground/10 text-sm text-foreground/50 hover:text-foreground hover:bg-foreground/5 transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
             Cancel
@@ -446,11 +446,11 @@ function AddRemoveModal({
                 : <PlusCircle className="w-4 h-4 text-success" />
               }
             </div>
-            <span className="font-semibold text-white text-sm">
+            <span className="font-semibold text-foreground text-sm">
               {isRemove ? "Remove" : "Add"} {config.singular}
             </span>
           </div>
-          <button onClick={onClose} className="text-foreground/30 hover:text-white p-1">
+          <button onClick={onClose} className="text-foreground/30 hover:text-foreground p-1">
             <X className="w-4 h-4" />
           </button>
         </div>
@@ -467,7 +467,7 @@ function AddRemoveModal({
               </div>
               <div className="space-y-1">
                 <label className="text-xs font-medium text-foreground/50">Select {config.singular} to Remove</label>
-                <select className="w-full bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-foreground/30">
+                <select className="w-full bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-foreground/30">
                   <option value="">— Choose {config.singular} —</option>
                   {type === "department" && DEPARTMENTS.map(d => (
                     <option key={d.code} value={d.code}>{d.name}</option>
@@ -494,7 +494,7 @@ function AddRemoveModal({
                 <textarea
                   rows={3}
                   placeholder="Enter reason..."
-                  className="w-full bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:outline-none focus:border-foreground/30 resize-none"
+                  className="w-full bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-2 text-sm text-foreground placeholder-white/20 focus:outline-none focus:border-foreground/30 resize-none"
                 />
               </div>
             </div>
@@ -505,7 +505,7 @@ function AddRemoveModal({
                   <label className="text-xs font-medium text-foreground/50">{f.label}</label>
                   <input
                     placeholder={f.placeholder}
-                    className="w-full bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-2 text-sm text-white placeholder-white/20 focus:outline-none focus:border-foreground/30 transition-colors"
+                    className="w-full bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-2 text-sm text-foreground placeholder-white/20 focus:outline-none focus:border-foreground/30 transition-colors"
                   />
                 </div>
               ))}
@@ -514,7 +514,7 @@ function AddRemoveModal({
         </div>
 
         <div className="flex gap-3 px-6 py-4 border-t border-foreground/10">
-          <button onClick={onClose} className="px-4 py-2 rounded-xl border border-foreground/10 text-sm text-foreground/50 hover:text-white hover:bg-foreground/5 transition-colors">
+          <button onClick={onClose} className="px-4 py-2 rounded-xl border border-foreground/10 text-sm text-foreground/50 hover:text-foreground hover:bg-foreground/5 transition-colors">
             Cancel
           </button>
           <button
@@ -589,7 +589,7 @@ export default function InstitutionAdminPage() {
       {pauseToast && (
         <div className="fixed bottom-6 right-6 z-50 flex items-center gap-3 px-5 py-3.5 rounded-2xl bg-muted border border-foreground/15 shadow-2xl">
           <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0" />
-          <span className="text-sm font-semibold text-white">{pauseToast}</span>
+          <span className="text-sm font-semibold text-foreground">{pauseToast}</span>
         </div>
       )}
       {/* System toast */}
@@ -621,7 +621,7 @@ export default function InstitutionAdminPage() {
               <Building2 className="w-4 h-4 text-secondary" />
               <span className="text-xs font-semibold text-secondary uppercase tracking-widest">Institution Admin</span>
             </div>
-            <h1 className="text-2xl font-bold text-white">Faculty Control Panel</h1>
+            <h1 className="text-2xl font-bold text-foreground">Faculty Control Panel</h1>
             <p className="text-foreground/40 text-sm mt-1">Faculty of Physical and Applied Sciences · 2024/2025 S1</p>
           </div>
           {activeOverrides.length > 0 && (
@@ -644,7 +644,7 @@ export default function InstitutionAdminPage() {
                 onClick={() => setActiveTab(t.id)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                   activeTab === t.id
-                    ? "bg-foreground/10 text-white shadow"
+                    ? "bg-foreground/10 text-foreground shadow"
                     : "text-foreground/40 hover:text-foreground/70"
                 }`}
               >
@@ -677,7 +677,7 @@ export default function InstitutionAdminPage() {
                       onClick={() => setSelectedOverride(o)}
                       className="w-full flex items-center justify-between text-left px-3 py-2 rounded-lg hover:bg-accent-gold/10 transition-colors group"
                     >
-                      <span className="text-sm text-foreground/70 group-hover:text-white transition-colors">
+                      <span className="text-sm text-foreground/70 group-hover:text-foreground transition-colors">
                         {o.label} — {o.details.proposedAction}
                       </span>
                       <ChevronRight className="w-3.5 h-3.5 text-accent-gold/60" />
@@ -709,7 +709,7 @@ export default function InstitutionAdminPage() {
                           <Icon className={`w-4 h-4 ${o.color}`} />
                         </div>
                         <div>
-                          <div className="font-semibold text-white text-sm">{o.label}</div>
+                          <div className="font-semibold text-foreground text-sm">{o.label}</div>
                           {o.active && (
                             <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-1.5 py-0.5 rounded border mt-1 ${o.badgeColor}`}>
                               <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
@@ -785,14 +785,14 @@ export default function InstitutionAdminPage() {
                   <div className="flex items-center gap-3">
                     <Icon className={`w-5 h-5 ${item.color}`} />
                     <div>
-                      <div className="font-semibold text-white text-sm">{item.label}</div>
+                      <div className="font-semibold text-foreground text-sm">{item.label}</div>
                       <div className="text-xs text-foreground/40 mt-0.5">{item.description}</div>
                     </div>
                   </div>
                   <div className="flex gap-3">
                     <button
                       onClick={() => setAddRemoveModal({ type: item.type, action: "add" })}
-                      className="flex items-center gap-2 px-4 py-2 rounded-xl bg-foreground/5 border border-foreground/10 text-sm text-foreground/70 hover:bg-foreground/10 hover:text-white transition-colors"
+                      className="flex items-center gap-2 px-4 py-2 rounded-xl bg-foreground/5 border border-foreground/10 text-sm text-foreground/70 hover:bg-foreground/10 hover:text-foreground transition-colors"
                     >
                       <PlusCircle className="w-4 h-4 text-success" />
                       Add {item.label}
@@ -826,9 +826,9 @@ export default function InstitutionAdminPage() {
                 return (
                   <div key={s.label} className="rounded-2xl border border-foreground/10 bg-foreground/[0.03] p-4 space-y-2">
                     <div className={`w-8 h-8 rounded-xl flex items-center justify-center ${s.color}`}>
-                      <Icon className="w-4 h-4 text-white" />
+                      <Icon className="w-4 h-4 text-foreground" />
                     </div>
-                    <div className="text-xl font-bold text-white">{s.value}</div>
+                    <div className="text-xl font-bold text-foreground">{s.value}</div>
                     <div className="text-xs text-foreground/40">{s.label}</div>
                   </div>
                 );
@@ -900,10 +900,10 @@ export default function InstitutionAdminPage() {
                     timetableStatus === "active" ? "bg-success" : timetableStatus === "paused" ? "bg-accent-gold" : "bg-clash"
                   }`}>
                     {timetableStatus === "active"
-                      ? <Play className="w-5 h-5 text-white" />
+                      ? <Play className="w-5 h-5 text-foreground" />
                       : timetableStatus === "paused"
-                      ? <Pause className="w-5 h-5 text-white" />
-                      : <Shield className="w-5 h-5 text-white" />
+                      ? <Pause className="w-5 h-5 text-foreground" />
+                      : <Shield className="w-5 h-5 text-foreground" />
                     }
                   </div>
                   <div>
@@ -941,7 +941,7 @@ export default function InstitutionAdminPage() {
                   <input
                     value={pauseReason}
                     onChange={e => setPauseReason(e.target.value)}
-                    className="w-full bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-2 text-sm text-white focus:outline-none focus:border-foreground/30"
+                    className="w-full bg-foreground/5 border border-foreground/10 rounded-lg px-3 py-2 text-sm text-foreground focus:outline-none focus:border-foreground/30"
                     placeholder="e.g. ASUU strike action, public holiday, maintenance..."
                   />
                 </div>
@@ -1127,7 +1127,7 @@ export default function InstitutionAdminPage() {
                         <div className={`w-9 h-9 rounded-xl border ${item.bg} flex items-center justify-center`}>
                           <Icon className={`w-4 h-4 ${item.color}`} />
                         </div>
-                        <span className="text-sm font-semibold text-white">{item.label}</span>
+                        <span className="text-sm font-semibold text-foreground">{item.label}</span>
                       </div>
                       <Zap className={`w-3.5 h-3.5 ${item.color} opacity-0 group-hover:opacity-100 transition-opacity`} />
                     </div>

@@ -23,10 +23,10 @@ function StatCard({
   return (
     <div className="rounded-2xl border border-foreground/10 bg-foreground/[0.03] p-5 space-y-3">
       <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${color}`}>
-        <Icon className="w-4 h-4 text-white" />
+        <Icon className="w-4 h-4 text-foreground" />
       </div>
       <div>
-        <div className="text-2xl font-bold text-white">{value}</div>
+        <div className="text-2xl font-bold text-foreground">{value}</div>
         <div className="text-sm text-foreground/50 mt-0.5">{label}</div>
         {sub && <div className="text-xs text-foreground/30 mt-1">{sub}</div>}
       </div>
@@ -102,7 +102,7 @@ function SCIDeptCard({ dept }: { dept: (typeof DEPARTMENTS)[number] }) {
             <BookMarked className="w-4 h-4 text-primary" />
           </div>
           <div>
-            <div className="font-semibold text-white text-sm">{dept.name}</div>
+            <div className="font-semibold text-foreground text-sm">{dept.name}</div>
             <div className="text-xs text-foreground/40 mt-0.5">
               {dept.code} · {dept.hodTitle}
             </div>
@@ -110,11 +110,11 @@ function SCIDeptCard({ dept }: { dept: (typeof DEPARTMENTS)[number] }) {
         </div>
         <div className="flex items-center gap-4">
           <div className="hidden sm:flex flex-col items-end">
-            <span className="text-sm font-semibold text-white">{totalStudents}</span>
+            <span className="text-sm font-semibold text-foreground">{totalStudents}</span>
             <span className="text-xs text-foreground/35">students</span>
           </div>
           <div className="hidden sm:flex flex-col items-end">
-            <span className="text-sm font-semibold text-white">{dept.totalLecturers}</span>
+            <span className="text-sm font-semibold text-foreground">{dept.totalLecturers}</span>
             <span className="text-xs text-foreground/35">lecturers</span>
           </div>
           <div className="hidden md:flex flex-col items-end">
@@ -139,7 +139,7 @@ function SCIDeptCard({ dept }: { dept: (typeof DEPARTMENTS)[number] }) {
               {dept.hod.split(" ").slice(-1)[0][0]}
             </div>
             <div>
-              <div className="text-sm font-medium text-white">{dept.hod}</div>
+              <div className="text-sm font-medium text-foreground">{dept.hod}</div>
               <div className="text-xs text-foreground/40">Head of Department · {dept.code}</div>
             </div>
           </div>
@@ -160,7 +160,7 @@ function SCIDeptCard({ dept }: { dept: (typeof DEPARTMENTS)[number] }) {
                 )?.conflictsDetected ?? 0;
                 return (
                   <div key={level} className={`rounded-xl bg-gradient-to-br border p-3 ${colors[level]}`}>
-                    <div className="text-lg font-bold text-white">{count}</div>
+                    <div className="text-lg font-bold text-foreground">{count}</div>
                     <div className="text-xs text-foreground/50">{level}</div>
                     {conflicts > 0 && (
                       <div className="mt-1.5 flex items-center gap-1 text-accent-gold text-[10px]">
@@ -178,12 +178,12 @@ function SCIDeptCard({ dept }: { dept: (typeof DEPARTMENTS)[number] }) {
           <div className="grid grid-cols-2 gap-3">
             <div className="rounded-xl bg-foreground/5 border border-foreground/10 p-3 space-y-1">
               <div className="text-xs text-foreground/40">Courses Offered</div>
-              <div className="text-xl font-bold text-white">64</div>
+              <div className="text-xl font-bold text-foreground">64</div>
               <div className="text-xs text-foreground/30">8 per sem × 2 × 4 yrs</div>
             </div>
             <div className="rounded-xl bg-foreground/5 border border-foreground/10 p-3 space-y-1">
               <div className="text-xs text-foreground/40">Degree Awarded</div>
-              <div className="text-sm font-semibold text-white">{dept.degreeAwarded}</div>
+              <div className="text-sm font-semibold text-foreground">{dept.degreeAwarded}</div>
               <div className="text-xs text-foreground/30">4-year programme</div>
             </div>
           </div>
@@ -224,7 +224,7 @@ export default function SuperAdminPage() {
               <ShieldCheck className="w-5 h-5 text-primary" />
               <span className="text-xs font-semibold text-primary uppercase tracking-widest">Super Admin</span>
             </div>
-            <h1 className="text-2xl font-bold text-white">Institutional Overview</h1>
+            <h1 className="text-2xl font-bold text-foreground">Institutional Overview</h1>
             <p className="text-foreground/40 text-sm mt-1">Federal University of Konoha · 2024/2025 Session</p>
           </div>
           <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-primary/10 border border-primary/20">
@@ -241,7 +241,7 @@ export default function SuperAdminPage() {
               onClick={() => setActiveTab(t.id)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 activeTab === t.id
-                  ? "bg-foreground/10 text-white shadow"
+                  ? "bg-foreground/10 text-foreground shadow"
                   : "text-foreground/40 hover:text-foreground/70"
               }`}
             >
@@ -289,7 +289,7 @@ export default function SuperAdminPage() {
                     <span className="text-xs font-bold text-primary uppercase tracking-wide">FOCUS</span>
                     <ChevronRight className="w-4 h-4 text-primary group-hover:translate-x-0.5 transition-transform" />
                   </div>
-                  <div className="font-semibold text-white text-sm">{FOCUS_FACULTY.name}</div>
+                  <div className="font-semibold text-foreground text-sm">{FOCUS_FACULTY.name}</div>
                   <div className="text-xs text-foreground/40 mt-1">12 departments · Full data available</div>
                   <div className="mt-3 flex gap-2">
                     <span className="text-xs px-2 py-0.5 rounded-md bg-foreground/10 text-foreground/50">{totalStudents} students</span>
@@ -316,7 +316,7 @@ export default function SuperAdminPage() {
             <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6 space-y-4">
               <div className="flex items-start justify-between gap-4 flex-wrap">
                 <div>
-                  <h2 className="text-lg font-bold text-white">{FOCUS_FACULTY.name}</h2>
+                  <h2 className="text-lg font-bold text-foreground">{FOCUS_FACULTY.name}</h2>
                   <p className="text-sm text-foreground/40 mt-1">Dean: {FOCUS_FACULTY.deanName} · Est. {FOCUS_FACULTY.established}</p>
                 </div>
                 <div className="grid grid-cols-3 gap-3">
@@ -326,7 +326,7 @@ export default function SuperAdminPage() {
                     { label: "Lecturers", v: FOCUS_FACULTY.totalLecturers },
                   ].map(s => (
                     <div key={s.label} className="rounded-xl bg-foreground/5 border border-foreground/10 p-3 text-center">
-                      <div className="text-lg font-bold text-white">{s.v}</div>
+                      <div className="text-lg font-bold text-foreground">{s.v}</div>
                       <div className="text-xs text-foreground/35">{s.label}</div>
                     </div>
                   ))}

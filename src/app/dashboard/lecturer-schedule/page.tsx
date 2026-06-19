@@ -194,9 +194,9 @@ export default function LecturerSchedulePage() {
       ) : !lecturer ? (
         <Card className="bg-foreground/5 border-foreground/10">
           <CardContent className="py-12 text-center">
-            <User className="w-12 h-12 mx-auto text-muted mb-4" />
-            <p className="text-white font-medium">No lecturer profile found</p>
-            <p className="text-sm text-muted">Contact your department administrator</p>
+            <User className="w-12 h-12 mx-auto text-muted-foreground mb-4" />
+            <p className="text-foreground font-medium">No lecturer profile found</p>
+            <p className="text-sm text-muted-foreground">Contact your department administrator</p>
           </CardContent>
         </Card>
       ) : (
@@ -210,11 +210,11 @@ export default function LecturerSchedulePage() {
                     {lecturer.name?.charAt(0)}
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold text-white">{lecturer.name}</h2>
-                    <p className="text-muted text-sm">{lecturer.staffId} · {lecturer.rank || 'Lecturer'}</p>
+                    <h2 className="text-xl font-bold text-foreground">{lecturer.name}</h2>
+                    <p className="text-muted-foreground text-sm">{lecturer.staffId} · {lecturer.rank || 'Lecturer'}</p>
                     <div className="flex items-center gap-2 mt-1 flex-wrap">
                       <Badge variant="outline" className="border-success/30 text-success">{lecturer.department?.code}</Badge>
-                      <Badge variant="outline" className="border-foreground/10 text-muted">{courses.length} Course(s)</Badge>
+                      <Badge variant="outline" className="border-foreground/10 text-muted-foreground">{courses.length} Course(s)</Badge>
                       <Badge variant="outline" className={`border-foreground/10 ${slotsStatus === 'good' ? 'text-success' : slotsStatus === 'low' ? 'text-accent-gold' : 'text-clash'}`}>
                         {totalLectureSlotsPerWeek}/{slotsPerWeekTarget} lecture slots/wk
                       </Badge>
@@ -223,22 +223,22 @@ export default function LecturerSchedulePage() {
                 </div>
                 <div className="flex flex-wrap gap-2">
                   <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
-                    <SelectTrigger className="w-56 bg-foreground/5 border-foreground/10 text-white text-sm">
+                    <SelectTrigger className="w-56 bg-foreground/5 border-foreground/10 text-foreground text-sm">
                       <SelectValue placeholder="Exam period" />
                     </SelectTrigger>
                     <SelectContent className="bg-muted border-foreground/10">
                       {examPeriods.map(p => (
-                        <SelectItem key={p.id} value={p.id} className="text-white">{p.name}</SelectItem>
+                        <SelectItem key={p.id} value={p.id} className="text-foreground">{p.name}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                   <Select value={selectedLectureTT} onValueChange={setSelectedLectureTT}>
-                    <SelectTrigger className="w-56 bg-foreground/5 border-foreground/10 text-white text-sm">
+                    <SelectTrigger className="w-56 bg-foreground/5 border-foreground/10 text-foreground text-sm">
                       <SelectValue placeholder="Lecture timetable" />
                     </SelectTrigger>
                     <SelectContent className="bg-muted border-foreground/10">
                       {lectureTimetables.map(t => (
-                        <SelectItem key={t.id} value={t.id} className="text-white">{t.name}</SelectItem>
+                        <SelectItem key={t.id} value={t.id} className="text-foreground">{t.name}</SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
@@ -263,8 +263,8 @@ export default function LecturerSchedulePage() {
                       <s.icon className={`w-4 h-4 ${s.tc}`} />
                     </div>
                     <div>
-                      <div className="text-xl font-bold text-white">{s.value}</div>
-                      <div className="text-xs text-muted">{s.label}</div>
+                      <div className="text-xl font-bold text-foreground">{s.value}</div>
+                      <div className="text-xs text-muted-foreground">{s.label}</div>
                     </div>
                   </div>
                 </CardContent>
@@ -298,11 +298,11 @@ export default function LecturerSchedulePage() {
                 variant={activeTab === tab.id ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => setActiveTab(tab.id)}
-                className={activeTab === tab.id ? 'bg-secondary text-white' : 'text-muted hover:text-white'}
+                className={activeTab === tab.id ? 'bg-secondary text-white' : 'text-muted-foreground hover:text-white'}
               >
                 {tab.label}
                 {tab.count > 0 && (
-                  <Badge className="ml-2 bg-foreground/10 text-white text-xs">{tab.count}</Badge>
+                  <Badge className="ml-2 bg-foreground/10 text-foreground text-xs">{tab.count}</Badge>
                 )}
               </Button>
             ))}
@@ -316,9 +316,9 @@ export default function LecturerSchedulePage() {
               {examSlots.length === 0 ? (
                 <Card className="bg-foreground/5 border-foreground/10">
                   <CardContent className="py-12 text-center">
-                    <Calendar className="w-12 h-12 mx-auto text-muted mb-3" />
-                    <p className="text-white font-medium">No exam slots yet</p>
-                    <p className="text-sm text-muted">Exam schedule will appear here once generated</p>
+                    <Calendar className="w-12 h-12 mx-auto text-muted-foreground mb-3" />
+                    <p className="text-foreground font-medium">No exam slots yet</p>
+                    <p className="text-sm text-muted-foreground">Exam schedule will appear here once generated</p>
                   </CardContent>
                 </Card>
               ) : (
@@ -326,7 +326,7 @@ export default function LecturerSchedulePage() {
                   {Object.entries(groupedExam).sort(([a], [b]) => new Date(a).getTime() - new Date(b).getTime()).map(([date, slots]) => (
                     <Card key={date} className="bg-foreground/5 border-foreground/10">
                       <CardHeader className="pb-2">
-                        <CardTitle className="text-base text-white flex items-center gap-2">
+                        <CardTitle className="text-base text-foreground flex items-center gap-2">
                           <Calendar className="w-4 h-4 text-secondary" /> {date}
                         </CardTitle>
                       </CardHeader>
@@ -336,11 +336,11 @@ export default function LecturerSchedulePage() {
                             <div key={slot.id} className={`p-3 rounded-lg bg-gradient-to-r ${slotColors[slot.slotNumber - 1]} border`}>
                               <div className="flex items-center gap-2 mb-1 flex-wrap">
                                 <Badge variant="outline" className="border-foreground/20 text-secondary font-mono">{slot.course.code}</Badge>
-                                <Badge className="bg-foreground/10 text-muted text-xs">{['Morning', 'Afternoon', 'Evening'][slot.slotNumber - 1]}</Badge>
+                                <Badge className="bg-foreground/10 text-muted-foreground text-xs">{['Morning', 'Afternoon', 'Evening'][slot.slotNumber - 1]}</Badge>
                                 <Badge className="bg-success/20 text-success text-xs">Course Lecturer</Badge>
                               </div>
-                              <p className="text-white font-medium text-sm">{slot.course.name}</p>
-                              <div className="flex flex-wrap gap-4 mt-2 text-xs text-muted">
+                              <p className="text-foreground font-medium text-sm">{slot.course.name}</p>
+                              <div className="flex flex-wrap gap-4 mt-2 text-xs text-muted-foreground">
                                 <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{slot.startTime}–{slot.endTime}</span>
                                 <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{slot.room.name} ({slot.room.code})</span>
                                 <span className="flex items-center gap-1"><Users className="w-3 h-3" />{slot.course._count?.studentCourses || 0} students</span>
@@ -364,9 +364,9 @@ export default function LecturerSchedulePage() {
               {lectureSlots.length === 0 ? (
                 <Card className="bg-foreground/5 border-foreground/10">
                   <CardContent className="py-12 text-center">
-                    <Clock className="w-12 h-12 mx-auto text-muted mb-3" />
-                    <p className="text-white font-medium">No lecture slots assigned</p>
-                    <p className="text-sm text-muted">The timetable officer needs to assign lecture slots for your courses</p>
+                    <Clock className="w-12 h-12 mx-auto text-muted-foreground mb-3" />
+                    <p className="text-foreground font-medium">No lecture slots assigned</p>
+                    <p className="text-sm text-muted-foreground">The timetable officer needs to assign lecture slots for your courses</p>
                   </CardContent>
                 </Card>
               ) : (
@@ -374,12 +374,12 @@ export default function LecturerSchedulePage() {
                   {Object.entries(lectureGrid).filter(([, slots]) => slots.length > 0).map(([dayIdx, slots]) => (
                     <Card key={dayIdx} className="bg-foreground/5 border-foreground/10">
                       <CardHeader className="pb-2">
-                        <CardTitle className="text-base text-white flex items-center justify-between">
+                        <CardTitle className="text-base text-foreground flex items-center justify-between">
                           <span className="flex items-center gap-2">
                             <Clock className="w-4 h-4 text-primary" />
                             {DAY_NAMES[parseInt(dayIdx)]}
                           </span>
-                          <Badge variant="outline" className="text-muted border-foreground/10">{slots.length} class(es)</Badge>
+                          <Badge variant="outline" className="text-muted-foreground border-foreground/10">{slots.length} class(es)</Badge>
                         </CardTitle>
                       </CardHeader>
                       <CardContent>
@@ -390,8 +390,8 @@ export default function LecturerSchedulePage() {
                                 <Badge variant="outline" className="text-primary border-primary/20 font-mono text-xs">{slot.course.code}</Badge>
                                 {slot.course.isShared && <Badge className="bg-clash/20 text-clash text-xs">GST</Badge>}
                               </div>
-                              <p className="text-white text-sm font-medium">{slot.course.name}</p>
-                              <div className="flex flex-wrap gap-4 mt-1 text-xs text-muted">
+                              <p className="text-foreground text-sm font-medium">{slot.course.name}</p>
+                              <div className="flex flex-wrap gap-4 mt-1 text-xs text-muted-foreground">
                                 <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{slot.startTime}–{slot.endTime}</span>
                                 <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{slot.room.code}</span>
                                 <span>{slot.course.level}L</span>
@@ -424,9 +424,9 @@ export default function LecturerSchedulePage() {
               {invigAssignments.length === 0 ? (
                 <Card className="bg-foreground/5 border-foreground/10">
                   <CardContent className="py-12 text-center">
-                    <Shield className="w-12 h-12 mx-auto text-muted mb-3" />
-                    <p className="text-white font-medium">No invigilation duties assigned</p>
-                    <p className="text-sm text-muted">The timetable officer will assign your invigilation duties after exam generation</p>
+                    <Shield className="w-12 h-12 mx-auto text-muted-foreground mb-3" />
+                    <p className="text-foreground font-medium">No invigilation duties assigned</p>
+                    <p className="text-sm text-muted-foreground">The timetable officer will assign your invigilation duties after exam generation</p>
                   </CardContent>
                 </Card>
               ) : (
@@ -434,7 +434,7 @@ export default function LecturerSchedulePage() {
                   {Object.entries(groupedInvig).sort(([a], [b]) => new Date(a).getTime() - new Date(b).getTime()).map(([date, assignments]) => (
                     <Card key={date} className="bg-foreground/5 border-foreground/10">
                       <CardHeader className="pb-2">
-                        <CardTitle className="text-base text-white flex items-center gap-2">
+                        <CardTitle className="text-base text-foreground flex items-center gap-2">
                           <Shield className="w-4 h-4 text-primary" /> {date}
                         </CardTitle>
                       </CardHeader>
@@ -443,17 +443,17 @@ export default function LecturerSchedulePage() {
                           {assignments.sort((a, b) => a.examSlot.slotNumber - b.examSlot.slotNumber).map(a => (
                             <div key={a.id} className={`p-3 rounded-lg bg-gradient-to-r ${slotColors[a.examSlot.slotNumber - 1]} border`}>
                               <div className="flex items-center gap-2 mb-1 flex-wrap">
-                                <Badge variant="outline" className="border-foreground/20 text-white font-mono text-xs">{a.examSlot.course.code}</Badge>
+                                <Badge variant="outline" className="border-foreground/20 text-foreground font-mono text-xs">{a.examSlot.course.code}</Badge>
                                 <Badge className={`${roleColors[a.role]} text-xs`}>{a.role}</Badge>
-                                <Badge className="bg-foreground/10 text-muted text-xs">{['Morning', 'Afternoon', 'Evening'][a.examSlot.slotNumber - 1]}</Badge>
+                                <Badge className="bg-foreground/10 text-muted-foreground text-xs">{['Morning', 'Afternoon', 'Evening'][a.examSlot.slotNumber - 1]}</Badge>
                               </div>
-                              <p className="text-white text-sm font-medium">{a.examSlot.course.name}</p>
-                              <div className="flex flex-wrap gap-4 mt-1 text-xs text-muted">
+                              <p className="text-foreground text-sm font-medium">{a.examSlot.course.name}</p>
+                              <div className="flex flex-wrap gap-4 mt-1 text-xs text-muted-foreground">
                                 <span className="flex items-center gap-1"><Clock className="w-3 h-3" />{a.examSlot.startTime}–{a.examSlot.endTime}</span>
                                 <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{a.examSlot.room.name}</span>
                                 <span className="flex items-center gap-1"><Users className="w-3 h-3" />{a.examSlot.course._count?.studentCourses || 0} students</span>
                               </div>
-                              {a.notes && <p className="text-xs text-muted mt-1 italic">Note: {a.notes}</p>}
+                              {a.notes && <p className="text-xs text-muted-foreground mt-1 italic">Note: {a.notes}</p>}
                             </div>
                           ))}
                         </div>
@@ -469,7 +469,7 @@ export default function LecturerSchedulePage() {
           {courses.length > 0 && (
             <Card className="bg-foreground/5 border-foreground/10">
               <CardHeader>
-                <CardTitle className="text-white flex items-center gap-2 text-base">
+                <CardTitle className="text-foreground flex items-center gap-2 text-base">
                   <BookOpen className="w-4 h-4 text-secondary" /> Courses Teaching ({courses.length})
                 </CardTitle>
               </CardHeader>
@@ -478,8 +478,8 @@ export default function LecturerSchedulePage() {
                   {courses.map((c: any) => (
                     <div key={c.id} className="p-3 bg-foreground/5 rounded-lg border border-foreground/10">
                       <Badge variant="outline" className="border-foreground/20 text-secondary font-mono text-xs mb-1">{c.code}</Badge>
-                      <p className="text-white text-sm">{c.name}</p>
-                      <p className="text-xs text-muted mt-1">{c.level}L · {c.creditUnits} CU</p>
+                      <p className="text-foreground text-sm">{c.name}</p>
+                      <p className="text-xs text-muted-foreground mt-1">{c.level}L · {c.creditUnits} CU</p>
                     </div>
                   ))}
                 </div>
