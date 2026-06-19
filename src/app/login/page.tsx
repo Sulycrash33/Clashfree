@@ -1,7 +1,6 @@
 'use client'
 
 import { DemoBanner } from '@/components/demo-banner'
-
 import { Suspense, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { signIn } from 'next-auth/react'
@@ -9,9 +8,8 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Loader2, Mail, Lock, ArrowLeft, Building2, Calendar, BookOpen, GraduationCap } from 'lucide-react'
+import { Loader2, Mail, Lock, ArrowLeft, CheckCircle2 } from 'lucide-react'
 
 
 function LoginForm() {
@@ -51,122 +49,155 @@ function LoginForm() {
     }
   }
 
-
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-background to-card text-foreground flex items-center justify-center p-4">
-      {/* Animated background */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute top-1/2 -left-40 w-80 h-80 bg-secondary/20 rounded-full blur-3xl animate-pulse delay-1000" />
-        <div className="absolute -bottom-40 right-1/3 w-80 h-80 bg-secondary/20 rounded-full blur-3xl animate-pulse delay-500" />
-      </div>
-
-      <div className="w-full max-w-md relative z-10">
-        {/* Back to home */}
-        <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-6">
-          <ArrowLeft className="w-4 h-4" />
-          Back to home
-        </Link>
-
-        {/* Logo */}
-        <div className="flex items-center gap-3 mb-8">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-secondary to-secondary flex items-center justify-center font-bold text-xl">
-            CF
-          </div>
+    <div className="min-h-screen bg-background text-foreground flex">
+      {/* Left Panel - Branding */}
+      <div className="hidden lg:flex lg:w-1/2 bg-primary relative overflow-hidden">
+        <div className="absolute inset-0">
+          <div className="absolute top-20 left-20 w-72 h-72 bg-white/5 rounded-full blur-3xl" />
+          <div className="absolute bottom-20 right-20 w-96 h-96 bg-white/5 rounded-full blur-3xl" />
+        </div>
+        <div className="relative z-10 flex flex-col justify-between p-12 w-full">
           <div>
-            <h1 className="text-2xl font-bold bg-gradient-to-r from-secondary to-secondary bg-clip-text text-transparent">
-              ClashFree
-            </h1>
-            <p className="text-xs text-muted-foreground">Academic Scheduling Platform</p>
+            <div className="flex items-center gap-3 mb-16">
+              <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
+                <span className="text-white font-bold text-sm">CF</span>
+              </div>
+              <span className="text-xl font-bold text-white tracking-tight">ClashFree</span>
+            </div>
+            <h2 className="text-4xl font-bold text-white leading-tight mb-6">
+              Academic Scheduling<br />
+              Without the Clashes
+            </h2>
+            <p className="text-white/60 text-lg leading-relaxed max-w-md">
+              Generate conflict-free exam and lecture timetables for your institution.
+              Trusted by Nigerian universities.
+            </p>
+          </div>
+
+          <div className="space-y-4">
+            <div className="flex items-center gap-3 text-white/70">
+              <CheckCircle2 className="w-4 h-4 text-white/50 flex-shrink-0" />
+              <span className="text-sm">Zero clashes guaranteed</span>
+            </div>
+            <div className="flex items-center gap-3 text-white/70">
+              <CheckCircle2 className="w-4 h-4 text-white/50 flex-shrink-0" />
+              <span className="text-sm">Carry-over students automatically validated</span>
+            </div>
+            <div className="flex items-center gap-3 text-white/70">
+              <CheckCircle2 className="w-4 h-4 text-white/50 flex-shrink-0" />
+              <span className="text-sm">Room capacity optimization</span>
+            </div>
           </div>
         </div>
+      </div>
 
-        <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-xl">
-          <CardHeader className="space-y-1 pb-4">
-            <CardTitle className="text-2xl font-bold">Sign In</CardTitle>
-            <CardDescription className="text-muted-foreground">
-              Enter your credentials to access your dashboard
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              {error && (
-                <Alert className="bg-clash/10 border-clash/20 text-clash">
-                  <AlertDescription>{error}</AlertDescription>
-                </Alert>
-              )}
+      {/* Right Panel - Login Form */}
+      <div className="flex-1 flex items-center justify-center p-6 lg:p-12">
+        <div className="w-full max-w-md">
+          {/* Mobile logo */}
+          <div className="lg:hidden flex items-center gap-3 mb-8">
+            <div className="w-9 h-9 rounded-lg bg-primary flex items-center justify-center">
+              <span className="text-primary-foreground font-bold text-sm">CF</span>
+            </div>
+            <span className="text-lg font-bold text-foreground tracking-tight">ClashFree</span>
+          </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-muted-foreground">
-                  Email
-                </Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    id="email"
-                    type="email"
-                    placeholder="admin@clashfree.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="pl-10 bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground focus:border-secondary focus:ring-secondary/20"
-                    required
-                  />
-                </div>
+          {/* Back link */}
+          <Link href="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8">
+            <ArrowLeft className="w-3.5 h-3.5" />
+            Back to home
+          </Link>
+
+          <div className="mb-8">
+            <h1 className="text-2xl font-bold text-foreground mb-2">Welcome back</h1>
+            <p className="text-muted-foreground">Sign in to access your institution&apos;s dashboard</p>
+          </div>
+
+          <form onSubmit={handleSubmit} className="space-y-5">
+            {error && (
+              <Alert className="bg-destructive/10 border-destructive/20 text-destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
+
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-sm font-medium text-foreground">
+                Email address
+              </Label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder="you@institution.edu.ng"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="pl-10 h-11 bg-card border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20"
+                  required
+                />
               </div>
+            </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-muted-foreground">
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <Label htmlFor="password" className="text-sm font-medium text-foreground">
                   Password
                 </Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                  <Input
-                    id="password"
-                    type="password"
-                    placeholder="••••••••"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="pl-10 bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground focus:border-secondary focus:ring-secondary/20"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between text-sm">
-                <label className="flex items-center gap-2 text-muted-foreground">
-                  <input type="checkbox" className="rounded border-foreground/20 bg-foreground/5" />
-                  Remember me
-                </label>
-                <a href="#" className="text-secondary hover:text-secondary transition-colors">
+                <a href="#" className="text-xs text-primary hover:text-primary/80 transition-colors">
                   Forgot password?
                 </a>
               </div>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="pl-10 h-11 bg-card border-border text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-primary/20"
+                  required
+                />
+              </div>
+            </div>
 
-              <Button
-                type="submit"
-                className="w-full bg-gradient-to-r from-secondary to-secondary hover:from-secondary hover:to-secondary text-white border-0 h-11"
-                disabled={loading}
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Signing in...
-                  </>
-                ) : (
-                  'Sign In'
-                )}
-              </Button>
-            </form>
+            <div className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                id="remember"
+                className="rounded border-border bg-card w-4 h-4"
+              />
+              <Label htmlFor="remember" className="text-sm text-muted-foreground cursor-pointer">
+                Keep me signed in
+              </Label>
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full h-11 bg-primary text-primary-foreground hover:bg-primary/90 font-medium"
+              disabled={loading}
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Signing in...
+                </>
+              ) : (
+                'Sign In'
+              )}
+            </Button>
+          </form>
+
           <DemoBanner />
-          </CardContent>
-        </Card>
 
-        <p className="text-center text-sm text-muted-foreground mt-6">
-          Institution not on ClashFree?{' '}
-          <Link href="/signup" className="text-secondary hover:text-secondary transition-colors">
-            Register your institution
-          </Link>
-        </p>
+          <p className="text-center text-sm text-muted-foreground mt-8">
+            Institution not on ClashFree?{' '}
+            <Link href="/signup" className="text-primary hover:text-primary/80 font-medium transition-colors">
+              Register here
+            </Link>
+          </p>
+        </div>
       </div>
     </div>
   )
