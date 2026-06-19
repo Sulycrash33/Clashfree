@@ -83,8 +83,8 @@ export async function POST(request: NextRequest) {
               }
             })
             success++
-          } catch (error: any) {
-            errors.push(`Row ${rows.indexOf(row) + 1}: ${error.message}`)
+          } catch (error: unknown) {
+            errors.push(`Row ${rows.indexOf(row) + 1}: ${error instanceof Error ? error.message : 'Unknown error'}`)
             failed++
           }
         }
@@ -119,8 +119,8 @@ export async function POST(request: NextRequest) {
               }
             })
             success++
-          } catch (error: any) {
-            errors.push(`Row ${rows.indexOf(row) + 1}: ${error.message}`)
+          } catch (error: unknown) {
+            errors.push(`Row ${rows.indexOf(row) + 1}: ${error instanceof Error ? error.message : 'Unknown error'}`)
             failed++
           }
         }
@@ -152,8 +152,8 @@ export async function POST(request: NextRequest) {
               }
             })
             success++
-          } catch (error: any) {
-            errors.push(`Row ${rows.indexOf(row) + 1}: ${error.message}`)
+          } catch (error: unknown) {
+            errors.push(`Row ${rows.indexOf(row) + 1}: ${error instanceof Error ? error.message : 'Unknown error'}`)
             failed++
           }
         }
@@ -174,8 +174,8 @@ export async function POST(request: NextRequest) {
               }
             })
             success++
-          } catch (error: any) {
-            errors.push(`Row ${rows.indexOf(row) + 1}: ${error.message}`)
+          } catch (error: unknown) {
+            errors.push(`Row ${rows.indexOf(row) + 1}: ${error instanceof Error ? error.message : 'Unknown error'}`)
             failed++
           }
         }
@@ -192,8 +192,8 @@ export async function POST(request: NextRequest) {
               }
             })
             success++
-          } catch (error: any) {
-            errors.push(`Row ${rows.indexOf(row) + 1}: ${error.message}`)
+          } catch (error: unknown) {
+            errors.push(`Row ${rows.indexOf(row) + 1}: ${error instanceof Error ? error.message : 'Unknown error'}`)
             failed++
           }
         }
@@ -242,8 +242,8 @@ export async function POST(request: NextRequest) {
               }
             })
             success++
-          } catch (error: any) {
-            errors.push(`Row ${rows.indexOf(row) + 1}: ${error.message}`)
+          } catch (error: unknown) {
+            errors.push(`Row ${rows.indexOf(row) + 1}: ${error instanceof Error ? error.message : 'Unknown error'}`)
             failed++
           }
         }
@@ -293,8 +293,8 @@ export async function POST(request: NextRequest) {
               }
             })
             success++
-          } catch (error: any) {
-            errors.push(`Row ${rows.indexOf(row) + 1}: ${error.message}`)
+          } catch (error: unknown) {
+            errors.push(`Row ${rows.indexOf(row) + 1}: ${error instanceof Error ? error.message : 'Unknown error'}`)
             failed++
           }
         }
@@ -312,8 +312,8 @@ export async function POST(request: NextRequest) {
       errors: errors.slice(0, 10), // Return first 10 errors
     })
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('Bulk upload error:', error)
-    return NextResponse.json({ error: error.message || 'Upload failed' }, { status: 500 })
+    return NextResponse.json({ error: error instanceof Error ? error.message : 'Upload failed' }, { status: 500 })
   }
 }

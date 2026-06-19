@@ -52,29 +52,31 @@ export default function DashboardPage() {
   const { data: session } = useSession()
   const [stats, setStats] = useState<DashboardStats | null>(null)
   const [loading, setLoading] = useState(true)
+  const [fetchError, setFetchError] = useState<string | null>(null)
 
   const fetchStats = useCallback(async () => {
     setLoading(true)
+    setFetchError(null)
     try {
-      // Fetch all counts in parallel
+      // Fetch all counts in parallel — individual failures return 0 instead of breaking the batch
       const [institutions, users, students, courses, lecturers, rooms, departments, faculties, examPeriods, conflicts] = await Promise.all([
-        fetch('/api/institutions').then(r => r.ok ? r.json().then(d => d.length) : 0),
-        fetch('/api/users').then(r => r.ok ? r.json().then(d => d.length) : 0),
-        fetch('/api/students').then(r => r.ok ? r.json().then(d => Array.isArray(d) ? d.length : d.data?.length || d.total || 0) : 0),
-        fetch('/api/courses').then(r => r.ok ? r.json().then(d => d.length) : 0),
-        fetch('/api/lecturers').then(r => r.ok ? r.json().then(d => d.length) : 0),
-        fetch('/api/rooms').then(r => r.ok ? r.json().then(d => d.length) : 0),
-        fetch('/api/departments').then(r => r.ok ? r.json().then(d => d.length) : 0),
-        fetch('/api/faculties').then(r => r.ok ? r.json().then(d => d.length) : 0),
-        fetch('/api/exam-periods').then(r => r.ok ? r.json().then(d => d.length) : 0),
-        fetch('/api/conflicts').then(r => r.ok ? r.json().then(d => d.conflicts?.length || 0) : 0),
+        fetch('/api/institutions').then(r => r.ok ? r.json().then(d => d.length) : 0).catch(() => 0),
+        fetch('/api/users').then(r => r.ok ? r.json().then(d => d.length) : 0).catch(() => 0),
+        fetch('/api/students').then(r => r.ok ? r.json().then(d => Array.isArray(d) ? d.length : d.data?.length || d.total || 0) : 0).catch(() => 0),
+        fetch('/api/courses').then(r => r.ok ? r.json().then(d => d.length) : 0).catch(() => 0),
+        fetch('/api/lecturers').then(r => r.ok ? r.json().then(d => d.length) : 0).catch(() => 0),
+        fetch('/api/rooms').then(r => r.ok ? r.json().then(d => d.length) : 0).catch(() => 0),
+        fetch('/api/departments').then(r => r.ok ? r.json().then(d => d.length) : 0).catch(() => 0),
+        fetch('/api/faculties').then(r => r.ok ? r.json().then(d => d.length) : 0).catch(() => 0),
+        fetch('/api/exam-periods').then(r => r.ok ? r.json().then(d => d.length) : 0).catch(() => 0),
+        fetch('/api/conflicts').then(r => r.ok ? r.json().then(d => d.conflicts?.length || 0) : 0).catch(() => 0),
       ])
 
       // Get CO stats
-      const coStats = await fetch('/api/co-stats').then(r => r.ok ? r.json() : { studentsWithCOs: 0 })
+      const coStats = await fetch('/api/co-stats').then(r => r.ok ? r.json() : { studentsWithCOs: 0 }).catch(() => ({ studentsWithCOs: 0 }))
 
       // Get faculty drill-down
-      const facultyData = await fetch('/api/faculties').then(r => r.ok ? r.json() : [])
+      const facultyData = await fetch('/api/faculties').then(r => r.ok ? r.json() : []).catch(() => [])
       const facultyDrilldown = (facultyData || []).map((f: any) => ({
         id: f.id,
         name: f.name,
@@ -105,6 +107,7 @@ export default function DashboardPage() {
       })
     } catch (error) {
       console.error('Failed to fetch stats:', error)
+      setFetchError('Failed to load dashboard data. Please try refreshing.')
     } finally {
       setLoading(false)
     }
@@ -120,6 +123,17 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6">
+      {/* Error Alert */}
+      {fetchError && (
+        <div className="flex items-center gap-3 p-4 rounded-lg bg-clash/10 border border-clash/20 text-clash">
+          <AlertCircle className="w-5 h-5 flex-shrink-0" />
+          <p className="text-sm">{fetchError}</p>
+          <Button variant="outline" size="sm" onClick={fetchStats} className="ml-auto border-clash/20 text-clash hover:bg-clash/10">
+            Retry
+          </Button>
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>

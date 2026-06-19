@@ -56,27 +56,32 @@ export async function POST(req: Request) {
 
 // GET /api/invites/accept?token=xxx — validate token before showing form
 export async function GET(req: Request) {
-  const { searchParams } = new URL(req.url)
-  const token = searchParams.get('token')
-  if (!token) return NextResponse.json({ error: 'Token required' }, { status: 400 })
+  try {
+    const { searchParams } = new URL(req.url)
+    const token = searchParams.get('token')
+    if (!token) return NextResponse.json({ error: 'Token required' }, { status: 400 })
 
-  const invite = await prisma.inviteToken.findUnique({ where: { token } })
-  if (!invite) return NextResponse.json({ valid: false, error: 'Invalid token' }, { status: 404 })
-  if (invite.usedAt) return NextResponse.json({ valid: false, error: 'Already used' })
-  if (invite.expiresAt < new Date()) return NextResponse.json({ valid: false, error: 'Expired' })
+    const invite = await prisma.inviteToken.findUnique({ where: { token } })
+    if (!invite) return NextResponse.json({ valid: false, error: 'Invalid token' }, { status: 404 })
+    if (invite.usedAt) return NextResponse.json({ valid: false, error: 'Already used' })
+    if (invite.expiresAt < new Date()) return NextResponse.json({ valid: false, error: 'Expired' })
 
-  // Return safe info for the accept form
-  let institutionName = null
-  if (invite.institutionId) {
-    const inst = await prisma.institution.findUnique({ where: { id: invite.institutionId } })
-    institutionName = inst?.name || null
+    // Return safe info for the accept form
+    let institutionName: string | null = null
+    if (invite.institutionId) {
+      const inst = await prisma.institution.findUnique({ where: { id: invite.institutionId } })
+      institutionName = inst?.name || null
+    }
+
+    return NextResponse.json({
+      valid: true,
+      email: invite.email,
+      role: invite.role,
+      institutionName,
+      expiresAt: invite.expiresAt,
+    })
+  } catch (err) {
+    console.error('[invites/accept GET]', err)
+    return NextResponse.json({ valid: false, error: 'Server error' }, { status: 500 })
   }
-
-  return NextResponse.json({
-    valid: true,
-    email: invite.email,
-    role: invite.role,
-    institutionName,
-    expiresAt: invite.expiresAt,
-  })
 }

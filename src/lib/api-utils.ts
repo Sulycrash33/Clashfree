@@ -56,6 +56,30 @@ export function apiError(message: string, status: number = 400) {
 
 export function handleApiError(error: unknown) {
   console.error('API Error:', error)
+
+  // Handle Prisma known request errors (e.g. unique constraint violations, foreign key failures)
+  if (
+    error !== null &&
+    typeof error === 'object' &&
+    'code' in error &&
+    'clientVersion' in error
+  ) {
+    const prismaError = error as { code: string; meta?: { target?: string[] | string; cause?: string } }
+    switch (prismaError.code) {
+      case 'P2002':
+        return apiError(
+          `A record with this ${Array.isArray(prismaError.meta?.target) ? prismaError.meta.target.join(', ') : 'value'} already exists`,
+          409
+        )
+      case 'P2025':
+        return apiError('Record not found', 404)
+      case 'P2003':
+        return apiError('Cannot perform this action due to related records', 409)
+      default:
+        return apiError('Database error', 500)
+    }
+  }
+
   if (error instanceof Error) {
     return apiError(error.message, 500)
   }

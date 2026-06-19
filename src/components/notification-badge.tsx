@@ -52,10 +52,9 @@ export function NotificationBadge({ count = 0, maxDisplay = 5 }: NotificationBad
     setLoading(true)
     try {
       const res = await fetch('/api/notifications')
-      if (res.ok) {
-        const data = await res.json()
-        setNotifications(data)
-      }
+      if (!res.ok) throw new Error(`Failed to load notifications (${res.status})`)
+      const data = await res.json()
+      setNotifications(data)
     } catch (error) {
       console.error('Failed to fetch notifications:', error)
     } finally {
@@ -64,22 +63,26 @@ export function NotificationBadge({ count = 0, maxDisplay = 5 }: NotificationBad
   }
 
   const markAsRead = async (id: string) => {
+    const prev = notifications
+    setNotifications(notifications.map(n => n.id === id ? { ...n, isRead: true } : n))
     try {
-      await fetch(`/api/notifications/${id}/read`, { method: 'POST' })
-      setNotifications(prev => 
-        prev.map(n => n.id === id ? { ...n, isRead: true } : n)
-      )
+      const res = await fetch(`/api/notifications/${id}/read`, { method: 'POST' })
+      if (!res.ok) throw new Error('Failed to mark as read')
     } catch (error) {
       console.error('Failed to mark as read:', error)
+      setNotifications(prev)
     }
   }
 
   const markAllAsRead = async () => {
+    const prev = notifications
+    setNotifications(notifications.map(n => ({ ...n, isRead: true })))
     try {
-      await fetch('/api/notifications/read-all', { method: 'POST' })
-      setNotifications(prev => prev.map(n => ({ ...n, isRead: true })))
+      const res = await fetch('/api/notifications/read-all', { method: 'POST' })
+      if (!res.ok) throw new Error('Failed to mark all as read')
     } catch (error) {
       console.error('Failed to mark all as read:', error)
+      setNotifications(prev)
     }
   }
 
