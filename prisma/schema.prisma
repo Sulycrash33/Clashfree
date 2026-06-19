@@ -42,6 +42,7 @@ model User {
   lecturer      Lecturer?
   student       Student?
   activityLogs  ActivityLog[]
+  apiKeysCreated ApiKey[]     @relation("ApiKeysCreated")
 
   @@index([email])
   @@index([role])
@@ -104,6 +105,7 @@ model Institution {
   examPeriods       ExamPeriod[]
   courses           Course[]
   lectureTimetables LectureTimetable[]
+  apiKeys           ApiKey[]
 
   @@index([shortName])
   @@index([type])
@@ -705,5 +707,26 @@ model InviteToken {
 
   @@index([token])
   @@index([email])
+  @@index([institutionId])
+}
+
+model ApiKey {
+  id            String    @id @default(cuid())
+  name          String    // Human-readable label, e.g. "NSUK Production Key"
+  key           String    @unique // Format: cfk_<random>
+  institutionId String
+  createdById   String    // User who created the key
+  active        Boolean   @default(true)
+  expiresAt     DateTime?
+  lastUsedAt    DateTime?
+  scopes        String    @default("generate,validate,export") // Comma-separated
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // Relations
+  institution Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
+  createdBy   User        @relation("ApiKeysCreated", fields: [createdById], references: [id])
+
+  @@index([key])
   @@index([institutionId])
 }
