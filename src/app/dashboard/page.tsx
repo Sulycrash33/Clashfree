@@ -21,6 +21,8 @@ import {
   RefreshCw,
   Sparkles,
   AlertCircle,
+  ArrowRight,
+  Activity,
 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -56,7 +58,6 @@ export default function DashboardPage() {
   const fetchStats = useCallback(async () => {
     setLoading(true)
     try {
-      // Fetch all counts in parallel
       const [institutions, users, students, courses, lecturers, rooms, departments, faculties, examPeriods, conflicts] = await Promise.all([
         fetch('/api/institutions').then(r => r.ok ? r.json().then(d => d.length) : 0),
         fetch('/api/users').then(r => r.ok ? r.json().then(d => d.length) : 0),
@@ -70,10 +71,8 @@ export default function DashboardPage() {
         fetch('/api/conflicts').then(r => r.ok ? r.json().then(d => d.conflicts?.length || 0) : 0),
       ])
 
-      // Get CO stats
       const coStats = await fetch('/api/co-stats').then(r => r.ok ? r.json() : { studentsWithCOs: 0 })
 
-      // Get faculty drill-down
       const facultyData = await fetch('/api/faculties').then(r => r.ok ? r.json() : [])
       const facultyDrilldown = (facultyData || []).map((f: any) => ({
         id: f.id,
@@ -83,7 +82,6 @@ export default function DashboardPage() {
         courses: f._count?.courses || 0,
       }))
 
-      // Student:Lecturer ratio
       const ratio = (lecturers as number) > 0
         ? `${Math.round((students as number) / (lecturers as number))}:1`
         : 'N/A'
@@ -119,34 +117,35 @@ export default function DashboardPage() {
   const userRole = session.user.role
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-foreground">
+          <h1 className="text-2xl font-bold text-foreground tracking-tight">
             Welcome back, {session.user.name?.split(' ')[0] || 'User'}
           </h1>
-          <p className="text-muted-foreground">
-            {roleLabels[userRole]} Dashboard • {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
+          <p className="text-sm text-muted-foreground mt-1">
+            {roleLabels[userRole]} &middot; {new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <Button
             variant="outline"
             size="sm"
             onClick={fetchStats}
             disabled={loading}
-            className="border-foreground/10 text-muted-foreground hover:text-foreground"
+            className="h-9"
           >
             {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RefreshCw className="w-4 h-4" />}
+            <span className="ml-2 hidden sm:inline">Refresh</span>
           </Button>
-          <Badge className="bg-secondary/10 text-secondary border-secondary/20">
-            {userRole}
+          <Badge variant="outline" className="font-medium">
+            {roleLabels[userRole]}
           </Badge>
         </div>
       </div>
 
-      {/* Stats Grid */}
+      {/* Role-specific content */}
       {userRole === 'SA' && <SuperAdminStats stats={stats} loading={loading} />}
       {userRole === 'IA' && <InstitutionAdminStats stats={stats} loading={loading} />}
       {userRole === 'TO' && <TimetableOfficerStats stats={stats} loading={loading} />}
@@ -156,182 +155,181 @@ export default function DashboardPage() {
   )
 }
 
-function SuperAdminStats({ stats, loading }: { stats: DashboardStats | null; loading: boolean }) {
-  const statCards = [
-    { label: 'Institutions', value: stats?.institutions || 0, icon: Building2, color: 'from-secondary to-secondary' },
-    { label: 'Total Users', value: stats?.users || 0, icon: Users, color: 'from-primary to-clash' },
-    { label: 'Students', value: stats?.students || 0, icon: GraduationCap, color: 'from-success to-success' },
-    { label: 'Courses', value: stats?.courses || 0, icon: BookOpen, color: 'from-accent-gold to-accent-gold' },
-  ]
+/* ─── Stat Card Component ─────────────────────────────────────────── */
+function StatCard({ label, value, sublabel, icon: Icon, loading }: {
+  label: string
+  value: number | string
+  sublabel?: string
+  icon: React.ElementType
+  loading: boolean
+}) {
+  return (
+    <Card className="relative overflow-hidden">
+      <CardContent className="p-6">
+        <div className="flex items-start justify-between">
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-muted-foreground">{label}</p>
+            {loading ? (
+              <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
+            ) : (
+              <>
+                <p className="text-3xl font-bold tracking-tight text-foreground">
+                  {typeof value === 'number' ? value.toLocaleString() : value}
+                </p>
+                {sublabel && <p className="text-xs text-muted-foreground">{sublabel}</p>}
+              </>
+            )}
+          </div>
+          <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+            <Icon className="w-5 h-5 text-primary" />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  )
+}
 
+/* ─── Super Admin Dashboard ───────────────────────────────────────── */
+function SuperAdminStats({ stats, loading }: { stats: DashboardStats | null; loading: boolean }) {
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {statCards.map((stat, i) => (
-          <Card key={i} className="bg-foreground/5 border-foreground/10 backdrop-blur-sm hover:bg-foreground/7 transition-colors">
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between mb-4">
-                <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center`}>
-                  <stat.icon className="w-6 h-6 text-foreground" />
-                </div>
-              </div>
-              {loading ? (
-                <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
-              ) : (
-                <>
-                  <div className="text-3xl font-bold text-foreground">{stat.value.toLocaleString()}</div>
-                  <div className="text-sm text-muted-foreground">{stat.label}</div>
-                </>
-              )}
-            </CardContent>
-          </Card>
-        ))}
+      {/* Stats Grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard label="Institutions" value={stats?.institutions || 0} icon={Building2} loading={loading} />
+        <StatCard label="Total Users" value={stats?.users || 0} icon={Users} loading={loading} />
+        <StatCard label="Students" value={stats?.students || 0} icon={GraduationCap} loading={loading} />
+        <StatCard label="Courses" value={stats?.courses || 0} icon={BookOpen} loading={loading} />
       </div>
 
       {/* Quick Actions */}
-      <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle className="text-foreground">Quick Actions</CardTitle>
-          <CardDescription>Common administrative tasks</CardDescription>
+      <Card>
+        <CardHeader className="pb-4">
+          <CardTitle className="text-base">Quick Actions</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <Link href="/dashboard/institutions">
-              <Button variant="outline" className="w-full border-foreground/10 text-muted-foreground hover:text-foreground">
-                <Building2 className="w-4 h-4 mr-2" />
-                Institutions
+              <Button variant="outline" className="w-full h-auto py-3 flex flex-col items-center gap-2">
+                <Building2 className="w-5 h-5 text-primary" />
+                <span className="text-xs">Institutions</span>
               </Button>
             </Link>
             <Link href="/dashboard/users">
-              <Button variant="outline" className="w-full border-foreground/10 text-muted-foreground hover:text-foreground">
-                <Users className="w-4 h-4 mr-2" />
-                Users
+              <Button variant="outline" className="w-full h-auto py-3 flex flex-col items-center gap-2">
+                <Users className="w-5 h-5 text-primary" />
+                <span className="text-xs">Users</span>
               </Button>
             </Link>
             <Link href="/dashboard/conflicts">
-              <Button variant="outline" className="w-full border-foreground/10 text-muted-foreground hover:text-foreground">
-                <AlertTriangle className="w-4 h-4 mr-2" />
-                Conflicts
+              <Button variant="outline" className="w-full h-auto py-3 flex flex-col items-center gap-2">
+                <AlertTriangle className="w-5 h-5 text-primary" />
+                <span className="text-xs">Conflicts</span>
               </Button>
             </Link>
             <Link href="/dashboard/exam-timetable">
-              <Button variant="outline" className="w-full border-foreground/10 text-muted-foreground hover:text-foreground">
-                <Calendar className="w-4 h-4 mr-2" />
-                Timetables
+              <Button variant="outline" className="w-full h-auto py-3 flex flex-col items-center gap-2">
+                <Calendar className="w-5 h-5 text-primary" />
+                <span className="text-xs">Timetables</span>
               </Button>
             </Link>
           </div>
         </CardContent>
       </Card>
 
-      {/* System Overview */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle className="text-foreground flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-success" />
+      {/* Two Column: Health + Stats */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <Card>
+          <CardHeader className="pb-4">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Activity className="w-4 h-4 text-success" />
               System Health
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Database</span>
-                <Badge className="bg-success/10 text-success border-success/20">Operational</Badge>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">API Endpoints</span>
-                <Badge className="bg-success/10 text-success border-success/20">All Running</Badge>
-              </div>
-              <div className="flex items-center justify-between">
-                <span className="text-muted-foreground">Active Conflicts</span>
-                <Badge className={stats?.conflicts ? 'bg-accent-gold/10 text-accent-gold border-accent-gold/20' : 'bg-success/10 text-success border-success/20'}>
-                  {stats?.conflicts || 0}
-                </Badge>
-              </div>
+            <div className="space-y-3">
+              {[
+                { label: 'Database', status: 'Operational' },
+                { label: 'API Endpoints', status: 'All Running' },
+                { label: 'Active Conflicts', status: String(stats?.conflicts || 0), warn: (stats?.conflicts || 0) > 0 },
+              ].map((item, i) => (
+                <div key={i} className="flex items-center justify-between py-2 border-b border-border last:border-0">
+                  <span className="text-sm text-muted-foreground">{item.label}</span>
+                  <Badge variant={item.warn ? 'destructive' : 'secondary'} className="font-normal text-xs">
+                    {item.status}
+                  </Badge>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
-          <CardHeader>
-            <CardTitle className="text-foreground flex items-center gap-2">
-              <TrendingUp className="w-5 h-5 text-secondary" />
-              Platform Statistics
+        <Card>
+          <CardHeader className="pb-4">
+            <CardTitle className="text-base flex items-center gap-2">
+              <TrendingUp className="w-4 h-4 text-primary" />
+              Platform Overview
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-center p-3 bg-foreground/5 rounded-lg">
-                <div className="text-2xl font-bold text-foreground">{stats?.faculties || 0}</div>
-                <div className="text-xs text-muted-foreground">Faculties</div>
-              </div>
-              <div className="text-center p-3 bg-foreground/5 rounded-lg">
-                <div className="text-2xl font-bold text-foreground">{stats?.departments || 0}</div>
-                <div className="text-xs text-muted-foreground">Departments</div>
-              </div>
-              <div className="text-center p-3 bg-foreground/5 rounded-lg">
-                <div className="text-2xl font-bold text-foreground">{stats?.lecturers || 0}</div>
-                <div className="text-xs text-muted-foreground">Lecturers</div>
-              </div>
-              <div className="text-center p-3 bg-foreground/5 rounded-lg">
-                <div className="text-2xl font-bold text-foreground">{stats?.rooms || 0}</div>
-                <div className="text-xs text-muted-foreground">Rooms</div>
-              </div>
+            <div className="grid grid-cols-2 gap-3">
+              {[
+                { label: 'Faculties', value: stats?.faculties || 0 },
+                { label: 'Departments', value: stats?.departments || 0 },
+                { label: 'Lecturers', value: stats?.lecturers || 0 },
+                { label: 'Rooms', value: stats?.rooms || 0 },
+              ].map((item, i) => (
+                <div key={i} className="text-center p-3 rounded-lg bg-muted/50">
+                  <div className="text-2xl font-bold text-foreground">{item.value}</div>
+                  <div className="text-xs text-muted-foreground mt-0.5">{item.label}</div>
+                </div>
+              ))}
             </div>
           </CardContent>
         </Card>
       </div>
 
-      {/* Faculty Drill-down */}
-      <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle className="text-foreground flex items-center gap-2">
-            <Building2 className="w-5 h-5 text-secondary" />
-            Faculty Breakdown
-          </CardTitle>
-          <CardDescription>
-            Departments and courses per faculty
+      {/* Faculty Breakdown */}
+      <Card>
+        <CardHeader className="pb-4">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-base flex items-center gap-2">
+              <Building2 className="w-4 h-4 text-primary" />
+              Faculty Breakdown
+            </CardTitle>
             {stats?.studentLecturerRatio && (
-              <span className={`ml-3 font-medium ${
-                parseInt(stats.studentLecturerRatio) <= 20
-                  ? 'text-success'
-                  : parseInt(stats.studentLecturerRatio) <= 40
-                  ? 'text-accent-gold'
-                  : 'text-clash'
-              }`}>
-                Student:Lecturer ratio — {stats.studentLecturerRatio}
-              </span>
+              <Badge variant="outline" className="font-normal">
+                Student:Lecturer — {stats.studentLecturerRatio}
+              </Badge>
             )}
-          </CardDescription>
+          </div>
         </CardHeader>
         <CardContent>
           {loading ? (
-            <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+            <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
           ) : (stats?.facultyDrilldown?.length || 0) === 0 ? (
-            <p className="text-muted-foreground text-sm">No faculties found</p>
+            <p className="text-sm text-muted-foreground">No faculties found</p>
           ) : (
             <div className="space-y-2">
               {stats?.facultyDrilldown?.map(f => (
-                <div key={f.id} className="flex items-center justify-between p-3 bg-foreground/5 rounded-lg border border-foreground/10 hover:border-foreground/20 transition-colors">
+                <div key={f.id} className="flex items-center justify-between p-3 rounded-lg border border-border hover:bg-muted/50 transition-colors">
                   <div className="flex items-center gap-3">
-                    <Badge variant="outline" className="text-secondary border-secondary/30 font-mono text-xs min-w-[50px] text-center">
+                    <Badge variant="outline" className="font-mono text-xs min-w-[50px] justify-center">
                       {f.code}
                     </Badge>
-                    <span className="text-foreground text-sm">{f.name}</span>
+                    <span className="text-sm font-medium text-foreground">{f.name}</span>
                   </div>
-                  <div className="flex items-center gap-4">
-                    <div className="text-center">
-                      <div className="text-foreground font-medium">{f.departments}</div>
-                      <div className="text-xs text-muted-foreground">Depts</div>
+                  <div className="flex items-center gap-6">
+                    <div className="text-right">
+                      <div className="text-sm font-medium text-foreground">{f.departments}</div>
+                      <div className="text-[10px] text-muted-foreground uppercase">Depts</div>
                     </div>
-                    <div className="text-center">
-                      <div className="text-foreground font-medium">{f.courses}</div>
-                      <div className="text-xs text-muted-foreground">Courses</div>
+                    <div className="text-right">
+                      <div className="text-sm font-medium text-foreground">{f.courses}</div>
+                      <div className="text-[10px] text-muted-foreground uppercase">Courses</div>
                     </div>
                     <Link href={`/dashboard/departments?facultyId=${f.id}`}>
-                      <Button variant="outline" size="sm" className="border-foreground/10 text-muted-foreground hover:text-foreground text-xs">
-                        View Depts →
+                      <Button variant="ghost" size="sm" className="text-xs h-8">
+                        View <ArrowRight className="w-3 h-3 ml-1" />
                       </Button>
                     </Link>
                   </div>
@@ -345,6 +343,7 @@ function SuperAdminStats({ stats, loading }: { stats: DashboardStats | null; loa
   )
 }
 
+/* ─── Institution Admin Dashboard ─────────────────────────────────── */
 function InstitutionAdminStats({ stats, loading }: { stats: DashboardStats | null; loading: boolean }) {
   const setupProgress = [
     { step: 'Institution profile configured', done: true },
@@ -363,23 +362,25 @@ function InstitutionAdminStats({ stats, loading }: { stats: DashboardStats | nul
   return (
     <>
       {/* Progress Card */}
-      <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
-        <CardContent className="pt-6">
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <Card className="border-primary/20 bg-primary/5">
+        <CardContent className="p-6">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             <div className="flex-1">
-              <div className="flex items-center gap-3 mb-2">
-                <Sparkles className="w-5 h-5 text-secondary" />
-                <h3 className="text-lg font-semibold text-foreground">Setup Progress</h3>
+              <div className="flex items-center gap-2 mb-2">
+                <Sparkles className="w-4 h-4 text-primary" />
+                <h3 className="font-semibold text-foreground">Setup Progress</h3>
+                <Badge variant="outline" className="ml-2 text-xs">{progressPercent}%</Badge>
               </div>
-              <p className="text-sm text-muted-foreground mb-4">
-                {completed} of {setupProgress.length} steps complete ({progressPercent}%)
+              <p className="text-sm text-muted-foreground mb-3">
+                {completed} of {setupProgress.length} steps complete
               </p>
-              <Progress value={progressPercent} className="h-2 bg-foreground/10" />
+              <Progress value={progressPercent} className="h-2" />
             </div>
             {progressPercent < 100 && (
               <Link href="/dashboard/exam-timetable">
-                <Button className="bg-gradient-to-r from-secondary to-secondary hover:from-secondary hover:to-secondary text-white border-0">
+                <Button size="sm" className="bg-primary text-primary-foreground hover:bg-primary/90">
                   Continue Setup
+                  <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
                 </Button>
               </Link>
             )}
@@ -388,49 +389,28 @@ function InstitutionAdminStats({ stats, loading }: { stats: DashboardStats | nul
       </Card>
 
       {/* Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[
-          { label: 'Faculties', value: stats?.faculties || 0, sublabel: `${stats?.departments || 0} departments`, icon: Building2, color: 'from-secondary to-secondary' },
-          { label: 'Students', value: stats?.students || 0, sublabel: `${stats?.coStudents || 0} with COs`, icon: GraduationCap, color: 'from-primary to-clash' },
-          { label: 'Courses', value: stats?.courses || 0, sublabel: 'Active courses', icon: BookOpen, color: 'from-success to-success' },
-          { label: 'Lecturers', value: stats?.lecturers || 0, sublabel: 'Teaching staff', icon: Users, color: 'from-accent-gold to-accent-gold' },
-        ].map((stat, i) => (
-          <Card key={i} className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
-            <CardContent className="pt-6">
-              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center mb-4`}>
-                <stat.icon className="w-6 h-6 text-foreground" />
-              </div>
-              {loading ? (
-                <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
-              ) : (
-                <>
-                  <div className="text-3xl font-bold text-foreground">{stat.value.toLocaleString()}</div>
-                  <div className="text-sm text-muted-foreground">{stat.label}</div>
-                  <div className="text-xs text-secondary mt-1">{stat.sublabel}</div>
-                </>
-              )}
-            </CardContent>
-          </Card>
-        ))}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard label="Faculties" value={stats?.faculties || 0} sublabel={`${stats?.departments || 0} departments`} icon={Building2} loading={loading} />
+        <StatCard label="Students" value={stats?.students || 0} sublabel={`${stats?.coStudents || 0} with carry-overs`} icon={GraduationCap} loading={loading} />
+        <StatCard label="Courses" value={stats?.courses || 0} sublabel="Active courses" icon={BookOpen} loading={loading} />
+        <StatCard label="Lecturers" value={stats?.lecturers || 0} sublabel="Teaching staff" icon={Users} loading={loading} />
       </div>
 
       {/* Conflicts Alert */}
       {(stats?.conflicts || 0) > 0 && (
-        <Card className="bg-accent-gold/5 border-accent-gold/20">
-          <CardContent className="pt-6">
+        <Card className="border-destructive/30 bg-destructive/5">
+          <CardContent className="p-4">
             <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-accent-gold/20 flex items-center justify-center">
-                <AlertTriangle className="w-6 h-6 text-accent-gold" />
+              <div className="w-10 h-10 rounded-lg bg-destructive/10 flex items-center justify-center flex-shrink-0">
+                <AlertTriangle className="w-5 h-5 text-destructive" />
               </div>
-              <div className="flex-1">
-                <h3 className="text-foreground font-medium">Attention Required</h3>
-                <p className="text-sm text-muted-foreground">
-                  {stats?.conflicts} conflict(s) detected. Please review and resolve before publishing timetable.
-                </p>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-foreground">{stats?.conflicts} conflict(s) detected</p>
+                <p className="text-xs text-muted-foreground">Review and resolve before publishing timetable</p>
               </div>
               <Link href="/dashboard/conflicts">
-                <Button variant="outline" className="border-accent-gold/20 text-accent-gold hover:bg-accent-gold/10">
-                  View Conflicts
+                <Button variant="outline" size="sm" className="border-destructive/30 text-destructive hover:bg-destructive/10">
+                  View
                 </Button>
               </Link>
             </div>
@@ -441,25 +421,25 @@ function InstitutionAdminStats({ stats, loading }: { stats: DashboardStats | nul
       {/* Quick Actions */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <Link href="/dashboard/exam-timetable">
-          <Button className="w-full bg-gradient-to-r from-secondary to-secondary hover:from-secondary hover:to-secondary text-white border-0">
+          <Button className="w-full bg-primary text-primary-foreground hover:bg-primary/90">
             <Sparkles className="w-4 h-4 mr-2" />
             Generate Timetable
           </Button>
         </Link>
         <Link href="/dashboard/students">
-          <Button variant="outline" className="w-full border-foreground/10 text-muted-foreground hover:text-foreground">
+          <Button variant="outline" className="w-full">
             <GraduationCap className="w-4 h-4 mr-2" />
             Students
           </Button>
         </Link>
         <Link href="/dashboard/courses">
-          <Button variant="outline" className="w-full border-foreground/10 text-muted-foreground hover:text-foreground">
+          <Button variant="outline" className="w-full">
             <BookOpen className="w-4 h-4 mr-2" />
             Courses
           </Button>
         </Link>
         <Link href="/dashboard/rooms">
-          <Button variant="outline" className="w-full border-foreground/10 text-muted-foreground hover:text-foreground">
+          <Button variant="outline" className="w-full">
             <MapPin className="w-4 h-4 mr-2" />
             Rooms
           </Button>
@@ -469,62 +449,44 @@ function InstitutionAdminStats({ stats, loading }: { stats: DashboardStats | nul
   )
 }
 
+/* ─── Timetable Officer Dashboard ─────────────────────────────────── */
 function TimetableOfficerStats({ stats, loading }: { stats: DashboardStats | null; loading: boolean }) {
   return (
     <>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {[
-          { label: 'Courses', value: stats?.courses || 0, icon: BookOpen, color: 'from-secondary to-secondary' },
-          { label: 'Students', value: stats?.students || 0, sublabel: `${stats?.coStudents || 0} with COs`, icon: GraduationCap, color: 'from-primary to-clash' },
-          { label: 'Lecturers', value: stats?.lecturers || 0, icon: Users, color: 'from-success to-success' },
-          { label: 'Rooms', value: stats?.rooms || 0, icon: MapPin, color: 'from-accent-gold to-accent-gold' },
-        ].map((stat, i) => (
-          <Card key={i} className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
-            <CardContent className="pt-6">
-              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center mb-4`}>
-                <stat.icon className="w-6 h-6 text-foreground" />
-              </div>
-              {loading ? (
-                <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
-              ) : (
-                <>
-                  <div className="text-3xl font-bold text-foreground">{stat.value.toLocaleString()}</div>
-                  <div className="text-sm text-muted-foreground">{stat.label}</div>
-                  {stat.sublabel && <div className="text-xs text-accent-gold mt-1">{stat.sublabel}</div>}
-                </>
-              )}
-            </CardContent>
-          </Card>
-        ))}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard label="Courses" value={stats?.courses || 0} icon={BookOpen} loading={loading} />
+        <StatCard label="Students" value={stats?.students || 0} sublabel={`${stats?.coStudents || 0} with COs`} icon={GraduationCap} loading={loading} />
+        <StatCard label="Lecturers" value={stats?.lecturers || 0} icon={Users} loading={loading} />
+        <StatCard label="Rooms" value={stats?.rooms || 0} icon={MapPin} loading={loading} />
       </div>
 
-      <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle className="text-foreground">Data Readiness Checklist</CardTitle>
+      <Card>
+        <CardHeader className="pb-4">
+          <CardTitle className="text-base">Data Readiness Checklist</CardTitle>
           <CardDescription>Ensure all data is complete before generating timetable</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
             {[
-              { label: 'Courses imported', value: stats?.courses || 0, status: (stats?.courses || 0) > 0 ? 'complete' : 'pending' },
-              { label: 'Students registered', value: stats?.students || 0, status: (stats?.students || 0) > 0 ? 'complete' : 'pending' },
-              { label: 'Lecturers assigned', value: stats?.lecturers || 0, status: (stats?.lecturers || 0) > 0 ? 'complete' : 'pending' },
-              { label: 'Rooms available', value: stats?.rooms || 0, status: (stats?.rooms || 0) > 0 ? 'complete' : 'pending' },
-              { label: 'Exam periods defined', value: stats?.examPeriods || 0, status: (stats?.examPeriods || 0) > 0 ? 'complete' : 'pending' },
-              { label: 'Conflicts resolved', value: stats?.conflicts || 0, status: (stats?.conflicts || 0) === 0 ? 'complete' : 'warning' },
+              { label: 'Courses imported', value: stats?.courses || 0, done: (stats?.courses || 0) > 0 },
+              { label: 'Students registered', value: stats?.students || 0, done: (stats?.students || 0) > 0 },
+              { label: 'Lecturers assigned', value: stats?.lecturers || 0, done: (stats?.lecturers || 0) > 0 },
+              { label: 'Rooms available', value: stats?.rooms || 0, done: (stats?.rooms || 0) > 0 },
+              { label: 'Exam periods defined', value: stats?.examPeriods || 0, done: (stats?.examPeriods || 0) > 0 },
+              { label: 'Conflicts resolved', value: stats?.conflicts || 0, done: (stats?.conflicts || 0) === 0, warn: (stats?.conflicts || 0) > 0 },
             ].map((item, i) => (
-              <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-foreground/5">
-                <div className="flex items-center gap-3">
-                  {item.status === 'complete' ? (
-                    <CheckCircle2 className="w-5 h-5 text-success" />
-                  ) : item.status === 'warning' ? (
-                    <AlertCircle className="w-5 h-5 text-accent-gold" />
+              <div key={i} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                <div className="flex items-center gap-2.5">
+                  {item.done ? (
+                    <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0" />
+                  ) : item.warn ? (
+                    <AlertCircle className="w-4 h-4 text-destructive flex-shrink-0" />
                   ) : (
-                    <div className="w-5 h-5 rounded-full border border-muted" />
+                    <div className="w-4 h-4 rounded-full border-2 border-muted-foreground/30 flex-shrink-0" />
                   )}
-                  <span className="text-muted-foreground">{item.label}</span>
+                  <span className="text-sm text-muted-foreground">{item.label}</span>
                 </div>
-                <span className="text-sm text-foreground font-medium">{item.value}</span>
+                <span className="text-sm font-medium text-foreground">{item.value}</span>
               </div>
             ))}
           </div>
@@ -534,22 +496,20 @@ function TimetableOfficerStats({ stats, loading }: { stats: DashboardStats | nul
   )
 }
 
+/* ─── Lecturer Dashboard ──────────────────────────────────────────── */
 function LecturerDashboard({ stats, loading }: { stats: DashboardStats | null; loading: boolean }) {
   const [lecturerCourses, setLecturerCourses] = useState<number>(0)
   const [lecturerStudents, setLecturerStudents] = useState<number>(0)
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
-    // Fetch lecturer-specific data
     const fetchLecturerData = async () => {
       try {
-        // Get lecturer linked to this user
         const lecRes = await fetch('/api/lecturers')
         if (lecRes.ok) {
           const lecs = await lecRes.json()
           const myLec = lecs.find((l: any) => l.userId)
           if (myLec) {
-            // Get courses assigned to this lecturer
             const coursesRes = await fetch(`/api/courses?lecturerId=${myLec.id}`)
             if (coursesRes.ok) {
               const courses = await coursesRes.json()
@@ -568,45 +528,34 @@ function LecturerDashboard({ stats, loading }: { stats: DashboardStats | null; l
   const displayStudents = loaded ? lecturerStudents : (stats?.students || 0)
 
   return (
-    <div className="space-y-4">
-      <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle className="text-foreground flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-secondary" />
-            My Schedule Overview
-          </CardTitle>
-          <CardDescription>Your teaching and invigilation schedule</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="text-center p-4 bg-foreground/5 rounded-lg">
-              <BookOpen className="w-8 h-8 mx-auto text-secondary mb-2" />
-              <div className="text-2xl font-bold text-foreground">{displayCourses}</div>
-              <div className="text-sm text-muted-foreground">Courses Teaching</div>
-            </div>
-            <div className="text-center p-4 bg-foreground/5 rounded-lg">
-              <Calendar className="w-8 h-8 mx-auto text-success mb-2" />
-              <div className="text-2xl font-bold text-foreground">{stats?.examPeriods || 0}</div>
-              <div className="text-sm text-muted-foreground">Exam Periods</div>
-            </div>
-            <div className="text-center p-4 bg-foreground/5 rounded-lg">
-              <Users className="w-8 h-8 mx-auto text-primary mb-2" />
-              <div className="text-2xl font-bold text-foreground">{displayStudents}</div>
-              <div className="text-sm text-muted-foreground">My Students</div>
-            </div>
-          </div>
+    <div className="space-y-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <StatCard label="Courses Teaching" value={displayCourses} icon={BookOpen} loading={loading && !loaded} />
+        <StatCard label="Exam Periods" value={stats?.examPeriods || 0} icon={Calendar} loading={loading} />
+        <StatCard label="My Students" value={displayStudents} icon={Users} loading={loading && !loaded} />
+      </div>
 
-          <Link href="/dashboard/lecturer-schedule">
-            <Button className="w-full bg-gradient-to-r from-secondary to-secondary hover:from-secondary hover:to-secondary text-white border-0">
-              View Full Schedule
-            </Button>
-          </Link>
+      <Card>
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-semibold text-foreground">My Schedule</h3>
+              <p className="text-sm text-muted-foreground mt-1">View your teaching and invigilation schedule</p>
+            </div>
+            <Link href="/dashboard/lecturer-schedule">
+              <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+                View Schedule
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
+          </div>
         </CardContent>
       </Card>
     </div>
   )
 }
 
+/* ─── Student Dashboard ───────────────────────────────────────────── */
 function StudentDashboard({ stats, loading }: { stats: DashboardStats | null; loading: boolean }) {
   const [myCourses, setMyCourses] = useState<{ registered: number; carryOver: number; total: number }>({ registered: 0, carryOver: 0, total: 0 })
   const [myExams, setMyExams] = useState<number>(0)
@@ -615,7 +564,6 @@ function StudentDashboard({ stats, loading }: { stats: DashboardStats | null; lo
   useEffect(() => {
     const fetchStudentData = async () => {
       try {
-        // Find student linked to this user
         const stuRes = await fetch('/api/students')
         if (stuRes.ok) {
           const stuData = await stuRes.json()
@@ -629,7 +577,6 @@ function StudentDashboard({ stats, loading }: { stats: DashboardStats | null; lo
               level: myStu.level,
               isSpillover: myStu.isSpillover,
             })
-            // Get student's courses
             const coursesRes = await fetch(`/api/students/courses?studentId=${myStu.id}`)
             if (coursesRes.ok) {
               const data = await coursesRes.json()
@@ -641,7 +588,6 @@ function StudentDashboard({ stats, loading }: { stats: DashboardStats | null; lo
             }
           }
         }
-        // Get exam count for student
         const periodRes = await fetch('/api/exam-periods')
         if (periodRes.ok) {
           const periods = await periodRes.json()
@@ -649,9 +595,6 @@ function StudentDashboard({ stats, loading }: { stats: DashboardStats | null; lo
             const slotsRes = await fetch(`/api/exam-slots?examPeriodId=${periods[0].id}`)
             if (slotsRes.ok) {
               const data = await slotsRes.json()
-              // Count slots for this student's courses
-              const courseIds = new Set<string>()
-              // We already have myCourses from above, so this is a simplified count
               setMyExams(Math.min(data.slots?.length || 0, myCourses.total))
             }
           }
@@ -662,89 +605,66 @@ function StudentDashboard({ stats, loading }: { stats: DashboardStats | null; lo
   }, [])
 
   return (
-    <div className="space-y-4">
-      {/* Student Profile Card */}
+    <div className="space-y-6">
+      {/* Profile */}
       {studentProfile && (
-        <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
-          <CardContent className="pt-6">
+        <Card>
+          <CardContent className="p-6">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-full bg-gradient-to-br from-accent-gold to-accent-gold flex items-center justify-center text-2xl font-bold text-white">
+              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-xl font-bold text-primary">
                 {studentProfile.name.charAt(0)}
               </div>
               <div>
-                <h2 className="text-lg font-bold text-foreground">{studentProfile.name}</h2>
-                <p className="text-muted-foreground text-sm">{studentProfile.regNumber} • {studentProfile.dept} • {studentProfile.level}L</p>
-                <div className="flex items-center gap-2 mt-1">
-                  <Badge variant="outline" className="border-foreground/10 text-secondary">{studentProfile.dept} Department</Badge>
-                  {studentProfile.isSpillover && (
-                    <Badge variant="outline" className="border-accent-gold/20 text-accent-gold">Spillover Student</Badge>
-                  )}
-                </div>
+                <h2 className="font-semibold text-foreground">{studentProfile.name}</h2>
+                <p className="text-sm text-muted-foreground">{studentProfile.regNumber} &middot; {studentProfile.dept} &middot; {studentProfile.level}L</p>
+                {studentProfile.isSpillover && (
+                  <Badge variant="outline" className="mt-1 text-xs border-destructive/30 text-destructive">Spillover</Badge>
+                )}
               </div>
             </div>
           </CardContent>
         </Card>
       )}
 
-      {/* Carry-over Banner */}
+      {/* CO Alert */}
       {myCourses.carryOver > 0 && (
-        <Card className="bg-accent-gold/5 border-accent-gold/20">
-          <CardContent className="pt-6">
-            <div className="flex items-center gap-4">
-              <div className="w-12 h-12 rounded-xl bg-accent-gold/20 flex items-center justify-center">
-                <AlertTriangle className="w-6 h-6 text-accent-gold" />
-              </div>
+        <Card className="border-destructive/30 bg-destructive/5">
+          <CardContent className="p-4">
+            <div className="flex items-center gap-3">
+              <AlertTriangle className="w-5 h-5 text-destructive flex-shrink-0" />
               <div className="flex-1">
-                <h3 className="text-foreground font-medium">Carry-over Courses Detected</h3>
-                <p className="text-sm text-muted-foreground">
-                  You have {myCourses.carryOver} carry-over course(s) from previous semesters. The timetable has been optimized to avoid clashes.
+                <p className="text-sm font-medium text-foreground">
+                  {myCourses.carryOver} carry-over course(s) detected
                 </p>
+                <p className="text-xs text-muted-foreground">Timetable optimized to avoid clashes with your current courses</p>
               </div>
-              <Badge className="bg-accent-gold/10 text-accent-gold border-accent-gold/20 text-lg px-4 py-2">
-                {myCourses.carryOver}
-              </Badge>
             </div>
           </CardContent>
         </Card>
       )}
 
-      <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle className="text-foreground flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-secondary" />
-            My Exam Timetable
-          </CardTitle>
-          <CardDescription>Your personalized exam schedule</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-            <div className="text-center p-4 bg-foreground/5 rounded-lg">
-              <BookOpen className="w-8 h-8 mx-auto text-secondary mb-2" />
-              <div className="text-2xl font-bold text-foreground">{myCourses.registered || myCourses.total || stats?.courses || 0}</div>
-              <div className="text-sm text-muted-foreground">Registered Courses</div>
-            </div>
-            <div className="text-center p-4 bg-foreground/5 rounded-lg">
-              <AlertTriangle className="w-8 h-8 mx-auto text-accent-gold mb-2" />
-              <div className="text-2xl font-bold text-foreground">{myCourses.carryOver}</div>
-              <div className="text-sm text-muted-foreground">Carry-over Courses</div>
-            </div>
-            <div className="text-center p-4 bg-foreground/5 rounded-lg">
-              <Calendar className="w-8 h-8 mx-auto text-success mb-2" />
-              <div className="text-2xl font-bold text-foreground">{myExams}</div>
-              <div className="text-sm text-muted-foreground">Exams Scheduled</div>
-            </div>
-            <div className="text-center p-4 bg-foreground/5 rounded-lg">
-              <GraduationCap className="w-8 h-8 mx-auto text-primary mb-2" />
-              <div className="text-2xl font-bold text-foreground">{studentProfile?.level || 0}00</div>
-              <div className="text-sm text-muted-foreground">Level</div>
-            </div>
-          </div>
+      {/* Stats */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard label="Registered" value={myCourses.registered || myCourses.total || stats?.courses || 0} icon={BookOpen} loading={loading} />
+        <StatCard label="Carry-Over" value={myCourses.carryOver} icon={AlertTriangle} loading={loading} />
+        <StatCard label="Exams" value={myExams} icon={Calendar} loading={loading} />
+        <StatCard label="Level" value={`${studentProfile?.level || 0}00`} icon={GraduationCap} loading={loading} />
+      </div>
 
-          <Link href="/dashboard/my-timetable">
-            <Button className="w-full bg-gradient-to-r from-secondary to-secondary hover:from-secondary hover:to-secondary text-white border-0">
-              View My Timetable
-            </Button>
-          </Link>
+      <Card>
+        <CardContent className="p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="font-semibold text-foreground">My Timetable</h3>
+              <p className="text-sm text-muted-foreground mt-1">View your personalized exam schedule</p>
+            </div>
+            <Link href="/dashboard/my-timetable">
+              <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
+                View Timetable
+                <ArrowRight className="w-4 h-4 ml-2" />
+              </Button>
+            </Link>
+          </div>
         </CardContent>
       </Card>
     </div>
