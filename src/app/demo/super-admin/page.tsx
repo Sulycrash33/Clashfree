@@ -6,6 +6,7 @@ import {
   FlaskConical, Monitor, BarChart3, AlertTriangle,
   ShieldCheck, Layers, GraduationCap, CheckCircle2, DoorOpen,
   Activity, Clock, Database, Server, Mail, MessageCircle,
+  XCircle, MapPin, Phone,
 } from "lucide-react";
 import { DemoLayout } from "../_components/DemoLayout";
 import {
@@ -199,7 +200,7 @@ function SCIDeptCard({ dept }: { dept: (typeof DEPARTMENTS)[number] }) {
 
 // ── Main page ─────────────────────────────────────────────────
 export default function SuperAdminPage() {
-  const [activeTab, setActiveTab] = useState<"overview" | "science" | "facilities" | "rooms" | "conflicts" | "users" | "logs" | "health" | "allFaculties">(
+  const [activeTab, setActiveTab] = useState<"overview" | "science" | "facilities" | "rooms" | "conflicts" | "users" | "logs" | "health" | "signups" | "allFaculties">(
     "overview"
   );
 
@@ -261,6 +262,29 @@ export default function SuperAdminPage() {
     down: "text-clash",
   };
 
+  // Signups queue — realistic Nigerian tertiary institutions across the same
+  // categories the real signup form supports (federal/state/private uni,
+  // polytechnic, college of education, etc.)
+  type SignupStatus = "PENDING" | "APPROVED" | "REJECTED";
+  type Signup = { name: string; type: string; city: string; state: string; contact: string; email: string; phone: string; status: SignupStatus };
+  const SIGNUPS: Signup[] = [
+    { name: "Federal Polytechnic Bida", type: "Polytechnic", city: "Bida", state: "Niger State", contact: "Engr. Yusuf Danjuma", email: "registrar@fedpolybida.edu.ng", phone: "+234 803 211 4400", status: "PENDING" },
+    { name: "Ibrahim Badamasi Babangida University", type: "State University", city: "Lapai", state: "Niger State", contact: "Dr. Hauwa Garba", email: "academic.office@ibbu.edu.ng", phone: "+234 805 662 7711", status: "PENDING" },
+    { name: "Niger State Polytechnic Zungeru", type: "Polytechnic", city: "Zungeru", state: "Niger State", contact: "Mal. Suleiman Yakubu", email: "info@nspoly.edu.ng", phone: "+234 807 340 8821", status: "PENDING" },
+    { name: "Federal University of Konoha", type: "Federal University", city: "Konoha", state: "Niger State", contact: "Prof. Minato Namikaze", email: "vc.office@fedko.edu.ng", phone: "+234 803 000 0000", status: "APPROVED" },
+    { name: "Capital City College of Education", type: "College of Education", city: "Minna", state: "Niger State", contact: "Dr. Amina Bello", email: "admin@ccce.edu.ng", phone: "+234 806 119 2230", status: "REJECTED" },
+  ];
+  const signupStatusColor: Record<SignupStatus, string> = {
+    PENDING: "bg-accent-gold/10 border-accent-gold/20 text-accent-gold",
+    APPROVED: "bg-success/10 border-success/20 text-success",
+    REJECTED: "bg-clash/10 border-clash/20 text-clash",
+  };
+  const signupStatusIcon: Record<SignupStatus, React.ElementType> = {
+    PENDING: Clock,
+    APPROVED: CheckCircle2,
+    REJECTED: XCircle,
+  };
+
   const TABS = [
     { id: "overview", label: "Overview" },
     { id: "science", label: "Faculty of Science (SCI)" },
@@ -270,6 +294,7 @@ export default function SuperAdminPage() {
     { id: "users", label: "Users" },
     { id: "logs", label: "Activity Logs" },
     { id: "health", label: "System Health" },
+    { id: "signups", label: "Signups" },
     { id: "allFaculties", label: "All Faculties" },
   ] as const;
 
@@ -729,6 +754,56 @@ export default function SuperAdminPage() {
                   <span className="text-foreground/40">Environment</span>
                   <span className="text-foreground/70">Production</span>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ══ SIGNUPS TAB ════════════════════════ */}
+        {activeTab === "signups" && (
+          <div className="space-y-6">
+            <p className="text-sm text-foreground/40">
+              Institution onboarding queue — review and approve new institutions requesting access to ClashFree.
+            </p>
+            <div className="grid grid-cols-3 gap-4">
+              {(["PENDING", "APPROVED", "REJECTED"] as const).map(s => (
+                <div key={s} className={`rounded-xl border px-4 py-3 text-center ${signupStatusColor[s]}`}>
+                  <div className="text-xl font-bold">{SIGNUPS.filter(x => x.status === s).length}</div>
+                  <div className="text-xs font-medium mt-0.5">{s}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="rounded-2xl border border-foreground/10 overflow-hidden">
+              <div className="px-5 py-3 border-b border-foreground/10 bg-foreground/[0.03]">
+                <p className="text-sm font-semibold text-foreground/60">Institution Requests</p>
+              </div>
+              <div className="divide-y divide-white/5">
+                {SIGNUPS.map((s, i) => {
+                  const StatusIcon = signupStatusIcon[s.status];
+                  return (
+                    <div key={i} className="px-5 py-4 hover:bg-foreground/[0.03] transition-colors">
+                      <div className="flex items-start justify-between gap-4">
+                        <div className="flex items-start gap-3 min-w-0">
+                          <Building2 className="w-4 h-4 text-foreground/30 shrink-0 mt-0.5" />
+                          <div className="min-w-0">
+                            <div className="text-sm font-medium text-foreground/80">{s.name}</div>
+                            <div className="text-xs text-foreground/40 mt-0.5">{s.type}</div>
+                            <div className="flex items-center gap-3 mt-1.5 text-xs text-foreground/30">
+                              <span className="flex items-center gap-1"><MapPin className="w-3 h-3" />{s.city}, {s.state}</span>
+                              <span className="flex items-center gap-1"><Phone className="w-3 h-3" />{s.phone}</span>
+                            </div>
+                            <div className="text-xs text-foreground/30 mt-1">{s.contact} · {s.email}</div>
+                          </div>
+                        </div>
+                        <span className={`shrink-0 flex items-center gap-1 text-[10px] px-2 py-1 rounded-md border font-semibold ${signupStatusColor[s.status]}`}>
+                          <StatusIcon className="w-3 h-3" />
+                          {s.status}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>

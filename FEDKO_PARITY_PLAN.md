@@ -32,7 +32,7 @@ Main app: 17 routes (`/dashboard/*`). Demo: 5 pages, no sub-routes.
 
 7. ✅ **System Health showcase** — new "System Health" tab on Super Admin demo. Reflects the actual ClashFree stack (Neon PostgreSQL, API services, Resend email, Meta WhatsApp Cloud API) rather than generic placeholders — matches real `/dashboard/health` concept.
 
-8. ⬜ **Signups queue showcase** — new tab on Super Admin demo. Simulated pending institution signups list, matching real `/dashboard/signups` concept.
+8. ✅ **Signups queue showcase** — new "Signups" tab on Super Admin demo. 5 realistic Nigerian institution requests (Niger State context, matching real institution-type categories from the actual signup form) — PENDING/APPROVED/REJECTED states with full contact details.
 
 9. ⬜ **Final pass** — review all new tabs against Kofar Mata design tokens (no ad hoc colors), confirm demo-mode lockdown CSS applies correctly to new interactive elements, test light/dark mode on every new screen, push + verify Vercel deploy.
 
