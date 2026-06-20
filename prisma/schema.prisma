@@ -713,7 +713,8 @@ model InviteToken {
 model ApiKey {
   id            String    @id @default(cuid())
   name          String    // Human-readable label, e.g. "NSUK Production Key"
-  key           String    @unique // Format: cfk_<random>
+  keyHash       String    @unique // SHA-256 hash of the raw cfk_<random> token — raw value is never stored
+  keyPrefix     String    // First 12 chars of the raw key (e.g. "cfk_a1b2c3d4"), shown in UI for identification
   institutionId String
   createdById   String    // User who created the key
   active        Boolean   @default(true)
@@ -727,6 +728,6 @@ model ApiKey {
   institution Institution @relation(fields: [institutionId], references: [id], onDelete: Cascade)
   createdBy   User        @relation("ApiKeysCreated", fields: [createdById], references: [id])
 
-  @@index([key])
+  @@index([keyHash])
   @@index([institutionId])
 }

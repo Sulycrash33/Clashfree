@@ -298,29 +298,27 @@ export default function LandingPage() {
                   </div>
                   <div>
                     <h4 className="font-medium text-sm">Integration Mode</h4>
-                    <p className="text-sm text-muted-foreground">Plug into your existing SIS. Your portal handles users — ClashFree handles scheduling logic.</p>
+                    <p className="text-sm text-muted-foreground">Plug into your existing SIS with a scoped API key. Your portal handles users — ClashFree imports your data, validates it, and returns a generated, conflict-free timetable as JSON or CSV.</p>
                   </div>
                 </div>
               </div>
             </div>
             <div className="bg-card border border-border rounded-2xl p-8">
               <div className="font-mono text-sm space-y-3">
-                <div className="text-muted-foreground">{/* Feed data, get timetable */}{'// Feed data, get timetable'}</div>
-                <div><span className="text-primary">POST</span> <span className="text-foreground">/api/generate</span></div>
-                <div className="pl-4 text-muted-foreground">
-                  {'{'}<br />
-                  <span className="pl-4">&quot;courses&quot;: [...],</span><br />
-                  <span className="pl-4">&quot;students&quot;: [...],</span><br />
-                  <span className="pl-4">&quot;rooms&quot;: [...],</span><br />
-                  <span className="pl-4">&quot;constraints&quot;: {'{'}</span><br />
-                  <span className="pl-8">&quot;excludeFridays&quot;: true,</span><br />
-                  <span className="pl-8">&quot;slotsPerDay&quot;: 3</span><br />
-                  <span className="pl-4">{'}'}</span><br />
-                  {'}'}
-                </div>
+                <div className="text-muted-foreground">{'// 1. Authenticate with your institution key'}</div>
+                <div><span className="text-primary">Authorization:</span> <span className="text-foreground">Bearer cfk_••••••••</span></div>
+                <div className="border-t border-border pt-3 mt-3 text-muted-foreground">{'// 2. Import your SIS data'}</div>
+                <div><span className="text-primary">POST</span> <span className="text-foreground">/api/v1/integrate/data</span></div>
+                <div className="border-t border-border pt-3 mt-3 text-muted-foreground">{'// 3. Validate completeness & conflicts'}</div>
+                <div><span className="text-primary">POST</span> <span className="text-foreground">/api/v1/integrate/validate</span></div>
+                <div className="border-t border-border pt-3 mt-3 text-muted-foreground">{'// 4. Generate the timetable'}</div>
+                <div><span className="text-primary">POST</span> <span className="text-foreground">/api/v1/integrate/generate</span></div>
                 <div className="border-t border-border pt-3 mt-3">
+                  <span className="text-primary">GET</span> <span className="text-foreground">/api/v1/integrate/timetable</span>
+                </div>
+                <div className="pl-4">
                   <span className="text-success">200 OK</span>
-                  <span className="text-muted-foreground"> — conflict-free timetable</span>
+                  <span className="text-muted-foreground"> — JSON or CSV, conflict-free</span>
                 </div>
               </div>
             </div>

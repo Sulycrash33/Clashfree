@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { apiError, requireRole } from '@/lib/api-utils'
 import { db } from '@/lib/db'
 import { randomBytes } from 'crypto'
+import { hashApiKey } from '@/lib/api-key'
 
 /**
  * GET /api/v1/integrate/keys
@@ -28,7 +29,7 @@ export async function GET() {
     select: {
       id: true,
       name: true,
-      key: true,
+      keyPrefix: true,
       active: true,
       scopes: true,
       expiresAt: true,
@@ -40,10 +41,10 @@ export async function GET() {
     orderBy: { createdAt: 'desc' },
   })
 
-  // Mask key values — only show prefix + last 4 chars
+  // keyPrefix already only holds the first 12 chars — safe to display as-is
   const masked = keys.map(k => ({
     ...k,
-    key: `${k.key.slice(0, 8)}...${k.key.slice(-4)}`,
+    key: `${k.keyPrefix}...`,
   }))
 
   return NextResponse.json(masked)
@@ -84,7 +85,9 @@ export async function POST(request: NextRequest) {
 
     // Generate a secure API key
     const keyBytes = randomBytes(32)
-    const key = `cfk_${keyBytes.toString('base64url')}`
+    const rawKey = `cfk_${keyBytes.toString('base64url')}`
+    const keyHash = hashApiKey(rawKey)
+    const keyPrefix = rawKey.slice(0, 12)
 
     const expiresAt = expiresInDays
       ? new Date(Date.now() + expiresInDays * 24 * 60 * 60 * 1000)
@@ -93,7 +96,8 @@ export async function POST(request: NextRequest) {
     const apiKey = await db.apiKey.create({
       data: {
         name,
-        key,
+        keyHash,
+        keyPrefix,
         institutionId: user.institutionId,
         createdById: user.id,
         scopes: scopes || 'generate,validate,export',
@@ -101,11 +105,12 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    // Return the full key only on creation — never shown again
+    // Return the full raw key only on creation — it is never stored or
+    // shown again. The server only ever retains its SHA-256 hash.
     return NextResponse.json({
       id: apiKey.id,
       name: apiKey.name,
-      key: apiKey.key,
+      key: rawKey,
       scopes: apiKey.scopes,
       expiresAt: apiKey.expiresAt,
       createdAt: apiKey.createdAt,

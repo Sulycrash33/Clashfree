@@ -25,7 +25,7 @@ import { db } from '@/lib/db'
 export async function POST(request: NextRequest) {
   const auth = await validateApiKey(request)
   if ('error' in auth) {
-    return NextResponse.json({ error: auth.error }, { status: auth.status })
+    return NextResponse.json({ error: auth.error, ...('retryAfterSeconds' in auth && { retryAfterSeconds: auth.retryAfterSeconds }) }, { status: auth.status })
   }
 
   // Check scope
