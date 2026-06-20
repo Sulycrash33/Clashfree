@@ -26,7 +26,7 @@ Main app: 17 routes (`/dashboard/*`). Demo: 5 pages, no sub-routes.
 
 4. ✅ **Conflicts & Issues standalone screen** — new "Conflicts & Issues" tab on Super Admin demo. Two real sections: "Flagged Issues" (4 explicitly-flagged slots with documented causes — overcapacity, cross-level spillover clashes) and "System-Detected Clashes" (computed venue/time double-bookings via existing `getConflictSlots()`). Both sourced from real `fedko-timetable.ts` data, nothing invented.
 
-5. ⬜ **Users showcase** — new tab on Super Admin demo. Simulated user list across roles (SA/IA/TO/LC/ST) with role badges — this one needs lightweight invented data since no user dataset exists yet; keep it small and clearly demo-labeled.
+5. ✅ **Users showcase** — new "Users" tab on Super Admin demo. Cross-role directory built entirely from real personas already established elsewhere in the demo (role picker's SA/IA/TO names, FEATURED_LECTURERS, FEATURED_STUDENTS) — no invented strangers. Role-count summary + full list with role badges.
 
 6. ⬜ **Activity Logs showcase** — new tab, simulated log entries (timetable published, conflict resolved, override applied, etc.) — invented but realistic, tied to actions already simulated elsewhere in the demo (e.g. IA's pause/resume, overrides).
 

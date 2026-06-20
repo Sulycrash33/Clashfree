@@ -11,9 +11,10 @@ import {
   FOCUS_FACULTY, OTHER_FACULTIES, DEPARTMENTS, LECTURE_FACILITIES,
   FACILITY_SUMMARY, getStudentDistribution,
 } from "../_data/fedko-faculties";
-import { POPULATION_SUMMARY, getFacultyTotals } from "../_data/fedko-students";
+import { POPULATION_SUMMARY, getFacultyTotals, FEATURED_STUDENTS } from "../_data/fedko-students";
 import { FEDKO_ROOMS, utilizationPercent } from "../_data/fedko-rooms";
 import { TIMETABLE, getConflictSlots } from "../_data/fedko-timetable";
+import { FEATURED_LECTURERS } from "../_data/fedko-lecturers";
 
 // ── Helpers ───────────────────────────────────────────────────
 function StatCard({
@@ -197,7 +198,7 @@ function SCIDeptCard({ dept }: { dept: (typeof DEPARTMENTS)[number] }) {
 
 // ── Main page ─────────────────────────────────────────────────
 export default function SuperAdminPage() {
-  const [activeTab, setActiveTab] = useState<"overview" | "science" | "facilities" | "rooms" | "conflicts" | "allFaculties">(
+  const [activeTab, setActiveTab] = useState<"overview" | "science" | "facilities" | "rooms" | "conflicts" | "users" | "allFaculties">(
     "overview"
   );
 
@@ -206,12 +207,31 @@ export default function SuperAdminPage() {
   const flaggedIssues = TIMETABLE.filter(s => s.conflictFlag);
   const systemClashes = getConflictSlots();
 
+  // Cross-role user directory — built from real personas already used across
+  // the demo (role picker, featured lecturers, featured students). No invented people.
+  type DemoUser = { name: string; role: "SA" | "IA" | "TO" | "LC" | "ST"; detail: string; email: string };
+  const DEMO_USERS: DemoUser[] = [
+    { name: "Prof. Minato Namikaze", role: "SA", detail: "Vice-Chancellor's Office", email: "vc.office@fedko.edu.ng" },
+    { name: "Dr. Temari Nara", role: "IA", detail: "Faculty of Physical & Applied Sciences", email: "ia.sci@fedko.edu.ng" },
+    { name: "Mr. Konohamaru Sarutobi", role: "TO", detail: "Faculty of Physical & Applied Sciences", email: "to.sci@fedko.edu.ng" },
+    ...FEATURED_LECTURERS.map(l => ({ name: l.name, role: "LC" as const, detail: l.deptName, email: l.email })),
+    ...FEATURED_STUDENTS.map(s => ({ name: s.name, role: "ST" as const, detail: `${s.deptName} · ${s.level}L`, email: s.email })),
+  ];
+  const roleColor: Record<DemoUser["role"], string> = {
+    SA: "bg-primary/10 border-primary/20 text-primary",
+    IA: "bg-secondary/10 border-secondary/20 text-secondary",
+    TO: "bg-accent-gold/10 border-accent-gold/20 text-accent-gold",
+    LC: "bg-success/10 border-success/20 text-success",
+    ST: "bg-clash/10 border-clash/20 text-clash",
+  };
+
   const TABS = [
     { id: "overview", label: "Overview" },
     { id: "science", label: "Faculty of Science (SCI)" },
     { id: "facilities", label: "Facilities" },
     { id: "rooms", label: "Rooms & Utilization" },
     { id: "conflicts", label: "Conflicts & Issues" },
+    { id: "users", label: "Users" },
     { id: "allFaculties", label: "All Faculties" },
   ] as const;
 
@@ -553,6 +573,40 @@ export default function SuperAdminPage() {
                     </div>
                     <span className="shrink-0 text-[10px] px-2 py-0.5 rounded-md bg-accent-gold/10 border border-accent-gold/20 text-accent-gold font-medium">
                       {slot.dept}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ══ USERS TAB ═════════════════════════ */}
+        {activeTab === "users" && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
+              {(["SA", "IA", "TO", "LC", "ST"] as const).map(role => (
+                <div key={role} className={`rounded-xl border px-4 py-3 text-center ${roleColor[role]}`}>
+                  <div className="text-xl font-bold">{DEMO_USERS.filter(u => u.role === role).length}</div>
+                  <div className="text-xs font-medium mt-0.5">{role}</div>
+                </div>
+              ))}
+            </div>
+
+            <div className="rounded-2xl border border-foreground/10 overflow-hidden">
+              <div className="px-5 py-3 border-b border-foreground/10 bg-foreground/[0.03]">
+                <p className="text-sm font-semibold text-foreground/60">All Demo Accounts</p>
+                <p className="text-xs text-foreground/30 mt-0.5">Real personas used across this demo — Super Admin down to Student.</p>
+              </div>
+              <div className="divide-y divide-white/5">
+                {DEMO_USERS.map((u, i) => (
+                  <div key={`${u.email}-${i}`} className="flex items-center justify-between px-5 py-3 hover:bg-foreground/[0.03] transition-colors gap-4">
+                    <div className="min-w-0">
+                      <div className="text-sm font-medium text-foreground/80 truncate">{u.name}</div>
+                      <div className="text-xs text-foreground/35 truncate">{u.detail} · {u.email}</div>
+                    </div>
+                    <span className={`shrink-0 text-[10px] px-2 py-0.5 rounded-md border font-semibold ${roleColor[u.role]}`}>
+                      {u.role}
                     </span>
                   </div>
                 ))}
