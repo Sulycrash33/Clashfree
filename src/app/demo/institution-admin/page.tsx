@@ -546,7 +546,7 @@ function AddRemoveModal({
 // Main page
 // ─────────────────────────────────────────────
 export default function InstitutionAdminPage() {
-  const [activeTab, setActiveTab] = useState<"overrides" | "manage" | "summary" | "courses" | "control" | "system">("overrides");
+  const [activeTab, setActiveTab] = useState<"overrides" | "manage" | "summary" | "courses" | "lecturers" | "control" | "system">("overrides");
   const [selectedOverride, setSelectedOverride] = useState<Override | null>(null);
   const [addRemoveModal, setAddRemoveModal] = useState<{
     type: "faculty" | "department" | "admin" | "lecturer";
@@ -560,6 +560,9 @@ export default function InstitutionAdminPage() {
   const [courseDept, setCourseDept] = useState<string>(courseDepts[0] ?? "CHM");
   const [courseLevel, setCourseLevel] = useState<100 | 200 | 300 | 400>(100);
   const [courseSemester, setCourseSemester] = useState<1 | 2>(1);
+
+  // Lecturer Directory
+  const [expandedLecturer, setExpandedLecturer] = useState<string | null>(null);
 
   // Pause / Resume timetable
   const [timetableStatus, setTimetableStatus] = useState<"active" | "paused" | "suspended">("active");
@@ -581,6 +584,7 @@ export default function InstitutionAdminPage() {
     { id: "manage", label: "Add / Remove", icon: Settings },
     { id: "summary", label: "Faculty Summary", icon: BarChart3 },
     { id: "courses", label: "Course Catalogue", icon: BookMarked },
+    { id: "lecturers", label: "Lecturer Directory", icon: GraduationCap },
     { id: "control", label: "Timetable Control", icon: Pause },
     { id: "system", label: "System Powers", icon: Crown },
   ] as const;
@@ -971,6 +975,91 @@ export default function InstitutionAdminPage() {
           </div>
         )}
 
+        {/* ══ LECTURER DIRECTORY TAB ══════════════════ */}
+        {activeTab === "lecturers" && (
+          <div className="space-y-6">
+            <p className="text-sm text-foreground/40">
+              Faculty profiles with real qualifications, course loads, and contact details.
+            </p>
+            <div className="space-y-3">
+              {FEATURED_LECTURERS.map(l => {
+                const isOpen = expandedLecturer === l.id;
+                return (
+                  <div key={l.id} className="rounded-2xl border border-foreground/10 overflow-hidden">
+                    <button
+                      onClick={() => setExpandedLecturer(isOpen ? null : l.id)}
+                      className="w-full flex items-center justify-between px-5 py-4 hover:bg-foreground/[0.03] transition-colors text-left"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className={`w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0 ${l.colorClass}`}>
+                          {l.imageInitials}
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-sm font-semibold text-foreground/85 truncate">{l.name}</div>
+                          <div className="text-xs text-foreground/40 truncate">{l.rank} · {l.deptName}</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 shrink-0">
+                        <span className="text-xs text-foreground/30 hidden sm:inline">{l.weeklyHours} hrs/wk</span>
+                        {isOpen ? <ChevronDown className="w-4 h-4 text-foreground/40" /> : <ChevronRight className="w-4 h-4 text-foreground/40" />}
+                      </div>
+                    </button>
+                    {isOpen && (
+                      <div className="px-5 pb-5 pt-1 space-y-4 border-t border-foreground/10 bg-foreground/[0.02]">
+                        <p className="text-sm text-foreground/60 leading-relaxed">{l.bio}</p>
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                          <div>
+                            <div className="text-xs text-foreground/30">Specialization</div>
+                            <div className="text-sm text-foreground/70 mt-0.5">{l.specialization}</div>
+                          </div>
+                          <div>
+                            <div className="text-xs text-foreground/30">Office</div>
+                            <div className="text-sm text-foreground/70 mt-0.5">{l.office}</div>
+                          </div>
+                          <div>
+                            <div className="text-xs text-foreground/30">Publications</div>
+                            <div className="text-sm text-foreground/70 mt-0.5">{l.publications ?? "—"}</div>
+                          </div>
+                          <div>
+                            <div className="text-xs text-foreground/30">Years of Service</div>
+                            <div className="text-sm text-foreground/70 mt-0.5">{l.yearsService ?? "—"}</div>
+                          </div>
+                        </div>
+                        {l.qualifications && (
+                          <div>
+                            <div className="text-xs text-foreground/30 mb-1.5">Qualifications</div>
+                            <div className="flex flex-wrap gap-1.5">
+                              {l.qualifications.map((q, i) => (
+                                <span key={i} className="text-[11px] px-2 py-1 rounded-md bg-primary/10 border border-primary/20 text-primary">
+                                  {q}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        <div>
+                          <div className="text-xs text-foreground/30 mb-1.5">Teaching This Semester</div>
+                          <div className="flex flex-wrap gap-1.5">
+                            {l.coursesCurrent.map(code => (
+                              <span key={code} className="text-[11px] px-2 py-1 rounded-md bg-accent-gold/10 border border-accent-gold/20 text-accent-gold font-medium">
+                                {code}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-4 text-xs text-foreground/40 pt-1">
+                          <span>{l.email}</span>
+                          <span>·</span>
+                          <span>{l.phone}</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {/* ══ TIMETABLE CONTROL TAB ══════════════════ */}
         {activeTab === "control" && (

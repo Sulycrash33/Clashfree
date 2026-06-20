@@ -22,7 +22,7 @@ Main app: 17 routes (`/dashboard/*`). Demo: 5 pages, no sub-routes.
 
 2. ✅ **Courses showcase** — new "Course Catalogue" tab on Institution Admin demo. Uses existing `fedko-courses.ts` (621 lines, real CCMAS-aligned data) via `ALL_DEPT_COURSES`. Filterable by department/level/semester, shows credit units + course type badges.
 
-3. ⬜ **Lecturers showcase** — new tab using existing `fedko-lecturers.ts` (284 lines). Table view: name, dept, courses assigned, weekly load.
+3. ✅ **Lecturers showcase** — new "Lecturer Directory" tab on Institution Admin demo. Expandable profile cards using existing `fedko-lecturers.ts` `FEATURED_LECTURERS` data (was already imported but only used in a dropdown) — shows bio, specialization, qualifications, current course load, contact details.
 
 4. ⬜ **Conflicts & Issues standalone screen** — currently only inline on TO's timetable grid. Build a dedicated demo view listing conflict types/resolutions, matching the real app's `/dashboard/conflicts` concept, using conflict flags already in `fedko-timetable.ts`.
 
