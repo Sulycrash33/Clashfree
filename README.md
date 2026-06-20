@@ -1,8 +1,7 @@
 # ClashFree - Automatic Timetable Generator
 
-> Revolutionary academic scheduling system for Nigerian universities. Smart engine detects conflicts before they happen. Zero clashes guaranteed.
+> Academic scheduling system for Nigerian tertiary institutions. Smart engine detects scheduling conflicts and flags them for resolution before timetables are published.
 
-![ClashFree Dashboard](https://img.shields.io/badge/Status-Production%20Ready-brightgreen)
 ![Next.js](https://img.shields.io/badge/Next.js-16.1.3-black)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-4.0-38bdf8)
@@ -13,14 +12,14 @@
 ## 🚀 Features
 
 ### Smart Scheduling Engine
-- **Zero Clashes Guaranteed** - The engine halts if any conflict is detected
+- **Conflict Detection** - Automatically detects student, lecturer, and room clashes and surfaces them for review before publishing
 - **Carry-Over Detection** - Automatically validates CO students against all registered courses
-- **Real-time Conflict Resolution** - Interactive conflict resolution suggestions
+- **Real-time Conflict Resolution** - Interactive conflict resolution suggestions for unresolved scheduling clashes
 
 ### Multi-Tenant Architecture
-- Support for **47+ institution types** (Federal, State, Private Universities, Polytechnics, etc.)
+- Built to support multiple institution types (Federal, State, Private Universities, Polytechnics, Colleges of Education, etc.)
 - Role-based access control (Super Admin, Institution Admin, Timetable Officer, Lecturer, Student)
-- Institution-level data isolation
+- Institution-level data scoping
 
 ### Exam & Lecture Timetables
 - Automatic timetable generation
@@ -50,8 +49,10 @@
 | **Framework** | Next.js 16 (App Router) |
 | **Language** | TypeScript |
 | **Styling** | Tailwind CSS 4 + shadcn/ui |
-| **Database** | SQLite (Prisma ORM) |
+| **Database** | PostgreSQL (Neon) via Prisma ORM |
 | **Auth** | NextAuth.js |
+| **Email** | Resend |
+| **Messaging** | WhatsApp via Meta Cloud API |
 | **Icons** | Lucide React |
 | **Animations** | Framer Motion |
 
@@ -69,7 +70,7 @@ bun install
 
 # Set up environment variables
 cp .env.example .env
-# Edit .env with your settings
+# Edit .env with your own values — see Environment Variables section below
 
 # Initialize database
 bun run db:push
@@ -81,15 +82,11 @@ bun run dev
 
 ---
 
-## 🔐 Demo Credentials
+## 🔐 Demo Access
 
-| Role | Email | Password |
-|------|-------|----------|
-| Super Admin | admin@clashfree.com | admin123 |
-| Institution Admin | ia@nsuk.edu.ng | admin123 |
-| Timetable Officer | to@nsuk.edu.ng | admin123 |
-| Lecturer | lecturer@nsuk.edu.ng | admin123 |
-| Student | student@nsuk.edu.ng | admin123 |
+A live interactive demo (no login required) is available, showcasing all five role views with sample data.
+
+For Super Admin / Institution Admin / Timetable Officer / Lecturer / Student login credentials on the full application, contact the maintainer directly. Credentials are not published in this README.
 
 ---
 
@@ -129,7 +126,7 @@ clashfree/
 
 ---
 
-## 🏫 Supported Institutions
+## 🏫 Supported Institution Types
 
 - Federal Universities
 - State Universities
@@ -144,7 +141,7 @@ clashfree/
 
 ## 📊 Database Schema
 
-The system uses a comprehensive schema supporting:
+The system uses a schema supporting:
 
 - **Multi-tenancy**: Institution → Faculty → Department hierarchy
 - **Academic Structure**: Courses, Students, Lecturers
@@ -157,11 +154,7 @@ The system uses a comprehensive schema supporting:
 
 ## 🔧 Environment Variables
 
-```env
-DATABASE_URL="file:./dev.db"
-NEXTAUTH_SECRET="your-secret-key"
-NEXTAUTH_URL="http://localhost:3000"
-```
+See `.env.example` for the full list of required variables and setup notes (database, NextAuth, Resend, WhatsApp Cloud API). Never commit a `.env` file with real values — `.env` is already in `.gitignore`.
 
 ---
 
@@ -179,8 +172,8 @@ Contributions are welcome! Please read our contributing guidelines before submit
 
 ## 📞 Support
 
-For support, email support@clashfree.com or join our Discord channel.
+For support, email support@clashfree.com.
 
 ---
 
-**Built with ❤️ for Nigerian Tertiary Institutions**
+**Built for Nigerian Tertiary Institutions**
