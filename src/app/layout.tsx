@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Fraunces, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-sans",
@@ -43,12 +44,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="dark">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('clashfree-theme');var r=t==='dark'?'dark':(t==='system'?(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):'light');document.documentElement.classList.add(r);}catch(e){document.documentElement.classList.add('light');}})();`,
+          }}
+        />
+      </head>
       <body
         className={`${jakarta.variable} ${fraunces.variable} ${plexMono.variable} font-sans antialiased`}
       >
-        {children}
-        <Toaster />
+        <ThemeProvider defaultTheme="light" storageKey="clashfree-theme">
+          {children}
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

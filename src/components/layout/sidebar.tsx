@@ -23,9 +23,12 @@ import {
   X,
   UserPlus,
   Bell,
+  Sun,
+  Moon,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useState, useEffect } from 'react'
+import { useTheme } from '@/components/theme-provider'
 
 const roleLabels = {
   SA: 'Super Admin',
@@ -133,6 +136,8 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
   const { data: session } = useSession()
   const pathname = usePathname()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const { resolvedTheme, setTheme } = useTheme()
+  const toggleTheme = () => setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
 
   // Close drawer on route change
   useEffect(() => { setMobileOpen(false) }, [pathname])
@@ -208,6 +213,19 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
               <p className="text-[11px] text-muted-foreground truncate">{session.user.email}</p>
             </div>
           </div>
+          <button
+            onClick={toggleTheme}
+            className="w-full flex items-center justify-between gap-2 px-3 py-2 mb-2 rounded-lg border border-border bg-muted/50 hover:bg-muted transition-colors"
+            aria-label="Toggle theme"
+          >
+            <span className="flex items-center gap-2 text-sm font-medium text-foreground">
+              {resolvedTheme === 'dark' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+              {resolvedTheme === 'dark' ? 'Dark Mode' : 'Light Mode'}
+            </span>
+            <div className={cn('w-9 h-5 rounded-full relative transition-colors', resolvedTheme === 'dark' ? 'bg-primary' : 'bg-accent')}>
+              <div className={cn('absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform', resolvedTheme === 'dark' ? 'translate-x-4' : 'translate-x-0.5')} />
+            </div>
+          </button>
           <Button
             variant="ghost"
             size="sm"
@@ -291,7 +309,20 @@ export function Sidebar({ demoMode = false }: SidebarProps) {
         </nav>
 
         {/* Sign out */}
-        <div className="p-4 border-t border-foreground/10">
+        <div className="p-4 border-t border-foreground/10 space-y-2">
+          <button
+            onClick={toggleTheme}
+            className="w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg border border-foreground/10 bg-foreground/3 hover:bg-foreground/5 transition-colors"
+            aria-label="Toggle theme"
+          >
+            <span className="flex items-center gap-2 text-sm font-medium text-foreground">
+              {resolvedTheme === 'dark' ? <Moon className="w-4 h-4" /> : <Sun className="w-4 h-4" />}
+              {resolvedTheme === 'dark' ? 'Dark Mode' : 'Light Mode'}
+            </span>
+            <div className={cn('w-9 h-5 rounded-full relative transition-colors', resolvedTheme === 'dark' ? 'bg-primary' : 'bg-accent')}>
+              <div className={cn('absolute top-0.5 w-4 h-4 rounded-full bg-white shadow transition-transform', resolvedTheme === 'dark' ? 'translate-x-4' : 'translate-x-0.5')} />
+            </div>
+          </button>
           <Button
             variant="ghost"
             className="w-full justify-start text-muted-foreground hover:text-foreground hover:bg-foreground/5"
