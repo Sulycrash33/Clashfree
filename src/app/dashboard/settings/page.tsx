@@ -10,10 +10,12 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Settings, Bell, Shield, Palette } from 'lucide-react'
+import { useTheme } from '@/components/theme-provider'
 
 export default function SettingsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
+  const { resolvedTheme, setTheme } = useTheme()
 
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -108,7 +110,10 @@ export default function SettingsPage() {
                 <Label>Dark Mode</Label>
                 <p className="text-sm text-muted-foreground">Use dark theme</p>
               </div>
-              <Switch />
+              <Switch
+                checked={resolvedTheme === 'dark'}
+                onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')}
+              />
             </div>
             <div className="flex items-center justify-between">
               <div>

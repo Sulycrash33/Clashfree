@@ -50,17 +50,17 @@
 :root {
   --radius: 0.5rem;
   --background: #FAF8FF;
-  --foreground: #1C1638;
+  --foreground: #000000;
   --card: #FFFFFF;
-  --card-foreground: #1C1638;
+  --card-foreground: #000000;
   --popover: #FFFFFF;
-  --popover-foreground: #1C1638;
+  --popover-foreground: #000000;
   --primary: #2A1F5E;
   --primary-foreground: #F5F3FA;
   --secondary: #BD5B2C;
   --secondary-foreground: #F5F3FA;
   --muted: #F0EDFB;
-  --muted-foreground: #3D3566;
+  --muted-foreground: #2A2450;
   --accent: #D7A33B;
   --accent-foreground: #1C1638;
   --accent-gold: #D7A33B;
@@ -76,11 +76,11 @@
   --chart-4: #4F7A4B;
   --chart-5: #9C3B30;
   --sidebar: #FFFFFF;
-  --sidebar-foreground: #1C1638;
+  --sidebar-foreground: #000000;
   --sidebar-primary: #2A1F5E;
   --sidebar-primary-foreground: #F5F3FA;
   --sidebar-accent: #F0EDFB;
-  --sidebar-accent-foreground: #1C1638;
+  --sidebar-accent-foreground: #000000;
   --sidebar-border: #E4DEF5;
   --sidebar-ring: #2A1F5E;
 }
@@ -94,17 +94,17 @@
 .light-override {
   --radius: 0.5rem;
   --background: #FAF8FF;
-  --foreground: #1C1638;
+  --foreground: #000000;
   --card: #FFFFFF;
-  --card-foreground: #1C1638;
+  --card-foreground: #000000;
   --popover: #FFFFFF;
-  --popover-foreground: #1C1638;
+  --popover-foreground: #000000;
   --primary: #2A1F5E;
   --primary-foreground: #F5F3FA;
   --secondary: #BD5B2C;
   --secondary-foreground: #F5F3FA;
   --muted: #F0EDFB;
-  --muted-foreground: #3D3566;
+  --muted-foreground: #2A2450;
   --accent: #D7A33B;
   --accent-foreground: #1C1638;
   --accent-gold: #D7A33B;
@@ -120,11 +120,11 @@
   --chart-4: #4F7A4B;
   --chart-5: #9C3B30;
   --sidebar: #FFFFFF;
-  --sidebar-foreground: #1C1638;
+  --sidebar-foreground: #000000;
   --sidebar-primary: #2A1F5E;
   --sidebar-primary-foreground: #F5F3FA;
   --sidebar-accent: #F0EDFB;
-  --sidebar-accent-foreground: #1C1638;
+  --sidebar-accent-foreground: #000000;
   --sidebar-border: #E4DEF5;
   --sidebar-ring: #2A1F5E;
 }
