@@ -5,6 +5,7 @@ import {
   ChevronDown, ChevronRight, Building2, Users, BookMarked,
   FlaskConical, Monitor, BarChart3, AlertTriangle,
   ShieldCheck, Layers, GraduationCap, CheckCircle2, DoorOpen,
+  Activity, Clock,
 } from "lucide-react";
 import { DemoLayout } from "../_components/DemoLayout";
 import {
@@ -198,7 +199,7 @@ function SCIDeptCard({ dept }: { dept: (typeof DEPARTMENTS)[number] }) {
 
 // ── Main page ─────────────────────────────────────────────────
 export default function SuperAdminPage() {
-  const [activeTab, setActiveTab] = useState<"overview" | "science" | "facilities" | "rooms" | "conflicts" | "users" | "allFaculties">(
+  const [activeTab, setActiveTab] = useState<"overview" | "science" | "facilities" | "rooms" | "conflicts" | "users" | "logs" | "allFaculties">(
     "overview"
   );
 
@@ -225,6 +226,26 @@ export default function SuperAdminPage() {
     ST: "bg-clash/10 border-clash/20 text-clash",
   };
 
+  // Activity log — every entry maps to an action this demo actually simulates
+  // (IA overrides/pause-resume, TO auto-assign, flagged conflicts). Timestamps
+  // are relative/illustrative since this is a static demo dataset.
+  type LogEntry = { time: string; actor: string; action: string; detail: string; type: "info" | "warning" | "success" };
+  const ACTIVITY_LOG: LogEntry[] = [
+    { time: "2 min ago",  actor: "Mr. Konohamaru Sarutobi", action: "Auto-Assign", detail: "Ran F8 auto-assign for CSC 400L, Semester 1 — 0 new clashes introduced", type: "success" },
+    { time: "18 min ago", actor: "Dr. Temari Nara",          action: "Override Applied", detail: "Timetable Lock activated for Faculty of Science, 2024/2025 Semester 1", type: "warning" },
+    { time: "41 min ago", actor: "System",                   action: "Conflict Flagged", detail: "CSC 411 — 118 students registered, venue capacity 100 (SCI LH 9) — overcapacity by 18", type: "warning" },
+    { time: "1 hr ago",   actor: "Prof. Kakashi Hatake",     action: "Lecture Rescheduled", detail: "CHM 411 moved from Mon 08:00 to Wed 10:00 — venue conflict resolved", type: "info" },
+    { time: "2 hrs ago",  actor: "System",                   action: "Conflict Flagged", detail: "CSC 316 (300L) clashes with CSC 413 (400L) Tue 12:00–14:00 — spillover student affected", type: "warning" },
+    { time: "3 hrs ago",  actor: "Dr. Temari Nara",          action: "Staff Added", detail: "New lecturer record created for Department of Biochemistry", type: "info" },
+    { time: "5 hrs ago",  actor: "Mr. Konohamaru Sarutobi", action: "Timetable Published", detail: "Faculty of Science weekly timetable published for student/lecturer view", type: "success" },
+    { time: "1 day ago",  actor: "Prof. Minato Namikaze",   action: "Institution Review", detail: "Reviewed and approved Faculty of Science facility allocation", type: "success" },
+  ];
+  const logTypeColor: Record<LogEntry["type"], string> = {
+    info: "bg-primary/10 border-primary/20 text-primary",
+    warning: "bg-accent-gold/10 border-accent-gold/20 text-accent-gold",
+    success: "bg-success/10 border-success/20 text-success",
+  };
+
   const TABS = [
     { id: "overview", label: "Overview" },
     { id: "science", label: "Faculty of Science (SCI)" },
@@ -232,6 +253,7 @@ export default function SuperAdminPage() {
     { id: "rooms", label: "Rooms & Utilization" },
     { id: "conflicts", label: "Conflicts & Issues" },
     { id: "users", label: "Users" },
+    { id: "logs", label: "Activity Logs" },
     { id: "allFaculties", label: "All Faculties" },
   ] as const;
 
@@ -608,6 +630,40 @@ export default function SuperAdminPage() {
                     <span className={`shrink-0 text-[10px] px-2 py-0.5 rounded-md border font-semibold ${roleColor[u.role]}`}>
                       {u.role}
                     </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ══ ACTIVITY LOGS TAB ═════════════════ */}
+        {activeTab === "logs" && (
+          <div className="space-y-6">
+            <p className="text-sm text-foreground/40">
+              Every action taken across the system — overrides, reschedules, auto-assigns, and conflicts as they're detected.
+            </p>
+            <div className="rounded-2xl border border-foreground/10 overflow-hidden">
+              <div className="px-5 py-3 border-b border-foreground/10 bg-foreground/[0.03] flex items-center gap-2">
+                <Activity className="w-4 h-4 text-foreground/40" />
+                <p className="text-sm font-semibold text-foreground/60">Recent Activity</p>
+              </div>
+              <div className="divide-y divide-white/5">
+                {ACTIVITY_LOG.map((log, i) => (
+                  <div key={i} className="flex items-start justify-between gap-4 px-5 py-3.5 hover:bg-foreground/[0.03] transition-colors">
+                    <div className="flex items-start gap-3 min-w-0">
+                      <span className={`shrink-0 text-[10px] px-2 py-0.5 rounded-md border font-semibold mt-0.5 ${logTypeColor[log.type]}`}>
+                        {log.action}
+                      </span>
+                      <div className="min-w-0">
+                        <div className="text-sm text-foreground/75">{log.detail}</div>
+                        <div className="text-xs text-foreground/35 mt-0.5">{log.actor}</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-1.5 text-xs text-foreground/30 shrink-0">
+                      <Clock className="w-3 h-3" />
+                      {log.time}
+                    </div>
                   </div>
                 ))}
               </div>

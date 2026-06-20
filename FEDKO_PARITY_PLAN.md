@@ -28,7 +28,7 @@ Main app: 17 routes (`/dashboard/*`). Demo: 5 pages, no sub-routes.
 
 5. ✅ **Users showcase** — new "Users" tab on Super Admin demo. Cross-role directory built entirely from real personas already established elsewhere in the demo (role picker's SA/IA/TO names, FEATURED_LECTURERS, FEATURED_STUDENTS) — no invented strangers. Role-count summary + full list with role badges.
 
-6. ⬜ **Activity Logs showcase** — new tab, simulated log entries (timetable published, conflict resolved, override applied, etc.) — invented but realistic, tied to actions already simulated elsewhere in the demo (e.g. IA's pause/resume, overrides).
+6. ✅ **Activity Logs showcase** — new "Activity Logs" tab on Super Admin demo. 8 log entries, each tied to an action this demo actually simulates elsewhere (TO auto-assign, IA overrides, real flagged conflicts, real lecturer names) — invented timestamps/sequence but grounded content, not disconnected filler.
 
 7. ⬜ **System Health showcase** — new tab on Super Admin demo. Simulated status cards (DB, email service, WhatsApp API, etc.) — cosmetic/static, just needs to exist so panel sees the concept.
 
