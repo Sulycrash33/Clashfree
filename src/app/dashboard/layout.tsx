@@ -1,9 +1,9 @@
 'use client'
 
-import { SessionProvider } from 'next-auth/react'
+import { SessionProvider, useSession, signOut } from 'next-auth/react'
 import { Sidebar } from '@/components/layout/sidebar'
 import { redirect } from 'next/navigation'
-import { useSession } from 'next-auth/react'
+import { LogOut } from 'lucide-react'
 
 function DashboardContent({ children }: { children: React.ReactNode }) {
   const { data: session, status } = useSession()
@@ -22,6 +22,17 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-background text-foreground">
       <Sidebar />
+
+      {/* Persistent top-right sign out, always visible on desktop regardless of scroll */}
+      <button
+        onClick={() => signOut({ callbackUrl: '/login' })}
+        className="hidden lg:flex fixed top-4 right-6 z-50 items-center gap-2 px-3 py-2 rounded-lg border border-border bg-card hover:bg-muted text-muted-foreground hover:text-foreground transition-colors shadow-sm"
+        aria-label="Sign out"
+      >
+        <LogOut className="w-4 h-4" />
+        <span className="text-sm font-medium">Sign Out</span>
+      </button>
+
       <main
         className={[
           // Desktop: offset by sidebar width

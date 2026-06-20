@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import {
   ShieldCheck, Building2, CalendarClock, GraduationCap, BookOpen,
   ChevronLeft, ChevronRight, Menu, X, AlertTriangle, Sparkles,
-  Moon, Sun,
+  Moon, Sun, LogOut,
 } from "lucide-react";
 import { ThemeProvider, useTheme } from "./ThemeContext";
 
@@ -148,6 +148,12 @@ function DemoLayoutInner({ children, activeRole, roleName, roleSubtitle, conflic
             {darkMode ? <Moon className="w-3.5 h-3.5" /> : <Sun className="w-3.5 h-3.5" />}
             <span className="text-[11px] font-medium hidden sm:block">{darkMode ? "Dark" : "Light"}</span>
           </button>
+
+          <Link href="/demo"
+            className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full border transition-all ${darkMode ? "bg-[#9C3B30]/10 border-[#9C3B30]/20 text-[#E8857A]" : "bg-[#FBEAE7] border-[#9C3B30]/30 text-[#9C3B30]"} hover:brightness-110`}>
+            <LogOut className="w-3.5 h-3.5" />
+            <span className="text-[11px] font-medium hidden sm:block">Exit Demo</span>
+          </Link>
 
           <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#4F7A4B]/10 border border-[#4F7A4B]/20">
             <span className="w-1.5 h-1.5 rounded-full bg-[#6F9A6A] animate-pulse" />

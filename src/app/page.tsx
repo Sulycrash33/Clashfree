@@ -81,8 +81,6 @@ const steps = [
 
 const stats = [
   { value: '0', label: 'Clashes Guaranteed', suffix: '' },
-  { value: '3', label: 'Sessions Per Day', suffix: '' },
-  { value: '47', label: 'Institution Types', suffix: '+' },
   { value: '100', label: 'Automation', suffix: '%' },
 ]
 
@@ -189,7 +187,7 @@ export default function LandingPage() {
 
           {/* Stats Row */}
           <motion.div
-            className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border rounded-2xl overflow-hidden border border-border"
+            className="grid grid-cols-2 gap-px bg-border rounded-2xl overflow-hidden border border-border max-w-md mx-auto"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.4 }}
