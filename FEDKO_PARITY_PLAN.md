@@ -30,7 +30,7 @@ Main app: 17 routes (`/dashboard/*`). Demo: 5 pages, no sub-routes.
 
 6. ✅ **Activity Logs showcase** — new "Activity Logs" tab on Super Admin demo. 8 log entries, each tied to an action this demo actually simulates elsewhere (TO auto-assign, IA overrides, real flagged conflicts, real lecturer names) — invented timestamps/sequence but grounded content, not disconnected filler.
 
-7. ⬜ **System Health showcase** — new tab on Super Admin demo. Simulated status cards (DB, email service, WhatsApp API, etc.) — cosmetic/static, just needs to exist so panel sees the concept.
+7. ✅ **System Health showcase** — new "System Health" tab on Super Admin demo. Reflects the actual ClashFree stack (Neon PostgreSQL, API services, Resend email, Meta WhatsApp Cloud API) rather than generic placeholders — matches real `/dashboard/health` concept.
 
 8. ⬜ **Signups queue showcase** — new tab on Super Admin demo. Simulated pending institution signups list, matching real `/dashboard/signups` concept.
 

@@ -5,7 +5,7 @@ import {
   ChevronDown, ChevronRight, Building2, Users, BookMarked,
   FlaskConical, Monitor, BarChart3, AlertTriangle,
   ShieldCheck, Layers, GraduationCap, CheckCircle2, DoorOpen,
-  Activity, Clock,
+  Activity, Clock, Database, Server, Mail, MessageCircle,
 } from "lucide-react";
 import { DemoLayout } from "../_components/DemoLayout";
 import {
@@ -199,7 +199,7 @@ function SCIDeptCard({ dept }: { dept: (typeof DEPARTMENTS)[number] }) {
 
 // ── Main page ─────────────────────────────────────────────────
 export default function SuperAdminPage() {
-  const [activeTab, setActiveTab] = useState<"overview" | "science" | "facilities" | "rooms" | "conflicts" | "users" | "logs" | "allFaculties">(
+  const [activeTab, setActiveTab] = useState<"overview" | "science" | "facilities" | "rooms" | "conflicts" | "users" | "logs" | "health" | "allFaculties">(
     "overview"
   );
 
@@ -246,6 +246,21 @@ export default function SuperAdminPage() {
     success: "bg-success/10 border-success/20 text-success",
   };
 
+  // System Health — reflects the real ClashFree stack (Neon Postgres, Resend email,
+  // Meta WhatsApp Cloud API), matching the actual main-app /dashboard/health concept.
+  type HealthStatus = "healthy" | "degraded" | "down";
+  const SYSTEM_HEALTH: { label: string; sub: string; status: HealthStatus; icon: React.ElementType }[] = [
+    { label: "Database", sub: "Neon PostgreSQL connection", status: "healthy", icon: Database },
+    { label: "API Services", sub: "All API endpoints", status: "healthy", icon: Server },
+    { label: "Email Notifications", sub: "Resend delivery service", status: "healthy", icon: Mail },
+    { label: "WhatsApp Notifications", sub: "Meta Cloud API", status: "healthy", icon: MessageCircle },
+  ];
+  const healthStatusColor: Record<HealthStatus, string> = {
+    healthy: "text-success",
+    degraded: "text-accent-gold",
+    down: "text-clash",
+  };
+
   const TABS = [
     { id: "overview", label: "Overview" },
     { id: "science", label: "Faculty of Science (SCI)" },
@@ -254,6 +269,7 @@ export default function SuperAdminPage() {
     { id: "conflicts", label: "Conflicts & Issues" },
     { id: "users", label: "Users" },
     { id: "logs", label: "Activity Logs" },
+    { id: "health", label: "System Health" },
     { id: "allFaculties", label: "All Faculties" },
   ] as const;
 
@@ -666,6 +682,53 @@ export default function SuperAdminPage() {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ══ SYSTEM HEALTH TAB ═════════════════ */}
+        {activeTab === "health" && (
+          <div className="space-y-6">
+            <p className="text-sm text-foreground/40">
+              Live status of the services ClashFree depends on — database, API, and the notification channels that reach lecturers and students.
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {SYSTEM_HEALTH.map(h => {
+                const Icon = h.icon;
+                return (
+                  <div key={h.label} className="rounded-2xl border border-foreground/10 bg-foreground/[0.03] p-5 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <Icon className="w-4 h-4 text-foreground/40" />
+                      <CheckCircle2 className={`w-4 h-4 ${healthStatusColor[h.status]}`} />
+                    </div>
+                    <div>
+                      <div className={`text-lg font-bold capitalize ${healthStatusColor[h.status]}`}>{h.status}</div>
+                      <div className="text-sm text-foreground/60 mt-0.5">{h.label}</div>
+                      <div className="text-xs text-foreground/30 mt-1">{h.sub}</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="rounded-2xl border border-foreground/10 overflow-hidden">
+              <div className="px-5 py-3 border-b border-foreground/10 bg-foreground/[0.03]">
+                <p className="text-sm font-semibold text-foreground/60">System Information</p>
+              </div>
+              <div className="px-5 py-4 space-y-2.5 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-foreground/40">Last Health Check</span>
+                  <span className="text-foreground/70">Just now</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-foreground/40">Version</span>
+                  <span className="text-foreground/70">1.0.0</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-foreground/40">Environment</span>
+                  <span className="text-foreground/70">Production</span>
+                </div>
               </div>
             </div>
           </div>
