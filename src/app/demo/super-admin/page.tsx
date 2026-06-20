@@ -4,7 +4,7 @@ import { useState } from "react";
 import {
   ChevronDown, ChevronRight, Building2, Users, BookMarked,
   FlaskConical, Monitor, BarChart3, AlertTriangle,
-  ShieldCheck, Layers, GraduationCap, CheckCircle2,
+  ShieldCheck, Layers, GraduationCap, CheckCircle2, DoorOpen,
 } from "lucide-react";
 import { DemoLayout } from "../_components/DemoLayout";
 import {
@@ -12,6 +12,7 @@ import {
   FACILITY_SUMMARY, getStudentDistribution,
 } from "../_data/fedko-faculties";
 import { POPULATION_SUMMARY, getFacultyTotals } from "../_data/fedko-students";
+import { FEDKO_ROOMS, utilizationPercent } from "../_data/fedko-rooms";
 
 // ── Helpers ───────────────────────────────────────────────────
 function StatCard({
@@ -195,7 +196,7 @@ function SCIDeptCard({ dept }: { dept: (typeof DEPARTMENTS)[number] }) {
 
 // ── Main page ─────────────────────────────────────────────────
 export default function SuperAdminPage() {
-  const [activeTab, setActiveTab] = useState<"overview" | "science" | "facilities" | "allFaculties">(
+  const [activeTab, setActiveTab] = useState<"overview" | "science" | "facilities" | "rooms" | "allFaculties">(
     "overview"
   );
 
@@ -205,6 +206,7 @@ export default function SuperAdminPage() {
     { id: "overview", label: "Overview" },
     { id: "science", label: "Faculty of Science (SCI)" },
     { id: "facilities", label: "Facilities" },
+    { id: "rooms", label: "Rooms & Utilization" },
     { id: "allFaculties", label: "All Faculties" },
   ] as const;
 
@@ -392,6 +394,79 @@ export default function SuperAdminPage() {
                     </div>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ══ ROOMS & UTILIZATION TAB ═══════════ */}
+        {activeTab === "rooms" && (
+          <div className="space-y-6">
+            {/* Summary */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              <StatCard
+                label="Total Rooms"
+                value={FEDKO_ROOMS.length}
+                icon={DoorOpen}
+                color="bg-primary"
+              />
+              <StatCard
+                label="Lecture Halls/Theatres"
+                value={FEDKO_ROOMS.filter(r => r.type === "Lecture Hall" || r.type === "Lecture Theatre").length}
+                icon={BarChart3}
+                color="bg-secondary"
+              />
+              <StatCard
+                label="Laboratories"
+                value={FEDKO_ROOMS.filter(r => r.type === "Laboratory").length}
+                icon={FlaskConical}
+                color="bg-success"
+              />
+              <StatCard
+                label="Total Capacity"
+                value={FEDKO_ROOMS.reduce((sum, r) => sum + r.capacity, 0).toLocaleString()}
+                sub="seats across all rooms"
+                icon={Users}
+                color="bg-accent-gold"
+              />
+            </div>
+
+            {/* Room list with real utilization from the live timetable */}
+            <div className="rounded-2xl border border-foreground/10 overflow-hidden">
+              <div className="px-5 py-3 border-b border-foreground/10 bg-foreground/[0.03]">
+                <p className="text-sm font-semibold text-foreground/60">Room Utilization — Faculty of Science</p>
+                <p className="text-xs text-foreground/30 mt-0.5">Weekly slot usage computed from the actual generated timetable, not estimated.</p>
+              </div>
+              <div className="divide-y divide-white/5">
+                {FEDKO_ROOMS.map(room => {
+                  const pct = utilizationPercent(room);
+                  return (
+                    <div key={room.code} className="flex items-center justify-between px-5 py-3 hover:bg-foreground/[0.03] transition-colors gap-4">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className={`w-2 h-2 rounded-full shrink-0 ${
+                          room.type === "Laboratory" ? "bg-success" :
+                          room.type === "Lecture Theatre" ? "bg-accent-gold" : "bg-secondary"
+                        }`} />
+                        <div className="min-w-0">
+                          <div className="text-sm font-medium text-foreground/80 truncate">{room.code}</div>
+                          <div className="text-xs text-foreground/35">{room.type} · {room.building}</div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-4 shrink-0">
+                        <span className="text-xs text-foreground/30 hidden sm:inline">{room.capacity} seats</span>
+                        <div className="flex items-center gap-2 w-32">
+                          <div className="flex-1 h-1.5 rounded-full bg-foreground/10 overflow-hidden">
+                            <div
+                              className={`h-full rounded-full ${pct >= 70 ? "bg-clash" : pct >= 40 ? "bg-accent-gold" : "bg-success"}`}
+                              style={{ width: `${pct}%` }}
+                            />
+                          </div>
+                          <span className="text-xs font-semibold text-foreground/60 w-9 text-right">{pct}%</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
