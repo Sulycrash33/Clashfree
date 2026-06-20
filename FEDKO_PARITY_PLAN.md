@@ -45,7 +45,7 @@ Say "continue" — pick up at the first ⬜ item in order. Each item gets its ow
 
 ## ✅ ALL 9 ITEMS COMPLETE
 
-Super Admin demo now has 9 tabs (was 4): Overview, Faculty of Science, Facilities, Rooms & Utilization, Conflicts & Issues, Users, Activity Logs, System Health, Signups, All Faculties.
+Super Admin demo now has 10 tabs (was 4): Overview, Faculty of Science, Facilities, Rooms & Utilization, Conflicts & Issues, Users, Activity Logs, System Health, Signups, All Faculties.
 Institution Admin demo now has 7 tabs (was 5): added Course Catalogue and Lecturer Directory.
 
 All new data is either derived from real existing demo datasets (rooms from timetable venues, courses from CCMAS data, lecturers from featured profiles, conflicts from flagged slots) or — where genuinely new (Users, Logs, Signups) — built from real personas/names already established in the demo rather than invented strangers.
