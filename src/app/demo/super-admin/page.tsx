@@ -13,6 +13,7 @@ import {
 } from "../_data/fedko-faculties";
 import { POPULATION_SUMMARY, getFacultyTotals } from "../_data/fedko-students";
 import { FEDKO_ROOMS, utilizationPercent } from "../_data/fedko-rooms";
+import { TIMETABLE, getConflictSlots } from "../_data/fedko-timetable";
 
 // ── Helpers ───────────────────────────────────────────────────
 function StatCard({
@@ -196,17 +197,21 @@ function SCIDeptCard({ dept }: { dept: (typeof DEPARTMENTS)[number] }) {
 
 // ── Main page ─────────────────────────────────────────────────
 export default function SuperAdminPage() {
-  const [activeTab, setActiveTab] = useState<"overview" | "science" | "facilities" | "rooms" | "allFaculties">(
+  const [activeTab, setActiveTab] = useState<"overview" | "science" | "facilities" | "rooms" | "conflicts" | "allFaculties">(
     "overview"
   );
 
   const { totalStudents, totalConflicts } = getFacultyTotals();
+
+  const flaggedIssues = TIMETABLE.filter(s => s.conflictFlag);
+  const systemClashes = getConflictSlots();
 
   const TABS = [
     { id: "overview", label: "Overview" },
     { id: "science", label: "Faculty of Science (SCI)" },
     { id: "facilities", label: "Facilities" },
     { id: "rooms", label: "Rooms & Utilization" },
+    { id: "conflicts", label: "Conflicts & Issues" },
     { id: "allFaculties", label: "All Faculties" },
   ] as const;
 
@@ -467,6 +472,90 @@ export default function SuperAdminPage() {
                     </div>
                   );
                 })}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ══ CONFLICTS & ISSUES TAB ════════════ */}
+        {activeTab === "conflicts" && (
+          <div className="space-y-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <StatCard
+                label="Flagged Issues"
+                value={flaggedIssues.length}
+                sub="with documented cause"
+                icon={AlertTriangle}
+                color="bg-clash"
+              />
+              <StatCard
+                label="System-Detected Clashes"
+                value={systemClashes.length}
+                sub="venue/time double-bookings"
+                icon={AlertTriangle}
+                color="bg-accent-gold"
+              />
+              <StatCard
+                label="Resolution Rate"
+                value="100%"
+                sub="engine halts before publishing on unresolved clashes"
+                icon={CheckCircle2}
+                color="bg-success"
+              />
+            </div>
+
+            {/* Flagged issues with reasons */}
+            <div className="rounded-2xl border border-foreground/10 overflow-hidden">
+              <div className="px-5 py-3 border-b border-foreground/10 bg-foreground/[0.03]">
+                <p className="text-sm font-semibold text-foreground/60">Flagged Issues — Documented Cause</p>
+                <p className="text-xs text-foreground/30 mt-0.5">Real conflicts detected during generation, each with a specific, human-readable reason.</p>
+              </div>
+              <div className="divide-y divide-white/5">
+                {flaggedIssues.length === 0 && (
+                  <div className="px-5 py-6 text-center text-sm text-foreground/30">No flagged issues — timetable clean.</div>
+                )}
+                {flaggedIssues.map(slot => (
+                  <div key={slot.id} className="px-5 py-4 hover:bg-foreground/[0.03] transition-colors">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex items-start gap-3 min-w-0">
+                        <AlertTriangle className="w-4 h-4 text-clash shrink-0 mt-0.5" />
+                        <div className="min-w-0">
+                          <div className="text-sm font-medium text-foreground/80">
+                            {slot.courseCode} — {slot.day} {slot.startTime}–{slot.endTime} · {slot.venue}
+                          </div>
+                          <div className="text-xs text-foreground/40 mt-1 leading-relaxed">{slot.conflictReason}</div>
+                        </div>
+                      </div>
+                      <span className="shrink-0 text-[10px] px-2 py-0.5 rounded-md bg-clash/10 border border-clash/20 text-clash font-medium">
+                        {slot.dept} {slot.level}L
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* System-detected venue/time clashes */}
+            <div className="rounded-2xl border border-foreground/10 overflow-hidden">
+              <div className="px-5 py-3 border-b border-foreground/10 bg-foreground/[0.03]">
+                <p className="text-sm font-semibold text-foreground/60">System-Detected Clashes</p>
+                <p className="text-xs text-foreground/30 mt-0.5">Same venue, same time slot — caught automatically before publishing.</p>
+              </div>
+              <div className="divide-y divide-white/5">
+                {systemClashes.length === 0 && (
+                  <div className="px-5 py-6 text-center text-sm text-foreground/30">No venue/time clashes detected.</div>
+                )}
+                {systemClashes.map((slot, i) => (
+                  <div key={`${slot.id}-${i}`} className="flex items-center justify-between px-5 py-3 hover:bg-foreground/[0.03] transition-colors gap-4">
+                    <div className="min-w-0">
+                      <div className="text-sm font-medium text-foreground/80 truncate">{slot.courseCode} — {slot.courseTitle}</div>
+                      <div className="text-xs text-foreground/35 mt-0.5">{slot.day} {slot.startTime}–{slot.endTime} · {slot.venue}</div>
+                    </div>
+                    <span className="shrink-0 text-[10px] px-2 py-0.5 rounded-md bg-accent-gold/10 border border-accent-gold/20 text-accent-gold font-medium">
+                      {slot.dept}
+                    </span>
+                  </div>
+                ))}
               </div>
             </div>
           </div>

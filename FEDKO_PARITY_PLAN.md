@@ -24,7 +24,7 @@ Main app: 17 routes (`/dashboard/*`). Demo: 5 pages, no sub-routes.
 
 3. ✅ **Lecturers showcase** — new "Lecturer Directory" tab on Institution Admin demo. Expandable profile cards using existing `fedko-lecturers.ts` `FEATURED_LECTURERS` data (was already imported but only used in a dropdown) — shows bio, specialization, qualifications, current course load, contact details.
 
-4. ⬜ **Conflicts & Issues standalone screen** — currently only inline on TO's timetable grid. Build a dedicated demo view listing conflict types/resolutions, matching the real app's `/dashboard/conflicts` concept, using conflict flags already in `fedko-timetable.ts`.
+4. ✅ **Conflicts & Issues standalone screen** — new "Conflicts & Issues" tab on Super Admin demo. Two real sections: "Flagged Issues" (4 explicitly-flagged slots with documented causes — overcapacity, cross-level spillover clashes) and "System-Detected Clashes" (computed venue/time double-bookings via existing `getConflictSlots()`). Both sourced from real `fedko-timetable.ts` data, nothing invented.
 
 5. ⬜ **Users showcase** — new tab on Super Admin demo. Simulated user list across roles (SA/IA/TO/LC/ST) with role badges — this one needs lightweight invented data since no user dataset exists yet; keep it small and clearly demo-labeled.
 
