@@ -13,6 +13,7 @@ import {
 import { DemoLayout } from "../_components/DemoLayout";
 import { DEPARTMENTS, LECTURE_FACILITIES } from "../_data/fedko-faculties";
 import { FEATURED_LECTURERS } from "../_data/fedko-lecturers";
+import { ALL_DEPT_COURSES, getTotalCreditUnits, type Course } from "../_data/fedko-courses";
 
 // ─────────────────────────────────────────────
 // Types
@@ -545,7 +546,7 @@ function AddRemoveModal({
 // Main page
 // ─────────────────────────────────────────────
 export default function InstitutionAdminPage() {
-  const [activeTab, setActiveTab] = useState<"overrides" | "manage" | "summary" | "control" | "system">("overrides");
+  const [activeTab, setActiveTab] = useState<"overrides" | "manage" | "summary" | "courses" | "control" | "system">("overrides");
   const [selectedOverride, setSelectedOverride] = useState<Override | null>(null);
   const [addRemoveModal, setAddRemoveModal] = useState<{
     type: "faculty" | "department" | "admin" | "lecturer";
@@ -553,6 +554,12 @@ export default function InstitutionAdminPage() {
   } | null>(null);
 
   const activeOverrides = OVERRIDES.filter(o => o.active);
+
+  // Course Catalogue filters
+  const courseDepts = Object.keys(ALL_DEPT_COURSES);
+  const [courseDept, setCourseDept] = useState<string>(courseDepts[0] ?? "CHM");
+  const [courseLevel, setCourseLevel] = useState<100 | 200 | 300 | 400>(100);
+  const [courseSemester, setCourseSemester] = useState<1 | 2>(1);
 
   // Pause / Resume timetable
   const [timetableStatus, setTimetableStatus] = useState<"active" | "paused" | "suspended">("active");
@@ -573,6 +580,7 @@ export default function InstitutionAdminPage() {
     { id: "overrides", label: "Override Controls", icon: ShieldAlert },
     { id: "manage", label: "Add / Remove", icon: Settings },
     { id: "summary", label: "Faculty Summary", icon: BarChart3 },
+    { id: "courses", label: "Course Catalogue", icon: BookMarked },
     { id: "control", label: "Timetable Control", icon: Pause },
     { id: "system", label: "System Powers", icon: Crown },
   ] as const;
@@ -874,6 +882,92 @@ export default function InstitutionAdminPage() {
                 })}
               </div>
             </div>
+          </div>
+        )}
+
+
+        {/* ══ COURSE CATALOGUE TAB ═══════════════════ */}
+        {activeTab === "courses" && (
+          <div className="space-y-6">
+            <p className="text-sm text-foreground/40">
+              CCMAS-aligned course catalogue, by department, level, and semester. Real curriculum data, not placeholders.
+            </p>
+
+            {/* Filters */}
+            <div className="flex flex-wrap gap-3">
+              <select
+                value={courseDept}
+                onChange={e => setCourseDept(e.target.value)}
+                className="px-3 py-2 rounded-xl border border-foreground/10 bg-foreground/[0.03] text-sm text-foreground/80"
+              >
+                {courseDepts.map(d => (
+                  <option key={d} value={d}>{d}</option>
+                ))}
+              </select>
+              <select
+                value={courseLevel}
+                onChange={e => setCourseLevel(Number(e.target.value) as 100 | 200 | 300 | 400)}
+                className="px-3 py-2 rounded-xl border border-foreground/10 bg-foreground/[0.03] text-sm text-foreground/80"
+              >
+                {[100, 200, 300, 400].map(l => (
+                  <option key={l} value={l}>{l} Level</option>
+                ))}
+              </select>
+              <select
+                value={courseSemester}
+                onChange={e => setCourseSemester(Number(e.target.value) as 1 | 2)}
+                className="px-3 py-2 rounded-xl border border-foreground/10 bg-foreground/[0.03] text-sm text-foreground/80"
+              >
+                <option value={1}>Semester 1</option>
+                <option value={2}>Semester 2</option>
+              </select>
+            </div>
+
+            {(() => {
+              const courses: Course[] = (ALL_DEPT_COURSES[courseDept] ?? []).filter(
+                c => c.level === courseLevel && c.semester === courseSemester
+              );
+              const totalCU = getTotalCreditUnits(courses);
+              return (
+                <div className="rounded-2xl border border-foreground/10 overflow-hidden">
+                  <div className="px-5 py-3 border-b border-foreground/10 bg-foreground/[0.03] flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-semibold text-foreground/60">
+                        {courseDept} · {courseLevel}L · Semester {courseSemester}
+                      </p>
+                      <p className="text-xs text-foreground/30 mt-0.5">{courses.length} courses</p>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-lg font-bold text-foreground">{totalCU}</div>
+                      <div className="text-xs text-foreground/30">credit units</div>
+                    </div>
+                  </div>
+                  <div className="divide-y divide-white/5">
+                    {courses.length === 0 && (
+                      <div className="px-5 py-6 text-center text-sm text-foreground/30">
+                        No courses found for this combination.
+                      </div>
+                    )}
+                    {courses.map(c => (
+                      <div key={c.code} className="flex items-center justify-between px-5 py-3 hover:bg-foreground/[0.03] transition-colors gap-4">
+                        <div className="min-w-0">
+                          <div className="text-sm font-medium text-foreground/80">{c.code} — {c.title}</div>
+                          <div className="text-xs text-foreground/35 mt-0.5">{c.hoursPerWeek} hrs/week · {c.creditUnit} CU</div>
+                        </div>
+                        <span className={`shrink-0 text-[10px] px-2 py-0.5 rounded-md border font-medium ${
+                          c.type === "core" ? "bg-primary/10 border-primary/20 text-primary" :
+                          c.type === "elective" ? "bg-accent-gold/10 border-accent-gold/20 text-accent-gold" :
+                          c.type === "general" ? "bg-success/10 border-success/20 text-success" :
+                          "bg-secondary/10 border-secondary/20 text-secondary"
+                        }`}>
+                          {c.type}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
           </div>
         )}
 

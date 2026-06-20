@@ -20,7 +20,7 @@ Main app: 17 routes (`/dashboard/*`). Demo: 5 pages, no sub-routes.
 
 1. ✅ **Rooms showcase** — new "Rooms & Utilization" tab on Super Admin demo. Derived `fedko-rooms.ts` from real venue names + capacities already used in `fedko-timetable.ts`; weeklySlots computed from actual scheduled-use counts in the data, not invented. Distinct from existing "Facilities" tab (which lists the faculty's room pool/types) — this one shows utilization load per room.
 
-2. ⬜ **Courses showcase** — new tab on Institution Admin or Timetable Officer demo, pulling from existing `fedko-courses.ts` (already has 621 lines of real CCMAS-aligned course data). Filterable table by dept/level/semester.
+2. ✅ **Courses showcase** — new "Course Catalogue" tab on Institution Admin demo. Uses existing `fedko-courses.ts` (621 lines, real CCMAS-aligned data) via `ALL_DEPT_COURSES`. Filterable by department/level/semester, shows credit units + course type badges.
 
 3. ⬜ **Lecturers showcase** — new tab using existing `fedko-lecturers.ts` (284 lines). Table view: name, dept, courses assigned, weekly load.
 
