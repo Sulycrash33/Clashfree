@@ -13,10 +13,14 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { DataTable } from '@/components/data-table'
 import { PageHeader } from '@/components/page-header'
 import { ColumnDef } from '@tanstack/react-table'
-import { Building2, Users, MoreHorizontal, Pencil, Trash2, Loader2 } from 'lucide-react'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { useToast } from '@/hooks/use-toast'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Building2, Loader2 } from 'lucide-react'
+import { Suspense } from 'react'
+import { Loader2 as SuspenseLoader } from 'lucide-react'
+import { useCrud } from '@/hooks/use-crud'
+import { StatusBadge } from '@/components/status-badge'
+import { createActionsColumn } from '@/components/actions-column'
+import { AccessDenied } from '@/components/access-denied'
+import { LoadingSpinner } from '@/components/loading-spinner'
 
 interface Department {
   id: string
@@ -41,36 +45,52 @@ function DepartmentsPageInner() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const urlFacultyId = searchParams.get('facultyId')
-  const { toast } = useToast()
-  const [departments, setDepartments] = useState<Department[]>([])
-  const [faculties, setFaculties] = useState<Faculty[]>([])
-  const [filterFacultyId, setFilterFacultyId] = useState<string>(urlFacultyId || 'all')
-  const [loading, setLoading] = useState(true)
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [editingDepartment, setEditingDepartment] = useState<Department | null>(null)
+
   const [formData, setFormData] = useState({
     name: '',
     code: '',
     hodName: '',
     facultyId: '',
   })
-  const [saving, setSaving] = useState(false)
 
-  const fetchData = useCallback(async () => {
-    setLoading(true)
-    try {
-      const [deptRes, facRes] = await Promise.all([
-        fetch('/api/departments'),
-        fetch('/api/faculties'),
-      ])
-      if (deptRes.ok) setDepartments(await deptRes.json())
-      if (facRes.ok) setFaculties(await facRes.json())
-    } catch (error) {
-      toast({ title: 'Error', description: 'Failed to fetch data', variant: 'destructive' })
-    } finally {
-      setLoading(false)
+  const handleDialogOpen = useCallback((item: Department | null) => {
+    if (item) {
+      setFormData({
+        name: item.name,
+        code: item.code,
+        hodName: item.hodName || '',
+        facultyId: item.facultyId,
+      })
+    } else {
+      setFormData({ name: '', code: '', hodName: '', facultyId: '' })
     }
-  }, [toast])
+  }, [])
+
+  const {
+    data,
+    loading,
+    saving,
+    dialogOpen,
+    setDialogOpen,
+    editingItem,
+    fetchData,
+    handleSave,
+    handleDelete,
+    openCreateDialog,
+    openEditDialog,
+  } = useCrud<Department>({
+    endpoints: [
+      { url: '/api/departments', key: 'departments' },
+      { url: '/api/faculties', key: 'faculties' },
+    ],
+    resourceName: 'Department',
+    apiBasePath: '/api/departments',
+    onDialogOpen: handleDialogOpen,
+  })
+
+  const departments = (data.departments || []) as Department[]
+  const faculties = (data.faculties || []) as unknown as Faculty[]
+  const [filterFacultyId, setFilterFacultyId] = useState<string>(urlFacultyId || 'all')
 
   useEffect(() => {
     if (!session?.user) return
@@ -80,67 +100,6 @@ function DepartmentsPageInner() {
     }
     fetchData()
   }, [session, router, fetchData])
-
-  const handleOpenDialog = (department?: Department) => {
-    if (department) {
-      setEditingDepartment(department)
-      setFormData({
-        name: department.name,
-        code: department.code,
-        hodName: department.hodName || '',
-        facultyId: department.facultyId,
-      })
-    } else {
-      setEditingDepartment(null)
-      setFormData({
-        name: '',
-        code: '',
-        hodName: '',
-        facultyId: faculties[0]?.id || '',
-      })
-    }
-    setDialogOpen(true)
-  }
-
-  const handleSave = async () => {
-    setSaving(true)
-    try {
-      const url = editingDepartment ? `/api/departments/${editingDepartment.id}` : '/api/departments'
-      const method = editingDepartment ? 'PUT' : 'POST'
-
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      })
-
-      if (res.ok) {
-        toast({ title: 'Success', description: `Department ${editingDepartment ? 'updated' : 'created'} successfully` })
-        setDialogOpen(false)
-        fetchData()
-      } else {
-        const error = await res.json()
-        toast({ title: 'Error', description: error.error || 'Failed to save', variant: 'destructive' })
-      }
-    } catch (error) {
-      toast({ title: 'Error', description: 'An error occurred', variant: 'destructive' })
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this department?')) return
-    try {
-      const res = await fetch(`/api/departments/${id}`, { method: 'DELETE' })
-      if (res.ok) {
-        toast({ title: 'Success', description: 'Department deleted' })
-        fetchData()
-      }
-    } catch (error) {
-      toast({ title: 'Error', description: 'Failed to delete', variant: 'destructive' })
-    }
-  }
 
   const columns: ColumnDef<Department>[] = [
     {
@@ -190,40 +149,16 @@ function DepartmentsPageInner() {
     {
       accessorKey: 'isActive',
       header: 'Status',
-      cell: ({ row }) => (
-        <Badge className={row.getValue('isActive') ? 'bg-success/10 text-success' : 'bg-clash/10 text-clash'}>
-          {row.getValue('isActive') ? 'Active' : 'Inactive'}
-        </Badge>
-      ),
+      cell: ({ row }) => <StatusBadge isActive={row.getValue('isActive')} />,
     },
-    {
-      id: 'actions',
-      cell: ({ row }) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground">
-              <MoreHorizontal className="w-4 h-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-muted border-foreground/10">
-            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted-foreground">
-              <Pencil className="w-4 h-4 mr-2" /> Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-clash">
-              <Trash2 className="w-4 h-4 mr-2" /> Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ),
-    },
+    createActionsColumn<Department>({
+      onEdit: openEditDialog,
+      onDelete: (item) => handleDelete(item.id),
+    }),
   ]
 
   if (!['SA', 'IA', 'TO'].includes(session?.user?.role || '')) {
-    return (
-      <Alert className="bg-clash/10 border-clash/20">
-        <AlertDescription className="text-clash">Access denied.</AlertDescription>
-      </Alert>
-    )
+    return <AccessDenied />
   }
 
   return (
@@ -232,7 +167,7 @@ function DepartmentsPageInner() {
         title="Departments"
         description="Manage departments within faculties"
         actionLabel="Add Department"
-        onAction={() => handleOpenDialog()}
+        onAction={openCreateDialog}
         onRefresh={fetchData}
         loading={loading}
       />
@@ -240,9 +175,7 @@ function DepartmentsPageInner() {
       <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
         <CardContent className="pt-6">
           {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-success" />
-            </div>
+            <LoadingSpinner className="text-success" />
           ) : (
             <>
               <div className="flex items-center gap-3 mb-4">
@@ -278,9 +211,9 @@ function DepartmentsPageInner() {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="bg-muted border-foreground/10 text-foreground">
           <DialogHeader>
-            <DialogTitle>{editingDepartment ? 'Edit Department' : 'Add New Department'}</DialogTitle>
+            <DialogTitle>{editingItem ? 'Edit Department' : 'Add New Department'}</DialogTitle>
             <DialogDescription className="text-muted-foreground">
-              {editingDepartment ? 'Update department details' : 'Create a new department'}
+              {editingItem ? 'Update department details' : 'Create a new department'}
             </DialogDescription>
           </DialogHeader>
 
@@ -334,9 +267,9 @@ function DepartmentsPageInner() {
             <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-foreground/10 text-muted-foreground">
               Cancel
             </Button>
-            <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-success to-success">
+            <Button onClick={() => handleSave(formData, editingItem?.id)} disabled={saving} className="bg-gradient-to-r from-success to-success">
               {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-              {editingDepartment ? 'Update' : 'Create'}
+              {editingItem ? 'Update' : 'Create'}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -344,9 +277,6 @@ function DepartmentsPageInner() {
     </div>
   )
 }
-
-import { Suspense } from 'react'
-import { Loader2 as SuspenseLoader } from 'lucide-react'
 
 export default function DepartmentsPage() {
   return (

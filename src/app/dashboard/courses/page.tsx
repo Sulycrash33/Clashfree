@@ -13,11 +13,13 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { DataTable } from '@/components/data-table'
 import { PageHeader } from '@/components/page-header'
 import { ColumnDef } from '@tanstack/react-table'
-import { BookOpen, MoreHorizontal, Pencil, Trash2, Loader2, Users } from 'lucide-react'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { useToast } from '@/hooks/use-toast'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import { BookOpen, Loader2, Users } from 'lucide-react'
 import { Switch } from '@/components/ui/switch'
+import { useCrud } from '@/hooks/use-crud'
+import { StatusBadge } from '@/components/status-badge'
+import { createActionsColumn } from '@/components/actions-column'
+import { AccessDenied } from '@/components/access-denied'
+import { LoadingSpinner } from '@/components/loading-spinner'
 
 interface Course {
   id: string
@@ -44,12 +46,7 @@ interface Department {
 export default function CoursesPage() {
   const { data: session } = useSession()
   const router = useRouter()
-  const { toast } = useToast()
-  const [courses, setCourses] = useState<Course[]>([])
-  const [departments, setDepartments] = useState<Department[]>([])
-  const [loading, setLoading] = useState(true)
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [editingCourse, setEditingCourse] = useState<Course | null>(null)
+
   const [formData, setFormData] = useState({
     code: '',
     name: '',
@@ -59,23 +56,61 @@ export default function CoursesPage() {
     departmentId: '',
     isShared: false,
   })
-  const [saving, setSaving] = useState(false)
 
-  const fetchData = useCallback(async () => {
-    setLoading(true)
-    try {
-      const [courseRes, deptRes] = await Promise.all([
-        fetch('/api/courses'),
-        fetch('/api/departments'),
-      ])
-      if (courseRes.ok) setCourses(await courseRes.json())
-      if (deptRes.ok) setDepartments(await deptRes.json())
-    } catch (error) {
-      toast({ title: 'Error', description: 'Failed to fetch data', variant: 'destructive' })
-    } finally {
-      setLoading(false)
+  const handleDialogOpen = useCallback((item: Course | null) => {
+    if (item) {
+      setFormData({
+        code: item.code,
+        name: item.name,
+        creditUnits: item.creditUnits.toString(),
+        level: item.level.toString(),
+        semester: item.semester.toString(),
+        departmentId: item.departmentId,
+        isShared: item.isShared,
+      })
+    } else {
+      setFormData({
+        code: '',
+        name: '',
+        creditUnits: '2',
+        level: '100',
+        semester: '1',
+        departmentId: '',
+        isShared: false,
+      })
     }
-  }, [toast])
+  }, [])
+
+  const {
+    data,
+    loading,
+    saving,
+    dialogOpen,
+    setDialogOpen,
+    editingItem,
+    fetchData,
+    handleSave,
+    handleDelete,
+    openCreateDialog,
+    openEditDialog,
+  } = useCrud<Course>({
+    endpoints: [
+      { url: '/api/courses', key: 'courses' },
+      { url: '/api/departments', key: 'departments' },
+    ],
+    resourceName: 'Course',
+    apiBasePath: '/api/courses',
+    onDialogOpen: handleDialogOpen,
+    transformPayload: (fd) => ({
+      ...fd,
+      creditUnits: parseInt(fd.creditUnits as string),
+      level: parseInt(fd.level as string),
+      semester: parseInt(fd.semester as string),
+    }),
+  })
+
+  const courses = (data.courses || []) as Course[]
+  const departments = (data.departments || []) as unknown as Department[]
 
   useEffect(() => {
     if (!session?.user) return
@@ -85,78 +120,6 @@ export default function CoursesPage() {
     }
     fetchData()
   }, [session, router, fetchData])
-
-  const handleOpenDialog = (course?: Course) => {
-    if (course) {
-      setEditingCourse(course)
-      setFormData({
-        code: course.code,
-        name: course.name,
-        creditUnits: course.creditUnits.toString(),
-        level: course.level.toString(),
-        semester: course.semester.toString(),
-        departmentId: course.departmentId,
-        isShared: course.isShared,
-      })
-    } else {
-      setEditingCourse(null)
-      setFormData({
-        code: '',
-        name: '',
-        creditUnits: '2',
-        level: '100',
-        semester: '1',
-        departmentId: departments[0]?.id || '',
-        isShared: false,
-      })
-    }
-    setDialogOpen(true)
-  }
-
-  const handleSave = async () => {
-    setSaving(true)
-    try {
-      const url = editingCourse ? `/api/courses/${editingCourse.id}` : '/api/courses'
-      const method = editingCourse ? 'PUT' : 'POST'
-
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          creditUnits: parseInt(formData.creditUnits),
-          level: parseInt(formData.level),
-          semester: parseInt(formData.semester),
-        }),
-      })
-
-      if (res.ok) {
-        toast({ title: 'Success', description: `Course ${editingCourse ? 'updated' : 'created'} successfully` })
-        setDialogOpen(false)
-        fetchData()
-      } else {
-        const error = await res.json()
-        toast({ title: 'Error', description: error.error || 'Failed to save', variant: 'destructive' })
-      }
-    } catch (error) {
-      toast({ title: 'Error', description: 'An error occurred', variant: 'destructive' })
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this course?')) return
-    try {
-      const res = await fetch(`/api/courses/${id}`, { method: 'DELETE' })
-      if (res.ok) {
-        toast({ title: 'Success', description: 'Course deleted' })
-        fetchData()
-      }
-    } catch (error) {
-      toast({ title: 'Error', description: 'Failed to delete', variant: 'destructive' })
-    }
-  }
 
   const levels = [100, 200, 300, 400, 500, 600]
 
@@ -218,40 +181,16 @@ export default function CoursesPage() {
     {
       accessorKey: 'isActive',
       header: 'Status',
-      cell: ({ row }) => (
-        <Badge className={row.getValue('isActive') ? 'bg-success/10 text-success' : 'bg-clash/10 text-clash'}>
-          {row.getValue('isActive') ? 'Active' : 'Inactive'}
-        </Badge>
-      ),
+      cell: ({ row }) => <StatusBadge isActive={row.getValue('isActive')} />,
     },
-    {
-      id: 'actions',
-      cell: ({ row }) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground">
-              <MoreHorizontal className="w-4 h-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-muted border-foreground/10">
-            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted-foreground">
-              <Pencil className="w-4 h-4 mr-2" /> Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-clash">
-              <Trash2 className="w-4 h-4 mr-2" /> Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ),
-    },
+    createActionsColumn<Course>({
+      onEdit: openEditDialog,
+      onDelete: (item) => handleDelete(item.id),
+    }),
   ]
 
   if (!['SA', 'IA', 'TO', 'LC'].includes(session?.user?.role || '')) {
-    return (
-      <Alert className="bg-clash/10 border-clash/20">
-        <AlertDescription className="text-clash">Access denied.</AlertDescription>
-      </Alert>
-    )
+    return <AccessDenied />
   }
 
   return (
@@ -260,7 +199,7 @@ export default function CoursesPage() {
         title="Courses"
         description="Manage courses and curriculum"
         actionLabel="Add Course"
-        onAction={() => handleOpenDialog()}
+        onAction={openCreateDialog}
         onRefresh={fetchData}
         loading={loading}
       />
@@ -268,9 +207,7 @@ export default function CoursesPage() {
       <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
         <CardContent className="pt-6">
           {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-accent-gold" />
-            </div>
+            <LoadingSpinner className="text-accent-gold" />
           ) : (
             <DataTable columns={columns} data={courses} searchKey="name" searchPlaceholder="Search courses..." />
           )}
@@ -280,9 +217,9 @@ export default function CoursesPage() {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="bg-muted border-foreground/10 text-foreground max-w-xl">
           <DialogHeader>
-            <DialogTitle>{editingCourse ? 'Edit Course' : 'Add New Course'}</DialogTitle>
+            <DialogTitle>{editingItem ? 'Edit Course' : 'Add New Course'}</DialogTitle>
             <DialogDescription className="text-muted-foreground">
-              {editingCourse ? 'Update course details' : 'Create a new course'}
+              {editingItem ? 'Update course details' : 'Create a new course'}
             </DialogDescription>
           </DialogHeader>
 
@@ -378,9 +315,9 @@ export default function CoursesPage() {
             <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-foreground/10 text-muted-foreground">
               Cancel
             </Button>
-            <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-accent-gold to-accent-gold">
+            <Button onClick={() => handleSave(formData as unknown as Record<string, unknown>, editingItem?.id)} disabled={saving} className="bg-gradient-to-r from-accent-gold to-accent-gold">
               {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-              {editingCourse ? 'Update' : 'Create'}
+              {editingItem ? 'Update' : 'Create'}
             </Button>
           </DialogFooter>
         </DialogContent>

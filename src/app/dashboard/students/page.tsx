@@ -16,7 +16,9 @@ import { ColumnDef } from '@tanstack/react-table'
 import { GraduationCap, MoreHorizontal, Pencil, Trash2, Loader2, Upload, Download } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { useToast } from '@/hooks/use-toast'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import { StatusBadge } from '@/components/status-badge'
+import { AccessDenied } from '@/components/access-denied'
+import { LoadingSpinner } from '@/components/loading-spinner'
 import { BulkUpload } from '@/components/bulk-upload'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription } from '@/components/ui/sheet'
 import { BookOpen, Eye } from 'lucide-react'
@@ -276,9 +278,7 @@ export default function StudentsPage() {
           {row.original.isSpillover && (
             <Badge className="bg-accent-gold/10 text-accent-gold">Spillover</Badge>
           )}
-          <Badge className={row.getValue('isActive') ? 'bg-success/10 text-success' : 'bg-clash/10 text-clash'}>
-            {row.getValue('isActive') ? 'Active' : 'Inactive'}
-          </Badge>
+          <StatusBadge isActive={row.original.isActive} />
         </div>
       ),
     },
@@ -317,11 +317,7 @@ export default function StudentsPage() {
   ]
 
   if (!['SA', 'IA', 'TO', 'LC'].includes(session?.user?.role || '')) {
-    return (
-      <Alert className="bg-clash/10 border-clash/20">
-        <AlertDescription className="text-clash">Access denied.</AlertDescription>
-      </Alert>
-    )
+    return <AccessDenied />
   }
 
   return (
@@ -345,9 +341,7 @@ export default function StudentsPage() {
       <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
         <CardContent className="pt-6">
           {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-secondary" />
-            </div>
+            <LoadingSpinner className="text-secondary" />
           ) : (
             <DataTable columns={columns} data={students} searchKey="name" searchPlaceholder="Search students..." />
           )}

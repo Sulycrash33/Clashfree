@@ -13,10 +13,12 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { DataTable } from '@/components/data-table'
 import { PageHeader } from '@/components/page-header'
 import { ColumnDef } from '@tanstack/react-table'
-import { Users, MoreHorizontal, Pencil, Trash2, Loader2, Mail, Phone } from 'lucide-react'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { useToast } from '@/hooks/use-toast'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Users, Loader2, Mail, Phone } from 'lucide-react'
+import { useCrud } from '@/hooks/use-crud'
+import { StatusBadge } from '@/components/status-badge'
+import { createActionsColumn } from '@/components/actions-column'
+import { AccessDenied } from '@/components/access-denied'
+import { LoadingSpinner } from '@/components/loading-spinner'
 
 interface Lecturer {
   id: string
@@ -52,12 +54,7 @@ const academicRanks = [
 export default function LecturersPage() {
   const { data: session } = useSession()
   const router = useRouter()
-  const { toast } = useToast()
-  const [lecturers, setLecturers] = useState<Lecturer[]>([])
-  const [departments, setDepartments] = useState<Department[]>([])
-  const [loading, setLoading] = useState(true)
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [editingLecturer, setEditingLecturer] = useState<Lecturer | null>(null)
+
   const [formData, setFormData] = useState({
     staffId: '',
     name: '',
@@ -67,23 +64,55 @@ export default function LecturersPage() {
     specialization: '',
     departmentId: '',
   })
-  const [saving, setSaving] = useState(false)
 
-  const fetchData = useCallback(async () => {
-    setLoading(true)
-    try {
-      const [lectRes, deptRes] = await Promise.all([
-        fetch('/api/lecturers'),
-        fetch('/api/departments'),
-      ])
-      if (lectRes.ok) setLecturers(await lectRes.json())
-      if (deptRes.ok) setDepartments(await deptRes.json())
-    } catch (error) {
-      toast({ title: 'Error', description: 'Failed to fetch data', variant: 'destructive' })
-    } finally {
-      setLoading(false)
+  const handleDialogOpen = useCallback((item: Lecturer | null) => {
+    if (item) {
+      setFormData({
+        staffId: item.staffId,
+        name: item.name,
+        email: item.email,
+        phone: item.phone || '',
+        rank: item.rank || '',
+        specialization: item.specialization || '',
+        departmentId: item.departmentId,
+      })
+    } else {
+      setFormData({
+        staffId: '',
+        name: '',
+        email: '',
+        phone: '',
+        rank: '',
+        specialization: '',
+        departmentId: '',
+      })
     }
-  }, [toast])
+  }, [])
+
+  const {
+    data,
+    loading,
+    saving,
+    dialogOpen,
+    setDialogOpen,
+    editingItem,
+    fetchData,
+    handleSave,
+    handleDelete,
+    openCreateDialog,
+    openEditDialog,
+  } = useCrud<Lecturer>({
+    endpoints: [
+      { url: '/api/lecturers', key: 'lecturers' },
+      { url: '/api/departments', key: 'departments' },
+    ],
+    resourceName: 'Lecturer',
+    apiBasePath: '/api/lecturers',
+    onDialogOpen: handleDialogOpen,
+  })
+
+  const lecturers = (data.lecturers || []) as Lecturer[]
+  const departments = (data.departments || []) as unknown as Department[]
 
   useEffect(() => {
     if (!session?.user) return
@@ -93,73 +122,6 @@ export default function LecturersPage() {
     }
     fetchData()
   }, [session, router, fetchData])
-
-  const handleOpenDialog = (lecturer?: Lecturer) => {
-    if (lecturer) {
-      setEditingLecturer(lecturer)
-      setFormData({
-        staffId: lecturer.staffId,
-        name: lecturer.name,
-        email: lecturer.email,
-        phone: lecturer.phone || '',
-        rank: lecturer.rank || '',
-        specialization: lecturer.specialization || '',
-        departmentId: lecturer.departmentId,
-      })
-    } else {
-      setEditingLecturer(null)
-      setFormData({
-        staffId: '',
-        name: '',
-        email: '',
-        phone: '',
-        rank: '',
-        specialization: '',
-        departmentId: departments[0]?.id || '',
-      })
-    }
-    setDialogOpen(true)
-  }
-
-  const handleSave = async () => {
-    setSaving(true)
-    try {
-      const url = editingLecturer ? `/api/lecturers/${editingLecturer.id}` : '/api/lecturers'
-      const method = editingLecturer ? 'PUT' : 'POST'
-
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      })
-
-      if (res.ok) {
-        toast({ title: 'Success', description: `Lecturer ${editingLecturer ? 'updated' : 'created'} successfully` })
-        setDialogOpen(false)
-        fetchData()
-      } else {
-        const error = await res.json()
-        toast({ title: 'Error', description: error.error || 'Failed to save', variant: 'destructive' })
-      }
-    } catch (error) {
-      toast({ title: 'Error', description: 'An error occurred', variant: 'destructive' })
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this lecturer?')) return
-    try {
-      const res = await fetch(`/api/lecturers/${id}`, { method: 'DELETE' })
-      if (res.ok) {
-        toast({ title: 'Success', description: 'Lecturer deleted' })
-        fetchData()
-      }
-    } catch (error) {
-      toast({ title: 'Error', description: 'Failed to delete', variant: 'destructive' })
-    }
-  }
 
   const columns: ColumnDef<Lecturer>[] = [
     {
@@ -225,40 +187,16 @@ export default function LecturersPage() {
     {
       accessorKey: 'isActive',
       header: 'Status',
-      cell: ({ row }) => (
-        <Badge className={row.getValue('isActive') ? 'bg-success/10 text-success' : 'bg-clash/10 text-clash'}>
-          {row.getValue('isActive') ? 'Active' : 'Inactive'}
-        </Badge>
-      ),
+      cell: ({ row }) => <StatusBadge isActive={row.getValue('isActive')} />,
     },
-    {
-      id: 'actions',
-      cell: ({ row }) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground">
-              <MoreHorizontal className="w-4 h-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-muted border-foreground/10">
-            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted-foreground">
-              <Pencil className="w-4 h-4 mr-2" /> Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-clash">
-              <Trash2 className="w-4 h-4 mr-2" /> Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ),
-    },
+    createActionsColumn<Lecturer>({
+      onEdit: openEditDialog,
+      onDelete: (item) => handleDelete(item.id),
+    }),
   ]
 
   if (!['SA', 'IA', 'TO', 'LC'].includes(session?.user?.role || '')) {
-    return (
-      <Alert className="bg-clash/10 border-clash/20">
-        <AlertDescription className="text-clash">Access denied.</AlertDescription>
-      </Alert>
-    )
+    return <AccessDenied />
   }
 
   return (
@@ -267,7 +205,7 @@ export default function LecturersPage() {
         title="Lecturers"
         description="Manage academic staff and their assignments"
         actionLabel="Add Lecturer"
-        onAction={() => handleOpenDialog()}
+        onAction={openCreateDialog}
         onRefresh={fetchData}
         loading={loading}
       />
@@ -275,9 +213,7 @@ export default function LecturersPage() {
       <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
         <CardContent className="pt-6">
           {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-success" />
-            </div>
+            <LoadingSpinner className="text-success" />
           ) : (
             <DataTable columns={columns} data={lecturers} searchKey="name" searchPlaceholder="Search lecturers..." />
           )}
@@ -287,9 +223,9 @@ export default function LecturersPage() {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="bg-muted border-foreground/10 text-foreground max-w-xl">
           <DialogHeader>
-            <DialogTitle>{editingLecturer ? 'Edit Lecturer' : 'Add New Lecturer'}</DialogTitle>
+            <DialogTitle>{editingItem ? 'Edit Lecturer' : 'Add New Lecturer'}</DialogTitle>
             <DialogDescription className="text-muted-foreground">
-              {editingLecturer ? 'Update lecturer details' : 'Register a new lecturer'}
+              {editingItem ? 'Update lecturer details' : 'Register a new lecturer'}
             </DialogDescription>
           </DialogHeader>
 
@@ -378,9 +314,9 @@ export default function LecturersPage() {
             <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-foreground/10 text-muted-foreground">
               Cancel
             </Button>
-            <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-success to-success">
+            <Button onClick={() => handleSave(formData, editingItem?.id)} disabled={saving} className="bg-gradient-to-r from-success to-success">
               {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-              {editingLecturer ? 'Update' : 'Create'}
+              {editingItem ? 'Update' : 'Create'}
             </Button>
           </DialogFooter>
         </DialogContent>

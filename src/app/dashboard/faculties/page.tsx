@@ -12,10 +12,12 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { DataTable } from '@/components/data-table'
 import { PageHeader } from '@/components/page-header'
 import { ColumnDef } from '@tanstack/react-table'
-import { Building2, Users, MoreHorizontal, Pencil, Trash2, Loader2 } from 'lucide-react'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
-import { useToast } from '@/hooks/use-toast'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Building2, Users, Loader2 } from 'lucide-react'
+import { useCrud } from '@/hooks/use-crud'
+import { StatusBadge } from '@/components/status-badge'
+import { createActionsColumn } from '@/components/actions-column'
+import { AccessDenied } from '@/components/access-denied'
+import { LoadingSpinner } from '@/components/loading-spinner'
 
 interface Faculty {
   id: string
@@ -32,33 +34,47 @@ interface Faculty {
 export default function FacultiesPage() {
   const { data: session } = useSession()
   const router = useRouter()
-  const { toast } = useToast()
-  const [faculties, setFaculties] = useState<Faculty[]>([])
-  const [loading, setLoading] = useState(true)
-  const [dialogOpen, setDialogOpen] = useState(false)
-  const [editingFaculty, setEditingFaculty] = useState<Faculty | null>(null)
+
   const [formData, setFormData] = useState({
     name: '',
     code: '',
     description: '',
     deanName: '',
   })
-  const [saving, setSaving] = useState(false)
 
-  const fetchFaculties = useCallback(async () => {
-    setLoading(true)
-    try {
-      const res = await fetch('/api/faculties')
-      if (res.ok) {
-        const data = await res.json()
-        setFaculties(data)
-      }
-    } catch (error) {
-      toast({ title: 'Error', description: 'Failed to fetch faculties', variant: 'destructive' })
-    } finally {
-      setLoading(false)
+  const handleDialogOpen = useCallback((item: Faculty | null) => {
+    if (item) {
+      setFormData({
+        name: item.name,
+        code: item.code,
+        description: item.description || '',
+        deanName: item.deanName || '',
+      })
+    } else {
+      setFormData({ name: '', code: '', description: '', deanName: '' })
     }
-  }, [toast])
+  }, [])
+
+  const {
+    data,
+    loading,
+    saving,
+    dialogOpen,
+    setDialogOpen,
+    editingItem,
+    fetchData,
+    handleSave,
+    handleDelete,
+    openCreateDialog,
+    openEditDialog,
+  } = useCrud<Faculty>({
+    endpoints: [{ url: '/api/faculties', key: 'faculties' }],
+    resourceName: 'Faculty',
+    apiBasePath: '/api/faculties',
+    onDialogOpen: handleDialogOpen,
+  })
+
+  const faculties = data.faculties || []
 
   useEffect(() => {
     if (!session?.user) return
@@ -66,64 +82,8 @@ export default function FacultiesPage() {
       router.push('/dashboard')
       return
     }
-    fetchFaculties()
-  }, [session, router, fetchFaculties])
-
-  const handleOpenDialog = (faculty?: Faculty) => {
-    if (faculty) {
-      setEditingFaculty(faculty)
-      setFormData({
-        name: faculty.name,
-        code: faculty.code,
-        description: faculty.description || '',
-        deanName: faculty.deanName || '',
-      })
-    } else {
-      setEditingFaculty(null)
-      setFormData({ name: '', code: '', description: '', deanName: '' })
-    }
-    setDialogOpen(true)
-  }
-
-  const handleSave = async () => {
-    setSaving(true)
-    try {
-      const url = editingFaculty ? `/api/faculties/${editingFaculty.id}` : '/api/faculties'
-      const method = editingFaculty ? 'PUT' : 'POST'
-
-      const res = await fetch(url, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      })
-
-      if (res.ok) {
-        toast({ title: 'Success', description: `Faculty ${editingFaculty ? 'updated' : 'created'} successfully` })
-        setDialogOpen(false)
-        fetchFaculties()
-      } else {
-        const error = await res.json()
-        toast({ title: 'Error', description: error.error || 'Failed to save faculty', variant: 'destructive' })
-      }
-    } catch (error) {
-      toast({ title: 'Error', description: 'An error occurred', variant: 'destructive' })
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this faculty?')) return
-    try {
-      const res = await fetch(`/api/faculties/${id}`, { method: 'DELETE' })
-      if (res.ok) {
-        toast({ title: 'Success', description: 'Faculty deleted' })
-        fetchFaculties()
-      }
-    } catch (error) {
-      toast({ title: 'Error', description: 'Failed to delete faculty', variant: 'destructive' })
-    }
-  }
+    fetchData()
+  }, [session, router, fetchData])
 
   const columns: ColumnDef<Faculty>[] = [
     {
@@ -163,42 +123,16 @@ export default function FacultiesPage() {
     {
       accessorKey: 'isActive',
       header: 'Status',
-      cell: ({ row }) => (
-        <Badge className={row.getValue('isActive') ? 'bg-success/10 text-success' : 'bg-clash/10 text-clash'}>
-          {row.getValue('isActive') ? 'Active' : 'Inactive'}
-        </Badge>
-      ),
+      cell: ({ row }) => <StatusBadge isActive={row.getValue('isActive')} />,
     },
-    {
-      id: 'actions',
-      cell: ({ row }) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0 text-muted-foreground">
-              <MoreHorizontal className="w-4 h-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="bg-muted border-foreground/10">
-            <DropdownMenuItem onClick={() => handleOpenDialog(row.original)} className="text-muted-foreground focus:text-foreground">
-              <Pencil className="w-4 h-4 mr-2" />
-              Edit
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleDelete(row.original.id)} className="text-clash">
-              <Trash2 className="w-4 h-4 mr-2" />
-              Delete
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ),
-    },
+    createActionsColumn<Faculty>({
+      onEdit: openEditDialog,
+      onDelete: (item) => handleDelete(item.id),
+    }),
   ]
 
   if (!['SA', 'IA'].includes(session?.user?.role || '')) {
-    return (
-      <Alert className="bg-clash/10 border-clash/20">
-        <AlertDescription className="text-clash">Access denied. Admin role required.</AlertDescription>
-      </Alert>
-    )
+    return <AccessDenied message="Access denied. Admin role required." />
   }
 
   return (
@@ -207,17 +141,15 @@ export default function FacultiesPage() {
         title="Faculties"
         description="Manage faculties within your institution"
         actionLabel="Add Faculty"
-        onAction={() => handleOpenDialog()}
-        onRefresh={fetchFaculties}
+        onAction={openCreateDialog}
+        onRefresh={fetchData}
         loading={loading}
       />
 
       <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
         <CardContent className="pt-6">
           {loading ? (
-            <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-primary" />
-            </div>
+            <LoadingSpinner className="text-primary" />
           ) : (
             <DataTable columns={columns} data={faculties} searchKey="name" searchPlaceholder="Search faculties..." />
           )}
@@ -227,9 +159,9 @@ export default function FacultiesPage() {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="bg-muted border-foreground/10 text-foreground">
           <DialogHeader>
-            <DialogTitle>{editingFaculty ? 'Edit Faculty' : 'Add New Faculty'}</DialogTitle>
+            <DialogTitle>{editingItem ? 'Edit Faculty' : 'Add New Faculty'}</DialogTitle>
             <DialogDescription className="text-muted-foreground">
-              {editingFaculty ? 'Update faculty details' : 'Create a new faculty'}
+              {editingItem ? 'Update faculty details' : 'Create a new faculty'}
             </DialogDescription>
           </DialogHeader>
 
@@ -256,7 +188,7 @@ export default function FacultiesPage() {
               </div>
             </div>
             <div className="space-y-2">
-              <Label className="text-muted-foreground">Dean's Name</Label>
+              <Label className="text-muted-foreground">Dean&apos;s Name</Label>
               <Input
                 value={formData.deanName}
                 onChange={(e) => setFormData({ ...formData, deanName: e.target.value })}
@@ -279,9 +211,9 @@ export default function FacultiesPage() {
             <Button variant="outline" onClick={() => setDialogOpen(false)} className="border-foreground/10 text-muted-foreground">
               Cancel
             </Button>
-            <Button onClick={handleSave} disabled={saving} className="bg-gradient-to-r from-primary to-clash">
+            <Button onClick={() => handleSave(formData, editingItem?.id)} disabled={saving} className="bg-gradient-to-r from-primary to-clash">
               {saving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-              {editingFaculty ? 'Update' : 'Create'}
+              {editingItem ? 'Update' : 'Create'}
             </Button>
           </DialogFooter>
         </DialogContent>
