@@ -1,4 +1,4 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "node scripts/reconcile-migrations-once.mjs && npx prisma migrate deploy && npm run build"
+  "buildCommand": "npx prisma migrate deploy && npm run build"
 }
