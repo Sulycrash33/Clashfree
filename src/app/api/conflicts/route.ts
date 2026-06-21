@@ -65,6 +65,9 @@ export async function GET(request: NextRequest) {
       if (!institutionId) {
         return apiError('Institution ID is required for CO prediction')
       }
+      if (authResult.user.role !== 'SA' && authResult.user.institutionId !== institutionId) {
+        return apiError('Access denied', 403)
+      }
 
       const prediction = await predictCOClashes(institutionId)
       return apiResponse(prediction)
@@ -76,6 +79,9 @@ export async function GET(request: NextRequest) {
       if (!institutionId) {
         return apiError('Institution ID is required for CO statistics')
       }
+      if (authResult.user.role !== 'SA' && authResult.user.institutionId !== institutionId) {
+        return apiError('Access denied', 403)
+      }
 
       const stats = await getCOStatistics(institutionId)
       return apiResponse(stats)
@@ -85,12 +91,16 @@ export async function GET(request: NextRequest) {
     // F9: Enforce multi-institution isolation
     const whereClause: any = {}
     if (examPeriodId) {
+      const examPeriodData = await db.examPeriod.findUnique({ where: { id: examPeriodId }, select: { institutionId: true } })
+      if (!examPeriodData) {
+        return apiError('Exam period not found', 404)
+      }
+      if (authResult.user.role !== 'SA' && authResult.user.institutionId !== examPeriodData.institutionId) {
+        return apiError('Access denied', 403)
+      }
       whereClause.examPeriodId = examPeriodId
-    }
-    const examPeriodData = examPeriodId ? await db.examPeriod.findUnique({ where: { id: examPeriodId }, select: { institutionId: true } }) : null
-    const institutionFilter = examPeriodData?.institutionId || authResult.user.institutionId
-    if (institutionFilter && !examPeriodId) {
-      whereClause.examPeriod = { institutionId: institutionFilter }
+    } else if (authResult.user.role !== 'SA' && authResult.user.institutionId) {
+      whereClause.examPeriod = { institutionId: authResult.user.institutionId }
     }
 
     const conflicts = await db.conflict.findMany({
@@ -125,6 +135,19 @@ export async function PATCH(request: NextRequest) {
 
     if (!id) {
       return apiError('Conflict ID is required')
+    }
+
+    if (authResult.user.role !== 'SA') {
+      const existing = await db.conflict.findUnique({
+        where: { id },
+        select: { examPeriod: { select: { institutionId: true } } },
+      })
+      if (!existing) {
+        return apiError('Conflict not found', 404)
+      }
+      if (existing.examPeriod?.institutionId !== authResult.user.institutionId) {
+        return apiError('Access denied', 403)
+      }
     }
 
     const updateData: any = { status }

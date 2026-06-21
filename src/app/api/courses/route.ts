@@ -25,6 +25,9 @@ export async function GET(request: NextRequest) {
     } else if (facultyId) {
       whereClause.department = { facultyId }
     } else if (institutionId) {
+      if (authResult.user.role !== 'SA' && authResult.user.institutionId !== institutionId) {
+        return apiError('Access denied', 403)
+      }
       whereClause.institutionId = institutionId
     } else if (authResult.user.role !== 'SA' && authResult.user.institutionId) {
       whereClause.institutionId = authResult.user.institutionId

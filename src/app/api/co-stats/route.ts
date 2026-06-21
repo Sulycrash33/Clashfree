@@ -18,6 +18,10 @@ export async function GET(request: NextRequest) {
       return apiError('Institution ID is required')
     }
 
+    if (authResult.user.role !== 'SA' && authResult.user.institutionId !== institutionId) {
+      return apiError('Access denied', 403)
+    }
+
     const stats = await getCOStatistics(institutionId)
 
     if (detailed) {
