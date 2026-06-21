@@ -172,7 +172,7 @@ export default function SettingsPage() {
           </Card>
         )}
       </div>
+      <ChangePasswordDialog open={passwordDialogOpen} onOpenChange={setPasswordDialogOpen} />
     </div>
-    <ChangePasswordDialog open={passwordDialogOpen} onOpenChange={setPasswordDialogOpen} />
   )
 }
