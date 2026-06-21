@@ -7,9 +7,9 @@ CREATE TABLE "User" (
     "role" TEXT NOT NULL DEFAULT 'ST',
     "avatar" TEXT,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
-    "lastLoginAt" DATETIME,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "lastLoginAt" TIMESTAMP,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL,
     "institutionId" TEXT,
     "facultyId" TEXT,
     CONSTRAINT "User_institutionId_fkey" FOREIGN KEY ("institutionId") REFERENCES "Institution" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
@@ -25,7 +25,7 @@ CREATE TABLE "ActivityLog" (
     "details" TEXT,
     "ipAddress" TEXT,
     "userAgent" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userId" TEXT NOT NULL,
     CONSTRAINT "ActivityLog_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -46,8 +46,8 @@ CREATE TABLE "Institution" (
     "currentSemester" INTEGER NOT NULL DEFAULT 1,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "settings" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL
 );
 
 -- CreateTable
@@ -59,8 +59,8 @@ CREATE TABLE "Faculty" (
     "description" TEXT,
     "deanName" TEXT,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL,
     CONSTRAINT "Faculty_institutionId_fkey" FOREIGN KEY ("institutionId") REFERENCES "Institution" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -72,8 +72,8 @@ CREATE TABLE "Department" (
     "code" TEXT NOT NULL,
     "hodName" TEXT,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL,
     CONSTRAINT "Department_facultyId_fkey" FOREIGN KEY ("facultyId") REFERENCES "Faculty" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -92,8 +92,8 @@ CREATE TABLE "Course" (
     "maxStudents" INTEGER,
     "description" TEXT,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL,
     "lecturerId" TEXT,
     CONSTRAINT "Course_institutionId_fkey" FOREIGN KEY ("institutionId") REFERENCES "Institution" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "Course_departmentId_fkey" FOREIGN KEY ("departmentId") REFERENCES "Department" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
@@ -105,7 +105,7 @@ CREATE TABLE "CoursePrerequisite" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "courseId" TEXT NOT NULL,
     "prerequisiteId" TEXT NOT NULL,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "CoursePrerequisite_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "CoursePrerequisite_prerequisiteId_fkey" FOREIGN KEY ("prerequisiteId") REFERENCES "Course" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -123,8 +123,8 @@ CREATE TABLE "Student" (
     "admissionYear" INTEGER NOT NULL,
     "isSpillover" BOOLEAN NOT NULL DEFAULT false,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL,
     CONSTRAINT "Student_departmentId_fkey" FOREIGN KEY ("departmentId") REFERENCES "Department" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "Student_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
@@ -137,8 +137,8 @@ CREATE TABLE "StudentCourse" (
     "status" TEXT NOT NULL DEFAULT 'REGISTERED',
     "semester" INTEGER NOT NULL,
     "session" TEXT NOT NULL,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL,
     CONSTRAINT "StudentCourse_studentId_fkey" FOREIGN KEY ("studentId") REFERENCES "Student" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "StudentCourse_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -155,8 +155,8 @@ CREATE TABLE "Lecturer" (
     "rank" TEXT,
     "specialization" TEXT,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL,
     "unavailableDays" TEXT,
     "unavailableTimes" TEXT,
     CONSTRAINT "Lecturer_departmentId_fkey" FOREIGN KEY ("departmentId") REFERENCES "Department" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
@@ -181,8 +181,8 @@ CREATE TABLE "Room" (
     "isAccessible" BOOLEAN NOT NULL DEFAULT true,
     "isActive" BOOLEAN NOT NULL DEFAULT true,
     "notes" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL,
     CONSTRAINT "Room_institutionId_fkey" FOREIGN KEY ("institutionId") REFERENCES "Institution" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "Room_facultyId_fkey" FOREIGN KEY ("facultyId") REFERENCES "Faculty" ("id") ON DELETE SET NULL ON UPDATE CASCADE
 );
@@ -194,8 +194,8 @@ CREATE TABLE "ExamPeriod" (
     "name" TEXT NOT NULL,
     "session" TEXT NOT NULL,
     "semester" INTEGER NOT NULL,
-    "startDate" DATETIME NOT NULL,
-    "endDate" DATETIME NOT NULL,
+    "startDate" TIMESTAMP NOT NULL,
+    "endDate" TIMESTAMP NOT NULL,
     "slotsPerDay" INTEGER NOT NULL DEFAULT 3,
     "slotDuration" INTEGER NOT NULL DEFAULT 180,
     "morningStart" TEXT NOT NULL DEFAULT '08:00',
@@ -207,9 +207,9 @@ CREATE TABLE "ExamPeriod" (
     "includeSaturday" BOOLEAN NOT NULL DEFAULT true,
     "excludeFridays" BOOLEAN NOT NULL DEFAULT false,
     "status" TEXT NOT NULL DEFAULT 'DRAFT',
-    "publishedAt" DATETIME,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "publishedAt" TIMESTAMP,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL,
     CONSTRAINT "ExamPeriod_institutionId_fkey" FOREIGN KEY ("institutionId") REFERENCES "Institution" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -217,12 +217,12 @@ CREATE TABLE "ExamPeriod" (
 CREATE TABLE "BlackoutDate" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "examPeriodId" TEXT NOT NULL,
-    "date" DATETIME NOT NULL,
+    "date" TIMESTAMP NOT NULL,
     "reason" TEXT NOT NULL,
     "isFullDay" BOOLEAN NOT NULL DEFAULT true,
     "startTime" TEXT,
     "endTime" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "BlackoutDate_examPeriodId_fkey" FOREIGN KEY ("examPeriodId") REFERENCES "ExamPeriod" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -232,15 +232,15 @@ CREATE TABLE "ExamSlot" (
     "examPeriodId" TEXT NOT NULL,
     "courseId" TEXT NOT NULL,
     "roomId" TEXT NOT NULL,
-    "date" DATETIME NOT NULL,
+    "date" TIMESTAMP NOT NULL,
     "dayOfWeek" INTEGER NOT NULL,
     "slotNumber" INTEGER NOT NULL,
     "startTime" TEXT NOT NULL,
     "endTime" TEXT NOT NULL,
     "status" TEXT NOT NULL DEFAULT 'SCHEDULED',
     "notes" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL,
     CONSTRAINT "ExamSlot_examPeriodId_fkey" FOREIGN KEY ("examPeriodId") REFERENCES "ExamPeriod" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "ExamSlot_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "ExamSlot_roomId_fkey" FOREIGN KEY ("roomId") REFERENCES "Room" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
@@ -253,7 +253,7 @@ CREATE TABLE "InvigilatorAssignment" (
     "lecturerId" TEXT NOT NULL,
     "role" TEXT NOT NULL DEFAULT 'ASSISTANT',
     "notes" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "InvigilatorAssignment_examSlotId_fkey" FOREIGN KEY ("examSlotId") REFERENCES "ExamSlot" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "InvigilatorAssignment_lecturerId_fkey" FOREIGN KEY ("lecturerId") REFERENCES "Lecturer" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -272,9 +272,9 @@ CREATE TABLE "Conflict" (
     "slotBId" TEXT,
     "resolution" TEXT,
     "resolvedBy" TEXT,
-    "resolvedAt" DATETIME,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "resolvedAt" TIMESTAMP,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL,
     "reportId" TEXT,
     CONSTRAINT "Conflict_examPeriodId_fkey" FOREIGN KEY ("examPeriodId") REFERENCES "ExamPeriod" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "Conflict_slotAId_fkey" FOREIGN KEY ("slotAId") REFERENCES "ExamSlot" ("id") ON DELETE SET NULL ON UPDATE CASCADE,
@@ -286,16 +286,16 @@ CREATE TABLE "Conflict" (
 CREATE TABLE "ConflictReport" (
     "id" TEXT NOT NULL PRIMARY KEY,
     "examPeriodId" TEXT NOT NULL,
-    "generatedAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "generatedAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "totalConflicts" INTEGER NOT NULL DEFAULT 0,
     "criticalCount" INTEGER NOT NULL DEFAULT 0,
     "warningCount" INTEGER NOT NULL DEFAULT 0,
     "infoCount" INTEGER NOT NULL DEFAULT 0,
     "status" TEXT NOT NULL DEFAULT 'PENDING',
     "reviewedBy" TEXT,
-    "reviewedAt" DATETIME,
+    "reviewedAt" TIMESTAMP,
     "approvedBy" TEXT,
-    "approvedAt" DATETIME,
+    "approvedAt" TIMESTAMP,
     "notes" TEXT,
     CONSTRAINT "ConflictReport_examPeriodId_fkey" FOREIGN KEY ("examPeriodId") REFERENCES "ExamPeriod" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
@@ -307,9 +307,9 @@ CREATE TABLE "TimetableVersion" (
     "version" INTEGER NOT NULL,
     "changes" TEXT,
     "publishedBy" TEXT,
-    "publishedAt" DATETIME,
+    "publishedAt" TIMESTAMP,
     "isCurrent" BOOLEAN NOT NULL DEFAULT false,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "TimetableVersion_examPeriodId_fkey" FOREIGN KEY ("examPeriodId") REFERENCES "ExamPeriod" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -320,12 +320,12 @@ CREATE TABLE "LectureTimetable" (
     "name" TEXT NOT NULL,
     "session" TEXT NOT NULL,
     "semester" INTEGER NOT NULL,
-    "startDate" DATETIME NOT NULL,
-    "endDate" DATETIME NOT NULL,
+    "startDate" TIMESTAMP NOT NULL,
+    "endDate" TIMESTAMP NOT NULL,
     "status" TEXT NOT NULL DEFAULT 'DRAFT',
-    "publishedAt" DATETIME,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "publishedAt" TIMESTAMP,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL,
     CONSTRAINT "LectureTimetable_institutionId_fkey" FOREIGN KEY ("institutionId") REFERENCES "Institution" ("id") ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -342,8 +342,8 @@ CREATE TABLE "LectureSlot" (
     "weekPattern" TEXT,
     "status" TEXT NOT NULL DEFAULT 'ACTIVE',
     "notes" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" DATETIME NOT NULL,
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP NOT NULL,
     CONSTRAINT "LectureSlot_lectureTimetableId_fkey" FOREIGN KEY ("lectureTimetableId") REFERENCES "LectureTimetable" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "LectureSlot_courseId_fkey" FOREIGN KEY ("courseId") REFERENCES "Course" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT "LectureSlot_roomId_fkey" FOREIGN KEY ("roomId") REFERENCES "Room" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
@@ -358,7 +358,7 @@ CREATE TABLE "Notification" (
     "type" TEXT NOT NULL,
     "isRead" BOOLEAN NOT NULL DEFAULT false,
     "actionUrl" TEXT,
-    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 -- CreateIndex
