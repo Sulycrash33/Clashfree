@@ -135,7 +135,7 @@ export default function SettingsPage() {
             <CardDescription>Manage your security preferences</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <Button variant="outline">Change Password</Button>
+            <Button variant="outline" onClick={() => setPasswordDialogOpen(true)}>Change Password</Button>
             <div className="flex items-center justify-between">
               <div>
                 <Label>Two-Factor Authentication</Label>
@@ -173,5 +173,6 @@ export default function SettingsPage() {
         )}
       </div>
     </div>
+    <ChangePasswordDialog open={passwordDialogOpen} onOpenChange={setPasswordDialogOpen} />
   )
 }
