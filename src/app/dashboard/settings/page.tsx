@@ -2,7 +2,7 @@
 
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { PageHeader } from '@/components/page-header'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import { Settings, Bell, Shield, Palette } from 'lucide-react'
 import { useTheme } from '@/components/theme-provider'
-
+import { ChangePasswordDialog } from '@/components/change-password-dialog'
 export default function SettingsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
