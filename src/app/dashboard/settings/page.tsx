@@ -16,6 +16,8 @@ export default function SettingsPage() {
   const { data: session, status } = useSession()
   const router = useRouter()
   const { resolvedTheme, setTheme } = useTheme()
+  const [passwordDialogOpen, setPasswordDialogOpen] = useState(false);
+  
 
   useEffect(() => {
     if (status === 'unauthenticated') {
