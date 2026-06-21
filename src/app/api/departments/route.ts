@@ -17,6 +17,12 @@ export async function GET(request: NextRequest) {
     let whereClause: any = {}
 
     if (facultyId) {
+      if (authResult.user.role !== 'SA') {
+        const fac = await db.faculty.findUnique({ where: { id: facultyId }, select: { institutionId: true } })
+        if (!fac || fac.institutionId !== authResult.user.institutionId) {
+          return apiError('Access denied', 403)
+        }
+      }
       whereClause.facultyId = facultyId
     } else if (institutionId) {
       if (authResult.user.role !== 'SA' && authResult.user.institutionId !== institutionId) {

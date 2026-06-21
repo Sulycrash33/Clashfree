@@ -45,8 +45,23 @@ export async function GET(request: NextRequest) {
     let whereClause: any = {}
 
     if (departmentId) {
+      if (authResult.user.role !== 'SA') {
+        const dept = await db.department.findUnique({
+          where: { id: departmentId },
+          select: { faculty: { select: { institutionId: true } } },
+        })
+        if (!dept || dept.faculty.institutionId !== authResult.user.institutionId) {
+          return apiError('Access denied', 403)
+        }
+      }
       whereClause.departmentId = departmentId
     } else if (facultyId) {
+      if (authResult.user.role !== 'SA') {
+        const fac = await db.faculty.findUnique({ where: { id: facultyId }, select: { institutionId: true } })
+        if (!fac || fac.institutionId !== authResult.user.institutionId) {
+          return apiError('Access denied', 403)
+        }
+      }
       whereClause.department = { facultyId }
     } else if (institutionId) {
       if (authResult.user.role !== 'SA' && authResult.user.institutionId !== institutionId) {
