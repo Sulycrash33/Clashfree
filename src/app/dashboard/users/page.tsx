@@ -13,7 +13,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { DataTable } from '@/components/data-table'
 import { PageHeader } from '@/components/page-header'
 import { ColumnDef } from '@tanstack/react-table'
-import { Users, MoreHorizontal, Pencil, Trash2, Loader2, Shield, Building2, Calendar, BookOpen, GraduationCap, Mail } from 'lucide-react'
+import { Users, MoreHorizontal, Pencil, Trash2, Loader2, Shield, Building2, Calendar, BookOpen, GraduationCap, Mail, Eye, EyeOff } from 'lucide-react'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { useToast } from '@/hooks/use-toast'
 import { Alert, AlertDescription } from '@/components/ui/alert'
@@ -71,6 +71,7 @@ export default function UsersPage() {
     facultyId: '',
   })
   const [saving, setSaving] = useState(false)
+  const [showNewUserPassword, setShowNewUserPassword] = useState(false)
 
   const fetchData = useCallback(async () => {
     setLoading(true)
@@ -277,7 +278,7 @@ export default function UsersPage() {
         loading={loading}
       />
 
-      <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
+      <Card>
         <CardContent className="pt-6">
           {loading ? (
             <div className="flex items-center justify-center py-12">
@@ -319,12 +320,23 @@ export default function UsersPage() {
             {!editingUser && (
               <div className="space-y-2">
                 <Label className="text-muted-foreground">Password</Label>
-                <Input
-                  type="password"
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="bg-foreground/5 border-foreground/10 text-foreground"
-                />
+                <div className="relative">
+                  <Input
+                    type={showNewUserPassword ? 'text' : 'password'}
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    className="bg-foreground/5 border-foreground/10 text-foreground pr-10"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowNewUserPassword(!showNewUserPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    tabIndex={-1}
+                    aria-label={showNewUserPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showNewUserPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
+                </div>
               </div>
             )}
             <div className="space-y-2">
@@ -370,4 +382,4 @@ export default function UsersPage() {
       </Dialog>
     </div>
   )
-}
+  }
