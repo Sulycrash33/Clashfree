@@ -212,7 +212,7 @@ export default function FacultiesPage() {
         loading={loading}
       />
 
-      <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
+      <Card>
         <CardContent className="pt-6">
           {loading ? (
             <div className="flex items-center justify-center py-12">
