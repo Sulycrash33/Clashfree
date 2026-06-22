@@ -48,7 +48,7 @@ const LEVEL_COLORS: Record<number, string> = {
   200: 'bg-secondary/20 text-secondary',
   300: 'bg-primary/20 text-primary',
   400: 'bg-accent-gold/20 text-accent-gold',
-  500: 'bg-clash/20 text-clash',
+  500: 'bg-foreground/10 text-foreground',
 }
 
 const CAN_MANAGE = ['IA', 'TO', 'SA']
@@ -540,7 +540,7 @@ export default function LectureTimetablePage() {
 
       {/* Weekly Grid */}
       {slots.length > 0 && (
-        <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
+        <Card>
           <CardHeader>
             <CardTitle className="text-foreground flex items-center gap-2">
               <Clock className="w-5 h-5 text-primary" /> Weekly Schedule Grid
