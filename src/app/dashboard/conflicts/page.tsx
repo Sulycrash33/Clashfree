@@ -412,8 +412,15 @@ export default function ConflictsPage() {
           filteredConflicts.map((conflict) => {
             const typeInfo = conflictTypes[conflict.type] || { label: conflict.type, color: 'text-muted-foreground', icon: AlertCircle }
             const IconComponent = typeInfo.icon
+            const isCritical = conflict.severity === 'CRITICAL' && conflict.status !== 'RESOLVED' && conflict.status !== 'IGNORED'
             return (
-              <Card key={conflict.id} className="bg-foreground/5 border-foreground/10">
+              <Card
+                key={conflict.id}
+                className="bg-foreground/5 border-foreground/10"
+                style={isCritical ? {
+                  backgroundImage: "repeating-linear-gradient(45deg, rgba(156,59,48,0.06) 0px, rgba(156,59,48,0.06) 2px, transparent 2px, transparent 10px)",
+                } : undefined}
+              >
                 <CardContent className="pt-4">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1">
