@@ -2,6 +2,7 @@ import NextAuth, { type NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import { db } from './db'
 import { compare } from 'bcryptjs'
+import { checkLoginLockout, recordLoginFailure, clearLoginFailures } from './login-rate-limit'
 
 declare module 'next-auth' {
   interface Session {
@@ -46,6 +47,12 @@ export const authOptions: NextAuthOptions = {
           return null
         }
 
+        const lockout = checkLoginLockout(credentials.email)
+        if (!lockout.allowed) {
+          const minutes = Math.ceil((lockout.retryAfterSeconds || 0) / 60)
+          throw new Error(`Too many failed attempts. Try again in ${minutes} minute${minutes === 1 ? '' : 's'}.`)
+        }
+
         const user = await db.user.findUnique({
           where: { email: credentials.email },
           select: {
@@ -61,14 +68,18 @@ export const authOptions: NextAuthOptions = {
         })
 
         if (!user || !user.isActive) {
+          recordLoginFailure(credentials.email)
           return null
         }
 
         const passwordMatch = await compare(credentials.password, user.passwordHash)
 
         if (!passwordMatch) {
+          recordLoginFailure(credentials.email)
           return null
         }
+
+        clearLoginFailures(credentials.email)
 
         // Update last login
         await db.user.update({
