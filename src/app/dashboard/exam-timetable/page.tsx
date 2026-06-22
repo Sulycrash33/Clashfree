@@ -396,7 +396,7 @@ export default function ExamTimetablePage() {
       />
 
       {/* ── Wizard Progress Bar ── */}
-      <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
+      <Card>
         <CardContent className="pt-5 pb-4">
           <div className="flex items-center justify-between">
             {STEPS.map((s, idx) => {
