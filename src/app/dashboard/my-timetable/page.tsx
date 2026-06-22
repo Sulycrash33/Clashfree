@@ -164,7 +164,7 @@ export default function MyTimetablePage() {
       ) : (
         <>
           {/* Student Info Card */}
-          <Card className="bg-foreground/5 border-foreground/10 backdrop-blur-sm">
+          <Card>
             <CardContent className="pt-6">
               <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
