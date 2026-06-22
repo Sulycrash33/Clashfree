@@ -10,7 +10,7 @@ import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
-import { CheckCircle2, Loader2, Lock, User, AlertTriangle, Building2 } from 'lucide-react'
+import { CheckCircle2, Loader2, Lock, User, AlertTriangle, Building2, Eye, EyeOff } from 'lucide-react'
 
 const ROLE_LABELS: Record<string, string> = {
   IA: 'Institution Admin', TO: 'Timetable Officer', LC: 'Lecturer', ST: 'Student',
@@ -36,6 +36,8 @@ function AcceptInviteForm() {
   const [done, setDone] = useState(false)
   const [error, setError] = useState('')
   const [form, setForm] = useState({ name: '', password: '', confirmPassword: '' })
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
   useEffect(() => {
     if (!token) { setLoading(false); return }
@@ -179,11 +181,20 @@ function AcceptInviteForm() {
                   <Input
                     value={form.password}
                     onChange={e => setForm(p => ({ ...p, password: e.target.value }))}
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     placeholder="Min 8 characters"
-                    className="pl-10 bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground focus:border-secondary"
+                    className="pl-10 pr-10 bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground focus:border-secondary"
                     required minLength={8}
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    tabIndex={-1}
+                    aria-label={showPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
                 </div>
               </div>
 
@@ -194,11 +205,20 @@ function AcceptInviteForm() {
                   <Input
                     value={form.confirmPassword}
                     onChange={e => setForm(p => ({ ...p, confirmPassword: e.target.value }))}
-                    type="password"
+                    type={showConfirmPassword ? 'text' : 'password'}
                     placeholder="Repeat password"
-                    className="pl-10 bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground focus:border-secondary"
+                    className="pl-10 pr-10 bg-foreground/5 border-foreground/10 text-foreground placeholder:text-muted-foreground focus:border-secondary"
                     required
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    tabIndex={-1}
+                    aria-label={showConfirmPassword ? 'Hide password' : 'Show password'}
+                  >
+                    {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                  </button>
                 </div>
               </div>
 
